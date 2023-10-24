@@ -1,0 +1,19 @@
+Use list of runs from: runs.txt
+
+Number of runs:  6
+90206
+90252
+90253
+90602
+90661
+90662
+
+ =========================================== 
+ ===========  ALL RUNS ===================== 
+ =========================================== 
+ 
+
+ Total flux (E > 7.0 GeV)  (10e12):   1.2205787    Lumi (per nucleus)  (pb-1)  0.0000000 
+ Total flux (E > 8.0 GeV)  (10e12):   0.9431364    Lumi (per nucleus)  (pb-1)  0.0000000 
+ Total flux (E > 6.0 GeV)  (10e12):   1.3458230    Lumi (per nucleus)  (pb-1)  0.0000000 
+

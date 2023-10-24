@@ -1,0 +1,5 @@
+**/.vscode
+**/.ipynb_checkpoints
+build/*
+output_cache
+output_volatile

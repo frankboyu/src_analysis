@@ -1,0 +1,52 @@
+Doc: https://halldweb.jlab.org/doc-private/DocDB/ShowDocument?docid=3407
+
+F: Kinematic fit,
+B: Beam bunches,
+S, T: extra showers/tracks,
+U: store extra tracks
+
+Cuts:
+-PIDs: https://github.com/JeffersonLab/halld_recon/blob/master/src/libraries/include/particleType.h
+-Detector IDs: https://github.com/JeffersonLab/halld_recon/blob/master/src/libraries/include/GlueX.h
+-Default cuts: 
+    https://github.com/JeffersonLab/halld_recon/blob/master/src/libraries/ANALYSIS/DSourceComboer.cc
+    https://github.com/JeffersonLab/halld_recon/blob/master/src/libraries/ANALYSIS/DSourceComboTimeHandler.cc
+    https://github.com/JeffersonLab/halld_recon/blob/master/src/libraries/ANALYSIS/DSourceComboP4Handler.cc
+-Default cuts from command line: -PCOMBO_PRINT_CUTS=1
+    JANA >>Invariant mass cut: pid, low cut, high cut = 34, 0.8, 1.2
+    JANA >>E/p Cut PID, System, func form, params: Muon-, BCAL, [0], 0.45
+
+    JANA >>Missing Energy Cut (none-missing only), Low-side: func form, params: [0], -3
+    JANA >>Missing Energy Cut (none-missing only), High-side: func form, params: [0], 3
+
+    JANA >>Missing Mass Squared Cut, Low-side: PID, func form, params: Photon, [0], -0.1
+    JANA >>Missing Mass Squared Cut, High-side: PID, func form, params: Photon, [0], 0.1
+
+    JANA >>Time Cut PID, System, func form, params: Photon, BCAL, [0], 1.5
+    JANA >>Time Cut PID, System, func form, params: Photon, FCAL, [0], 2.5
+    JANA >>Time Cut PID, System, func form, params: Photon, CCAL, [0], 10
+    JANA >>Time Cut PID, System, func form, params: K+, BCAL, [0], 0.75
+    JANA >>Time Cut PID, System, func form, params: K+, TOF, [0], 0.3
+    JANA >>Time Cut PID, System, func form, params: K+, FCAL, [0], 2.5
+    JANA >>Time Cut PID, System, func form, params: K+, ST, [0], 2.5
+    JANA >>Time Cut PID, System, func form, params: K+, CCAL, [0], 10
+    JANA >>Time Cut PID, System, func form, params: K-, BCAL, [0], 0.75
+    JANA >>Time Cut PID, System, func form, params: K-, TOF, [0], 0.3
+    JANA >>Time Cut PID, System, func form, params: K-, FCAL, [0], 2.5
+    JANA >>Time Cut PID, System, func form, params: K-, ST, [0], 2.5
+    JANA >>Time Cut PID, System, func form, params: K-, CCAL, [0], 10
+    JANA >>Time Cut PID, System, func form, params: Proton, BCAL, [0], 1
+    JANA >>Time Cut PID, System, func form, params: Proton, TOF, [0], 0.6
+    JANA >>Time Cut PID, System, func form, params: Proton, FCAL, [0], 2
+    JANA >>Time Cut PID, System, func form, params: Proton, ST, [0], 2.5
+    JANA >>Time Cut PID, System, func form, params: Proton, CCAL, [0], 10
+
+    JANA >>dE/dx Cut PID, System, low-side func form, params: K+, CDC, [0], -9.9e+09
+    JANA >>dE/dx Cut PID, System, High-side func form, params: K+, CDC, exp(-1.0*[0]*x + [1]) + [2], 8, 4.7, 5.5
+    JANA >>dE/dx Cut PID, System, low-side func form, params: K-, CDC, [0], -9.9e+09
+    JANA >>dE/dx Cut PID, System, High-side func form, params: K-, CDC, exp(-1.0*[0]*x + [1]) + [2], 8, 4.7, 5.5
+    JANA >>dE/dx Cut PID, System, low-side func form, params: Proton, CDC, exp(-1.0*[0]*x + [1]) + [2], 4, 2.25, 1
+    JANA >>dE/dx Cut PID, System, High-side func form, params: Proton, CDC, [0], 9.9e+09
+
+    JANA >>Beta Cut PID, System, func form, params: Neutron, BCAL, [0], 0.9
+    JANA >>Beta Cut PID, System, func form, params: Neutron, FCAL, [0], 0.9

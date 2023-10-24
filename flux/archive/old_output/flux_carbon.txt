@@ -1,0 +1,1870 @@
+Use list of runs from: runs.txt
+
+Number of runs:  232
+90262
+90263
+90264
+90265
+90266
+90267
+90268
+90269
+90270
+90271
+90272
+90273
+90276
+90277
+90278
+90279
+90281
+90282
+90283
+90284
+90285
+90286
+90287
+90288
+90289
+90290
+90291
+90292
+90293
+90294
+90295
+90296
+90297
+90298
+90299
+90300
+90301
+90302
+90303
+90304
+90305
+90306
+90307
+90308
+90309
+90310
+90311
+90312
+90313
+90314
+90315
+90316
+90317
+90318
+90319
+90320
+90321
+90322
+90323
+90324
+90325
+90326
+90327
+90328
+90329
+90330
+90331
+90332
+90333
+90334
+90335
+90336
+90337
+90338
+90339
+90340
+90341
+90342
+90343
+90344
+90345
+90347
+90348
+90349
+90350
+90351
+90354
+90355
+90357
+90358
+90359
+90360
+90361
+90362
+90363
+90364
+90365
+90366
+90367
+90368
+90369
+90370
+90371
+90372
+90373
+90374
+90375
+90376
+90377
+90378
+90380
+90381
+90382
+90383
+90384
+90385
+90386
+90394
+90395
+90396
+90397
+90398
+90399
+90400
+90401
+90402
+90403
+90404
+90405
+90407
+90408
+90409
+90410
+90411
+90413
+90414
+90415
+90416
+90417
+90418
+90420
+90421
+90422
+90424
+90425
+90426
+90427
+90428
+90429
+90430
+90431
+90432
+90433
+90434
+90436
+90437
+90438
+90440
+90441
+90442
+90443
+90444
+90445
+90446
+90447
+90448
+90449
+90450
+90452
+90453
+90457
+90458
+90469
+90470
+90471
+90474
+90475
+90476
+90477
+90478
+90479
+90480
+90481
+90482
+90483
+90484
+90486
+90487
+90488
+90489
+90491
+90492
+90493
+90494
+90495
+90496
+90497
+90498
+90499
+90500
+90501
+90502
+90503
+90504
+90506
+90507
+90510
+90511
+90512
+90513
+90514
+90515
+90516
+90517
+90518
+90519
+90520
+90521
+90522
+90523
+90524
+90525
+90526
+90527
+90528
+90530
+90531
+90532
+90533
+90534
+90535
+90536
+
+ Run number: 90262
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2688854    Lumi (per nucleus)  (pb-1)  0.0454436 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2101093    Lumi (per nucleus)  (pb-1)  0.0355100 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2953189    Lumi (per nucleus)  (pb-1)  0.0499111 
+ 
+ Run number: 90263
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2585521    Lumi (per nucleus)  (pb-1)  0.0436972 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2028650    Lumi (per nucleus)  (pb-1)  0.0342857 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2842214    Lumi (per nucleus)  (pb-1)  0.0480355 
+ 
+ Run number: 90264
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2417634    Lumi (per nucleus)  (pb-1)  0.0408598 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1896056    Lumi (per nucleus)  (pb-1)  0.0320447 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2655757    Lumi (per nucleus)  (pb-1)  0.0448843 
+ 
+ Run number: 90265
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0162529    Lumi (per nucleus)  (pb-1)  0.0027469 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0120613    Lumi (per nucleus)  (pb-1)  0.0020384 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0196249    Lumi (per nucleus)  (pb-1)  0.0033168 
+ 
+ Run number: 90266
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0964401    Lumi (per nucleus)  (pb-1)  0.0162991 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0714381    Lumi (per nucleus)  (pb-1)  0.0120736 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1164732    Lumi (per nucleus)  (pb-1)  0.0196848 
+ 
+ Run number: 90267
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2603228    Lumi (per nucleus)  (pb-1)  0.0439965 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2051478    Lumi (per nucleus)  (pb-1)  0.0346715 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2861831    Lumi (per nucleus)  (pb-1)  0.0483671 
+ 
+ Run number: 90268
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2509777    Lumi (per nucleus)  (pb-1)  0.0424171 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1965440    Lumi (per nucleus)  (pb-1)  0.0332174 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2757446    Lumi (per nucleus)  (pb-1)  0.0466029 
+ 
+ Run number: 90269
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2342896    Lumi (per nucleus)  (pb-1)  0.0395967 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1829796    Lumi (per nucleus)  (pb-1)  0.0309249 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2576888    Lumi (per nucleus)  (pb-1)  0.0435513 
+ 
+ Run number: 90270
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0318485    Lumi (per nucleus)  (pb-1)  0.0053826 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0248653    Lumi (per nucleus)  (pb-1)  0.0042024 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0350467    Lumi (per nucleus)  (pb-1)  0.0059232 
+ 
+ Run number: 90271
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2907774    Lumi (per nucleus)  (pb-1)  0.0491435 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2297695    Lumi (per nucleus)  (pb-1)  0.0388327 
+ Total flux (E > 6.0 GeV)  (10e12):   0.3193401    Lumi (per nucleus)  (pb-1)  0.0539708 
+ 
+ Run number: 90272
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2117045    Lumi (per nucleus)  (pb-1)  0.0357796 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1670067    Lumi (per nucleus)  (pb-1)  0.0282254 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2328040    Lumi (per nucleus)  (pb-1)  0.0393456 
+ 
+ Run number: 90273
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0572067    Lumi (per nucleus)  (pb-1)  0.0096684 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0448450    Lumi (per nucleus)  (pb-1)  0.0075791 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0628570    Lumi (per nucleus)  (pb-1)  0.0106233 
+ 
+ Run number: 90276
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2549085    Lumi (per nucleus)  (pb-1)  0.0430814 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1994890    Lumi (per nucleus)  (pb-1)  0.0337151 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2798869    Lumi (per nucleus)  (pb-1)  0.0473030 
+ 
+ Run number: 90277
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2510021    Lumi (per nucleus)  (pb-1)  0.0424212 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1969046    Lumi (per nucleus)  (pb-1)  0.0332783 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2759611    Lumi (per nucleus)  (pb-1)  0.0466395 
+ 
+ Run number: 90278
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2389694    Lumi (per nucleus)  (pb-1)  0.0403876 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1877044    Lumi (per nucleus)  (pb-1)  0.0317234 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2625592    Lumi (per nucleus)  (pb-1)  0.0443745 
+ 
+ Run number: 90279
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1401550    Lumi (per nucleus)  (pb-1)  0.0236872 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1107907    Lumi (per nucleus)  (pb-1)  0.0187244 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1540214    Lumi (per nucleus)  (pb-1)  0.0260308 
+ 
+ Run number: 90281
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1105416    Lumi (per nucleus)  (pb-1)  0.0186824 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0874661    Lumi (per nucleus)  (pb-1)  0.0147824 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1215725    Lumi (per nucleus)  (pb-1)  0.0205466 
+ 
+ Run number: 90282
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2475587    Lumi (per nucleus)  (pb-1)  0.0418393 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1938325    Lumi (per nucleus)  (pb-1)  0.0327591 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2719604    Lumi (per nucleus)  (pb-1)  0.0459633 
+ 
+ Run number: 90283
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1154247    Lumi (per nucleus)  (pb-1)  0.0195076 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0904401    Lumi (per nucleus)  (pb-1)  0.0152850 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1268925    Lumi (per nucleus)  (pb-1)  0.0214458 
+ 
+ Run number: 90284
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1337404    Lumi (per nucleus)  (pb-1)  0.0226031 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1051468    Lumi (per nucleus)  (pb-1)  0.0177706 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1470786    Lumi (per nucleus)  (pb-1)  0.0248574 
+ 
+ Run number: 90285
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0862828    Lumi (per nucleus)  (pb-1)  0.0145824 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0682733    Lumi (per nucleus)  (pb-1)  0.0115387 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0947610    Lumi (per nucleus)  (pb-1)  0.0160153 
+ 
+ Run number: 90286
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1506388    Lumi (per nucleus)  (pb-1)  0.0254591 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1186559    Lumi (per nucleus)  (pb-1)  0.0200537 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1655889    Lumi (per nucleus)  (pb-1)  0.0279858 
+ 
+ Run number: 90287
+ Beam energy 10.81 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0111870    Lumi (per nucleus)  (pb-1)  0.0018907 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0087837    Lumi (per nucleus)  (pb-1)  0.0014845 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0122815    Lumi (per nucleus)  (pb-1)  0.0020757 
+ 
+ Run number: 90288
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1927507    Lumi (per nucleus)  (pb-1)  0.0325763 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1430214    Lumi (per nucleus)  (pb-1)  0.0241717 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2328191    Lumi (per nucleus)  (pb-1)  0.0393481 
+ 
+ Run number: 90289
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2749740    Lumi (per nucleus)  (pb-1)  0.0464726 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2174199    Lumi (per nucleus)  (pb-1)  0.0367456 
+ Total flux (E > 6.0 GeV)  (10e12):   0.3023034    Lumi (per nucleus)  (pb-1)  0.0510915 
+ 
+ Run number: 90290
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.3021381    Lumi (per nucleus)  (pb-1)  0.0510636 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2370128    Lumi (per nucleus)  (pb-1)  0.0400569 
+ Total flux (E > 6.0 GeV)  (10e12):   0.3319796    Lumi (per nucleus)  (pb-1)  0.0561070 
+ 
+ Run number: 90291
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2604689    Lumi (per nucleus)  (pb-1)  0.0440212 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2040219    Lumi (per nucleus)  (pb-1)  0.0344812 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2864344    Lumi (per nucleus)  (pb-1)  0.0484095 
+ 
+ Run number: 90292
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2400747    Lumi (per nucleus)  (pb-1)  0.0405744 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1886515    Lumi (per nucleus)  (pb-1)  0.0318835 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2638111    Lumi (per nucleus)  (pb-1)  0.0445860 
+ 
+ Run number: 90293
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2526345    Lumi (per nucleus)  (pb-1)  0.0426971 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1998838    Lumi (per nucleus)  (pb-1)  0.0337818 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2777382    Lumi (per nucleus)  (pb-1)  0.0469398 
+ 
+ Run number: 90294
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2014777    Lumi (per nucleus)  (pb-1)  0.0340512 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1579574    Lumi (per nucleus)  (pb-1)  0.0266960 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2214016    Lumi (per nucleus)  (pb-1)  0.0374185 
+ 
+ Run number: 90295
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2535592    Lumi (per nucleus)  (pb-1)  0.0428534 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1988028    Lumi (per nucleus)  (pb-1)  0.0335991 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2789710    Lumi (per nucleus)  (pb-1)  0.0471482 
+ 
+ Run number: 90296
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2433745    Lumi (per nucleus)  (pb-1)  0.0411321 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1911163    Lumi (per nucleus)  (pb-1)  0.0323001 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2676214    Lumi (per nucleus)  (pb-1)  0.0452300 
+ 
+ Run number: 90297
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2564730    Lumi (per nucleus)  (pb-1)  0.0433458 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2021602    Lumi (per nucleus)  (pb-1)  0.0341666 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2821075    Lumi (per nucleus)  (pb-1)  0.0476783 
+ 
+ Run number: 90298
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2511137    Lumi (per nucleus)  (pb-1)  0.0424401 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1968587    Lumi (per nucleus)  (pb-1)  0.0332706 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2759556    Lumi (per nucleus)  (pb-1)  0.0466385 
+ 
+ Run number: 90299
+ Beam energy 10.813000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1907683    Lumi (per nucleus)  (pb-1)  0.0322413 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1490458    Lumi (per nucleus)  (pb-1)  0.0251898 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2099690    Lumi (per nucleus)  (pb-1)  0.0354863 
+ 
+ Run number: 90300
+ Beam energy 10.814000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0615851    Lumi (per nucleus)  (pb-1)  0.0104083 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0485532    Lumi (per nucleus)  (pb-1)  0.0082059 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0677457    Lumi (per nucleus)  (pb-1)  0.0114495 
+ 
+ Run number: 90301
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2408749    Lumi (per nucleus)  (pb-1)  0.0407096 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1892454    Lumi (per nucleus)  (pb-1)  0.0319839 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2646448    Lumi (per nucleus)  (pb-1)  0.0447269 
+ 
+ Run number: 90302
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0556850    Lumi (per nucleus)  (pb-1)  0.0094112 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0440442    Lumi (per nucleus)  (pb-1)  0.0074438 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0612319    Lumi (per nucleus)  (pb-1)  0.0103486 
+ 
+ Run number: 90303
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2031967    Lumi (per nucleus)  (pb-1)  0.0343417 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1606420    Lumi (per nucleus)  (pb-1)  0.0271497 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2234537    Lumi (per nucleus)  (pb-1)  0.0377653 
+ 
+ Run number: 90304
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2531309    Lumi (per nucleus)  (pb-1)  0.0427810 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1987786    Lumi (per nucleus)  (pb-1)  0.0335951 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2781146    Lumi (per nucleus)  (pb-1)  0.0470034 
+ 
+ Run number: 90305
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1981115    Lumi (per nucleus)  (pb-1)  0.0334823 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1553754    Lumi (per nucleus)  (pb-1)  0.0262596 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2178702    Lumi (per nucleus)  (pb-1)  0.0368217 
+ 
+ Run number: 90306
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2415612    Lumi (per nucleus)  (pb-1)  0.0408256 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1897153    Lumi (per nucleus)  (pb-1)  0.0320633 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2655771    Lumi (per nucleus)  (pb-1)  0.0448845 
+ 
+ Run number: 90307
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2550742    Lumi (per nucleus)  (pb-1)  0.0431094 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2012642    Lumi (per nucleus)  (pb-1)  0.0340151 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2805878    Lumi (per nucleus)  (pb-1)  0.0474214 
+ 
+ Run number: 90308
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2533660    Lumi (per nucleus)  (pb-1)  0.0428207 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1990868    Lumi (per nucleus)  (pb-1)  0.0336471 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2784439    Lumi (per nucleus)  (pb-1)  0.0470591 
+ 
+ Run number: 90309
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2506843    Lumi (per nucleus)  (pb-1)  0.0423675 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1966582    Lumi (per nucleus)  (pb-1)  0.0332367 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2757218    Lumi (per nucleus)  (pb-1)  0.0465990 
+ 
+ Run number: 90310
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2422322    Lumi (per nucleus)  (pb-1)  0.0409390 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1903811    Lumi (per nucleus)  (pb-1)  0.0321758 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2662741    Lumi (per nucleus)  (pb-1)  0.0450023 
+ 
+ Run number: 90311
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2140206    Lumi (per nucleus)  (pb-1)  0.0361711 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1689920    Lumi (per nucleus)  (pb-1)  0.0285609 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2353941    Lumi (per nucleus)  (pb-1)  0.0397833 
+ 
+ Run number: 90312
+ Beam energy 10.813000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2504916    Lumi (per nucleus)  (pb-1)  0.0423349 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1970695    Lumi (per nucleus)  (pb-1)  0.0333062 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2753446    Lumi (per nucleus)  (pb-1)  0.0465353 
+ 
+ Run number: 90313
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2563600    Lumi (per nucleus)  (pb-1)  0.0433267 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2008779    Lumi (per nucleus)  (pb-1)  0.0339499 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2820675    Lumi (per nucleus)  (pb-1)  0.0476715 
+ 
+ Run number: 90314
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2488433    Lumi (per nucleus)  (pb-1)  0.0420564 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1958641    Lumi (per nucleus)  (pb-1)  0.0331025 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2737213    Lumi (per nucleus)  (pb-1)  0.0462609 
+ 
+ Run number: 90315
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2522840    Lumi (per nucleus)  (pb-1)  0.0426379 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1994223    Lumi (per nucleus)  (pb-1)  0.0337038 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2775395    Lumi (per nucleus)  (pb-1)  0.0469062 
+ 
+ Run number: 90316
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2501730    Lumi (per nucleus)  (pb-1)  0.0422811 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1967986    Lumi (per nucleus)  (pb-1)  0.0332604 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2749764    Lumi (per nucleus)  (pb-1)  0.0464730 
+ 
+ Run number: 90317
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2487127    Lumi (per nucleus)  (pb-1)  0.0420343 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1947848    Lumi (per nucleus)  (pb-1)  0.0329201 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2737726    Lumi (per nucleus)  (pb-1)  0.0462696 
+ 
+ Run number: 90318
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2192764    Lumi (per nucleus)  (pb-1)  0.0370593 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1727683    Lumi (per nucleus)  (pb-1)  0.0291991 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2411573    Lumi (per nucleus)  (pb-1)  0.0407574 
+ 
+ Run number: 90319
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2540814    Lumi (per nucleus)  (pb-1)  0.0429416 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2009654    Lumi (per nucleus)  (pb-1)  0.0339646 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2795171    Lumi (per nucleus)  (pb-1)  0.0472405 
+ 
+ Run number: 90320
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2520639    Lumi (per nucleus)  (pb-1)  0.0426007 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1983684    Lumi (per nucleus)  (pb-1)  0.0335257 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2770019    Lumi (per nucleus)  (pb-1)  0.0468154 
+ 
+ Run number: 90321
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2445422    Lumi (per nucleus)  (pb-1)  0.0413294 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1894658    Lumi (per nucleus)  (pb-1)  0.0320211 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2697271    Lumi (per nucleus)  (pb-1)  0.0455859 
+ 
+ Run number: 90322
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0099860    Lumi (per nucleus)  (pb-1)  0.0016877 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0077317    Lumi (per nucleus)  (pb-1)  0.0013067 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0110223    Lumi (per nucleus)  (pb-1)  0.0018629 
+ 
+ Run number: 90323
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2425386    Lumi (per nucleus)  (pb-1)  0.0409908 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1907542    Lumi (per nucleus)  (pb-1)  0.0322389 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2667432    Lumi (per nucleus)  (pb-1)  0.0450816 
+ 
+ Run number: 90324
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2526757    Lumi (per nucleus)  (pb-1)  0.0427041 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1999356    Lumi (per nucleus)  (pb-1)  0.0337906 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2779752    Lumi (per nucleus)  (pb-1)  0.0469799 
+ 
+ Run number: 90325
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2503905    Lumi (per nucleus)  (pb-1)  0.0423178 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1970108    Lumi (per nucleus)  (pb-1)  0.0332963 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2751088    Lumi (per nucleus)  (pb-1)  0.0464954 
+ 
+ Run number: 90326
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2507741    Lumi (per nucleus)  (pb-1)  0.0423827 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1961914    Lumi (per nucleus)  (pb-1)  0.0331578 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2760249    Lumi (per nucleus)  (pb-1)  0.0466503 
+ 
+ Run number: 90327
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2421939    Lumi (per nucleus)  (pb-1)  0.0409326 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1904257    Lumi (per nucleus)  (pb-1)  0.0321833 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2663464    Lumi (per nucleus)  (pb-1)  0.0450145 
+ 
+ Run number: 90328
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2522413    Lumi (per nucleus)  (pb-1)  0.0426307 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1992034    Lumi (per nucleus)  (pb-1)  0.0336668 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2775601    Lumi (per nucleus)  (pb-1)  0.0469097 
+ 
+ Run number: 90329
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2360880    Lumi (per nucleus)  (pb-1)  0.0399006 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1857573    Lumi (per nucleus)  (pb-1)  0.0313944 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2595889    Lumi (per nucleus)  (pb-1)  0.0438724 
+ 
+ Run number: 90330
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2487290    Lumi (per nucleus)  (pb-1)  0.0420370 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1940025    Lumi (per nucleus)  (pb-1)  0.0327879 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2739509    Lumi (per nucleus)  (pb-1)  0.0462997 
+ 
+ Run number: 90331
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2450723    Lumi (per nucleus)  (pb-1)  0.0414190 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1925783    Lumi (per nucleus)  (pb-1)  0.0325472 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2696056    Lumi (per nucleus)  (pb-1)  0.0455653 
+ 
+ Run number: 90332
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2693325    Lumi (per nucleus)  (pb-1)  0.0455192 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2123698    Lumi (per nucleus)  (pb-1)  0.0358921 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2964233    Lumi (per nucleus)  (pb-1)  0.0500977 
+ 
+ Run number: 90333
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2538189    Lumi (per nucleus)  (pb-1)  0.0428973 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1993623    Lumi (per nucleus)  (pb-1)  0.0336937 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2789242    Lumi (per nucleus)  (pb-1)  0.0471403 
+ 
+ Run number: 90334
+ Beam energy 10.810000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2528130    Lumi (per nucleus)  (pb-1)  0.0427273 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1980205    Lumi (per nucleus)  (pb-1)  0.0334669 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2783927    Lumi (per nucleus)  (pb-1)  0.0470504 
+ 
+ Run number: 90335
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2725015    Lumi (per nucleus)  (pb-1)  0.0460548 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2142993    Lumi (per nucleus)  (pb-1)  0.0362182 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2997772    Lumi (per nucleus)  (pb-1)  0.0506646 
+ 
+ Run number: 90336
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2542036    Lumi (per nucleus)  (pb-1)  0.0429623 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2009510    Lumi (per nucleus)  (pb-1)  0.0339622 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2798196    Lumi (per nucleus)  (pb-1)  0.0472916 
+ 
+ Run number: 90337
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2484571    Lumi (per nucleus)  (pb-1)  0.0419911 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1955327    Lumi (per nucleus)  (pb-1)  0.0330465 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2728812    Lumi (per nucleus)  (pb-1)  0.0461189 
+ 
+ Run number: 90338
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1876070    Lumi (per nucleus)  (pb-1)  0.0317070 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1471434    Lumi (per nucleus)  (pb-1)  0.0248683 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2064912    Lumi (per nucleus)  (pb-1)  0.0348985 
+ 
+ Run number: 90339
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0621952    Lumi (per nucleus)  (pb-1)  0.0105114 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0487470    Lumi (per nucleus)  (pb-1)  0.0082386 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0685332    Lumi (per nucleus)  (pb-1)  0.0115826 
+ 
+ Run number: 90340
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1476486    Lumi (per nucleus)  (pb-1)  0.0249537 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1163899    Lumi (per nucleus)  (pb-1)  0.0196708 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1623448    Lumi (per nucleus)  (pb-1)  0.0274375 
+ 
+ Run number: 90341
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1087086    Lumi (per nucleus)  (pb-1)  0.0183726 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0856636    Lumi (per nucleus)  (pb-1)  0.0144778 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1195611    Lumi (per nucleus)  (pb-1)  0.0202067 
+ 
+ Run number: 90342
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0857214    Lumi (per nucleus)  (pb-1)  0.0144875 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0638021    Lumi (per nucleus)  (pb-1)  0.0107830 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1035171    Lumi (per nucleus)  (pb-1)  0.0174952 
+ 
+ Run number: 90343
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0875470    Lumi (per nucleus)  (pb-1)  0.0147961 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0651688    Lumi (per nucleus)  (pb-1)  0.0110140 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1057697    Lumi (per nucleus)  (pb-1)  0.0178759 
+ 
+ Run number: 90344
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2568519    Lumi (per nucleus)  (pb-1)  0.0434099 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2035479    Lumi (per nucleus)  (pb-1)  0.0344011 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2826925    Lumi (per nucleus)  (pb-1)  0.0477771 
+ 
+ Run number: 90345
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2475056    Lumi (per nucleus)  (pb-1)  0.0418303 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1952926    Lumi (per nucleus)  (pb-1)  0.0330059 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2720251    Lumi (per nucleus)  (pb-1)  0.0459743 
+ 
+ Run number: 90347
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2493968    Lumi (per nucleus)  (pb-1)  0.0421499 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1945990    Lumi (per nucleus)  (pb-1)  0.0328887 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2748746    Lumi (per nucleus)  (pb-1)  0.0464558 
+ 
+ Run number: 90348
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2402647    Lumi (per nucleus)  (pb-1)  0.0406065 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1893971    Lumi (per nucleus)  (pb-1)  0.0320095 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2642785    Lumi (per nucleus)  (pb-1)  0.0446650 
+ 
+ Run number: 90349
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2511523    Lumi (per nucleus)  (pb-1)  0.0424466 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1991913    Lumi (per nucleus)  (pb-1)  0.0336648 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2764261    Lumi (per nucleus)  (pb-1)  0.0467181 
+ 
+ Run number: 90350
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2626916    Lumi (per nucleus)  (pb-1)  0.0443968 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2074351    Lumi (per nucleus)  (pb-1)  0.0350581 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2887772    Lumi (per nucleus)  (pb-1)  0.0488055 
+ 
+ Run number: 90351
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1811496    Lumi (per nucleus)  (pb-1)  0.0306156 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1411336    Lumi (per nucleus)  (pb-1)  0.0238526 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1997113    Lumi (per nucleus)  (pb-1)  0.0337527 
+ 
+ Run number: 90354
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1642324    Lumi (per nucleus)  (pb-1)  0.0277565 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1296180    Lumi (per nucleus)  (pb-1)  0.0219064 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1809182    Lumi (per nucleus)  (pb-1)  0.0305765 
+ 
+ Run number: 90355
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2654666    Lumi (per nucleus)  (pb-1)  0.0448658 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2137194    Lumi (per nucleus)  (pb-1)  0.0361202 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2939515    Lumi (per nucleus)  (pb-1)  0.0496800 
+ 
+ Run number: 90357
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2495974    Lumi (per nucleus)  (pb-1)  0.0421838 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1972877    Lumi (per nucleus)  (pb-1)  0.0333431 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2748046    Lumi (per nucleus)  (pb-1)  0.0464440 
+ 
+ Run number: 90358
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2468903    Lumi (per nucleus)  (pb-1)  0.0417263 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1946240    Lumi (per nucleus)  (pb-1)  0.0328929 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2711586    Lumi (per nucleus)  (pb-1)  0.0458278 
+ 
+ Run number: 90359
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0648979    Lumi (per nucleus)  (pb-1)  0.0109682 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0511522    Lumi (per nucleus)  (pb-1)  0.0086451 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0715258    Lumi (per nucleus)  (pb-1)  0.0120884 
+ 
+ Run number: 90360
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0591220    Lumi (per nucleus)  (pb-1)  0.0099921 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0466533    Lumi (per nucleus)  (pb-1)  0.0078848 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0651760    Lumi (per nucleus)  (pb-1)  0.0110152 
+ 
+ Run number: 90361
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0465546    Lumi (per nucleus)  (pb-1)  0.0078681 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0366728    Lumi (per nucleus)  (pb-1)  0.0061980 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0513052    Lumi (per nucleus)  (pb-1)  0.0086710 
+ 
+ Run number: 90362
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0873157    Lumi (per nucleus)  (pb-1)  0.0147570 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0687919    Lumi (per nucleus)  (pb-1)  0.0116263 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0962897    Lumi (per nucleus)  (pb-1)  0.0162737 
+ 
+ Run number: 90363
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0939725    Lumi (per nucleus)  (pb-1)  0.0158821 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0761606    Lumi (per nucleus)  (pb-1)  0.0128717 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1050979    Lumi (per nucleus)  (pb-1)  0.0177623 
+ 
+ Run number: 90364
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0261559    Lumi (per nucleus)  (pb-1)  0.0044205 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0211112    Lumi (per nucleus)  (pb-1)  0.0035680 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0291502    Lumi (per nucleus)  (pb-1)  0.0049266 
+ 
+ Run number: 90365
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1851151    Lumi (per nucleus)  (pb-1)  0.0312858 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1461453    Lumi (per nucleus)  (pb-1)  0.0246996 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2035117    Lumi (per nucleus)  (pb-1)  0.0343950 
+ 
+ Run number: 90366
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2548374    Lumi (per nucleus)  (pb-1)  0.0430694 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1983379    Lumi (per nucleus)  (pb-1)  0.0335206 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2810752    Lumi (per nucleus)  (pb-1)  0.0475038 
+ 
+ Run number: 90367
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2476709    Lumi (per nucleus)  (pb-1)  0.0418582 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1939007    Lumi (per nucleus)  (pb-1)  0.0327707 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2720343    Lumi (per nucleus)  (pb-1)  0.0459758 
+ 
+ Run number: 90368
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1177991    Lumi (per nucleus)  (pb-1)  0.0199089 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0899188    Lumi (per nucleus)  (pb-1)  0.0151969 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1303446    Lumi (per nucleus)  (pb-1)  0.0220292 
+ 
+ Run number: 90369
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1436870    Lumi (per nucleus)  (pb-1)  0.0242842 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1097113    Lumi (per nucleus)  (pb-1)  0.0185420 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1589542    Lumi (per nucleus)  (pb-1)  0.0268644 
+ 
+ Run number: 90370
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2555857    Lumi (per nucleus)  (pb-1)  0.0431959 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1971183    Lumi (per nucleus)  (pb-1)  0.0333145 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2809309    Lumi (per nucleus)  (pb-1)  0.0474794 
+ 
+ Run number: 90371
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2654830    Lumi (per nucleus)  (pb-1)  0.0448686 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2043755    Lumi (per nucleus)  (pb-1)  0.0345410 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2932372    Lumi (per nucleus)  (pb-1)  0.0495593 
+ 
+ Run number: 90372
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1726452    Lumi (per nucleus)  (pb-1)  0.0291783 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1327909    Lumi (per nucleus)  (pb-1)  0.0224427 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1897495    Lumi (per nucleus)  (pb-1)  0.0320691 
+ 
+ Run number: 90373
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0965509    Lumi (per nucleus)  (pb-1)  0.0163178 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0762846    Lumi (per nucleus)  (pb-1)  0.0128927 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1061436    Lumi (per nucleus)  (pb-1)  0.0179391 
+ 
+ Run number: 90374
+ Beam energy 10.81 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0150884    Lumi (per nucleus)  (pb-1)  0.0025500 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0121348    Lumi (per nucleus)  (pb-1)  0.0020509 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0166198    Lumi (per nucleus)  (pb-1)  0.0028089 
+ 
+ Run number: 90375
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2523483    Lumi (per nucleus)  (pb-1)  0.0426487 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1999206    Lumi (per nucleus)  (pb-1)  0.0337881 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2781406    Lumi (per nucleus)  (pb-1)  0.0470078 
+ 
+ Run number: 90376
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2459659    Lumi (per nucleus)  (pb-1)  0.0415701 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1948739    Lumi (per nucleus)  (pb-1)  0.0329351 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2708637    Lumi (per nucleus)  (pb-1)  0.0457780 
+ 
+ Run number: 90377
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2552992    Lumi (per nucleus)  (pb-1)  0.0431475 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2017983    Lumi (per nucleus)  (pb-1)  0.0341054 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2811196    Lumi (per nucleus)  (pb-1)  0.0475113 
+ 
+ Run number: 90378
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2629299    Lumi (per nucleus)  (pb-1)  0.0444371 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2074749    Lumi (per nucleus)  (pb-1)  0.0350648 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2889357    Lumi (per nucleus)  (pb-1)  0.0488323 
+ 
+ Run number: 90380
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2673153    Lumi (per nucleus)  (pb-1)  0.0451783 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2105740    Lumi (per nucleus)  (pb-1)  0.0355886 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2947936    Lumi (per nucleus)  (pb-1)  0.0498223 
+ 
+ Run number: 90381
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2541882    Lumi (per nucleus)  (pb-1)  0.0429597 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2004776    Lumi (per nucleus)  (pb-1)  0.0338822 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2794844    Lumi (per nucleus)  (pb-1)  0.0472349 
+ 
+ Run number: 90382
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1503028    Lumi (per nucleus)  (pb-1)  0.0254023 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1117849    Lumi (per nucleus)  (pb-1)  0.0188925 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1815533    Lumi (per nucleus)  (pb-1)  0.0306839 
+ 
+ Run number: 90383
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2546365    Lumi (per nucleus)  (pb-1)  0.0430355 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2009065    Lumi (per nucleus)  (pb-1)  0.0339547 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2803987    Lumi (per nucleus)  (pb-1)  0.0473895 
+ 
+ Run number: 90384
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2461836    Lumi (per nucleus)  (pb-1)  0.0416068 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1947292    Lumi (per nucleus)  (pb-1)  0.0329107 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2704765    Lumi (per nucleus)  (pb-1)  0.0457125 
+ 
+ Run number: 90385
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2515495    Lumi (per nucleus)  (pb-1)  0.0425137 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1965822    Lumi (per nucleus)  (pb-1)  0.0332238 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2776399    Lumi (per nucleus)  (pb-1)  0.0469232 
+ 
+ Run number: 90386
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1116554    Lumi (per nucleus)  (pb-1)  0.0188706 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0897610    Lumi (per nucleus)  (pb-1)  0.0151703 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1236256    Lumi (per nucleus)  (pb-1)  0.0208936 
+ 
+ Run number: 90394
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2604589    Lumi (per nucleus)  (pb-1)  0.0440195 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2018342    Lumi (per nucleus)  (pb-1)  0.0341115 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2873728    Lumi (per nucleus)  (pb-1)  0.0485681 
+ 
+ Run number: 90395
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2480270    Lumi (per nucleus)  (pb-1)  0.0419184 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1962257    Lumi (per nucleus)  (pb-1)  0.0331636 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2724631    Lumi (per nucleus)  (pb-1)  0.0460483 
+ 
+ Run number: 90396
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2552357    Lumi (per nucleus)  (pb-1)  0.0431367 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2029131    Lumi (per nucleus)  (pb-1)  0.0342938 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2811003    Lumi (per nucleus)  (pb-1)  0.0475080 
+ 
+ Run number: 90397
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0657274    Lumi (per nucleus)  (pb-1)  0.0111084 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0533194    Lumi (per nucleus)  (pb-1)  0.0090114 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0734797    Lumi (per nucleus)  (pb-1)  0.0124186 
+ 
+ Run number: 90398
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2480948    Lumi (per nucleus)  (pb-1)  0.0419299 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1958733    Lumi (per nucleus)  (pb-1)  0.0331040 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2728297    Lumi (per nucleus)  (pb-1)  0.0461102 
+ 
+ Run number: 90399
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2645328    Lumi (per nucleus)  (pb-1)  0.0447080 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2076267    Lumi (per nucleus)  (pb-1)  0.0350904 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2916004    Lumi (per nucleus)  (pb-1)  0.0492826 
+ 
+ Run number: 90400
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2494733    Lumi (per nucleus)  (pb-1)  0.0421628 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1963189    Lumi (per nucleus)  (pb-1)  0.0331793 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2739941    Lumi (per nucleus)  (pb-1)  0.0463070 
+ 
+ Run number: 90401
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2566643    Lumi (per nucleus)  (pb-1)  0.0433782 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2009659    Lumi (per nucleus)  (pb-1)  0.0339647 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2833868    Lumi (per nucleus)  (pb-1)  0.0478945 
+ 
+ Run number: 90402
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2460900    Lumi (per nucleus)  (pb-1)  0.0415910 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1941278    Lumi (per nucleus)  (pb-1)  0.0328090 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2706727    Lumi (per nucleus)  (pb-1)  0.0457457 
+ 
+ Run number: 90403
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2598230    Lumi (per nucleus)  (pb-1)  0.0439120 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2050949    Lumi (per nucleus)  (pb-1)  0.0346625 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2862527    Lumi (per nucleus)  (pb-1)  0.0483788 
+ 
+ Run number: 90404
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2480482    Lumi (per nucleus)  (pb-1)  0.0419220 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1963165    Lumi (per nucleus)  (pb-1)  0.0331789 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2725611    Lumi (per nucleus)  (pb-1)  0.0460648 
+ 
+ Run number: 90405
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2578506    Lumi (per nucleus)  (pb-1)  0.0435787 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2000844    Lumi (per nucleus)  (pb-1)  0.0338157 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2848859    Lumi (per nucleus)  (pb-1)  0.0481478 
+ 
+ Run number: 90407
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2541420    Lumi (per nucleus)  (pb-1)  0.0429519 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2007507    Lumi (per nucleus)  (pb-1)  0.0339283 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2796097    Lumi (per nucleus)  (pb-1)  0.0472561 
+ 
+ Run number: 90408
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2556357    Lumi (per nucleus)  (pb-1)  0.0432043 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2009739    Lumi (per nucleus)  (pb-1)  0.0339661 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2817207    Lumi (per nucleus)  (pb-1)  0.0476129 
+ 
+ Run number: 90409
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2553783    Lumi (per nucleus)  (pb-1)  0.0431608 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2021896    Lumi (per nucleus)  (pb-1)  0.0341715 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2805947    Lumi (per nucleus)  (pb-1)  0.0474226 
+ 
+ Run number: 90410
+ Beam energy 10.813000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2618778    Lumi (per nucleus)  (pb-1)  0.0442593 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2061055    Lumi (per nucleus)  (pb-1)  0.0348334 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2887837    Lumi (per nucleus)  (pb-1)  0.0488066 
+ 
+ Run number: 90411
+ Beam energy 10.813000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2510005    Lumi (per nucleus)  (pb-1)  0.0424209 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1982861    Lumi (per nucleus)  (pb-1)  0.0335118 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2761033    Lumi (per nucleus)  (pb-1)  0.0466635 
+ 
+ Run number: 90413
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2589380    Lumi (per nucleus)  (pb-1)  0.0437624 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2050437    Lumi (per nucleus)  (pb-1)  0.0346539 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2852055    Lumi (per nucleus)  (pb-1)  0.0482018 
+ 
+ Run number: 90414
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2476499    Lumi (per nucleus)  (pb-1)  0.0418547 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1963424    Lumi (per nucleus)  (pb-1)  0.0331833 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2720874    Lumi (per nucleus)  (pb-1)  0.0459848 
+ 
+ Run number: 90415
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2574692    Lumi (per nucleus)  (pb-1)  0.0435142 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2049416    Lumi (per nucleus)  (pb-1)  0.0346366 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2836722    Lumi (per nucleus)  (pb-1)  0.0479427 
+ 
+ Run number: 90416
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1956455    Lumi (per nucleus)  (pb-1)  0.0330655 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1533317    Lumi (per nucleus)  (pb-1)  0.0259142 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2150970    Lumi (per nucleus)  (pb-1)  0.0363530 
+ 
+ Run number: 90417
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0510816    Lumi (per nucleus)  (pb-1)  0.0086332 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0400610    Lumi (per nucleus)  (pb-1)  0.0067706 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0561738    Lumi (per nucleus)  (pb-1)  0.0094938 
+ 
+ Run number: 90418
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0312082    Lumi (per nucleus)  (pb-1)  0.0052744 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0242849    Lumi (per nucleus)  (pb-1)  0.0041043 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0344488    Lumi (per nucleus)  (pb-1)  0.0058221 
+ 
+ Run number: 90420
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2578313    Lumi (per nucleus)  (pb-1)  0.0435754 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2006882    Lumi (per nucleus)  (pb-1)  0.0339178 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2842783    Lumi (per nucleus)  (pb-1)  0.0480451 
+ 
+ Run number: 90421
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2391466    Lumi (per nucleus)  (pb-1)  0.0404175 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1878130    Lumi (per nucleus)  (pb-1)  0.0317418 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2635770    Lumi (per nucleus)  (pb-1)  0.0445465 
+ 
+ Run number: 90422
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2542592    Lumi (per nucleus)  (pb-1)  0.0429717 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1972854    Lumi (per nucleus)  (pb-1)  0.0333427 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2808612    Lumi (per nucleus)  (pb-1)  0.0474676 
+ 
+ Run number: 90424
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2450218    Lumi (per nucleus)  (pb-1)  0.0414105 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1939579    Lumi (per nucleus)  (pb-1)  0.0327803 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2696378    Lumi (per nucleus)  (pb-1)  0.0455708 
+ 
+ Run number: 90425
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1616031    Lumi (per nucleus)  (pb-1)  0.0273121 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1203618    Lumi (per nucleus)  (pb-1)  0.0203420 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1952974    Lumi (per nucleus)  (pb-1)  0.0330067 
+ 
+ Run number: 90426
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2576965    Lumi (per nucleus)  (pb-1)  0.0435526 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2003775    Lumi (per nucleus)  (pb-1)  0.0338653 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2843395    Lumi (per nucleus)  (pb-1)  0.0480555 
+ 
+ Run number: 90427
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2483460    Lumi (per nucleus)  (pb-1)  0.0419723 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1985636    Lumi (per nucleus)  (pb-1)  0.0335587 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2732173    Lumi (per nucleus)  (pb-1)  0.0461757 
+ 
+ Run number: 90428
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1970970    Lumi (per nucleus)  (pb-1)  0.0333109 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1607523    Lumi (per nucleus)  (pb-1)  0.0271683 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2174177    Lumi (per nucleus)  (pb-1)  0.0367452 
+ 
+ Run number: 90429
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0504988    Lumi (per nucleus)  (pb-1)  0.0085347 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0411567    Lumi (per nucleus)  (pb-1)  0.0069558 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0556847    Lumi (per nucleus)  (pb-1)  0.0094111 
+ 
+ Run number: 90430
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0331135    Lumi (per nucleus)  (pb-1)  0.0055964 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0271373    Lumi (per nucleus)  (pb-1)  0.0045864 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0367147    Lumi (per nucleus)  (pb-1)  0.0062051 
+ 
+ Run number: 90431
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2089141    Lumi (per nucleus)  (pb-1)  0.0353080 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1688957    Lumi (per nucleus)  (pb-1)  0.0285446 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2304185    Lumi (per nucleus)  (pb-1)  0.0389424 
+ 
+ Run number: 90432
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2492613    Lumi (per nucleus)  (pb-1)  0.0421270 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2026981    Lumi (per nucleus)  (pb-1)  0.0342575 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2753983    Lumi (per nucleus)  (pb-1)  0.0465444 
+ 
+ Run number: 90433
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2084981    Lumi (per nucleus)  (pb-1)  0.0352377 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1689557    Lumi (per nucleus)  (pb-1)  0.0285548 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2295126    Lumi (per nucleus)  (pb-1)  0.0387893 
+ 
+ Run number: 90434
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2598356    Lumi (per nucleus)  (pb-1)  0.0439141 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2081326    Lumi (per nucleus)  (pb-1)  0.0351759 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2873691    Lumi (per nucleus)  (pb-1)  0.0485675 
+ 
+ Run number: 90436
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0654676    Lumi (per nucleus)  (pb-1)  0.0110645 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0526915    Lumi (per nucleus)  (pb-1)  0.0089053 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0722999    Lumi (per nucleus)  (pb-1)  0.0122192 
+ 
+ Run number: 90437
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1390033    Lumi (per nucleus)  (pb-1)  0.0234926 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1120289    Lumi (per nucleus)  (pb-1)  0.0189337 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1534001    Lumi (per nucleus)  (pb-1)  0.0259258 
+ 
+ Run number: 90438
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0465328    Lumi (per nucleus)  (pb-1)  0.0078644 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0369090    Lumi (per nucleus)  (pb-1)  0.0062379 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0514459    Lumi (per nucleus)  (pb-1)  0.0086947 
+ 
+ Run number: 90440
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2030985    Lumi (per nucleus)  (pb-1)  0.0343251 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1610684    Lumi (per nucleus)  (pb-1)  0.0272218 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2245223    Lumi (per nucleus)  (pb-1)  0.0379459 
+ 
+ Run number: 90441
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0708723    Lumi (per nucleus)  (pb-1)  0.0119780 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0574184    Lumi (per nucleus)  (pb-1)  0.0097041 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0780526    Lumi (per nucleus)  (pb-1)  0.0131915 
+ 
+ Run number: 90442
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1672027    Lumi (per nucleus)  (pb-1)  0.0282585 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1355293    Lumi (per nucleus)  (pb-1)  0.0229055 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1841916    Lumi (per nucleus)  (pb-1)  0.0311297 
+ 
+ Run number: 90443
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2512717    Lumi (per nucleus)  (pb-1)  0.0424668 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1976701    Lumi (per nucleus)  (pb-1)  0.0334077 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2782840    Lumi (per nucleus)  (pb-1)  0.0470321 
+ 
+ Run number: 90444
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2396630    Lumi (per nucleus)  (pb-1)  0.0405048 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1938630    Lumi (per nucleus)  (pb-1)  0.0327643 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2645243    Lumi (per nucleus)  (pb-1)  0.0447066 
+ 
+ Run number: 90445
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2517983    Lumi (per nucleus)  (pb-1)  0.0425558 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2000193    Lumi (per nucleus)  (pb-1)  0.0338047 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2785323    Lumi (per nucleus)  (pb-1)  0.0470740 
+ 
+ Run number: 90446
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2473591    Lumi (per nucleus)  (pb-1)  0.0418055 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2005505    Lumi (per nucleus)  (pb-1)  0.0338945 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2724700    Lumi (per nucleus)  (pb-1)  0.0460495 
+ 
+ Run number: 90447
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2535339    Lumi (per nucleus)  (pb-1)  0.0428491 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2051281    Lumi (per nucleus)  (pb-1)  0.0346682 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2800623    Lumi (per nucleus)  (pb-1)  0.0473326 
+ 
+ Run number: 90448
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2681643    Lumi (per nucleus)  (pb-1)  0.0453218 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2230821    Lumi (per nucleus)  (pb-1)  0.0377025 
+ Total flux (E > 6.0 GeV)  (10e12):   0.3009885    Lumi (per nucleus)  (pb-1)  0.0508693 
+ 
+ Run number: 90449
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2585531    Lumi (per nucleus)  (pb-1)  0.0436974 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2101421    Lumi (per nucleus)  (pb-1)  0.0355156 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2860892    Lumi (per nucleus)  (pb-1)  0.0483512 
+ 
+ Run number: 90450
+ Beam energy 10.810000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2427705    Lumi (per nucleus)  (pb-1)  0.0410300 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1960031    Lumi (per nucleus)  (pb-1)  0.0331260 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2672568    Lumi (per nucleus)  (pb-1)  0.0451684 
+ 
+ Run number: 90452
+ Beam energy 10.810000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2495729    Lumi (per nucleus)  (pb-1)  0.0421797 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2022739    Lumi (per nucleus)  (pb-1)  0.0341858 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2757293    Lumi (per nucleus)  (pb-1)  0.0466003 
+ 
+ Run number: 90453
+ Beam energy 10.810000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0551303    Lumi (per nucleus)  (pb-1)  0.0093174 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0439911    Lumi (per nucleus)  (pb-1)  0.0074348 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0607160    Lumi (per nucleus)  (pb-1)  0.0102615 
+ 
+ Run number: 90457
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2332624    Lumi (per nucleus)  (pb-1)  0.0394231 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1838036    Lumi (per nucleus)  (pb-1)  0.0310642 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2568575    Lumi (per nucleus)  (pb-1)  0.0434108 
+ 
+ Run number: 90458
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0724452    Lumi (per nucleus)  (pb-1)  0.0122438 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0576341    Lumi (per nucleus)  (pb-1)  0.0097406 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0799679    Lumi (per nucleus)  (pb-1)  0.0135152 
+ 
+ Run number: 90469
+ Beam energy 10.805000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2624242    Lumi (per nucleus)  (pb-1)  0.0443516 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2028815    Lumi (per nucleus)  (pb-1)  0.0342885 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2897410    Lumi (per nucleus)  (pb-1)  0.0489684 
+ 
+ Run number: 90470
+ Beam energy 10.805000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1010818    Lumi (per nucleus)  (pb-1)  0.0170836 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0795755    Lumi (per nucleus)  (pb-1)  0.0134488 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1111451    Lumi (per nucleus)  (pb-1)  0.0187843 
+ 
+ Run number: 90471
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1467289    Lumi (per nucleus)  (pb-1)  0.0247983 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1153269    Lumi (per nucleus)  (pb-1)  0.0194911 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1614110    Lumi (per nucleus)  (pb-1)  0.0272797 
+ 
+ Run number: 90474
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1522080    Lumi (per nucleus)  (pb-1)  0.0257243 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1130127    Lumi (per nucleus)  (pb-1)  0.0191000 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1838572    Lumi (per nucleus)  (pb-1)  0.0310732 
+ 
+ Run number: 90475
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2546114    Lumi (per nucleus)  (pb-1)  0.0430312 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1982516    Lumi (per nucleus)  (pb-1)  0.0335060 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2811113    Lumi (per nucleus)  (pb-1)  0.0475099 
+ 
+ Run number: 90476
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2494683    Lumi (per nucleus)  (pb-1)  0.0421620 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1968948    Lumi (per nucleus)  (pb-1)  0.0332767 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2749412    Lumi (per nucleus)  (pb-1)  0.0464671 
+ 
+ Run number: 90477
+ Beam energy 10.813000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2606812    Lumi (per nucleus)  (pb-1)  0.0440570 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2019341    Lumi (per nucleus)  (pb-1)  0.0341284 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2874999    Lumi (per nucleus)  (pb-1)  0.0485896 
+ 
+ Run number: 90478
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2489957    Lumi (per nucleus)  (pb-1)  0.0420821 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1966574    Lumi (per nucleus)  (pb-1)  0.0332366 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2736180    Lumi (per nucleus)  (pb-1)  0.0462435 
+ 
+ Run number: 90479
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2574294    Lumi (per nucleus)  (pb-1)  0.0435075 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2002418    Lumi (per nucleus)  (pb-1)  0.0338424 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2843291    Lumi (per nucleus)  (pb-1)  0.0480537 
+ 
+ Run number: 90480
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2616615    Lumi (per nucleus)  (pb-1)  0.0442227 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2060515    Lumi (per nucleus)  (pb-1)  0.0348242 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2882898    Lumi (per nucleus)  (pb-1)  0.0487231 
+ 
+ Run number: 90481
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2599624    Lumi (per nucleus)  (pb-1)  0.0439356 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2070641    Lumi (per nucleus)  (pb-1)  0.0349954 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2873682    Lumi (per nucleus)  (pb-1)  0.0485673 
+ 
+ Run number: 90482
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2535659    Lumi (per nucleus)  (pb-1)  0.0428545 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2003840    Lumi (per nucleus)  (pb-1)  0.0338664 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2786954    Lumi (per nucleus)  (pb-1)  0.0471016 
+ 
+ Run number: 90483
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2574869    Lumi (per nucleus)  (pb-1)  0.0435172 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2017982    Lumi (per nucleus)  (pb-1)  0.0341054 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2842723    Lumi (per nucleus)  (pb-1)  0.0480441 
+ 
+ Run number: 90484
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2641187    Lumi (per nucleus)  (pb-1)  0.0446380 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2141478    Lumi (per nucleus)  (pb-1)  0.0361926 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2949907    Lumi (per nucleus)  (pb-1)  0.0498556 
+ 
+ Run number: 90486
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0701407    Lumi (per nucleus)  (pb-1)  0.0118543 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0559259    Lumi (per nucleus)  (pb-1)  0.0094519 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0775904    Lumi (per nucleus)  (pb-1)  0.0131133 
+ 
+ Run number: 90487
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1866113    Lumi (per nucleus)  (pb-1)  0.0315387 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1438859    Lumi (per nucleus)  (pb-1)  0.0243178 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2060324    Lumi (per nucleus)  (pb-1)  0.0348210 
+ 
+ Run number: 90488
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2493131    Lumi (per nucleus)  (pb-1)  0.0421358 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1973530    Lumi (per nucleus)  (pb-1)  0.0333541 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2740875    Lumi (per nucleus)  (pb-1)  0.0463228 
+ 
+ Run number: 90489
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0226726    Lumi (per nucleus)  (pb-1)  0.0038318 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0177194    Lumi (per nucleus)  (pb-1)  0.0029947 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0250489    Lumi (per nucleus)  (pb-1)  0.0042334 
+ 
+ Run number: 90491
+ Beam energy 10.81 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0103014    Lumi (per nucleus)  (pb-1)  0.0017410 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0080773    Lumi (per nucleus)  (pb-1)  0.0013651 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0113586    Lumi (per nucleus)  (pb-1)  0.0019197 
+ 
+ Run number: 90492
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2594972    Lumi (per nucleus)  (pb-1)  0.0438569 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2029313    Lumi (per nucleus)  (pb-1)  0.0342969 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2865982    Lumi (per nucleus)  (pb-1)  0.0484372 
+ 
+ Run number: 90493
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2613091    Lumi (per nucleus)  (pb-1)  0.0441632 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2127057    Lumi (per nucleus)  (pb-1)  0.0359488 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2922019    Lumi (per nucleus)  (pb-1)  0.0493843 
+ 
+ Run number: 90494
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2621280    Lumi (per nucleus)  (pb-1)  0.0443016 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1959668    Lumi (per nucleus)  (pb-1)  0.0331198 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2897750    Lumi (per nucleus)  (pb-1)  0.0489741 
+ 
+ Run number: 90495
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0550379    Lumi (per nucleus)  (pb-1)  0.0093018 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0414233    Lumi (per nucleus)  (pb-1)  0.0070008 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0608450    Lumi (per nucleus)  (pb-1)  0.0102833 
+ 
+ Run number: 90496
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2480153    Lumi (per nucleus)  (pb-1)  0.0419164 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1964203    Lumi (per nucleus)  (pb-1)  0.0331965 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2726590    Lumi (per nucleus)  (pb-1)  0.0460814 
+ 
+ Run number: 90497
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2553685    Lumi (per nucleus)  (pb-1)  0.0431592 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2006026    Lumi (per nucleus)  (pb-1)  0.0339033 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2819449    Lumi (per nucleus)  (pb-1)  0.0476508 
+ 
+ Run number: 90498
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2598074    Lumi (per nucleus)  (pb-1)  0.0439094 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2105912    Lumi (per nucleus)  (pb-1)  0.0355915 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2895052    Lumi (per nucleus)  (pb-1)  0.0489285 
+ 
+ Run number: 90499
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1054109    Lumi (per nucleus)  (pb-1)  0.0178152 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0841229    Lumi (per nucleus)  (pb-1)  0.0142174 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1167746    Lumi (per nucleus)  (pb-1)  0.0197358 
+ 
+ Run number: 90500
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1567932    Lumi (per nucleus)  (pb-1)  0.0264992 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1251211    Lumi (per nucleus)  (pb-1)  0.0211464 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1736919    Lumi (per nucleus)  (pb-1)  0.0293552 
+ 
+ Run number: 90501
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1612815    Lumi (per nucleus)  (pb-1)  0.0272578 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1279564    Lumi (per nucleus)  (pb-1)  0.0216256 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1773006    Lumi (per nucleus)  (pb-1)  0.0299651 
+ 
+ Run number: 90502
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0172845    Lumi (per nucleus)  (pb-1)  0.0029212 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0137018    Lumi (per nucleus)  (pb-1)  0.0023157 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0190086    Lumi (per nucleus)  (pb-1)  0.0032126 
+ 
+ Run number: 90503
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0769467    Lumi (per nucleus)  (pb-1)  0.0130046 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0610341    Lumi (per nucleus)  (pb-1)  0.0103152 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0845940    Lumi (per nucleus)  (pb-1)  0.0142970 
+ 
+ Run number: 90504
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0993489    Lumi (per nucleus)  (pb-1)  0.0167907 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0772058    Lumi (per nucleus)  (pb-1)  0.0130483 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1097962    Lumi (per nucleus)  (pb-1)  0.0185564 
+ 
+ Run number: 90506
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0284379    Lumi (per nucleus)  (pb-1)  0.0048062 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0140042    Lumi (per nucleus)  (pb-1)  0.0023668 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0285384    Lumi (per nucleus)  (pb-1)  0.0048232 
+ 
+ Run number: 90507
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0082466    Lumi (per nucleus)  (pb-1)  0.0013937 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0040272    Lumi (per nucleus)  (pb-1)  0.0006806 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0082804    Lumi (per nucleus)  (pb-1)  0.0013995 
+ 
+ Run number: 90510
+ Beam energy 10.811000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0465512    Lumi (per nucleus)  (pb-1)  0.0078675 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0358751    Lumi (per nucleus)  (pb-1)  0.0060632 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0515156    Lumi (per nucleus)  (pb-1)  0.0087065 
+ 
+ Run number: 90511
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0959951    Lumi (per nucleus)  (pb-1)  0.0162239 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0707029    Lumi (per nucleus)  (pb-1)  0.0119493 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1062218    Lumi (per nucleus)  (pb-1)  0.0179523 
+ 
+ Run number: 90512
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0257142    Lumi (per nucleus)  (pb-1)  0.0043459 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0189020    Lumi (per nucleus)  (pb-1)  0.0031946 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0284719    Lumi (per nucleus)  (pb-1)  0.0048120 
+ 
+ Run number: 90513
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2363757    Lumi (per nucleus)  (pb-1)  0.0399492 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1838211    Lumi (per nucleus)  (pb-1)  0.0310671 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2602809    Lumi (per nucleus)  (pb-1)  0.0439894 
+ 
+ Run number: 90514
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2541012    Lumi (per nucleus)  (pb-1)  0.0429450 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1976106    Lumi (per nucleus)  (pb-1)  0.0333977 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2798070    Lumi (per nucleus)  (pb-1)  0.0472895 
+ 
+ Run number: 90515
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2596441    Lumi (per nucleus)  (pb-1)  0.0438818 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2072836    Lumi (per nucleus)  (pb-1)  0.0350325 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2877137    Lumi (per nucleus)  (pb-1)  0.0486257 
+ 
+ Run number: 90516
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2509607    Lumi (per nucleus)  (pb-1)  0.0424142 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1992979    Lumi (per nucleus)  (pb-1)  0.0336828 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2760164    Lumi (per nucleus)  (pb-1)  0.0466488 
+ 
+ Run number: 90517
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2878983    Lumi (per nucleus)  (pb-1)  0.0486569 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2223379    Lumi (per nucleus)  (pb-1)  0.0375768 
+ Total flux (E > 6.0 GeV)  (10e12):   0.3180693    Lumi (per nucleus)  (pb-1)  0.0537561 
+ 
+ Run number: 90518
+ Beam energy 10.812000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0629776    Lumi (per nucleus)  (pb-1)  0.0106437 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0510527    Lumi (per nucleus)  (pb-1)  0.0086283 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0702373    Lumi (per nucleus)  (pb-1)  0.0118706 
+ 
+ Run number: 90519
+ Beam energy 10.813000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1956048    Lumi (per nucleus)  (pb-1)  0.0330587 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1511070    Lumi (per nucleus)  (pb-1)  0.0255382 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2153628    Lumi (per nucleus)  (pb-1)  0.0363979 
+ 
+ Run number: 90520
+ Beam energy 10.813000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2626220    Lumi (per nucleus)  (pb-1)  0.0443851 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1988417    Lumi (per nucleus)  (pb-1)  0.0336057 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2899545    Lumi (per nucleus)  (pb-1)  0.0490045 
+ 
+ Run number: 90521
+ Beam energy 10.813000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2578204    Lumi (per nucleus)  (pb-1)  0.0435736 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2039188    Lumi (per nucleus)  (pb-1)  0.0344638 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2833101    Lumi (per nucleus)  (pb-1)  0.0478815 
+ 
+ Run number: 90522
+ Beam energy 10.813000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2579214    Lumi (per nucleus)  (pb-1)  0.0435906 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1977574    Lumi (per nucleus)  (pb-1)  0.0334225 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2849324    Lumi (per nucleus)  (pb-1)  0.0481557 
+ 
+ Run number: 90523
+ Beam energy 10.813000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1950714    Lumi (per nucleus)  (pb-1)  0.0329685 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1528119    Lumi (per nucleus)  (pb-1)  0.0258263 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2149661    Lumi (per nucleus)  (pb-1)  0.0363309 
+ 
+ Run number: 90524
+ Beam energy 10.813000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0706927    Lumi (per nucleus)  (pb-1)  0.0119476 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0553997    Lumi (per nucleus)  (pb-1)  0.0093630 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0779279    Lumi (per nucleus)  (pb-1)  0.0131704 
+ 
+ Run number: 90525
+ Beam energy 10.813000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2628133    Lumi (per nucleus)  (pb-1)  0.0444174 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1993480    Lumi (per nucleus)  (pb-1)  0.0336913 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2901789    Lumi (per nucleus)  (pb-1)  0.0490424 
+ 
+ Run number: 90526
+ Beam energy 10.813000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2573748    Lumi (per nucleus)  (pb-1)  0.0434982 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2046763    Lumi (per nucleus)  (pb-1)  0.0345918 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2831602    Lumi (per nucleus)  (pb-1)  0.0478562 
+ 
+ Run number: 90527
+ Beam energy 10.813000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2562465    Lumi (per nucleus)  (pb-1)  0.0433076 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1953887    Lumi (per nucleus)  (pb-1)  0.0330221 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2830642    Lumi (per nucleus)  (pb-1)  0.0478399 
+ 
+ Run number: 90528
+ Beam energy 10.813000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2705763    Lumi (per nucleus)  (pb-1)  0.0457294 
+ Total flux (E > 8.0 GeV)  (10e12):   0.2195732    Lumi (per nucleus)  (pb-1)  0.0371095 
+ Total flux (E > 6.0 GeV)  (10e12):   0.3015192    Lumi (per nucleus)  (pb-1)  0.0509590 
+ 
+ Run number: 90530
+ Beam energy 10.813000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2134486    Lumi (per nucleus)  (pb-1)  0.0360744 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1574020    Lumi (per nucleus)  (pb-1)  0.0266021 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2357902    Lumi (per nucleus)  (pb-1)  0.0398503 
+ 
+ Run number: 90531
+ Beam energy 10.813000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2418072    Lumi (per nucleus)  (pb-1)  0.0408672 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1908937    Lumi (per nucleus)  (pb-1)  0.0322625 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2667506    Lumi (per nucleus)  (pb-1)  0.0450828 
+ 
+ Run number: 90532
+ Beam energy 10.813000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1614066    Lumi (per nucleus)  (pb-1)  0.0272789 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1200767    Lumi (per nucleus)  (pb-1)  0.0202939 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1950726    Lumi (per nucleus)  (pb-1)  0.0329687 
+ 
+ Run number: 90533
+ Beam energy 10.813000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2582612    Lumi (per nucleus)  (pb-1)  0.0436481 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1956550    Lumi (per nucleus)  (pb-1)  0.0330671 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2852220    Lumi (per nucleus)  (pb-1)  0.0482046 
+ 
+ Run number: 90534
+ Beam energy 10.813000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.2485671    Lumi (per nucleus)  (pb-1)  0.0420097 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1952340    Lumi (per nucleus)  (pb-1)  0.0329960 
+ Total flux (E > 6.0 GeV)  (10e12):   0.2741260    Lumi (per nucleus)  (pb-1)  0.0463293 
+ 
+ Run number: 90535
+ Beam energy 10.813000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.0348662    Lumi (per nucleus)  (pb-1)  0.0058926 
+ Total flux (E > 8.0 GeV)  (10e12):   0.0264882    Lumi (per nucleus)  (pb-1)  0.0044767 
+ Total flux (E > 6.0 GeV)  (10e12):   0.0385365    Lumi (per nucleus)  (pb-1)  0.0065129 
+ 
+ Run number: 90536
+ Beam energy 10.813000 
+ Target     Carbon  
+ Total flux (E > 7.0 GeV)  (10e12):   0.1661156    Lumi (per nucleus)  (pb-1)  0.0280748 
+ Total flux (E > 8.0 GeV)  (10e12):   0.1262666    Lumi (per nucleus)  (pb-1)  0.0213400 
+ Total flux (E > 6.0 GeV)  (10e12):   0.1836150    Lumi (per nucleus)  (pb-1)  0.0310323 
+ 
+
+ =========================================== 
+ ===========  ALL RUNS ===================== 
+ =========================================== 
+ 
+
+ Total flux (E > 7.0 GeV)  (10e12):   46.1095762    Lumi (per nucleus)  (pb-1)  7.7928595 
+ Total flux (E > 8.0 GeV)  (10e12):   36.2491439    Lumi (per nucleus)  (pb-1)  6.1263735 
+ Total flux (E > 6.0 GeV)  (10e12):   50.9205317    Lumi (per nucleus)  (pb-1)  8.6059465 
+

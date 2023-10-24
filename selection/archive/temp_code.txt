@@ -1,0 +1,46 @@
+// CUSTOM HISTOGRAMS: YIELD EXTRACTION
+TH1F* dHist_Yield_S_T[5][10];
+TH1F* dHist_Yield_S_ThetaCM[5][5];
+
+// CUSTOM HISTOGRAMS: YIELD EXTRACTION
+for(UInt_t index_i = 0; index_i < 5; ++index_i)
+{
+    for(UInt_t index_j = 0; index_j < 10; ++index_j)
+    {
+        dHist_Yield_S_T[index_i][index_j] = new TH1F("Yield_S_T_"+TString::Itoa(index_i+1, 10)+"_"+TString::Itoa(index_j+1, 10), ";Missing P^{-} (GeV) ;Events/0.01 GeV", 200, 0.0, 2.0);
+    }
+}
+for(UInt_t index_i = 0; index_i < 5; ++index_i)
+{
+    for(UInt_t index_j = 0; index_j < 5; ++index_j)
+    {
+        dHist_Yield_S_ThetaCM[index_i][index_j] = new TH1F("Yield_S_ThetaCM_"+TString::Itoa(index_i+1, 10)+"_"+TString::Itoa(index_j+1, 10), ";Missing P^{-} (GeV) ;Events/0.01 GeV", 200, 0.0, 2.0);
+    }
+}
+
+// FILL CUSTOM HISTOGRAMS: YIELD EXTRACTION
+double bin_S[6] = {5.0, 10.0, 15.0, 20.0, 25.0, 30.0};
+double bin_T[11] = {0.0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1.0, 1.5, 2.0, 3.0};
+double bin_ThetaCM[6] = {0.0, 10.0, 15.0, 20.0, 40.0, 60.0};
+for(UInt_t index_i = 0; index_i < 5; ++index_i)
+{
+    for(UInt_t index_j = 0; index_j < 10; ++index_j)
+    {
+        if(locSqrtS_KinFit*locSqrtS_KinFit >=  bin_S[index_i] && locSqrtS_KinFit*locSqrtS_KinFit < bin_S[index_i+1] && locMinusT_KinFit >= bin_T[index_j] && locMinusT_KinFit < bin_T[index_j+1])
+        {
+            dHist_Yield_S_T[index_i][index_j]->Fill(locMissingP4_Thrown.Minus(), locHistAccidWeightFactor);
+            continue;
+        }
+    }
+}
+for(UInt_t index_i = 0; index_i < 5; ++index_i)
+{
+    for(UInt_t index_j = 0; index_j < 5; ++index_j)
+    {
+        if(locSqrtS_KinFit*locSqrtS_KinFit >=  bin_S[index_i] && locSqrtS_KinFit*locSqrtS_KinFit < bin_S[index_i+1] && locThetaCM_KinFit >= bin_ThetaCM[index_j] && locThetaCM_KinFit < bin_ThetaCM[index_j+1])
+        {
+            dHist_Yield_S_ThetaCM[index_i][index_j]->Fill(locMissingP4_Thrown.Minus(), locHistAccidWeightFactor);
+            continue;
+        }
+    }
+}

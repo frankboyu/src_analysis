@@ -1,0 +1,73 @@
+// 0.75 in launch , Alex used 0.5.  Nilanga used standard analysis launch cuts for K+.
+	// Peter Pauli also used 0.5 https://halldweb.jlab.org/DocDB/0046/004628/001/2020pauliphd.pdf
+    // plus a separate vertical band at 0.5GeV which shows no preference for 0ns so cannot be K
+
+	dAnalysisActions.push_back(new DCutAction_PIDDeltaT(dComboWrapper, true, 0.5, KPlus, SYS_BCAL));
+	dAnalysisActions.push_back(new DCutAction_PIDDeltaT(dComboWrapper, true, 0.5, KMinus, SYS_BCAL));
+	dAnalysisActions.push_back(new DCutAction_PIDDeltaT(dComboWrapper, true, 1.0, Proton, SYS_BCAL));
+
+	// 2.5 in launch, Alex used 1.0
+	dAnalysisActions.push_back(new DCutAction_PIDDeltaT(dComboWrapper, true, 2.0, KPlus, SYS_FCAL));
+	dAnalysisActions.push_back(new DCutAction_PIDDeltaT(dComboWrapper, true, 2.0, KMinus, SYS_FCAL));
+	dAnalysisActions.push_back(new DCutAction_PIDDeltaT(dComboWrapper, true, 1.0, Proton, SYS_FCAL));
+
+    // 0.3 in launch, Alex used 0.4
+	dAnalysisActions.push_back(new DCutAction_PIDDeltaT(dComboWrapper, true, 0.3, KPlus, SYS_TOF));
+	dAnalysisActions.push_back(new DCutAction_PIDDeltaT(dComboWrapper, true, 0.3, KMinus, SYS_TOF));
+	dAnalysisActions.push_back(new DCutAction_PIDDeltaT(dComboWrapper, true, 0.3, Proton, SYS_TOF));
+
+BetaMax = new TF1(“betap1”,“[0] + [1] * exp([2]*x)“,0,10);
+    BetaMin = new TF1(“betap2”,“[0] + [1] * exp([2]*x)“,0,10);
+
+    BetaMin->SetParameters(0.95,-1,-2);
+    BetaMax->SetParameters(1.05,-1,-2.5);
+
+    DCutAction_PIDBeta *myBetaCutKp = new DCutAction_PIDBeta(dComboWrapper, true, 0, 2, KPlus, SYS_TOF);
+    myBetaCutKp->dFunc_BetaCut_SelectPositive = BetaMax; // this removes anything above the cut line
+    myBetaCutKp->dFunc_BetaCut_SelectNegative = BetaMin; // this removes anything above the cut line
+    dAnalysisActions.push_back(myBetaCutKp);
+
+    DCutAction_PIDBeta *myBetaCutKm = new DCutAction_PIDBeta(dComboWrapper, true, 0, 2, KMinus, SYS_TOF);
+    myBetaCutKm->dFunc_BetaCut_SelectPositive = BetaMax; // this removes anything above the cut line
+    myBetaCutKm->dFunc_BetaCut_SelectNegative = BetaMin; // this removes anything below the cut line
+    dAnalysisActions.push_back(myBetaCutKm);
+
+	
+    DCutAction_dEdx *dCutSTdedxKp = new DCutAction_dEdx(dComboWrapper, true, KPlus, SYS_START,“dCutSTdedxKp”);
+	dCutSTdedxKp->Set_Min(5, 2.4, 0.6);  //(5.0, 3.5, 0.1, 1.2);
+	dCutSTdedxKp->Set_Max(0, 0, 99);
+    dAnalysisActions.push_back(dCutSTdedxKp);
+	
+    DCutAction_dEdx *dCutSTdedxKm = new DCutAction_dEdx(dComboWrapper, true, KMinus, SYS_START,“dCutSTdedxKm”);
+	dCutSTdedxKm->Set_Min(5, 2.4, 0.6);  //(5.0, 3.5, 0.1, 1.2);
+	dCutSTdedxKm->Set_Max(0, 0, 99);  	
+    dAnalysisActions.push_back(dCutSTdedxKm);
+	
+    DCutAction_dEdx *dCutSTdedxP = new DCutAction_dEdx(dComboWrapper, true, Proton, SYS_START,“dCutSTdedxP”);
+    dCutSTdedxP->Set_Min(3.5, 2.3, 0.9);
+	dCutSTdedxP->Set_Max(0, 0, 99);  	
+    dAnalysisActions.push_back(dCutSTdedxP);
+	
+
+    DCutAction_dEdx *dCutCDCdedxKp = new DCutAction_dEdx(dComboWrapper, true, KPlus, SYS_CDC,“dCutCDCdedxKp”);
+    dCutCDCdedxKp->Set_Min(5, 2.6, 0.5);
+    dCutCDCdedxKp->Set_Max(9, 4.7, 3.3);
+    dAnalysisActions.push_back(dCutCDCdedxKp);
+
+DCutAction_dEdx *dCutCDCdedxKm = new DCutAction_dEdx(dComboWrapper, true, KMinus, SYS_CDC,“dCutCDCdedxKm”);
+    dCutCDCdedxKm->Set_Min(5, 2.6, 0.5);
+    dCutCDCdedxKm->Set_Max(9, 4.7, 3.3);
+    dAnalysisActions.push_back(dCutCDCdedxKm);
+
+	
+
+    DCutAction_dEdx *dCutCDCdedxP = new DCutAction_dEdx(dComboWrapper, true, Proton, SYS_CDC,“dCutCDCdedxP”);
+    dCutCDCdedxP->Set_Min(4.0, 3.2, 1.0);
+	dCutCDCdedxP->Set_Max(0, 0, 99);
+    dAnalysisActions.push_back(dCutCDCdedxP);
+	
+    DCutAction_dEdx *dCutFDCdedx = new DCutAction_dEdx(dComboWrapper, true, Proton, SYS_FDC,“dCutFDCdedx”);
+    dCutFDCdedx->Set_Min(5.2, 3.3, 0.6);
+	dCutFDCdedx->Set_Max(0, 0, 99);  	
+    dAnalysisActions.push_back(dCutFDCdedx);
+[9:17 AM] ^^^^^   my PID cuts.  In case you find them useful.  The unusual ones are ST & FDC, most ppl don’t do those, do what you think best, and the beta cut.
