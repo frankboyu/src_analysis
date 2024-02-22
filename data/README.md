@@ -1,10 +1,10 @@
 ## src_analysis_data
 
-Use reaction filter plugin of hd_root to skim the data files.
+Use reaction filter plugin of hd_root to skim the REST files.
 
 JLab: /work/halld2/home/boyu/src_analysis/data
 
-GitHub: 
+GitHub: https://github.com/frankboyu/src_analysis/tree/master/data
 
 ### Usage
 

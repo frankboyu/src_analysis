@@ -1,7 +1,7 @@
 import rcdb
 import sys
 
-rcdb_query = sys.argv[1]
+rcdb_query = "@is_src_production and @status_approved and target_type=='FULL & Ready Carbon'"
 
 db = rcdb.RCDBProvider("mysql://rcdb@hallddb/rcdb")
 
@@ -11,4 +11,4 @@ good_runs = db.select_runs(rcdb_query, 90001, 90662)
 
 for run in good_runs:
     print(run)
-    file.write(str(run)[-7:-2]+"\n")
+    file.write("run_"+str(run)[-7:-2]+"\n")

@@ -4,50 +4,32 @@ Simulation suite for the SRC/CT analysis.
 
 JLab: /work/halld2/home/boyu/src_analysis/sim
 
-GitHub:
+GitHub: https://github.com/frankboyu/src_analysis/tree/master/sim
 
 ### Usage
 
-1.  Install the softwares in the build directory.
+1.  Install the softwares in the builds directory, including halld_sim_srcct and gluex_MCwrapper_srcct.
 
-    `cd build`
+2.  Recompile halld_sim_srcct if needed.
 
-    `git clone https"//github.com/JacksonPybus/halld_sim_srcct.git` Install the halld_sim_srcct package. (derivative from halld_sim with custom generator, private repository)
+    `sh run_compile.sh VERSION`
 
-    `git clone https://github.com/JeffersonLab/gluex_MCwrapper.git` Install the gluex_MCwrapper package.
+    VERSION is the version number of the halld_sim_srcct software. Only the gen_MF generator is re-compiled for efficiency.
 
-    `cd gluex_MCwrapper`
+3.  Edit the config files (configs/gen_REACTION.cfg, jana_REACTION.cfg, wrapper_REACTION.cfg).
 
-    `git checkout -b src-ct` Switch to the src-ct branch.
+4.  Run the simulaiton
 
-2.  Recompile halld_sim_srcct after installation, checkout, or personal edits.
+    `sh run_sim.sh REACTION VERSION EVENTS`
 
-    `sh run_compile.sh`
+    REACTION can be one of the physics channel names or test.
 
-3.  Edit the config files (configs/CHANNEL/gen_CHANNEL.cfg, jana_CHANNEL.cfg, wrapper_CHANNEL.cfg) and the environment files (env.csh, env.sh).
+    VERSION is the version number for the physics channel or the target name for the test files.
 
-4.  Test the simulation
-
-     `sh run_test.sh CHANNEL EVENTS`
-    
-     It will run the simulation on the ifarm using wrapper_CHANNEL.cfg with specified number of events.
-
-5.  Run the simulaiton
-
-    `sh run_sim.sh CHANNEL EVENTS`
-
-    which contains 3 steps:
-
-    First, get_configs.py will generate the config files in the configs/ directory for each individual run.
-
-    Then, get_number.py will generate a text files containing the number of events to run for each individual run based on the total luminosity.
-
-    Finally, gluex_MC.py will submit the simulation jobs to the batch system.
+    EVENTS is the number of events to be run.
 
 6.  Merge the output root files and back up all the files on tape.
 
-    `sh run_merge.sh CHANNEL TAG`
+    `sh run_merge.sh REACTION VERSION`
 
-    where TAG is used to specify the configurations of the simulation.
-
-    The output files of the simulation will be relocated to output_cache/CHANNEL/TAG. Root files are merged by run number, while REST files are untouched.
+    Root files are merged by run number, while REST files are untouched. Test files are not applicable for this step.

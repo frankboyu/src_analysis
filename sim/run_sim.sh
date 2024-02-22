@@ -1,44 +1,41 @@
 #!/bin/bash
 
-CHANNEL=$1
-EVENTS=$2
+REACTION=$1
+VERSION=$2
+EVENTS=$3
 
 source env.sh
 
-
-
-
-
-python get_configs.py ${CHANNEL}
-python get_number.py ${CHANNEL} ${EVENTS}
-
-while read -r run number;
-do
-    echo ${run} ${number}
-    gluex_MC.py configs/wrapper_${CHANNEL}_${run}.cfg ${run} ${number} per_file=1000000 batch=1
-done < list.txt
-
-swif2 run -workflow src_analysis_sim
-
-rm list.txt
-rm configs/${CHANNEL}/wrapper_${CHANNEL}_*.cfg
-
-
-
-
-
-
-
-
-if   [ ${CHANNEL:(-11):2} == "2H" ]
+if  [ ${REACTION} == "test" ]
 then
-    gluex_MC.py configs/wrapper_${CHANNEL}.cfg 90213 ${EVENTS} per_file=1000000 batch=0
-elif [ ${CHANNEL:(-12):3} == "4He" ]
-then
-    gluex_MC.py configs/wrapper_${CHANNEL}.cfg 90061 ${EVENTS} per_file=1000000 batch=0
-elif [ ${CHANNEL:(-12):3} == "12C" ]
-then
-    gluex_MC.py configs/wrapper_${CHANNEL}.cfg 90290 ${EVENTS} per_file=1000000 batch=0
+    rm -r /volatile/halld/home/boyu/src_analysis/sim/test/
+    mkdir /volatile/halld/home/boyu/src_analysis/sim/test/
+
+    if   [ ${VERSION} == "2H" ]
+    then
+        gluex_MC.py configs/wrapper_test.cfg 90213 ${EVENTS} per_file=1000000 batch=2
+    elif [ ${VERSION} == "4He" ]
+    then
+        gluex_MC.py configs/wrapper_test.cfg 90061 ${EVENTS} per_file=1000000 batch=2
+    elif [ ${VERSION} == "12C" ]
+    then
+        gluex_MC.py configs/wrapper_test.cfg 90290 ${EVENTS} per_file=1000000 batch=2
+    fi
+else
+    mkdir /volatile/halld/home/boyu/src_analysis/sim/${REACTION}/ver${VERSION}/
+    mkdir /cache/halld/home/boyu/src_analysis/sim/${REACTION}/ver${VERSION}/
+
+    python get_configs.py ${REACTION} ${VERSION}  # Generate the config files for each individual run.
+    python get_number.py ${REACTION} ${EVENTS}    # Generate a text file of the number of events for each individual run
+
+    while read -r run number;
+    do
+        echo ${run} ${number}
+        gluex_MC.py configs/wrapper_${REACTION}_ver${VERSION}_${run}.cfg ${run} ${number} per_file=1000000 batch=1  # Submit the simulation to the batch system
+    done < list.txt
+
+    swif2 run -workflow src_analysis_sim
+
+    rm list.txt
+    rm configs/wrapper_${REACTION}_ver${VERSION}_*.cfg
 fi
-
-rm -r 90*

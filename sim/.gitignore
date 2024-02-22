@@ -1,5 +1,5 @@
 **/.vscode
 **/.ipynb_checkpoints
-build/*
+builds/*
 output_cache
 output_volatile

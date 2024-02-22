@@ -1,29 +1,72 @@
 #!/bin/bash
 
-CHANNEL=$1
+# INPUT ARGUMENTS
+REACTION=$1
 VERSION=$2
 
+# SET UP ENVIRONMENT
 source env.sh
 
-echo "Making directory"
-mkdir output_volatile/${CHANNEL}/${TAG}/
-
-echo "Merging ROOT files"
-if [ ${CHANNEL} == "piminus_p_2H_MF" ]
+# GET THE TARGET NAME
+if  [ ${REACTION:(-2)} == "2H" ]
 then
-    hadd output_volatile/${CHANNEL}/${TAG}/genOut_gen_MF.root                               output_volatile/${CHANNEL}/root/generator/genOut_gen_MF_*.root
-    hadd output_volatile/${CHANNEL}/${TAG}/tree_thrown_gen_MF.root                          output_volatile/${CHANNEL}/root/thrown/tree_thrown_gen_MF_*.root
-    hadd output_volatile/${CHANNEL}/${TAG}/tree_gd_pimprotinc__B4_F4_T1_S4_gen_MF.root      output_volatile/${CHANNEL}/root/trees/tree_gd_pimprotinc__B4_F4_T1_S4_gen_MF_*.root
-    hadd output_volatile/${CHANNEL}/${TAG}/tree_gd_pimprotmissprot__B4_F4_T1_S4_gen_MF.root output_volatile/${CHANNEL}/root/trees/tree_gd_pimprotmissprot__B4_F4_T1_S4_gen_MF_*.root  
-elif [ ${CHANNEL} == "phi_p_2H_MF" ]
+    TARGET="deuterium"
+elif [ ${REACTION:(-3)} == "4He" ]
 then
-    hadd output_volatile/${CHANNEL}/${TAG}/genOut_gen_MF.root                               output_volatile/${CHANNEL}/root/generator/genOut_gen_MF_*.root
-    hadd output_volatile/${CHANNEL}/${TAG}/tree_thrown_gen_MF.root                          output_volatile/${CHANNEL}/root/thrown/tree_thrown_gen_MF_*.root
-    hadd output_volatile/${CHANNEL}/${TAG}/tree_gd_kpkmprotinc__B4_F4_T2_S5_gen_MF.root     output_volatile/${CHANNEL}/root/trees/tree_gd_kpkmprotinc__B4_F4_T2_S5_gen_MF_*.root
-    hadd output_volatile/${CHANNEL}/${TAG}/tree_gd_kpkmprotmissn__B4_F4_T2_S5_gen_MF.root   output_volatile/${CHANNEL}/root/trees/tree_gd_kpkmprotmissn__B4_F4_T2_S5_gen_MF_*.root
+    TARGET="helium"
+elif [ ${REACTION:(-3)} == "12C" ]
+then
+    TARGET="carbon"
 fi
 
-echo "Removing individual files"
-rm -r output_volatile/${CHANNEL}/configurations
-rm -r output_volatile/${CHANNEL}/hddm
-rm -r output_volatile/${CHANNEL}/root
+# GET THE LIST OF TREES TO MERGE
+tree_list=()
+tree_list+=("genOut_gen_MF")       # output trees from generator
+tree_list+=("tree_thrown_gen_MF")  # output trees from mcthrown_tree plugin
+
+for file in "/volatile/halld/home/boyu/src_analysis/sim/${REACTION}/ver${VERSION}/root/trees"/*;  # output trees from reaction filter plugin
+do
+    tree_name=$(basename "$file")
+    tree_name=${tree_name:0:${#tree_name}-16}  # remove the part of run number and file number, "_09XXXX_XXX.root"
+    
+    if [ ${tree_name} != ${tree_list[-1]} ]; 
+    then
+        tree_list+=(${tree_name})
+    fi
+done
+
+# MAKE NEW DIRECTORIES
+mkdir /cache/halld/home/boyu/src_analysis/sim/${REACTION}/ver${VERSION}/REST
+for tree_name in ${tree_list[@]};
+do
+    mkdir /cache/halld/home/boyu/src_analysis/sim/${REACTION}/ver${VERSION}/${tree_name}
+    mkdir /cache/halld/home/boyu/src_analysis/sim/${REACTION}/ver${VERSION}/${tree_name}/merged
+done
+
+# MOVE THE HDDM FILES AND MERGE THE ROOT TREES
+while read -r run flux;
+do
+    echo ${run}
+
+    mkdir /cache/halld/home/boyu/src_analysis/sim/${REACTION}/ver${VERSION}/REST/0${run}
+    mv /volatile/halld/home/boyu/src_analysis/sim/${REACTION}/ver${VERSION}/hddm/dana_rest_gen_MF_0${run}_*.hddm /cache/halld/home/boyu/src_analysis/sim/${REACTION}/ver${VERSION}/REST/0${run}
+
+    for tree_name in ${tree_list[@]};
+    do
+        if   [ ${tree_name:0:6} == "genOut" ]
+        then
+            hadd /cache/halld/home/boyu/src_analysis/sim/${REACTION}/ver${VERSION}/${tree_name}/merged/${tree_name}_0${run}.root /volatile/halld/home/boyu/src_analysis/sim/${REACTION}/ver${VERSION}/root/generator/${tree_name}_0${run}_*.root
+        elif [ ${tree_name:0:11} == "tree_thrown" ]
+        then
+            hadd /cache/halld/home/boyu/src_analysis/sim/${REACTION}/ver${VERSION}/${tree_name}/merged/${tree_name}_0${run}.root /volatile/halld/home/boyu/src_analysis/sim/${REACTION}/ver${VERSION}/root/thrown/${tree_name}_0${run}_*.root
+        else
+            hadd /cache/halld/home/boyu/src_analysis/sim/${REACTION}/ver${VERSION}/${tree_name}/merged/${tree_name}_0${run}.root /volatile/halld/home/boyu/src_analysis/sim/${REACTION}/ver${VERSION}/root/trees/${tree_name}_0${run}_*.root
+        fi
+    done
+
+done < /work/halld2/home/boyu/src_analysis/flux/output/${TARGET}/flux_total_${TARGET}.txt
+
+# REMOVE THE INDIVIDUAL ROOT TREES
+rm -r /volatile/halld/home/boyu/src_analysis/sim/${REACTION}/ver${VERSION}/root/generator/*
+rm -r /volatile/halld/home/boyu/src_analysis/sim/${REACTION}/ver${VERSION}/root/thrown/*
+rm -r /volatile/halld/home/boyu/src_analysis/sim/${REACTION}/ver${VERSION}/root/trees/*

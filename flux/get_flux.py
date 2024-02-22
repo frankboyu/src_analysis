@@ -6,8 +6,8 @@ import ROOT as root
 #FUNCTION DEFINITIONS
 def LoadCCDB():  
     
-    # sqlite_connect_str = "mysql://ccdb_user@hallddb.jlab.org/ccdb"
-    sqlite_connect_str = "sqlite:///endpoint/ccdb.sqlite"
+    sqlite_connect_str = "mysql://ccdb_user@hallddb.jlab.org/ccdb"
+#     sqlite_connect_str = "sqlite:///endpoint/ccdb.sqlite"
     provider = ccdb.AlchemyProvider()
     provider.connect(sqlite_connect_str)
     provider.authentication.current_user_name = "psflux_user"
@@ -26,11 +26,13 @@ def PSAcceptance(x, par):
         return 0
 
 #CONSTANT DEFINITIONS
+tagh_limits = [1, 125, 179, 274]  # all values are closed brackets
+tagm_limits = [1, 102]            # all values are closed brackets
 conv_length = 75e-6
 Be_rl       = 35.28e-2      
 conv_rl     = conv_length/Be_rl
 ps_scale    = 1./((7/9.) * conv_rl)
-VARIATION   = "default"
+ccdb_variation   = "default"
 
 #FILE IO
 target = sys.argv[1]
@@ -55,17 +57,21 @@ for run in run_list:
     #INITIALIZATION
     run_number = run.number
     print("processing: {}".format(run_number))
+
+    if (run_number == 90207 or run_number == 90620):
+        print("run skipped")  # flux not processed yet
+        continue
  
     #GET THE DATA TABLE FROM CCDB
     ccdb_conn = LoadCCDB()
     
-    tagh_tagged_flux_assignment      = ccdb_conn.get_assignment("/PHOTON_BEAM/pair_spectrometer/lumi/tagh/tagged", run_number, VARIATION)
-    tagm_tagged_flux_assignment      = ccdb_conn.get_assignment("/PHOTON_BEAM/pair_spectrometer/lumi/tagm/tagged", run_number, VARIATION)
-    tagh_scaled_energy_assignment    = ccdb_conn.get_assignment("/PHOTON_BEAM/hodoscope/scaled_energy_range",      run_number, VARIATION)
-    tagm_scaled_energy_assignment    = ccdb_conn.get_assignment("/PHOTON_BEAM/microscope/scaled_energy_range",     run_number, VARIATION)
-    photon_endpoint_assignment       = ccdb_conn.get_assignment("/PHOTON_BEAM/endpoint_energy",                    run_number, VARIATION)
-    photon_endpoint_calib_assignment = ccdb_conn.get_assignment("/PHOTON_BEAM/hodoscope/endpoint_calib",           run_number, VARIATION)
-    PS_accept_assignment             = ccdb_conn.get_assignment("/PHOTON_BEAM/pair_spectrometer/lumi/PS_accept",   run_number, VARIATION)
+    tagh_tagged_flux_assignment      = ccdb_conn.get_assignment("/PHOTON_BEAM/pair_spectrometer/lumi/tagh/tagged", run_number, ccdb_variation)
+    tagm_tagged_flux_assignment      = ccdb_conn.get_assignment("/PHOTON_BEAM/pair_spectrometer/lumi/tagm/tagged", run_number, ccdb_variation)
+    tagh_scaled_energy_assignment    = ccdb_conn.get_assignment("/PHOTON_BEAM/hodoscope/scaled_energy_range",      run_number, ccdb_variation)
+    tagm_scaled_energy_assignment    = ccdb_conn.get_assignment("/PHOTON_BEAM/microscope/scaled_energy_range",     run_number, ccdb_variation)
+    photon_endpoint_assignment       = ccdb_conn.get_assignment("/PHOTON_BEAM/endpoint_energy",                    run_number, ccdb_variation)
+    photon_endpoint_calib_assignment = ccdb_conn.get_assignment("/PHOTON_BEAM/hodoscope/endpoint_calib",           run_number, ccdb_variation)
+    PS_accept_assignment             = ccdb_conn.get_assignment("/PHOTON_BEAM/pair_spectrometer/lumi/PS_accept",   run_number, ccdb_variation)
     
     tagh_tagged_flux      = tagh_tagged_flux_assignment     .constant_set.data_table
     tagm_tagged_flux      = tagm_tagged_flux_assignment     .constant_set.data_table
@@ -81,7 +87,7 @@ for run in run_list:
     
     for i in range(len(tagh_scaled_energy)):
         file_raw.write('{:>3.0f}    {:>8.6f}    {:>8.6f}    {:>9.3f}    {:>7.3f}\n'.format(float(tagh_scaled_energy[i][0]), float(tagh_scaled_energy[i][1]), float(tagh_scaled_energy[i][2]), float(tagh_tagged_flux[i][1]), float(tagh_tagged_flux[i][2])))
-    
+            
     file_raw.write('\n')
     
     for i in range(len(tagm_scaled_energy)):
@@ -105,8 +111,7 @@ for run in run_list:
     bin_count = 0
     total_flux = 0
 
-#     for i in range(0, 127):
-    for i in range(0, 126):
+    for i in range(tagh_limits[0]-1, tagh_limits[1]):
         
         energy_low    = float(photon_endpoint_calib[0][0])*float(tagh_scaled_energy[i][1]) + delta_E
         energy_high   = float(photon_endpoint_calib[0][0])*float(tagh_scaled_energy[i][2]) + delta_E
@@ -126,7 +131,7 @@ for run in run_list:
     
     file_corr.write('\n')
             
-    for i in range(0, 102):
+    for i in range(tagm_limits[0]-1, tagm_limits[1]):
         
         energy_low    = float(photon_endpoint_calib[0][0])*float(tagm_scaled_energy[i][1]) + delta_E
         energy_high   = float(photon_endpoint_calib[0][0])*float(tagm_scaled_energy[i][2]) + delta_E
@@ -146,7 +151,7 @@ for run in run_list:
     
     file_corr.write('\n')
     
-    for i in range(178, 274):
+    for i in range(tagh_limits[2]-1, tagh_limits[3]):
         
         energy_low    = float(photon_endpoint_calib[0][0])*float(tagh_scaled_energy[i][1]) + delta_E
         energy_high   = float(photon_endpoint_calib[0][0])*float(tagh_scaled_energy[i][2]) + delta_E
@@ -172,16 +177,17 @@ for run in run_list:
     hist_edges, hist_flux = array.array('d'), array.array('d')
     
     if (len(flux_all) > 0):
+        
+        hist_edges.append(flux_all[0][4])
+        
         for i in range(len(flux_all)):
-
-            if (i > 0 and flux_all[i][4] < flux_all[i-1][2]):
-                hist_edges.append(flux_all[i-1][2])
+            
+            hist_edges.append(flux_all[i][2])
+            hist_flux. append(flux_all[i][5])
+            
+            if (i != len(flux_all)-1 and flux_all[i][2] > flux_all[i+1][4]):
+                hist_edges.append(flux_all[i+1][4])
                 hist_flux. append(0.0)
-
-            hist_edges.append(flux_all[i][4])
-            hist_flux. append(flux_all[i][5])   
-
-        hist_edges.append(flux_all[-1][2])
 
         hist_edges.reverse()
         hist_flux .reverse()
