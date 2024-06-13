@@ -4,8 +4,5 @@ REACTION=$1
 TAG=$2
 
 source env.sh
-
-hadd output/${REACTION}/flattree_${REACTION}_${TAG}.root output/${REACTION}/flattree/*.root
-
-rm -r output/${REACTION}/flattree/
-rm -r output/${REACTION}/log/
+hadd output/flattree_${REACTION}_${TAG}.root output/flattree_${REACTION}/*.root
+rm -r output/flattree_${REACTION}

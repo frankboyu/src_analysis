@@ -1,3 +1,7 @@
 **/.vscode
 **/.ipynb_checkpoints
+**/*.d
+**/*.so
+**/*.pcm
 output
+test

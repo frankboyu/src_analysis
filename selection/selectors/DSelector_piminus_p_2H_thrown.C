@@ -1,28 +1,61 @@
-#include "DSelector_piminus_p_2H_thrown.h"
+#include <iostream>
+#include <string>
+
+#include "DSelector/DSelector.h"
+
+double RadToDeg = 180.0/3.1415926;
+
+class DSelector_piminus_p_2H_thrown : public DSelector
+{
+	public:
+
+		DSelector_piminus_p_2H_thrown(TTree* locTree = NULL) : DSelector(locTree){}
+		virtual ~DSelector_piminus_p_2H_thrown(){}
+
+		void Init(TTree *tree);
+		Bool_t Process(Long64_t entry);
+
+	private:
+
+		void Finalize(void);
+
+		//BEAM POLARIZATION INFORMATION
+		UInt_t dPreviousRunNumber;
+		bool dIsPolarizedFlag;      //Else is AMO
+		bool dIsPARAFlag;           //Else is PERP or AMO
+
+	ClassDef(DSelector_piminus_p_2H_thrown, 0);
+};
 
 void DSelector_piminus_p_2H_thrown::Init(TTree *locTree)
 {
-    //SET OUTPUT FILE NAME 
-    dOutputFileName          = "";                                  //"" for none
-    dOutputTreeFileName      = "";                                  //"" for none
-    dFlatTreeFileName        = "flattree_piminus_p_2H_thrown.root"; //Output flat tree (one combo per tree entry), "" for none
-    dFlatTreeName            = "piminus_p_2H_thrown";               //If blank, default name will be chosen
-    dSaveDefaultFlatBranches = false;                               //False: don't save default branches, reduce disk footprint.
+    // SET OUTPUT FILE NAME 
+    dOutputFileName          = "";
+    dOutputTreeFileName      = "";
+    dFlatTreeFileName        = "flattree_piminus_p_2H_thrown.root";
+    dFlatTreeName            = "flattree_piminus_p_2H_thrown";
+    dSaveDefaultFlatBranches = false;
+    dSkipNoTriggerEvents     = false;
 
-	//INITIALIZE THE TREE INTERFACE
+	// INITIALIZE THE TREE INTERFACE
 	bool locInitializedPriorFlag = dInitializedFlag; //Save whether have been initialized previously
 	DSelector::Init(locTree);                        //This must be called to initialize wrappers for each new TTree
 	if(locInitializedPriorFlag)
 		return;                                      //Have already created histograms, etc. below: exit
 	dPreviousRunNumber = 0;
 
-    //CUSTOM OUTPUT BRACHES: FLAT TREE
+    // CUSTOM OUTPUT BRACHES: FLAT TREE
+    dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("WeightFactor");
+    dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("MissingPMinus");
+    dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("BeamEnergy");
+    dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("MinusT");
+    dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("thetaCM");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("BeamP4_Thrown");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("PiMinusP4_Thrown");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("ProtonP4_Thrown");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("MissingP4_Thrown");
 }
-//END OF INITIALIZATION
+// END OF INITIALIZATION
 
 Bool_t DSelector_piminus_p_2H_thrown::Process(Long64_t locEntry)
 {
@@ -51,7 +84,21 @@ Bool_t DSelector_piminus_p_2H_thrown::Process(Long64_t locEntry)
     }
     locMissingP4_Thrown = locPiMinusP4_Thrown + locProtonP4_Thrown - locBeamP4_Thrown;
 
+    TVector3       boostCM          = (locPiMinusP4_Thrown   + locProtonP4_Thrown).BoostVector();
+    TLorentzVector locBeamP4CM_Thrown      = locBeamP4_Thrown;
+    TLorentzVector locPiMinusP4CM_Thrown   = locPiMinusP4_Thrown;
+    locBeamP4CM_Thrown.Boost(-boostCM);
+    locPiMinusP4CM_Thrown.Boost(-boostCM);
+
+    double locMinusT_Thrown          = -(locBeamP4_Thrown   - locPiMinusP4_Thrown).Mag2();
+    double locThetaCM_Thrown         = locBeamP4CM_Thrown.Vect().Angle(locPiMinusP4CM_Thrown.Vect())*RadToDeg;
+
     //FILL CUSTOM BRANCHES: FLAT TREE
+    dFlatTreeInterface->Fill_Fundamental<Double_t>("WeightFactor",          1.0);
+    dFlatTreeInterface->Fill_Fundamental<Double_t>("MissingPMinus",         locMissingP4_Thrown.Minus());
+    dFlatTreeInterface->Fill_Fundamental<Double_t>("BeamEnergy",            locBeamP4_Thrown.E());
+    dFlatTreeInterface->Fill_Fundamental<Double_t>("MinusT",                locMinusT_Thrown);
+    dFlatTreeInterface->Fill_Fundamental<Double_t>("thetaCM",               locThetaCM_Thrown);
     dFlatTreeInterface->Fill_TObject<TLorentzVector>("BeamP4_Thrown",    locBeamP4_Thrown);
     dFlatTreeInterface->Fill_TObject<TLorentzVector>("PiMinusP4_Thrown", locPiMinusP4_Thrown);
     dFlatTreeInterface->Fill_TObject<TLorentzVector>("ProtonP4_Thrown",  locProtonP4_Thrown);

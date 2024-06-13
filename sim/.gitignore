@@ -1,5 +1,5 @@
 **/.vscode
 **/.ipynb_checkpoints
-builds/*
-output_cache
-output_volatile
+builds/gluex_MCwrapper_srcct/*
+builds/halld_sim_srcct/*
+builds/halld_versions_srcct/*

@@ -306,7 +306,7 @@ def main():
             #    density * TARGETLENGTH * Navagadro * units_cm2_b * units_g_mg
 
 
-            print " "
+            #print " "
             print(" Run number: %d"%(run_number))
             print(" Beam energy %s "%(photon_endpoint[0][0]))
             if run_type == 0: 

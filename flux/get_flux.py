@@ -26,7 +26,7 @@ def PSAcceptance(x, par):
         return 0
 
 #CONSTANT DEFINITIONS
-tagh_limits = [1, 125, 179, 274]  # all values are closed brackets
+tagh_limits = [1, 125, 179, 274]  # all values are closed brackets, 126-127 overlap with TAGM, thus discarded
 tagm_limits = [1, 102]            # all values are closed brackets
 conv_length = 75e-6
 Be_rl       = 35.28e-2      
@@ -40,13 +40,13 @@ file_total = open("output/"+target+"/flux_total_"+target+".txt", "w")
 
 #RCDB CONNECTION
 if (target == 'deuterium'):
-    rcdb_query = "@is_src_production and @status_approved and target_type=='FULL & Ready Deuterium'"
+    rcdb_query = "@is_src_production and @status_approved and run_config == 'FCAL_BCAL_PS_SRC_m9.conf' and beam_on_current > 55.0 and target_type=='FULL & Ready Deuterium'"
 elif (target == 'helium'):
-    rcdb_query = "@is_src_production and @status_approved and target_type=='FULL & Ready Helium'"
+    rcdb_query = "@is_src_production and @status_approved and run_config == 'FCAL_BCAL_PS_SRC_m9.conf' and beam_on_current > 55.0 and target_type=='FULL & Ready Helium'"
 elif (target == 'carbon'):    
-    rcdb_query = "@is_src_production and @status_approved and target_type=='FULL & Ready Carbon'"
+    rcdb_query = "@is_src_production and @status_approved and run_config == 'FCAL_BCAL_PS_SRC_m9.conf' and beam_on_current > 55.0 and target_type=='FULL & Ready Carbon'"
 elif (target == 'empty'):    
-    rcdb_query = "@is_src_production and @status_approved and (target_type=='EMPTY & Ready' or target_type=='OFF')"
+    rcdb_query = "@is_src_production and @status_approved and run_config == 'FCAL_BCAL_PS_SRC_m9.conf' and beam_on_current > 55.0 and (target_type=='EMPTY & Ready' or target_type=='OFF')"
     
 db         = rcdb.RCDBProvider("mysql://rcdb@hallddb/rcdb")
 run_list   = db.select_runs(rcdb_query, 90001, 90662)
