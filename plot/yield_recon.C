@@ -30,7 +30,7 @@ double get_yield(double energy_low, double energy_high, double theta_low, double
     TH1F *hist = new TH1F("hist", "hist", 100, 0.4, 1.4);
     input_tree->Draw("MissingPMinus>>hist", Form("WeightFactor*(MissingPMinus>0.5 && MissingPMinus<1.3 && BeamEnergy>%f && BeamEnergy<%f && thetaCM>%f && thetaCM<%f)", energy_low, energy_high, theta_low, theta_high));
 
-    RooRealVar MissingPMinus("MissingPMinus", "MissingPMinus", 0.5, 1.3);
+    RooRealVar MissingPMinus("MissingPMinus", "MissingPMinus", 0.7, 1.2);
 
     RooRealVar mu("mu", "mu", 0.9, 0.8, 1.0);
     RooRealVar sigma("sigma", "sigma", 0.1, 0.01, 0.4);
@@ -41,7 +41,7 @@ double get_yield(double energy_low, double energy_high, double theta_low, double
     RooRealVar c2("c2", "c2", 1, 0, 15);
     RooPolynomial poly("poly", "poly", MissingPMinus, RooArgList(c0, c1, c2));
 
-    RooRealVar fsig("fsig", "signal fraction", 0.9, 0.1, 1.0);
+    RooRealVar fsig("fsig", "signal fraction", 0.9, 0.01, 1.0);
     RooAddPdf model("model", "model", RooArgList(gauss, poly), fsig);
 
     RooDataHist data("data", "data", MissingPMinus, hist);
@@ -58,20 +58,18 @@ double get_yield(double energy_low, double energy_high, double theta_low, double
 
 int yield_recon()
 {
-    TFile *input_file = new TFile("data_4He.root", "read");
-	TTree *input_tree = (TTree*) input_file->Get("flattree_piminus_p_4He_recon");
+    TFile *input_file = new TFile("/work/halld2/home/boyu/src_analysis/selection/output/flattree_piminus_p_2H_sim_samecut.root", "read");
+	TTree *input_tree = (TTree*) input_file->Get("flattree_piminus_p_2H_sim");
     TCanvas *canvas = new TCanvas("c1", "c1", 800, 600);
-    FILE *yieldfile = fopen("output/yield_piminus_p_4He_data.txt","w");
-    // FILE *errorfile = fopen("output/error_piminus_p_4He_data.txt","w");
-    // FILE *parasfile = fopen("output/paras_piminus_p_4He_data.txt","w");
+    FILE *yieldfile = fopen("output/yield_piminus_p_2H_sim.txt","w");
 
     double energy_low  = 6.0;
     double energy_high = 10.5;
     double energy_step = 0.5;
     int energy_bins    = int((energy_high - energy_low) / energy_step);
-    double theta_low   = 130;
-    double theta_high  = 150;
-    double theta_step  = 10;
+    double theta_low   = 20;
+    double theta_high  = 50;
+    double theta_step  =  5;
     int theta_bins     = int((theta_high - theta_low) / theta_step);
 
     double this_energy, this_theta, this_yield;
@@ -87,11 +85,11 @@ int yield_recon()
             this_yield = get_yield(this_energy, this_energy + energy_step, this_theta, this_theta + theta_step, input_tree);
             fprintf(yieldfile, "%f %f %f %f %f\n", this_energy, this_energy + energy_step, this_theta, this_theta + theta_step, this_yield);
             canvas->Update();
-            canvas->Print("output/fit_piminus_p_4He_data.pdf(");
+            canvas->Print("output/fit_piminus_p_2H_sim.pdf(");
             canvas->Clear();
         }
     }
-    canvas->Print("output/fit_piminus_p_4He_data.pdf)");
+    canvas->Print("output/fit_piminus_p_2H_sim.pdf)");
 
     return 0;
 
