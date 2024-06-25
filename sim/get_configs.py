@@ -3,7 +3,7 @@ import numpy as np
 
 reaction = sys.argv[1]
 version  = sys.argv[2]
-        
+
 if (reaction[-2:] == '2H'):
     run_list = np.loadtxt("../flux/output/deuterium/flux_total_deuterium.txt")[:,0]
 elif (reaction[-3:] == '4He'):
@@ -20,7 +20,7 @@ for (i, line) in enumerate(config_lines):
             if (line[j] == '9'):
                 char_flux = j
                 break
-    
+
     if (line[0:3] == 'BKG'):
         line_bkg = i
         for (j, character) in enumerate(line):
@@ -32,7 +32,7 @@ for (i, line) in enumerate(config_lines):
 for run_number in run_list:
 
     run_number = int(run_number)
-    
+
     # Replace the flux histogram for every run
     line = config_lines[line_flux]
     new_line = line[:char_flux] + str(run_number) + line[char_flux+5:char_flux+22] + str(run_number) + line[char_flux+27:]
@@ -46,7 +46,7 @@ for run_number in run_list:
     else:
         line = config_lines[line_bkg]
         new_line = line[:char_bkg] + "Random:recon-2021_11-ver01\n"
-        config_lines[line_bkg] = new_line        
+        config_lines[line_bkg] = new_line
 
     file = open("configs/wrapper/wrapper_"+reaction+"_ver"+version+"_"+str(run_number)+".cfg", "w")
     file.writelines(config_lines)
