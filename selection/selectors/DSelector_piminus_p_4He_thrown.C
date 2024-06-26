@@ -29,7 +29,7 @@ class DSelector_piminus_p_4He_thrown : public DSelector
 
 void DSelector_piminus_p_4He_thrown::Init(TTree *locTree)
 {
-    // SET OUTPUT FILE NAME 
+    // SET OUTPUT FILE NAME
     dOutputFileName          = "";
     dOutputTreeFileName      = "";
     dFlatTreeFileName        = "flattree_piminus_p_4He_thrown.root";
@@ -75,7 +75,7 @@ Bool_t DSelector_piminus_p_4He_thrown::Process(Long64_t locEntry)
     if(dThrownBeam != NULL)
         locBeamP4_Thrown = dThrownBeam->Get_P4();
     for(UInt_t loc_i = 0; loc_i < Get_NumThrown(); ++loc_i)
-	{                                                                                                                                                                                                                                                     
+	{
         dThrownWrapper->Set_ArrayIndex(loc_i);
         if (dThrownWrapper->Get_PID() == PiMinus)
             locPiMinusP4_Thrown = dThrownWrapper->Get_P4();
