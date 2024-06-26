@@ -311,7 +311,7 @@ Bool_t DSelector_piminus_p_12C_sim::Process(Long64_t locEntry)
         if(dPiMinusWrapper->Get_PIDFOM()               < 0.01 || dProtonWrapper->Get_PIDFOM()    < 0.01)                     locCutFlags[2] = true;
         if((locPiMinusP4 + locProtonP4AsPion).M()      < 1.0)                                                                locCutFlags[3] = true;
         if(dComboWrapper->Get_ConfidenceLevel_KinFit() < 0.001)                                                              locCutFlags[4] = true;
-        if(locMissingP4.P()                            > 2.0)                                                                locCutFlags[5] = true;
+        if(locMissingP4.P()                            > 4.0)                                                                locCutFlags[5] = true;
         if(locBeamP4.E()                               < 5.5  || locBeamP4.E()                   > 11.0)                     locCutFlags[6] = true;
         if(dComboBeamWrapper->Get_X4().Z()             < 51.0 || dComboBeamWrapper->Get_X4().Z() > 79.0 || locVertexR > 1.0) locCutFlags[7] = true;
         if(locMissingP4.Minus()                        < 0.4  || locMissingP4.Minus()            > 1.4)                      locCutFlags[8] = true;
