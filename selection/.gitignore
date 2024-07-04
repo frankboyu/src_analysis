@@ -3,5 +3,4 @@
 **/*.d
 **/*.so
 **/*.pcm
-output
 test
