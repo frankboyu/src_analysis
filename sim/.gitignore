@@ -1,5 +1,3 @@
-**/.vscode
-**/.ipynb_checkpoints
 builds/gluex_MCwrapper_srcct/*
 builds/halld_sim_srcct/*
 builds/halld_versions_srcct/*

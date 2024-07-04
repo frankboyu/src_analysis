@@ -1,5 +1,3 @@
-**/.vscode
-**/.ipynb_checkpoints
 output/carbon/*
 output/deuterium/*
 output/empty/*

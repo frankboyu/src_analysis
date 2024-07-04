@@ -1,6 +1,4 @@
-**/.vscode
-**/.ipynb_checkpoints
-**/*.d
-**/*.so
-**/*.pcm
 test
+*.d
+*.so
+*.pcm
