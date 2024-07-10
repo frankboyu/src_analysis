@@ -30,8 +30,8 @@ for file in /volatile/halld/home/boyu/src_analysis/sim/${REACTION}/ver${VERSION}
 do
     tree_name=$(basename "$file")
     tree_name=${tree_name:0:${#tree_name}-16}  # remove the part of run number and file number, "_09XXXX_XXX.root"
-    
-    if [ ${tree_name} != ${tree_list[-1]} ]; 
+
+    if [ ${tree_name} != ${tree_list[-1]} ];
     then
         tree_list+=(${tree_name})
     fi
