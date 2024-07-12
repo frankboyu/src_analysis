@@ -53,6 +53,7 @@ class DSelector_phi_c_2H_data : public DSelector
         TH1F* dHist_MissingMomentum_Before;
         TH1F* dHist_MissingPMinus_Before;
         TH1F* dHist_MissingMassSquared_Before;
+        TH1F* dHist_MissingMass_Before;
         TH1F* dHist_EnergyBalance_Before;
         TH1F* dHist_PhotonEnergy_Before;
         TH1F* dHist_VertexZ_Before;
@@ -81,6 +82,7 @@ class DSelector_phi_c_2H_data : public DSelector
         TH1F* dHist_MissingMomentum_After;
         TH1F* dHist_MissingPMinus_After;
         TH1F* dHist_MissingMassSquared_After;
+        TH1F* dHist_MissingMass_After;
         TH1F* dHist_EnergyBalance_After;
         TH1F* dHist_PhotonEnergy_After;
         TH1F* dHist_VertexZ_After;
@@ -132,7 +134,8 @@ void DSelector_phi_c_2H_data::Init(TTree *locTree)
     dHist_ConfidenceLevel_Before       = new TH1F("ConfidenceLevel_Before",         ";Confidence Level            ;Events/0.001",          1000,  0.0,   1.0);
     dHist_MissingMomentum_Before       = new TH1F("MissingMomentum_Before",         ";P_{miss} (GeV)              ;Events/0.01 GeV",       1000,  0.0,  10.0);
     dHist_MissingPMinus_Before         = new TH1F("MissingPMinus_Before",           ";P^{-}_{miss} (GeV)          ;Events/0.01 GeV",        200,  0.0,   2.0);
-    dHist_MissingMassSquared_Before    = new TH1F("MissingMassSquared_Before",      ";;MM^{2}_{miss} (GeV^{2})    ;Events/0.05 GeV",        200,  0.0,  10.0);
+    dHist_MissingMassSquared_Before    = new TH1F("MissingMassSquared_Before",      ";M^{2}_{miss} (GeV^{2})      ;Events/0.05 GeV",        200,  0.0,  10.0);
+    dHist_MissingMass_Before           = new TH1F("MissingMass_Before",             ";M_{miss} (GeV)              ;Events/0.02 GeV",        200,  0.0,   4.0);
     dHist_EnergyBalance_Before         = new TH1F("EnergyBalance_Before",           ";Missing Energy (GeV)        ;Events/0.01 GeV",        800, -4.0,   4.0);
     dHist_PhotonEnergy_Before          = new TH1F("PhotonEnergy_Before",            ";Photon Energy (GeV)         ;Events/0.01 GeV",        900,  3.0,  12.0);
     dHist_VertexZ_Before               = new TH1F("VertexZ_Before",                 ";Vertex Z (cm)               ;Events/1 cm",            200,  0.0, 200.0);
@@ -160,7 +163,8 @@ void DSelector_phi_c_2H_data::Init(TTree *locTree)
     dHist_ConfidenceLevel_After        = new TH1F("ConfidenceLevel_After",     ";Confidence Level            ;Events/0.001",          1000,  0.0,   1.0);
     dHist_MissingMomentum_After        = new TH1F("MissingMomentum_After",     ";P_{miss} (GeV)              ;Events/0.01 GeV",       1000,  0.0,  10.0);
     dHist_MissingPMinus_After          = new TH1F("MissingPMinus_After",       ";P^{-}_{miss} (GeV)          ;Events/0.01 GeV",        200,  0.0,   2.0);
-    dHist_MissingMassSquared_After     = new TH1F("MissingMassSquared_After",  ";MM^{2}_{miss} (GeV^{2})     ;Events/0.05 GeV",        200,  0.0,  10.0);
+    dHist_MissingMassSquared_After     = new TH1F("MissingMassSquared_After",  ";M^{2}_{miss} (GeV^{2})      ;Events/0.05 GeV",        200,  0.0,  10.0);
+    dHist_MissingMass_After            = new TH1F("MissingMass_After",         ";M_{miss} (GeV)              ;Events/0.02 GeV",        200,  0.0,   4.0);
     dHist_EnergyBalance_After          = new TH1F("EnergyBalance_After",       ";Missing Energy (GeV)        ;Events/0.01 GeV",        800, -4.0,   4.0);
     dHist_PhotonEnergy_After           = new TH1F("PhotonEnergy_After",        ";Photon Energy (GeV)         ;Events/0.01 GeV",        900,  3.0,  12.0);
     dHist_VertexZ_After                = new TH1F("VertexZ_After",             ";Vertex Z (cm)               ;Events/1 cm",            200,  0.0, 200.0);
@@ -272,6 +276,7 @@ Bool_t DSelector_phi_c_2H_data::Process(Long64_t locEntry)
         dHist_MissingMomentum_Before    ->Fill(locMissingP4.P(),                                                             locHistAccidWeightFactor);
         dHist_MissingPMinus_Before      ->Fill(locMissingP4.Minus(),                                                         locHistAccidWeightFactor);
         dHist_MissingMassSquared_Before ->Fill(locMissingP4.M2(),                                                            locHistAccidWeightFactor);
+        dHist_MissingMass_Before        ->Fill(locMissingP4.M(),                                                             locHistAccidWeightFactor);
         dHist_EnergyBalance_Before      ->Fill(mass_deuteron-locMissingP4.E(),                                               locHistAccidWeightFactor);
         dHist_PhotonEnergy_Before       ->Fill(locBeamP4.E(),                                                                locHistAccidWeightFactor);
         dHist_VertexZ_Before            ->Fill(dComboBeamWrapper->Get_X4().Z(),                                              locHistAccidWeightFactor);
@@ -324,6 +329,7 @@ Bool_t DSelector_phi_c_2H_data::Process(Long64_t locEntry)
         dHist_MissingMomentum_After    ->Fill(locMissingP4.P(),                                                                     locHistAccidWeightFactor);
         dHist_MissingPMinus_After      ->Fill(locMissingP4.Minus(),                                                                 locHistAccidWeightFactor);
         dHist_MissingMassSquared_After ->Fill(locMissingP4.M2(),                                                                    locHistAccidWeightFactor);
+        dHist_MissingMass_After        ->Fill(locMissingP4.M(),                                                                     locHistAccidWeightFactor);
         dHist_EnergyBalance_After      ->Fill(mass_deuteron-locMissingP4.E(),                                                       locHistAccidWeightFactor);
         dHist_PhotonEnergy_After       ->Fill(locBeamP4.E(),                                                                        locHistAccidWeightFactor);
         dHist_VertexZ_After            ->Fill(dComboBeamWrapper->Get_X4().Z(),                                                      locHistAccidWeightFactor);
