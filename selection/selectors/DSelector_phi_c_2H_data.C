@@ -68,7 +68,7 @@ class DSelector_phi_c_2H_data : public DSelector
         TH1F* dHist_CutEffect_MissingMomentum;
         TH1F* dHist_CutEffect_PhotonEnergy;
         TH1F* dHist_CutEffect_CommonVertex;
-        TH1F* dHist_CutEffect_MissingPMinus;
+        TH1F* dHist_CutEffect_InvariantMassPhi;
 
         // CUSTOM HISTOGRAMS: AFTER THE CUTS
         TH1F* dHist_NumUnusedTracks_After;
@@ -148,7 +148,7 @@ void DSelector_phi_c_2H_data::Init(TTree *locTree)
     dHist_CutEffect_MissingMomentum    = new TH1F("CutEffect_MissingMomentum",      ";M_{K^{+}K^{-}} (GeV)        ;Events/0.01 GeV",        500,  0.0,   5.0);
     dHist_CutEffect_PhotonEnergy       = new TH1F("CutEffect_PhotonEnergy",         ";M_{K^{+}K^{-}} (GeV)        ;Events/0.01 GeV",        500,  0.0,   5.0);
     dHist_CutEffect_CommonVertex       = new TH1F("CutEffect_CommonVertex",         ";M_{K^{+}K^{-}} (GeV)        ;Events/0.01 GeV",        500,  0.0,   5.0);
-    dHist_CutEffect_MissingPMinus      = new TH1F("CutEffect_MissingPMinus",        ";M_{K^{+}K^{-}} (GeV)        ;Events/0.01 GeV",        500,  0.0,   5.0);
+    dHist_CutEffect_InvariantMassPhi   = new TH1F("CutEffect_InvariantMassPhi",     ";M_{K^{+}K^{-}} (GeV)        ;Events/0.01 GeV",        500,  0.0,   5.0);
 
     // CUSTOM HISTOGRAMS: AFTER THE CUTS
     dHist_NumUnusedTracks_After        = new TH1F("NumUnusedTracks_After",     ";Unused Tracks               ;Events/1",                10,  0.0,  10.0);
@@ -247,11 +247,11 @@ Bool_t DSelector_phi_c_2H_data::Process(Long64_t locEntry)
         }
 
         // VECTORS in C.M. FRAME
-        // TVector3       boostCM          = (locPhiP4   + locProtonP4).BoostVector();
-        // TLorentzVector locBeamP4CM      = locBeamP4;
-        // TLorentzVector locPhiP4CM       = locPhiP4;
-        // locBeamP4CM.Boost(-boostCM);
-        // locPhiP4CM.Boost(-boostCM);
+        TVector3       boostCM          = (locBeamP4   + locDeuteronP4).BoostVector();
+        TLorentzVector locBeamP4CM      = locBeamP4;
+        TLorentzVector locPhiP4CM       = locPhiP4;
+        locBeamP4CM.Boost(-boostCM);
+        locPhiP4CM.Boost(-boostCM);
 
         // CALCULATE CUSTOM VARIABLES
         double locVertexR               = sqrt(pow(dComboBeamWrapper->Get_X4().X(),2) + pow(dComboBeamWrapper->Get_X4().Y(),2));
@@ -259,7 +259,7 @@ Bool_t DSelector_phi_c_2H_data::Process(Long64_t locEntry)
         double locSqrtS                 = (locBeamP4   + locDeuteronP4).Mag();
         double locMinusT                = -(locBeamP4   - locPhiP4).Mag2();
         double locMinusU                = -(locBeamP4   - locMissingP4).Mag2();
-        // double locThetaCM               = locBeamP4CM.Vect().Angle(locPhiP4CM.Vect())*RadToDeg;
+        double locThetaCM               = locBeamP4CM.Vect().Angle(locPhiP4CM.Vect())*RadToDeg;
 
         // FILL CUSTOM HISTOGRAMS: BEFORE CUTS
         dHist_NumUnusedTracks_Before    ->Fill(dComboWrapper->Get_NumUnusedTracks(),                                         locHistAccidWeightFactor);
@@ -289,7 +289,7 @@ Bool_t DSelector_phi_c_2H_data::Process(Long64_t locEntry)
         if(locMissingP4.P()                            > 1.0)                                                                                       locCutFlags[5] = true;
         if(locBeamP4.E()                               < 5.5  || locBeamP4.E()                   > 11.0)                                            locCutFlags[6] = true;
         if(dComboBeamWrapper->Get_X4().Z()             < 51.0 || dComboBeamWrapper->Get_X4().Z() > 79.0 || locVertexR > 1.0)                        locCutFlags[7] = true;
-        // if(locMissingP4.Minus()                        < 0.4  || locMissingP4.Minus()            > 1.4)                                             locCutFlags[8] = true;
+        if(locPhiP4.M()                                > 1.05)                                                                                      locCutFlags[8] = true;
         for(int loc_j = 0; loc_j < 9; ++loc_j)
         {
             locIsComboCut += locCutFlags[loc_j];
@@ -304,7 +304,7 @@ Bool_t DSelector_phi_c_2H_data::Process(Long64_t locEntry)
         if((locIsComboCut-locCutFlags[5]) == 0) dHist_CutEffect_MissingMomentum   ->Fill(locPhiP4.M(), locHistAccidWeightFactor);
         if((locIsComboCut-locCutFlags[6]) == 0) dHist_CutEffect_PhotonEnergy      ->Fill(locPhiP4.M(), locHistAccidWeightFactor);
         if((locIsComboCut-locCutFlags[7]) == 0) dHist_CutEffect_CommonVertex      ->Fill(locPhiP4.M(), locHistAccidWeightFactor);
-        if((locIsComboCut-locCutFlags[8]) == 0) dHist_CutEffect_MissingPMinus     ->Fill(locPhiP4.M(), locHistAccidWeightFactor);
+        if((locIsComboCut-locCutFlags[8]) == 0) dHist_CutEffect_InvariantMassPhi  ->Fill(locPhiP4.M(), locHistAccidWeightFactor);
 
         // DISCARD EVENTS THAT FAIL CUTS
         if(locIsComboCut > 0)
