@@ -144,7 +144,7 @@ void DSelector_phi_p_2H_data::Init(TTree *locTree)
     dHist_VertexZ_Before               = new TH1F("VertexZ_Before",                 ";Vertex Z (cm)               ;Events/1 cm",            200,  0.0, 200.0);
     dHist_VertexXY_Before              = new TH2F("VertexXY_Before",                ";Vertex X (cm)               ;Vertex Y (cm)",          100, -5.0,   5.0,  100, -5.0,   5.0);
     dHist_MissingPMinus_Before         = new TH1F("MissingPMinus_Before",           ";P^{-}_{miss} (GeV)          ;Events/0.01 GeV",        200,  0.0,   2.0);
-    dHist_InvariantMassPhi_Before      = new TH1F("InvariantMassPhi_After",         ";M_{K^{+}K^{-}} (GeV)        ;Events/0.01 GeV",        500,  0.0,   5.0);
+    dHist_InvariantMassPhi_Before      = new TH1F("InvariantMassPhi_Before",        ";M_{K^{+}K^{-}} (GeV)        ;Events/0.01 GeV",        500,  0.0,   5.0);
 
     // CUSTOM HISTOGRAMS: CUT EFFECTS
     dHist_CutEffect_NumUnusedTracks    = new TH1F("CutEffect_NumUnusedTracks",      ";M_{K^{+}K^{-}} (GeV)        ;Events/0.01 GeV",        500,  0.0,   5.0);
@@ -270,7 +270,7 @@ Bool_t DSelector_phi_p_2H_data::Process(Long64_t locEntry)
         double locSqrtS                 = (locPhiP4   + locProtonP4).Mag();
         double locMinusT                = -(locBeamP4   - locPhiP4).Mag2();
         double locMinusU                = -(locBeamP4   - locProtonP4).Mag2();
-        double locThetaCM               = locBeamP4CM.Vect().Angle(locPhiP4CM.Vect())*RadToDeg;
+        double locThetaCM               = locBeamP4CM.Vect().Angle(locPhiP4CM.Vect())*RadToDeg; 
         double locCoplanarity           = abs(locPhiP4.Phi()   - locProtonP4.Phi())*RadToDeg;
 
         // FILL CUSTOM HISTOGRAMS: BEFORE CUTS
@@ -279,7 +279,7 @@ Bool_t DSelector_phi_p_2H_data::Process(Long64_t locEntry)
         dHist_KPlusPIDFOM_Before      ->Fill(dKPlusWrapper->Get_PIDFOM(),                                                  locHistAccidWeightFactor);
         dHist_KMinusPIDFOM_Before     ->Fill(dKMinusWrapper->Get_PIDFOM(),                                                 locHistAccidWeightFactor);
         dHist_ProtonPIDFOM_Before     ->Fill(dProtonWrapper->Get_PIDFOM(),                                                 locHistAccidWeightFactor);
-        dHist_KPlusPVsTheta_Before    ->Fill(locKPlusP4.P(),                              locKPlusP4.Theta()*RadToDeg,    locHistAccidWeightFactor);
+        dHist_KPlusPVsTheta_Before    ->Fill(locKPlusP4.P(),                              locKPlusP4.Theta()*RadToDeg,     locHistAccidWeightFactor);
         dHist_KMinusPVsTheta_Before   ->Fill(locKMinusP4.P(),                             locKMinusP4.Theta()*RadToDeg,    locHistAccidWeightFactor);
         dHist_ProtonPVsTheta_Before   ->Fill(locProtonP4.P(),                             locProtonP4.Theta()*RadToDeg,    locHistAccidWeightFactor);
         dHist_ConfidenceLevel_Before  ->Fill(dComboWrapper->Get_ConfidenceLevel_KinFit(),                                  locHistAccidWeightFactor);
@@ -297,12 +297,12 @@ Bool_t DSelector_phi_p_2H_data::Process(Long64_t locEntry)
         if(dComboWrapper->Get_NumUnusedTracks()        > 0)                                                                                         locCutFlags[0] = true;
         if(dComboWrapper->Get_NumUnusedShowers()       > 0)                                                                                         locCutFlags[1] = true;
         if(dKPlusWrapper->Get_PIDFOM()                 < 0.01 || dKMinusWrapper->Get_PIDFOM()    < 0.01 || dProtonWrapper->Get_PIDFOM()    < 0.01)  locCutFlags[2] = true;
-        // if((locPiMinusP4 + locProtonP4AsPion).M()      < 1.0)                                                                locCutFlags[3] = true;
-        if(dComboWrapper->Get_ConfidenceLevel_KinFit() < 0.001)                                                              locCutFlags[4] = true;
-        if(locMissingP4.P()                            > 1.0)                                                                locCutFlags[5] = true;
-        if(locBeamP4.E()                               < 5.5  || locBeamP4.E()                   > 11.0)                     locCutFlags[6] = true;
-        if(dComboBeamWrapper->Get_X4().Z()             < 51.0 || dComboBeamWrapper->Get_X4().Z() > 79.0 || locVertexR > 1.0) locCutFlags[7] = true;
-        if(locMissingP4.Minus()                        < 0.4  || locMissingP4.Minus()            > 1.4)                      locCutFlags[8] = true;
+        // if((locPiMinusP4 + locProtonP4AsPion).M()      < 1.0)                                                                                    locCutFlags[3] = true;
+        if(dComboWrapper->Get_ConfidenceLevel_KinFit() < 0.001)                                                                                     locCutFlags[4] = true;
+        if(locMissingP4.P()                            > 1.0)                                                                                       locCutFlags[5] = true;
+        if(locBeamP4.E()                               < 5.5  || locBeamP4.E()                   > 11.0)                                            locCutFlags[6] = true;
+        if(dComboBeamWrapper->Get_X4().Z()             < 51.0 || dComboBeamWrapper->Get_X4().Z() > 79.0 || locVertexR > 1.0)                        locCutFlags[7] = true;
+        if(locMissingP4.Minus()                        < 0.4  || locMissingP4.Minus()            > 1.4)                                             locCutFlags[8] = true;
         for(int loc_j = 0; loc_j < 9; ++loc_j)
         {
             locIsComboCut += locCutFlags[loc_j];
@@ -332,7 +332,7 @@ Bool_t DSelector_phi_p_2H_data::Process(Long64_t locEntry)
         dHist_KPlusPIDFOM_After        ->Fill(dKPlusWrapper->Get_PIDFOM(),                                                          locHistAccidWeightFactor);
         dHist_KMinusPIDFOM_After       ->Fill(dKMinusWrapper->Get_PIDFOM(),                                                         locHistAccidWeightFactor);
         dHist_ProtonPIDFOM_After       ->Fill(dProtonWrapper->Get_PIDFOM(),                                                         locHistAccidWeightFactor);
-        dHist_KPlusPVsTheta_After      ->Fill(locKPlusP4.P(),                              locKPlusP4.Theta()*RadToDeg,            locHistAccidWeightFactor);
+        dHist_KPlusPVsTheta_After      ->Fill(locKPlusP4.P(),                              locKPlusP4.Theta()*RadToDeg,             locHistAccidWeightFactor);
         dHist_KMinusPVsTheta_After     ->Fill(locKMinusP4.P(),                             locKMinusP4.Theta()*RadToDeg,            locHistAccidWeightFactor);
         dHist_ProtonPVsTheta_After     ->Fill(locProtonP4.P(),                             locProtonP4.Theta()*RadToDeg,            locHistAccidWeightFactor);
         dHist_ConfidenceLevel_After    ->Fill(dComboWrapper->Get_ConfidenceLevel_KinFit(),                                          locHistAccidWeightFactor);
@@ -356,19 +356,19 @@ Bool_t DSelector_phi_p_2H_data::Process(Long64_t locEntry)
 			continue;
 
         //FILL CUSTOM BRANCHES: FLAT TREE
-        dFlatTreeInterface->Fill_Fundamental<Int_t>("RunNumber",                locRunNumber);
-        dFlatTreeInterface->Fill_Fundamental<Int_t>("Entry",                    locEntry);
-        dFlatTreeInterface->Fill_Fundamental<Int_t>("Combo",                    loc_i);
-        dFlatTreeInterface->Fill_Fundamental<Double_t>("WeightFactor",          locHistAccidWeightFactor);
-        dFlatTreeInterface->Fill_Fundamental<Double_t>("MissingPMinus",         locMissingP4.Minus());
-        dFlatTreeInterface->Fill_Fundamental<Double_t>("BeamEnergy",            locBeamP4.E());
-        dFlatTreeInterface->Fill_Fundamental<Double_t>("MinusT",                locMinusT);
-        dFlatTreeInterface->Fill_Fundamental<Double_t>("thetaCM",               locThetaCM);
-        dFlatTreeInterface->Fill_TObject<TLorentzVector>("BeamP4",              locBeamP4);
-        dFlatTreeInterface->Fill_TObject<TLorentzVector>("KPlusP4",             locKPlusP4);
-        dFlatTreeInterface->Fill_TObject<TLorentzVector>("KMinusP4",            locKMinusP4);
-        dFlatTreeInterface->Fill_TObject<TLorentzVector>("ProtonP4",            locProtonP4);
-        dFlatTreeInterface->Fill_TObject<TLorentzVector>("MissingP4",           locMissingP4);
+        // dFlatTreeInterface->Fill_Fundamental<Int_t>("RunNumber",                locRunNumber);
+        // dFlatTreeInterface->Fill_Fundamental<Int_t>("Entry",                    locEntry);
+        // dFlatTreeInterface->Fill_Fundamental<Int_t>("Combo",                    loc_i);
+        // dFlatTreeInterface->Fill_Fundamental<Double_t>("WeightFactor",          locHistAccidWeightFactor);
+        // dFlatTreeInterface->Fill_Fundamental<Double_t>("InvariantMassPhi",      locPhiP4.M());
+        // dFlatTreeInterface->Fill_Fundamental<Double_t>("BeamEnergy",            locBeamP4.E());
+        // dFlatTreeInterface->Fill_Fundamental<Double_t>("MinusT",                locMinusT);
+        // dFlatTreeInterface->Fill_Fundamental<Double_t>("thetaCM",               locThetaCM);
+        // dFlatTreeInterface->Fill_TObject<TLorentzVector>("BeamP4",              locBeamP4);
+        // dFlatTreeInterface->Fill_TObject<TLorentzVector>("KPlusP4",             locKPlusP4);
+        // dFlatTreeInterface->Fill_TObject<TLorentzVector>("KMinusP4",            locKMinusP4);
+        // dFlatTreeInterface->Fill_TObject<TLorentzVector>("ProtonP4",            locProtonP4);
+        // dFlatTreeInterface->Fill_TObject<TLorentzVector>("MissingP4",           locMissingP4);
 
         // FILL FLAT TREE
         Fill_FlatTree(); //for the active combo
