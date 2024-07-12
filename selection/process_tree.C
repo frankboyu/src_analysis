@@ -7,7 +7,7 @@
 
 using namespace std;
 
-int Run_Selector(string locInputFileName, string locTreeName, string locSelectorName, unsigned int locNThreads)
+int process_tree(string locInputFileName, string locTreeName, string locSelectorName, unsigned int locNThreads)
 {
 	//tell it to compile selector (if user did not)
 	if(locSelectorName[locSelectorName.size() - 1] != '+')
@@ -19,7 +19,7 @@ int Run_Selector(string locInputFileName, string locTreeName, string locSelector
 	{
 	  gEnv->SetValue("ProofLite.Sandbox", "$PWD/.proof/"); // write all intermediate files to the local directory
 	  DPROOFLiteManager::Set_SandBox("./"); // that does not work, as the proof session was already started
-	  
+
 	  return (DPROOFLiteManager::Process_Tree(locInputFileName, locTreeName, locSelectorName, locNThreads) ? 0 : 999); //0 = success
 	}
 
