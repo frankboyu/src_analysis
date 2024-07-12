@@ -4,7 +4,7 @@ INPUTFILE="/cache/halld/RunPeriod-2021-11/analysis/ver05/tree_gd_kpkmmissd__B4_F
 TREE_NAME="gd_kpkmmissd__B4_F4_T1_S4_Tree"
 SELECTOR_FILE="phi_c_2H_data"
 NUM_THREADS=1
-TAG="2_kinfit_phicutadded"
+TAG="3_measured"
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
 gxenv $HALLD_VERSIONS/version_5.17.0.xml
