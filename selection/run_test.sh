@@ -6,7 +6,7 @@ INPUTFILE="/cache/halld/RunPeriod-2021-11/analysis/ver06/tree_gd_kpkmprotmissn__
 TREE_NAME="gd_kpkmprotmissn__B4_F4_T2_S5_Tree"
 SELECTOR_FILE="phi_c_2H_data"
 NUM_THREADS=1
-TAG="5_kinfit_incoherent"
+TAG="6_measured_incoherent_largemm2bins"
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
 gxenv $HALLD_VERSIONS/version_5.17.0.xml

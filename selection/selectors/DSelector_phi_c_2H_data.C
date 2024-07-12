@@ -132,7 +132,7 @@ void DSelector_phi_c_2H_data::Init(TTree *locTree)
     dHist_ConfidenceLevel_Before       = new TH1F("ConfidenceLevel_Before",         ";Confidence Level            ;Events/0.001",          1000,  0.0,   1.0);
     dHist_MissingMomentum_Before       = new TH1F("MissingMomentum_Before",         ";P_{miss} (GeV)              ;Events/0.01 GeV",       1000,  0.0,  10.0);
     dHist_MissingPMinus_Before         = new TH1F("MissingPMinus_Before",           ";P^{-}_{miss} (GeV)          ;Events/0.01 GeV",        200,  0.0,   2.0);
-    dHist_MissingMassSquared_Before    = new TH1F("MissingMassSquared_Before",      ";M^{2}_{miss} (GeV)          ;Events/0.01 GeV",        200,  0.0,  10.0);
+    dHist_MissingMassSquared_Before    = new TH1F("MissingMassSquared_Before",      ";;MM^{2}_{miss} (GeV^{2})    ;Events/0.05 GeV",        200,  0.0,  10.0);
     dHist_EnergyBalance_Before         = new TH1F("EnergyBalance_Before",           ";Missing Energy (GeV)        ;Events/0.01 GeV",        800, -4.0,   4.0);
     dHist_PhotonEnergy_Before          = new TH1F("PhotonEnergy_Before",            ";Photon Energy (GeV)         ;Events/0.01 GeV",        900,  3.0,  12.0);
     dHist_VertexZ_Before               = new TH1F("VertexZ_Before",                 ";Vertex Z (cm)               ;Events/1 cm",            200,  0.0, 200.0);
@@ -160,7 +160,7 @@ void DSelector_phi_c_2H_data::Init(TTree *locTree)
     dHist_ConfidenceLevel_After        = new TH1F("ConfidenceLevel_After",     ";Confidence Level            ;Events/0.001",          1000,  0.0,   1.0);
     dHist_MissingMomentum_After        = new TH1F("MissingMomentum_After",     ";P_{miss} (GeV)              ;Events/0.01 GeV",       1000,  0.0,  10.0);
     dHist_MissingPMinus_After          = new TH1F("MissingPMinus_After",       ";P^{-}_{miss} (GeV)          ;Events/0.01 GeV",        200,  0.0,   2.0);
-    dHist_MissingMassSquared_After     = new TH1F("MissingMassSquared_After",  ";MM^{2}_{miss} (GeV^{2})     ;Events/0.01 GeV^{2}",    600,  0.0,   6.0);
+    dHist_MissingMassSquared_After     = new TH1F("MissingMassSquared_After",  ";MM^{2}_{miss} (GeV^{2})     ;Events/0.05 GeV",        200,  0.0,  10.0);
     dHist_EnergyBalance_After          = new TH1F("EnergyBalance_After",       ";Missing Energy (GeV)        ;Events/0.01 GeV",        800, -4.0,   4.0);
     dHist_PhotonEnergy_After           = new TH1F("PhotonEnergy_After",        ";Photon Energy (GeV)         ;Events/0.01 GeV",        900,  3.0,  12.0);
     dHist_VertexZ_After                = new TH1F("VertexZ_After",             ";Vertex Z (cm)               ;Events/1 cm",            200,  0.0, 200.0);
@@ -220,10 +220,10 @@ Bool_t DSelector_phi_c_2H_data::Process(Long64_t locEntry)
 		Int_t locKMinusTrackID  = dKMinusWrapper->Get_TrackID();
 
 		// GET RECONSTRUCTED P4
-        TLorentzVector locBeamP4     = dComboBeamWrapper->Get_P4();
+        TLorentzVector locBeamP4     = dComboBeamWrapper->Get_P4_Measured();
         TLorentzVector locDeuteronP4(0.0, 0.0, 0.0, mass_deuteron);
-        TLorentzVector locKPlusP4    = dKPlusWrapper->Get_P4();
-		TLorentzVector locKMinusP4   = dKMinusWrapper->Get_P4();
+        TLorentzVector locKPlusP4    = dKPlusWrapper->Get_P4_Measured();
+		TLorentzVector locKMinusP4   = dKMinusWrapper->Get_P4_Measured();
         TLorentzVector locPhiP4      = locKPlusP4 + locKMinusP4;
         TLorentzVector locMissingP4  = locBeamP4 + locDeuteronP4 - locPhiP4;
 
