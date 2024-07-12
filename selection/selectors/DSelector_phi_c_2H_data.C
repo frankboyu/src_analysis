@@ -220,10 +220,10 @@ Bool_t DSelector_phi_c_2H_data::Process(Long64_t locEntry)
 		Int_t locKMinusTrackID  = dKMinusWrapper->Get_TrackID();
 
 		// GET RECONSTRUCTED P4
-        TLorentzVector locBeamP4     = dComboBeamWrapper->Get_P4_Measured();
+        TLorentzVector locBeamP4     = dComboBeamWrapper->Get_P4();
         TLorentzVector locDeuteronP4(0.0, 0.0, 0.0, mass_deuteron);
-        TLorentzVector locKPlusP4    = dKPlusWrapper->Get_P4_Measured();
-		TLorentzVector locKMinusP4   = dKMinusWrapper->Get_P4_Measured();
+        TLorentzVector locKPlusP4    = dKPlusWrapper->Get_P4();
+		TLorentzVector locKMinusP4   = dKMinusWrapper->Get_P4();
         TLorentzVector locPhiP4      = locKPlusP4 + locKMinusP4;
         TLorentzVector locMissingP4  = locBeamP4 + locDeuteronP4 - locPhiP4;
 
