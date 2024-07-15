@@ -49,6 +49,7 @@ class DSelector_phi_c_2H_data : public DSelector
         TH1F* dHist_KMinusPIDFOM_Before;
         TH2F* dHist_KPlusPVsTheta_Before;
         TH2F* dHist_KMinusPVsTheta_Before;
+        TH2F* dHist_MissingPVsTheta_Before;
         TH1F* dHist_ConfidenceLevel_Before;
         TH1F* dHist_MissingMomentum_Before;
         TH1F* dHist_MissingPMinus_Before;
@@ -78,6 +79,7 @@ class DSelector_phi_c_2H_data : public DSelector
         TH1F* dHist_KMinusPIDFOM_After;
         TH2F* dHist_KPlusPVsTheta_After;
         TH2F* dHist_KMinusPVsTheta_After;
+        TH2F* dHist_MissingPVsTheta_After;
         TH1F* dHist_ConfidenceLevel_After;
         TH1F* dHist_MissingMomentum_After;
         TH1F* dHist_MissingPMinus_After;
@@ -132,6 +134,7 @@ void DSelector_phi_c_2H_data::Init(TTree *locTree)
     dHist_KMinusPIDFOM_Before          = new TH1F("KMinusPIDFOM_Before",            ";PIDFOM_{K^{-}}              ;Events/0.001",          1000,  0.0,   1.0);
     dHist_KPlusPVsTheta_Before         = new TH2F("KPlusPVsTheta_Before",           ";P_{K^{+}} (GeV)             ;#theta (deg)",          1000,  0.0,  10.0,  180,  0.0, 180.0);
     dHist_KMinusPVsTheta_Before        = new TH2F("KMinusPVsTheta_Before",          ";P_{K^{-}} (GeV)             ;#theta (deg)",          1000,  0.0,  10.0,  180,  0.0, 180.0);
+    dHist_MissingPVsTheta_Before       = new TH2F("MissingPVsTheta_Before",         ";P_{d} (GeV)                 ;#theta (deg)",          1000,  0.0,  10.0,  180,  0.0, 180.0);
     dHist_ConfidenceLevel_Before       = new TH1F("ConfidenceLevel_Before",         ";Confidence Level            ;Events/0.001",          1000,  0.0,   1.0);
     dHist_MissingMomentum_Before       = new TH1F("MissingMomentum_Before",         ";P_{miss} (GeV)              ;Events/0.01 GeV",       1000,  0.0,  10.0);
     dHist_MissingPMinus_Before         = new TH1F("MissingPMinus_Before",           ";P^{-}_{miss} (GeV)          ;Events/0.01 GeV",        200,  0.0,   2.0);
@@ -161,6 +164,7 @@ void DSelector_phi_c_2H_data::Init(TTree *locTree)
     dHist_KMinusPIDFOM_After           = new TH1F("KMinusPIDFOM_After",        ";PIDFOM_{K^{-}}              ;Events/0.001",          1000,  0.0,   1.0);
     dHist_KPlusPVsTheta_After          = new TH2F("KPlusPVsTheta_After",       ";P_{K^{+}} (GeV)             ;#theta (deg)",          1000,  0.0,  10.0,  180,  0.0, 180.0);
     dHist_KMinusPVsTheta_After         = new TH2F("KMinusPVsTheta_After",      ";P_{K^{-}} (GeV)             ;#theta (deg)",          1000,  0.0,  10.0,  180,  0.0, 180.0);
+    dHist_MissingPVsTheta_After        = new TH2F("MissingPVsTheta_After",     ";P_{d} (GeV)                 ;#theta (deg)",          1000,  0.0,  10.0,  180,  0.0, 180.0);
     dHist_ConfidenceLevel_After        = new TH1F("ConfidenceLevel_After",     ";Confidence Level            ;Events/0.001",          1000,  0.0,   1.0);
     dHist_MissingMomentum_After        = new TH1F("MissingMomentum_After",     ";P_{miss} (GeV)              ;Events/0.01 GeV",       1000,  0.0,  10.0);
     dHist_MissingPMinus_After          = new TH1F("MissingPMinus_After",       ";P^{-}_{miss} (GeV)          ;Events/0.01 GeV",        200,  0.0,   2.0);
@@ -227,11 +231,11 @@ Bool_t DSelector_phi_c_2H_data::Process(Long64_t locEntry)
 
 		// GET RECONSTRUCTED P4
         TLorentzVector locBeamP4     = dComboBeamWrapper->Get_P4_Measured();
-        TLorentzVector locDeuteronP4(0.0, 0.0, 0.0, mass_deuteron);
+        TLorentzVector locTargetP4(0.0, 0.0, 0.0, mass_deuteron);
         TLorentzVector locKPlusP4    = dKPlusWrapper->Get_P4_Measured();
 		TLorentzVector locKMinusP4   = dKMinusWrapper->Get_P4_Measured();
         TLorentzVector locPhiP4      = locKPlusP4 + locKMinusP4;
-        TLorentzVector locMissingP4  = locBeamP4 + locDeuteronP4 - locPhiP4;
+        TLorentzVector locMissingP4  = locBeamP4 + locTargetP4 - locPhiP4;
 
 		// GET RF TIMING INFO
 		TLorentzVector locBeamX4                       = dComboBeamWrapper->Get_X4_Measured();
@@ -253,7 +257,7 @@ Bool_t DSelector_phi_c_2H_data::Process(Long64_t locEntry)
         }
 
         // VECTORS in C.M. FRAME
-        TVector3       boostCM          = (locBeamP4   + locDeuteronP4).BoostVector();
+        TVector3       boostCM          = (locBeamP4   + locTargetP4).BoostVector();
         TLorentzVector locBeamP4CM      = locBeamP4;
         TLorentzVector locPhiP4CM       = locPhiP4;
         locBeamP4CM.Boost(-boostCM);
@@ -262,7 +266,7 @@ Bool_t DSelector_phi_c_2H_data::Process(Long64_t locEntry)
         // CALCULATE CUSTOM VARIABLES
         double locVertexR               = sqrt(pow(dComboBeamWrapper->Get_X4().X(),2) + pow(dComboBeamWrapper->Get_X4().Y(),2));
         double locChiSquarePerNDF       = dComboWrapper->Get_ChiSq_KinFit()/dComboWrapper->Get_NDF_KinFit();
-        double locSqrtS                 = (locBeamP4   + locDeuteronP4).Mag();
+        double locSqrtS                 = (locBeamP4   + locTargetP4).Mag();
         double locMinusT                = -(locBeamP4   - locPhiP4).Mag2();
         double locMinusU                = -(locBeamP4   - locMissingP4).Mag2();
         double locThetaCM               = locBeamP4CM.Vect().Angle(locPhiP4CM.Vect())*RadToDeg;
@@ -275,6 +279,7 @@ Bool_t DSelector_phi_c_2H_data::Process(Long64_t locEntry)
         dHist_KMinusPIDFOM_Before       ->Fill(dKMinusWrapper->Get_PIDFOM(),                                                 locHistAccidWeightFactor);
         dHist_KPlusPVsTheta_Before      ->Fill(locKPlusP4.P(),                              locKPlusP4.Theta()*RadToDeg,     locHistAccidWeightFactor);
         dHist_KMinusPVsTheta_Before     ->Fill(locKMinusP4.P(),                             locKMinusP4.Theta()*RadToDeg,    locHistAccidWeightFactor);
+        dHist_MissingPVsTheta_Before    ->Fill(locMissingP4.P(),                            locMissingP4.Theta()*RadToDeg,   locHistAccidWeightFactor);
         dHist_ConfidenceLevel_Before    ->Fill(dComboWrapper->Get_ConfidenceLevel_KinFit(),                                  locHistAccidWeightFactor);
         dHist_MissingMomentum_Before    ->Fill(locMissingP4.P(),                                                             locHistAccidWeightFactor);
         dHist_MissingPMinus_Before      ->Fill(locMissingP4.Minus(),                                                         locHistAccidWeightFactor);
@@ -294,7 +299,7 @@ Bool_t DSelector_phi_c_2H_data::Process(Long64_t locEntry)
         // if(dKPlusWrapper->Get_PIDFOM()                 < 0.01 || dKMinusWrapper->Get_PIDFOM()    < 0.01)                                            locCutFlags[2] = true;
         // if((locPiMinusP4 + locProtonP4AsPion).M()      < 1.0)                                                                                    locCutFlags[3] = true;
         if(dComboWrapper->Get_ConfidenceLevel_KinFit() < 0.001)                                                                                     locCutFlags[4] = true;
-        if(locMissingP4.P()                            > 1.0)                                                                                       locCutFlags[5] = true;
+        // if(locMissingP4.P()                            > 1.0)                                                                                       locCutFlags[5] = true;
         if(locBeamP4.E()                               < 5.5  || locBeamP4.E()                   > 11.0)                                            locCutFlags[6] = true;
         if(dComboBeamWrapper->Get_X4().Z()             < 51.0 || dComboBeamWrapper->Get_X4().Z() > 79.0 || locVertexR > 1.0)                        locCutFlags[7] = true;
         if(locPhiP4.M()                                > 1.05)                                                                                      locCutFlags[8] = true;
@@ -328,6 +333,7 @@ Bool_t DSelector_phi_c_2H_data::Process(Long64_t locEntry)
         dHist_KMinusPIDFOM_After       ->Fill(dKMinusWrapper->Get_PIDFOM(),                                                         locHistAccidWeightFactor);
         dHist_KPlusPVsTheta_After      ->Fill(locKPlusP4.P(),                              locKPlusP4.Theta()*RadToDeg,             locHistAccidWeightFactor);
         dHist_KMinusPVsTheta_After     ->Fill(locKMinusP4.P(),                             locKMinusP4.Theta()*RadToDeg,            locHistAccidWeightFactor);
+        dHist_MissingPVsTheta_After    ->Fill(locMissingP4.P(),                            locMissingP4.Theta()*RadToDeg,           locHistAccidWeightFactor);
         dHist_ConfidenceLevel_After    ->Fill(dComboWrapper->Get_ConfidenceLevel_KinFit(),                                          locHistAccidWeightFactor);
         dHist_MissingMomentum_After    ->Fill(locMissingP4.P(),                                                                     locHistAccidWeightFactor);
         dHist_MissingPMinus_After      ->Fill(locMissingP4.Minus(),                                                                 locHistAccidWeightFactor);
