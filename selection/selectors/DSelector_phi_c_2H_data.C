@@ -12,6 +12,8 @@
 
 double RadToDeg      = 180.0/3.1415926;
 double mass_deuteron = 1.875612928;
+double mass_neutron  = 0.939565421;
+double mass_proton   = 0.938272088;
 
 class DSelector_phi_c_2H_data : public DSelector
 {
@@ -96,7 +98,7 @@ class DSelector_phi_c_2H_data : public DSelector
         TH1F* dHist_MinusU_After;
         TH1F* dHist_ThetaCM_After;
         TH1F* dHist_InvariantMassPhi_After;
-        TH1F* dHist_Rapidity_After;
+        TH1F* dHist_YPhi_After;
 
 	ClassDef(DSelector_phi_c_2H_data, 0);
 };
@@ -181,7 +183,7 @@ void DSelector_phi_c_2H_data::Init(TTree *locTree)
     dHist_MinusU_After                 = new TH1F("MinusU_After",              ";-u (GeV^{2})                ;Events/0.01 GeV^{2}",   1500,  0.0,  15.0);
     dHist_ThetaCM_After                = new TH1F("ThetaCM_After",             ";#theta_{c.m.} (deg)         ;Events/1 deg",           180,  0.0, 180.0);
     dHist_InvariantMassPhi_After       = new TH1F("InvariantMassPhi_After",    ";M_{K^{+}K^{-}} (GeV)        ;Events/0.01 GeV",        500,  0.0,   5.0);
-    dHist_Rapidity_After               = new TH1F("Rapidity_After",            ";y_{#phi}                    ;Events/0.01",            400,  0.0,   4.0);
+    dHist_YPhi_After                   = new TH1F("YPhi_After",                ";y_{#phi}                    ;Events/0.01",            400,  0.0,   4.0);
 
     // CUSTOM OUTPUT BRACHES: FLAT TREE
     dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("RunNumber");
@@ -270,7 +272,7 @@ Bool_t DSelector_phi_c_2H_data::Process(Long64_t locEntry)
         double locMinusT                = -(locBeamP4   - locPhiP4).Mag2();
         double locMinusU                = -(locBeamP4   - locMissingP4).Mag2();
         double locThetaCM               = locBeamP4CM.Vect().Angle(locPhiP4CM.Vect())*RadToDeg;
-        double locRapidity              = 0.5*log((locPhiP4.E()+locPhiP4.Pz())/(locPhiP4.E()-locPhiP4.Pz()));
+        double locYPhi                  = locMinusT/(2*mass_proton*(locBeamP4.E()-locPhiP4.E()));
 
         // FILL CUSTOM HISTOGRAMS: BEFORE CUTS
         dHist_NumUnusedTracks_Before    ->Fill(dComboWrapper->Get_NumUnusedTracks(),                                         locHistAccidWeightFactor);
@@ -350,7 +352,7 @@ Bool_t DSelector_phi_c_2H_data::Process(Long64_t locEntry)
         dHist_MinusU_After             ->Fill(locMinusU,                                                                            locHistAccidWeightFactor);
         dHist_ThetaCM_After            ->Fill(locThetaCM,                                                                           locHistAccidWeightFactor);
         dHist_InvariantMassPhi_After   ->Fill(locPhiP4.M(),                                                                         locHistAccidWeightFactor);
-        dHist_Rapidity_After           ->Fill(locRapidity,                                                                          locHistAccidWeightFactor);
+        dHist_YPhi_After               ->Fill(locYPhi,                                                                              locHistAccidWeightFactor);
 
 		// EXECUTE ANALYSIS ACTIONS
         if(!Execute_Actions()) // if the active combo fails a cut, IsComboCutFlag automatically set

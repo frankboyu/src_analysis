@@ -6,7 +6,7 @@ TREE_NAME="gd_kpkmmissd__B4_F4_T1_S4_Tree"
 # TREE_NAME="gd_kpkmprotmissn__B4_F4_T2_S5_Tree"
 SELECTOR_FILE="phi_c_2H_data"
 NUM_THREADS=1
-TAG="10_measured_pmissremoved"
+TAG="11_measured_yphicorrected"
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
 gxenv $HALLD_VERSIONS/version_5.17.0.xml
