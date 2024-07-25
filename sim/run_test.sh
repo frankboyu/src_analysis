@@ -1,19 +1,12 @@
 #!/bin/bash
 
-REACTION=$1
-TARGET=$2
-EVENTS=$3
+REACTION=piminus_p_2H
+RUN=90213
+EVENTS=10000
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
-gxenv builds/halld_versions_srcct/recon_srcct.xml
+gxenv /work/halld2/home/boyu/src_software_builds/halld_versions_srcct/recon_srcct-2021_11-dev.xml
 
-if   [ ${TARGET} == "2H" ]
-then
-    gluex_MC.py configs/wrapper/wrapper_test.cfg 90213 ${EVENTS} per_file=1000000 batch=0
-elif [ ${TARGET} == "4He" ]
-then
-    gluex_MC.py configs/wrapper/wrapper_test.cfg 90061 ${EVENTS} per_file=1000000 batch=0
-elif [ ${TARGET} == "12C" ]
-then
-    gluex_MC.py configs/wrapper/wrapper_test.cfg 90290 ${EVENTS} per_file=1000000 batch=0
-fi
+cd output
+gluex_MC.py ../configs/wrapper_${REACTION}.cfg ${RUN} ${EVENTS} per_file=1000000 batch=2
+rm -r 90*
