@@ -8,9 +8,15 @@ GitHub: https://github.com/frankboyu/src_analysis/tree/master/sim
 
 ### Usage
 
-1.  Install the softwares in the builds directory.
+1.  Test the simulation interactively on the command line
 
-2.  Run the simulaiton
+    `sh run_test.sh`
+
+    If any of the software is not installed on the current system, run the singularity container first by
+
+    `sh run_singularity.sh`
+
+2.  Run simulaiton of large sample size on the batch system
 
     `sh run_sim.sh REACTION VERSION EVENTS`
 
