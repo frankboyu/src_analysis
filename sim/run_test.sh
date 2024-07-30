@@ -11,8 +11,8 @@ gxenv /work/halld2/home/boyu/src_software_builds/halld_versions_srcct/recon_srcc
 if  [ ${BATCH} == "0" ]
 then
     cd output
-    python $MCWRAPPER_CENTRAL/gluex_MC.py ../configs/wrapper_${REACTION}.cfg ${RUN} ${EVENTS} per_file=1000000 batch=${BATCH}
+    gluex_MC.py ../configs/wrapper_${REACTION}.cfg ${RUN} ${EVENTS} per_file=1000000 batch=${BATCH}
     rm -r 90*
 else
-    python $MCWRAPPER_CENTRAL/gluex_MC.py configs/wrapper_${REACTION}.cfg ${RUN} ${EVENTS} per_file=1000000 batch=${BATCH} logdir=/farm_out/boyu/src_analysis/sim/
+    gluex_MC.py configs/wrapper_${REACTION}.cfg ${RUN} ${EVENTS} per_file=1000000 batch=${BATCH} logdir=/farm_out/boyu/src_analysis/sim/
 fi
