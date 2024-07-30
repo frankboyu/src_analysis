@@ -2,7 +2,6 @@ import sys
 import numpy as np
 
 reaction = sys.argv[1]
-version  = sys.argv[2]
 
 if (reaction[-2:] == '2H'):
     run_list = np.loadtxt("../flux/output/deuterium/flux_total_deuterium.txt")[:,0]
@@ -11,7 +10,7 @@ elif (reaction[-3:] == '4He'):
 elif (reaction[-3:] == '12C'):
     run_list = np.loadtxt("../flux/output/carbon/flux_total_carbon.txt")[:,0]
 
-config_file = open("configs/wrapper/wrapper_"+reaction+"_ver"+version+".cfg", "r")
+config_file = open("configs/wrapper_"+reaction+".cfg", "r")
 config_lines = config_file.readlines()
 for (i, line) in enumerate(config_lines):
     if (line[0:11] == 'FLUX_TO_GEN'):
@@ -48,5 +47,5 @@ for run_number in run_list:
         new_line = line[:char_bkg] + "Random:recon-2021_11-ver01\n"
         config_lines[line_bkg] = new_line
 
-    file = open("configs/wrapper/wrapper_"+reaction+"_ver"+version+"_"+str(run_number)+".cfg", "w")
+    file = open("configs/wrapper_"+reaction+"_"+str(run_number)+".cfg", "w")
     file.writelines(config_lines)
