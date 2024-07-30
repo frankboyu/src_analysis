@@ -18,8 +18,4 @@ GitHub: https://github.com/frankboyu/src_analysis/tree/master/sim
 
 2.  Run simulaiton of large sample size on the batch system
 
-    `sh run_sim.sh REACTION VERSION EVENTS`
-
-3.  Merge the output root files and back up all the files on tape.
-
-    `sh run_merge.sh REACTION VERSION`
+    `sh run_sim.sh REACTION EVENTS`
