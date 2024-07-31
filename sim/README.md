@@ -8,7 +8,7 @@ GitHub: https://github.com/frankboyu/src_analysis/tree/master/sim
 
 ### Usage
 
-1.  Test the simulation interactively on the command line
+1.  To test the simulation or run small sample size of simulation interactively on the command line
 
     `sh run_test.sh`
 

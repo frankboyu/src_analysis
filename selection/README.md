@@ -8,7 +8,9 @@ GitHub: https://github.com/frankboyu/src_analysis/tree/master/selection
 
 ### Usage
 
-1.  Edit the configuration and DSelector files
+1.  To test the DSelector or run DSelector over small number of events interactively on the command line
+
+    `sh run_test.sh`
 
 2.  Run the selection
 
