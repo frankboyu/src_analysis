@@ -8,15 +8,9 @@ GitHub: https://github.com/frankboyu/src_analysis/tree/master/flux
 
 ### Usage
 
-1.  Set up the environment
+To calculate the flux of each run
 
-    `source env.sh`
-
-2.  Run the script
-
-    `python3.6 get_flux.py TARGET`
-
-    TARGET: 2H, 4He, 12C, empty
+`sh run_flux.sh`
 
 ### Output
 
@@ -26,4 +20,4 @@ flux_corr_RUN.txt: photon flux of each run. Format: combined bin number, TAGH/TA
 
 flux_hist_RUN.txt: root file containing a flux histogram of each run. Used by the simulation as the input flux.
 
-flux_total_TARGET.txt: the summed flux of each run
+flux_total_TARGET.txt: the summed flux of each run on the specified target.
