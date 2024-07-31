@@ -20,9 +20,5 @@ GitHub: https://github.com/frankboyu/src_analysis/tree/master/skim
 
     ```sh run_skim.sh <REACTION> <RUN>```
 
-3.  To merge the output files from step 2
-
-    ```sh run_merge.sh <REACTION> <TAG>```
-
 ### Note
 1.  This part of code should be used for testing the reaction configs on a small number of files. To run the skim on the entire dataset, submit the reaction to the analysis launch.
