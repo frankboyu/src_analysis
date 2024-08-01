@@ -304,7 +304,7 @@ Bool_t DSelector_phi_c_2H_data::Process(Long64_t locEntry)
         // if(locMissingP4.P()                            > 1.0)                                                                                       locCutFlags[5] = true;
         if(locBeamP4.E()                               < 5.5  || locBeamP4.E()                   > 11.0)                                            locCutFlags[6] = true;
         if(dComboBeamWrapper->Get_X4().Z()             < 51.0 || dComboBeamWrapper->Get_X4().Z() > 79.0 || locVertexR > 1.0)                        locCutFlags[7] = true;
-        if(locPhiP4.M()                                > 1.05)                                                                                      locCutFlags[8] = true;
+        if(locPhiP4.M()                                > 1.20)                                                                                      locCutFlags[8] = true;
         for(int loc_j = 0; loc_j < 9; ++loc_j)
         {
             locIsComboCut += locCutFlags[loc_j];
@@ -359,19 +359,18 @@ Bool_t DSelector_phi_c_2H_data::Process(Long64_t locEntry)
 			continue;
 
         //FILL CUSTOM BRANCHES: FLAT TREE
-        // dFlatTreeInterface->Fill_Fundamental<Int_t>("RunNumber",                locRunNumber);
-        // dFlatTreeInterface->Fill_Fundamental<Int_t>("Entry",                    locEntry);
-        // dFlatTreeInterface->Fill_Fundamental<Int_t>("Combo",                    loc_i);
-        // dFlatTreeInterface->Fill_Fundamental<Double_t>("WeightFactor",          locHistAccidWeightFactor);
-        // dFlatTreeInterface->Fill_Fundamental<Double_t>("InvariantMassPhi",      locPhiP4.M());
-        // dFlatTreeInterface->Fill_Fundamental<Double_t>("BeamEnergy",            locBeamP4.E());
-        // dFlatTreeInterface->Fill_Fundamental<Double_t>("MinusT",                locMinusT);
-        // dFlatTreeInterface->Fill_Fundamental<Double_t>("thetaCM",               locThetaCM);
-        // dFlatTreeInterface->Fill_TObject<TLorentzVector>("BeamP4",              locBeamP4);
-        // dFlatTreeInterface->Fill_TObject<TLorentzVector>("KPlusP4",             locKPlusP4);
-        // dFlatTreeInterface->Fill_TObject<TLorentzVector>("KMinusP4",            locKMinusP4);
-        // dFlatTreeInterface->Fill_TObject<TLorentzVector>("ProtonP4",            locProtonP4);
-        // dFlatTreeInterface->Fill_TObject<TLorentzVector>("MissingP4",           locMissingP4);
+        dFlatTreeInterface->Fill_Fundamental<Int_t>("RunNumber",                locRunNumber);
+        dFlatTreeInterface->Fill_Fundamental<Int_t>("Entry",                    locEntry);
+        dFlatTreeInterface->Fill_Fundamental<Int_t>("Combo",                    loc_i);
+        dFlatTreeInterface->Fill_Fundamental<Double_t>("WeightFactor",          locHistAccidWeightFactor);
+        dFlatTreeInterface->Fill_Fundamental<Double_t>("InvariantMassPhi",      locPhiP4.M());
+        dFlatTreeInterface->Fill_Fundamental<Double_t>("BeamEnergy",            locBeamP4.E());
+        dFlatTreeInterface->Fill_Fundamental<Double_t>("MinusT",                locMinusT);
+        dFlatTreeInterface->Fill_Fundamental<Double_t>("thetaCM",               locThetaCM);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("BeamP4",              locBeamP4);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("KPlusP4",             locKPlusP4);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("KMinusP4",            locKMinusP4);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("MissingP4",           locMissingP4);
 
         // FILL FLAT TREE
         Fill_FlatTree(); //for the active combo
