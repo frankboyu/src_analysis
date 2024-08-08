@@ -120,7 +120,7 @@ void DSelector_phi_c_4He_data::Init(TTree *locTree)
 	dOutputTreeFileName      = "";
 	dFlatTreeFileName        = "flattree_phi_c_4He_data.root";
 	dFlatTreeName            = "flattree_phi_c_4He_data";
-    dSaveDefaultFlatBranches = false;
+    dSaveDefaultFlatBranches = true;
 
 	// INITIALIZE THE TREE INTERFACE AND WRAPPERS
     bool locInitializedPriorFlag = dInitializedFlag;               // save whether have been initialized previously
@@ -343,7 +343,7 @@ Bool_t DSelector_phi_c_4He_data::Process(Long64_t locEntry)
         dHist_MissingPMinus_After      ->Fill(locMissingP4.Minus(),                                                                 locHistAccidWeightFactor);
         dHist_MissingMassSquared_After ->Fill(locMissingP4.M2(),                                                                    locHistAccidWeightFactor);
         dHist_MissingMass_After        ->Fill(locMissingP4.M(),                                                                     locHistAccidWeightFactor);
-        dHist_EnergyBalance_After      ->Fill(mass_helium4-locMissingP4.E(),                                                       locHistAccidWeightFactor);
+        dHist_EnergyBalance_After      ->Fill(mass_helium4-locMissingP4.E(),                                                        locHistAccidWeightFactor);
         dHist_PhotonEnergy_After       ->Fill(locBeamP4.E(),                                                                        locHistAccidWeightFactor);
         dHist_VertexZ_After            ->Fill(dComboBeamWrapper->Get_X4().Z(),                                                      locHistAccidWeightFactor);
         dHist_VertexXY_After           ->Fill(dComboBeamWrapper->Get_X4().X(),             dComboBeamWrapper->Get_X4().Y(),         locHistAccidWeightFactor);
