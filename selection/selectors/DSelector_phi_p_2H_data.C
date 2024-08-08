@@ -155,7 +155,7 @@ void DSelector_phi_p_2H_data::Init(TTree *locTree)
     dHist_CutEffect_MissingMomentum    = new TH1F("CutEffect_MissingMomentum",      ";M_{K^{+}K^{-}} (GeV)        ;Events/0.01 GeV",        500,  0.0,   5.0);
     dHist_CutEffect_PhotonEnergy       = new TH1F("CutEffect_PhotonEnergy",         ";M_{K^{+}K^{-}} (GeV)        ;Events/0.01 GeV",        500,  0.0,   5.0);
     dHist_CutEffect_CommonVertex       = new TH1F("CutEffect_CommonVertex",         ";M_{K^{+}K^{-}} (GeV)        ;Events/0.01 GeV",        500,  0.0,   5.0);
-    dHist_CutEffect_MissingPMinus      = new TH1F("CutEffect_MissingPMinus",        ";M_{K^{+}K^{-}} (GeV)        ;Events/0.01 GeV",        500,  0.0,   5.0);
+    dHist_CutEffect_InvariantMassPhi   = new TH1F("CutEffect_InvariantMassPhi",     ";M_{K^{+}K^{-}} (GeV)        ;Events/0.01 GeV",        500,  0.0,   5.0);
 
     // CUSTOM HISTOGRAMS: AFTER THE CUTS
     dHist_NumUnusedTracks_After        = new TH1F("NumUnusedTracks_After",     ";Unused Tracks               ;Events/1",                10,  0.0,  10.0);
@@ -299,25 +299,25 @@ Bool_t DSelector_phi_p_2H_data::Process(Long64_t locEntry)
         if(dKPlusWrapper->Get_PIDFOM()                 < 0.01 || dKMinusWrapper->Get_PIDFOM()    < 0.01 || dProtonWrapper->Get_PIDFOM()    < 0.01)  locCutFlags[2] = true;
         // if((locPiMinusP4 + locProtonP4AsPion).M()      < 1.0)                                                                                    locCutFlags[3] = true;
         if(dComboWrapper->Get_ConfidenceLevel_KinFit() < 0.001)                                                                                     locCutFlags[4] = true;
-        if(locMissingP4.P()                            > 1.0)                                                                                       locCutFlags[5] = true;
+        // if(locMissingP4.P()                            > 1.0)                                                                                       locCutFlags[5] = true;
         if(locBeamP4.E()                               < 5.5  || locBeamP4.E()                   > 11.0)                                            locCutFlags[6] = true;
         if(dComboBeamWrapper->Get_X4().Z()             < 51.0 || dComboBeamWrapper->Get_X4().Z() > 79.0 || locVertexR > 1.0)                        locCutFlags[7] = true;
-        if(locMissingP4.Minus()                        < 0.4  || locMissingP4.Minus()            > 1.4)                                             locCutFlags[8] = true;
+        if(locPhiP4.M()                                > 1.20)                                                                                      locCutFlags[8] = true;
         for(int loc_j = 0; loc_j < 9; ++loc_j)
         {
             locIsComboCut += locCutFlags[loc_j];
         }
 
         // FILL CUSTOM HISTOGRAMS: CUT EFFECTS
-        if((locIsComboCut-locCutFlags[0]) == 0) dHist_CutEffect_NumUnusedTracks   ->Fill(locMissingP4.Minus(), locHistAccidWeightFactor);
-        if((locIsComboCut-locCutFlags[1]) == 0) dHist_CutEffect_NumUnusedShowers  ->Fill(locMissingP4.Minus(), locHistAccidWeightFactor);
-        if((locIsComboCut-locCutFlags[2]) == 0) dHist_CutEffect_TrackPIDFOM       ->Fill(locMissingP4.Minus(), locHistAccidWeightFactor);
-        if((locIsComboCut-locCutFlags[3]) == 0) dHist_CutEffect_ParticleKinematics->Fill(locMissingP4.Minus(), locHistAccidWeightFactor);
-        if((locIsComboCut-locCutFlags[4]) == 0) dHist_CutEffect_ConfidenceLevel   ->Fill(locMissingP4.Minus(), locHistAccidWeightFactor);
-        if((locIsComboCut-locCutFlags[5]) == 0) dHist_CutEffect_MissingMomentum   ->Fill(locMissingP4.Minus(), locHistAccidWeightFactor);
-        if((locIsComboCut-locCutFlags[6]) == 0) dHist_CutEffect_PhotonEnergy      ->Fill(locMissingP4.Minus(), locHistAccidWeightFactor);
-        if((locIsComboCut-locCutFlags[7]) == 0) dHist_CutEffect_CommonVertex      ->Fill(locMissingP4.Minus(), locHistAccidWeightFactor);
-        if((locIsComboCut-locCutFlags[8]) == 0) dHist_CutEffect_MissingPMinus     ->Fill(locMissingP4.Minus(), locHistAccidWeightFactor);
+        if((locIsComboCut-locCutFlags[0]) == 0) dHist_CutEffect_NumUnusedTracks   ->Fill(locPhiP4.M(), locHistAccidWeightFactor);
+        if((locIsComboCut-locCutFlags[1]) == 0) dHist_CutEffect_NumUnusedShowers  ->Fill(locPhiP4.M(), locHistAccidWeightFactor);
+        if((locIsComboCut-locCutFlags[2]) == 0) dHist_CutEffect_TrackPIDFOM       ->Fill(locPhiP4.M(), locHistAccidWeightFactor);
+        if((locIsComboCut-locCutFlags[3]) == 0) dHist_CutEffect_ParticleKinematics->Fill(locPhiP4.M(), locHistAccidWeightFactor);
+        if((locIsComboCut-locCutFlags[4]) == 0) dHist_CutEffect_ConfidenceLevel   ->Fill(locPhiP4.M(), locHistAccidWeightFactor);
+        if((locIsComboCut-locCutFlags[5]) == 0) dHist_CutEffect_MissingMomentum   ->Fill(locPhiP4.M(), locHistAccidWeightFactor);
+        if((locIsComboCut-locCutFlags[6]) == 0) dHist_CutEffect_PhotonEnergy      ->Fill(locPhiP4.M(), locHistAccidWeightFactor);
+        if((locIsComboCut-locCutFlags[7]) == 0) dHist_CutEffect_CommonVertex      ->Fill(locPhiP4.M(), locHistAccidWeightFactor);
+        if((locIsComboCut-locCutFlags[8]) == 0) dHist_CutEffect_InvariantMassPhi  ->Fill(locPhiP4.M(), locHistAccidWeightFactor);
 
         // DISCARD EVENTS THAT FAIL CUTS
         if(locIsComboCut > 0)
@@ -356,19 +356,19 @@ Bool_t DSelector_phi_p_2H_data::Process(Long64_t locEntry)
 			continue;
 
         //FILL CUSTOM BRANCHES: FLAT TREE
-        // dFlatTreeInterface->Fill_Fundamental<Int_t>("RunNumber",                locRunNumber);
-        // dFlatTreeInterface->Fill_Fundamental<Int_t>("Entry",                    locEntry);
-        // dFlatTreeInterface->Fill_Fundamental<Int_t>("Combo",                    loc_i);
-        // dFlatTreeInterface->Fill_Fundamental<Double_t>("WeightFactor",          locHistAccidWeightFactor);
-        // dFlatTreeInterface->Fill_Fundamental<Double_t>("InvariantMassPhi",      locPhiP4.M());
-        // dFlatTreeInterface->Fill_Fundamental<Double_t>("BeamEnergy",            locBeamP4.E());
-        // dFlatTreeInterface->Fill_Fundamental<Double_t>("MinusT",                locMinusT);
-        // dFlatTreeInterface->Fill_Fundamental<Double_t>("thetaCM",               locThetaCM);
-        // dFlatTreeInterface->Fill_TObject<TLorentzVector>("BeamP4",              locBeamP4);
-        // dFlatTreeInterface->Fill_TObject<TLorentzVector>("KPlusP4",             locKPlusP4);
-        // dFlatTreeInterface->Fill_TObject<TLorentzVector>("KMinusP4",            locKMinusP4);
-        // dFlatTreeInterface->Fill_TObject<TLorentzVector>("ProtonP4",            locProtonP4);
-        // dFlatTreeInterface->Fill_TObject<TLorentzVector>("MissingP4",           locMissingP4);
+        dFlatTreeInterface->Fill_Fundamental<Int_t>("RunNumber",                locRunNumber);
+        dFlatTreeInterface->Fill_Fundamental<Int_t>("Entry",                    locEntry);
+        dFlatTreeInterface->Fill_Fundamental<Int_t>("Combo",                    loc_i);
+        dFlatTreeInterface->Fill_Fundamental<Double_t>("WeightFactor",          locHistAccidWeightFactor);
+        dFlatTreeInterface->Fill_Fundamental<Double_t>("InvariantMassPhi",      locPhiP4.M());
+        dFlatTreeInterface->Fill_Fundamental<Double_t>("BeamEnergy",            locBeamP4.E());
+        dFlatTreeInterface->Fill_Fundamental<Double_t>("MinusT",                locMinusT);
+        dFlatTreeInterface->Fill_Fundamental<Double_t>("thetaCM",               locThetaCM);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("BeamP4",              locBeamP4);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("KPlusP4",             locKPlusP4);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("KMinusP4",            locKMinusP4);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("ProtonP4",            locProtonP4);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("MissingP4",           locMissingP4);
 
         // FILL FLAT TREE
         Fill_FlatTree(); //for the active combo
