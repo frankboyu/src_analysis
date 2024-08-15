@@ -63,7 +63,7 @@ int filter_phi_c_2H_data()
         hist_MPhi_yPhi_Before->Fill(phi_mass, y_phi, WeightFactor);
 
         // Filter events
-        if (y_phi < 0.4) continue;
+        if (y_phi < 0.8) continue;
         hist_MPhi->Fill(phi_mass, WeightFactor);
         if (phi_mass < 1.01 || phi_mass > 1.03) continue;
 
