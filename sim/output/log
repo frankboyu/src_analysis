@@ -1,8 +1,9 @@
 piminus_p_2H
-ver01: flat, no t and u cut, 100M
+ver01: flat, no t and u cut, 100M.
+ver02: flat, no t and u cut, 10M. jana_recon config reverted, gen energy more specific, first version with updated Linux system.
 
 piminus_p_4He
-ver01: flat, no t and u cut, 200M
+ver01: flat, no t and u cut, 200M.
 
 piminus_p_12C
-ver01: flat, no t and u cut, 200M
+ver01: flat, no t and u cut, 200M.
