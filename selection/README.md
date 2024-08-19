@@ -17,9 +17,3 @@ GitHub: https://github.com/frankboyu/src_analysis/tree/master/selection
     `sh run_selection.sh REACTION`
 
     REACTION is one of the suffix in the configs folder
-
-3.  Merge the output flat trees
-
-    `sh run_merge.sh REACTION TAG`
-
-    TAG is the suffix added to the end of the output flat tree.
