@@ -37,6 +37,7 @@ int filter_phi_c_2H_data()
     TH2F *hist_MPhi_yPhi_After      = new TH2F("hist_MPhi_yPhi_After", "hist_MPhi_yPhi_After", 400, 0.9, 1.3, 200, 0.0, 2.0);
     TH2F *hist_MPhi_MRho            = new TH2F("hist_MPhi_MRho", "hist_MPhi_MRho", 400, 0.9, 1.3, 800, 0.6, 1.4);
     TH2F *hist_ThetaPhi_yPhi        = new TH2F("hist_ThetaPhi_yPhi", "hist_ThetaPhi_yPhi", 200, 0.0, 20.0, 200, 0.0, 2.0);
+    TH2F *hist_MissingMass_yPhi     = new TH2F("hist_MissingMass_yPhi", "hist_MissingMass_yPhi", 200, 1.0, 3.0, 200, 0.0, 2.0);
 
     // Loop over tree entries
     for (Long64_t i = 0; i < chain->GetEntries(); i++)
@@ -63,7 +64,7 @@ int filter_phi_c_2H_data()
         hist_MPhi_yPhi_Before->Fill(phi_mass, y_phi, WeightFactor);
 
         // Filter events
-        if (y_phi < 0.8) continue;
+        // if (y_phi < 0.6) continue;
         hist_MPhi->Fill(phi_mass, WeightFactor);
         if (phi_mass < 1.01 || phi_mass > 1.03) continue;
 
@@ -74,6 +75,7 @@ int filter_phi_c_2H_data()
         hist_MPhi_yPhi_After->Fill(phi_mass, y_phi, WeightFactor);
         hist_MPhi_MRho->Fill(phi_mass, rho_mass, WeightFactor);
         hist_ThetaPhi_yPhi->Fill(phi_theta, y_phi, WeightFactor);
+        hist_MissingMass_yPhi->Fill(MissingP4->M(), y_phi, WeightFactor);
     }
 
     // Save histograms to file
@@ -87,6 +89,7 @@ int filter_phi_c_2H_data()
     hist_MPhi_yPhi_After->Write();
     hist_MPhi_MRho->Write();
     hist_ThetaPhi_yPhi->Write();
+    hist_MissingMass_yPhi->Write();
     output_file->Close();
 
     return 0;
