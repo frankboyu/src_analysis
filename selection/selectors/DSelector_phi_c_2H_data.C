@@ -298,10 +298,10 @@ Bool_t DSelector_phi_c_2H_data::Process(Long64_t locEntry)
         int locIsComboCut = 0;
         if(dComboWrapper->Get_NumUnusedTracks()        > 0)                                                                                         locCutFlags[0] = true;
         if(dComboWrapper->Get_NumUnusedShowers()       > 0)                                                                                         locCutFlags[1] = true;
-        // if(dKPlusWrapper->Get_PIDFOM()                 < 0.01 || dKMinusWrapper->Get_PIDFOM()    < 0.01)                                            locCutFlags[2] = true;
+        if(dKPlusWrapper->Get_PIDFOM()                 < 0.01 || dKMinusWrapper->Get_PIDFOM()    < 0.01)                                            locCutFlags[2] = true;
         // if((locPiMinusP4 + locProtonP4AsPion).M()      < 1.0)                                                                                    locCutFlags[3] = true;
         if(dComboWrapper->Get_ConfidenceLevel_KinFit() < 0.001)                                                                                     locCutFlags[4] = true;
-        // if(locMissingP4.P()                            > 1.0)                                                                                       locCutFlags[5] = true;
+        // if(abs(mass_deuteron-locMissingP4.E())         > 1.0)                                                                                       locCutFlags[5] = true;
         if(locBeamP4.E()                               < 5.5  || locBeamP4.E()                   > 11.0)                                            locCutFlags[6] = true;
         if(dComboBeamWrapper->Get_X4().Z()             < 51.0 || dComboBeamWrapper->Get_X4().Z() > 79.0 || locVertexR > 1.0)                        locCutFlags[7] = true;
         if(locPhiP4.M()                                > 1.20)                                                                                      locCutFlags[8] = true;
