@@ -7,6 +7,6 @@ TAG="4_morereactions"
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
 gxenv $HALLD_VERSIONS/version.xml
 
-mkdir output/${REACTION}_test/${TAG}
-cd output/${REACTION}_test/${TAG}
+mkdir output/test/${REACTION}_${TAG}
+cd output/test/${REACTION}_${TAG}
 hd_root --config=../../../configs/jana_analysis_${REACTION}.cfg ${INPUTFILE}
