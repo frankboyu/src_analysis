@@ -40,14 +40,33 @@ class DSelector_phi_c_2H_data : public DSelector
         TH1F* dHist_PhotonEnergy_Before;
         TH1F* dHist_VertexZ_Before;
         TH2F* dHist_VertexXY_Before;
+		TH1F* dHist_ConfidenceLevel_Before;
+        TH1F* dHist_KPlusPIDFOM_Before;
+        TH1F* dHist_KMinusPIDFOM_Before;
         TH1F* dHist_InvariantMassPhi_Before;
 
-        TH1F* dHist_ConfidenceLevel_After;
+		TH1D* dHist_NumUnusedTracks_After;
+        TH1D* dHist_NumUnusedShowers_After;
+        TH1F* dHist_PhotonEnergy_After;
+        TH1F* dHist_VertexZ_After;
+        TH2F* dHist_VertexXY_After;
+		TH1F* dHist_ConfidenceLevel_After;
         TH1F* dHist_KPlusPIDFOM_After;
         TH1F* dHist_KMinusPIDFOM_After;
+        TH1F* dHist_InvariantMassPhi_After;
 
         TH1F* dHist_PhotonTiming_Raw;
         TH1F* dHist_PhotonTiming_Weighted;
+
+		TH1D* dHist_NumUnusedTracks_Weighted;
+        TH1D* dHist_NumUnusedShowers_Weighted;
+        TH1F* dHist_PhotonEnergy_Weighted;
+        TH1F* dHist_VertexZ_Weighted;
+        TH2F* dHist_VertexXY_Weighted;
+		TH1F* dHist_ConfidenceLevel_Weighted;
+        TH1F* dHist_KPlusPIDFOM_Weighted;
+        TH1F* dHist_KMinusPIDFOM_Weighted;
+        TH1F* dHist_InvariantMassPhi_Weighted;
 
 	ClassDef(DSelector_phi_c_2H_data, 0);
 };
@@ -79,22 +98,44 @@ void DSelector_phi_c_2H_data::Init(TTree *locTree)
     Initialize_Actions();
 
     // DEFINE HISTOGRAMS
-    dHist_NumUnusedTracks_Before       = new TH1D("NumUnusedTracks_Before",     ";Unused Tracks               ;Events/1",                10,  0.0,  10.0);
-    dHist_NumUnusedShowers_Before      = new TH1D("NumUnusedShowers_Before",    ";Unused Showers              ;Events/1",                10,  0.0,  10.0);
-    dHist_PhotonEnergy_Before          = new TH1F("PhotonEnergy_Before",        ";Photon Energy (GeV)         ;Events/0.01 GeV",        900,  3.0,  12.0);
-    dHist_VertexZ_Before               = new TH1F("VertexZ_Before",             ";Vertex Z (cm)               ;Events/1 cm",            200,  0.0, 200.0);
-    dHist_VertexXY_Before              = new TH2F("VertexXY_Before",            ";Vertex X (cm)               ;Vertex Y (cm)",          100, -5.0,   5.0,  100, -5.0,   5.0);
-    dHist_InvariantMassPhi_Before      = new TH1F("InvariantMassPhi_Before",    ";M_{K^{+}K^{-}} (GeV)        ;Events/0.01 GeV",        500,  0.0,   5.0);
+    dHist_NumUnusedTracks_Before	= new TH1D("NumUnusedTracks_Before",    ";Unused Tracks               ;Events/1",                10,  0.0,  10.0);
+    dHist_NumUnusedShowers_Before   = new TH1D("NumUnusedShowers_Before",   ";Unused Showers              ;Events/1",                10,  0.0,  10.0);
+    dHist_PhotonEnergy_Before       = new TH1F("PhotonEnergy_Before",       ";Photon Energy (GeV)         ;Events/0.01 GeV",        900,  3.0,  12.0);
+    dHist_VertexZ_Before            = new TH1F("VertexZ_Before",            ";Vertex Z (cm)               ;Events/1 cm",            200,  0.0, 200.0);
+    dHist_VertexXY_Before           = new TH2F("VertexXY_Before",           ";Vertex X (cm)               ;Vertex Y (cm)",          100, -5.0,   5.0,  100, -5.0,   5.0);
+    dHist_ConfidenceLevel_Before    = new TH1F("ConfidenceLevel_Before",    ";Confidence Level            ;Events/0.001",          1000,  0.0,  1.0);
+    dHist_KPlusPIDFOM_Before        = new TH1F("KPlusPIDFOM_Before",        ";PIDFOM_{K^{+}}              ;Events/0.001",          1000,  0.0,  1.0);
+    dHist_KMinusPIDFOM_Before       = new TH1F("KMinusPIDFOM_Before",       ";PIDFOM_{K^{-}}              ;Events/0.001",          1000,  0.0,  1.0);
+    dHist_InvariantMassPhi_Before   = new TH1F("InvariantMassPhi_Before",	";M_{K^{+}K^{-}} (GeV)        ;Events/0.01 GeV",        500,  0.0,   5.0);
 
-    dHist_ConfidenceLevel_After        = new TH1F("ConfidenceLevel_After",      ";Confidence Level            ;Events/0.001",          1000,  0.0,  0.0001);
-    dHist_KPlusPIDFOM_After            = new TH1F("KPlusPIDFOM_After",          ";PIDFOM_{K^{+}}              ;Events/0.001",          1000,  0.0,  0.0001);
-    dHist_KMinusPIDFOM_After           = new TH1F("KMinusPIDFOM_After",         ";PIDFOM_{K^{-}}              ;Events/0.001",          1000,  0.0,  0.0001);
+    dHist_NumUnusedTracks_After     = new TH1D("NumUnusedTracks_After",     ";Unused Tracks               ;Events/1",                10,  0.0,  10.0);
+    dHist_NumUnusedShowers_After    = new TH1D("NumUnusedShowers_After",    ";Unused Showers              ;Events/1",                10,  0.0,  10.0);
+    dHist_PhotonEnergy_After        = new TH1F("PhotonEnergy_After",        ";Photon Energy (GeV)         ;Events/0.01 GeV",        900,  3.0,  12.0);
+    dHist_VertexZ_After             = new TH1F("VertexZ_After",             ";Vertex Z (cm)               ;Events/1 cm",            200,  0.0, 200.0);
+    dHist_VertexXY_After            = new TH2F("VertexXY_After",            ";Vertex X (cm)               ;Vertex Y (cm)",          100, -5.0,   5.0,  100, -5.0,   5.0);
+    dHist_ConfidenceLevel_After     = new TH1F("ConfidenceLevel_After",     ";Confidence Level            ;Events/0.001",          1000,  0.0,  1.0);
+    dHist_KPlusPIDFOM_After         = new TH1F("KPlusPIDFOM_After",         ";PIDFOM_{K^{+}}              ;Events/0.001",          1000,  0.0,  1.0);
+    dHist_KMinusPIDFOM_After        = new TH1F("KMinusPIDFOM_After",        ";PIDFOM_{K^{-}}              ;Events/0.001",          1000,  0.0,  1.0);
+    dHist_InvariantMassPhi_After    = new TH1F("InvariantMassPhi_After",    ";M_{K^{+}K^{-}} (GeV)        ;Events/0.01 GeV",        500,  0.0,   5.0);
 
-    dHist_PhotonTiming_Raw             = new TH1F("PhotonTiming_Raw",           ";#Delta t_{Beam-RF} (ns)     ;Events/0.1 ns",          360,-18.0,  18.0);
-    dHist_PhotonTiming_Weighted        = new TH1F("PhotonTiming_Weighted",      ";#Delta t_{Beam-RF} (ns)     ;Events/0.1 ns",          360,-18.0,  18.0);
+    dHist_PhotonTiming_Raw          = new TH1F("PhotonTiming_Raw",          ";#Delta t_{Beam-RF} (ns)     ;Events/0.1 ns",          360,-18.0,  18.0);
+    dHist_PhotonTiming_Weighted     = new TH1F("PhotonTiming_Weighted",     ";#Delta t_{Beam-RF} (ns)     ;Events/0.1 ns",          360,-18.0,  18.0);
+
+    dHist_NumUnusedTracks_Weighted  = new TH1D("NumUnusedTracks_Weighted",  ";Unused Tracks               ;Events/1",                10,  0.0,  10.0);
+    dHist_NumUnusedShowers_Weighted = new TH1D("NumUnusedShowers_Weighted", ";Unused Showers              ;Events/1",                10,  0.0,  10.0);
+    dHist_PhotonEnergy_Weighted     = new TH1F("PhotonEnergy_Weighted",     ";Photon Energy (GeV)         ;Events/0.01 GeV",        900,  3.0,  12.0);
+    dHist_VertexZ_Weighted          = new TH1F("VertexZ_Weighted",          ";Vertex Z (cm)               ;Events/1 cm",            200,  0.0, 200.0);
+    dHist_VertexXY_Weighted         = new TH2F("VertexXY_Weighted",         ";Vertex X (cm)               ;Vertex Y (cm)",          100, -5.0,   5.0,  100, -5.0,   5.0);
+    dHist_ConfidenceLevel_Weighted  = new TH1F("ConfidenceLevel_Weighted",  ";Confidence Level            ;Events/0.001",          1000,  0.0,  1.0);
+    dHist_KPlusPIDFOM_Weighted      = new TH1F("KPlusPIDFOM_Weighted",      ";PIDFOM_{K^{+}}              ;Events/0.001",          1000,  0.0,  1.0);
+    dHist_KMinusPIDFOM_Weighted     = new TH1F("KMinusPIDFOM_Weighted",     ";PIDFOM_{K^{-}}              ;Events/0.001",          1000,  0.0,  1.0);
+    dHist_InvariantMassPhi_Weighted = new TH1F("InvariantMassPhi_Weighted", ";M_{K^{+}K^{-}} (GeV)        ;Events/0.01 GeV",        500,  0.0,   5.0);
+
 
     // FLAT TREE BRANCHES
     dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("accidweight");
+	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("kp_pidfom");  // the PIDFOM in the default flat branches kp_pid_fom is corrupted and always 0
+	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("km_pidfom");  // the PIDFOM in the default flat branches km_pid_fom is corrupted and always 0
 }
 // END OF INITIALIZATION
 
@@ -133,12 +174,15 @@ Bool_t DSelector_phi_c_2H_data::Process(Long64_t locEntry)
         TLorentzVector locKPlusP4    = dKPlusWrapper->Get_P4_Measured();
 		TLorentzVector locKMinusP4   = dKMinusWrapper->Get_P4_Measured();
 
-        // FILL HISTOGRAMS
+        // FILL HISTOGRAMS BEFORE CUTS
         dHist_NumUnusedTracks_Before    ->Fill(dComboWrapper->Get_NumUnusedTracks());
         dHist_NumUnusedShowers_Before   ->Fill(dComboWrapper->Get_NumUnusedShowers());
         dHist_PhotonEnergy_Before       ->Fill(locBeamP4.E());
         dHist_VertexZ_Before            ->Fill(dComboBeamWrapper->Get_X4().Z());
         dHist_VertexXY_Before           ->Fill(dComboBeamWrapper->Get_X4().X(), dComboBeamWrapper->Get_X4().Y());
+        dHist_ConfidenceLevel_Before    ->Fill(dComboWrapper->Get_ConfidenceLevel_KinFit());
+        dHist_KPlusPIDFOM_Before        ->Fill(dKPlusWrapper->Get_PIDFOM());
+        dHist_KMinusPIDFOM_Before       ->Fill(dKMinusWrapper->Get_PIDFOM());
         dHist_InvariantMassPhi_Before   ->Fill((locKPlusP4+locKMinusP4).M());
 
         // PERFORM CUTS
@@ -147,17 +191,23 @@ Bool_t DSelector_phi_c_2H_data::Process(Long64_t locEntry)
         if(locBeamP4.E()                               < 5.8  || locBeamP4.E()                   > 10.7)    dComboWrapper->Set_IsComboCut(true);
         if(dComboBeamWrapper->Get_X4().Z()             < 51.0 || dComboBeamWrapper->Get_X4().Z() > 79.0)    dComboWrapper->Set_IsComboCut(true);
         if(sqrt(pow(dComboBeamWrapper->Get_X4().X(),2) + pow(dComboBeamWrapper->Get_X4().Y(),2)) > 1.0)     dComboWrapper->Set_IsComboCut(true);
+        if(dComboWrapper->Get_ConfidenceLevel_KinFit() < 1e-4)                                              dComboWrapper->Set_IsComboCut(true);
+        if(dKPlusWrapper->Get_PIDFOM()                 < 1e-4)                                              dComboWrapper->Set_IsComboCut(true);
+        if(dKMinusWrapper->Get_PIDFOM()                < 1e-4)                                              dComboWrapper->Set_IsComboCut(true);
         if((locKPlusP4+locKMinusP4).M()                > 1.20)                                              dComboWrapper->Set_IsComboCut(true);
-        if(dComboWrapper->Get_ConfidenceLevel_KinFit() < 1e-5)                                              dComboWrapper->Set_IsComboCut(true);
-        if(dKPlusWrapper->Get_PIDFOM()                 < 1e-5)                                              dComboWrapper->Set_IsComboCut(true);
-        if(dKMinusWrapper->Get_PIDFOM()                < 1e-5)                                              dComboWrapper->Set_IsComboCut(true);
 
         if(dComboWrapper->Get_IsComboCut())  continue;
 
-        // FILL HISTOGRAMS
+        // FILL HISTOGRAMS AFTER CUTS
+        dHist_NumUnusedTracks_After ->Fill(dComboWrapper->Get_NumUnusedTracks());
+        dHist_NumUnusedShowers_After->Fill(dComboWrapper->Get_NumUnusedShowers());
+        dHist_PhotonEnergy_After    ->Fill(locBeamP4.E());
+        dHist_VertexZ_After         ->Fill(dComboBeamWrapper->Get_X4().Z());
+        dHist_VertexXY_After       	->Fill(dComboBeamWrapper->Get_X4().X(), dComboBeamWrapper->Get_X4().Y());
         dHist_ConfidenceLevel_After ->Fill(dComboWrapper->Get_ConfidenceLevel_KinFit());
         dHist_KPlusPIDFOM_After     ->Fill(dKPlusWrapper->Get_PIDFOM());
         dHist_KMinusPIDFOM_After    ->Fill(dKMinusWrapper->Get_PIDFOM());
+        dHist_InvariantMassPhi_After->Fill((locKPlusP4+locKMinusP4).M());
 
 		// GET THE ACCIDENTAL WEIGHT FACTOR
 		TLorentzVector locBeamX4                       = dComboBeamWrapper->Get_X4_Measured();
@@ -180,12 +230,25 @@ Bool_t DSelector_phi_c_2H_data::Process(Long64_t locEntry)
         dHist_PhotonTiming_Raw->Fill(locDeltaT_RF);
         dHist_PhotonTiming_Weighted->Fill(locDeltaT_RF, locHistAccidWeightFactor);
 
+		// FILL WEIGHTED HISTOGRAMS
+		dHist_NumUnusedTracks_Weighted  ->Fill(dComboWrapper->Get_NumUnusedTracks(), locHistAccidWeightFactor);
+		dHist_NumUnusedShowers_Weighted ->Fill(dComboWrapper->Get_NumUnusedShowers(), locHistAccidWeightFactor);
+		dHist_PhotonEnergy_Weighted     ->Fill(locBeamP4.E(), locHistAccidWeightFactor);
+		dHist_VertexZ_Weighted          ->Fill(dComboBeamWrapper->Get_X4().Z(), locHistAccidWeightFactor);
+		dHist_VertexXY_Weighted         ->Fill(dComboBeamWrapper->Get_X4().X(), dComboBeamWrapper->Get_X4().Y(), locHistAccidWeightFactor);
+		dHist_ConfidenceLevel_Weighted  ->Fill(dComboWrapper->Get_ConfidenceLevel_KinFit(), locHistAccidWeightFactor);
+		dHist_KPlusPIDFOM_Weighted      ->Fill(dKPlusWrapper->Get_PIDFOM(), locHistAccidWeightFactor);
+		dHist_KMinusPIDFOM_Weighted     ->Fill(dKMinusWrapper->Get_PIDFOM(), locHistAccidWeightFactor);
+		dHist_InvariantMassPhi_Weighted ->Fill((locKPlusP4+locKMinusP4).M(), locHistAccidWeightFactor);
+
 		// EXECUTE ANALYSIS ACTIONS
         if(!Execute_Actions()) // if the active combo fails a cut, IsComboCutFlag automatically set
 			continue;
 
         // FILL FLAT TREE
         dFlatTreeInterface->Fill_Fundamental<Double_t>("accidweight", locHistAccidWeightFactor);
+		dFlatTreeInterface->Fill_Fundamental<Double_t>("kp_pidfom", dKPlusWrapper->Get_PIDFOM());
+		dFlatTreeInterface->Fill_Fundamental<Double_t>("km_pidfom", dKMinusWrapper->Get_PIDFOM());
         Fill_FlatTree(); //for the active combo
 	}
     // END OF COMBO LOOP
