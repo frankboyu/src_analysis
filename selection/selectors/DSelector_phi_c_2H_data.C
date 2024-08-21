@@ -55,7 +55,7 @@ class DSelector_phi_c_2H_data : public DSelector
         TH1F* dHist_PhotonTiming_Weighted;
 
         // FLAT TREE BRANCHES
-        // dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("WeightFactor");
+        dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("accidweight");
 
 	ClassDef(DSelector_phi_c_2H_data, 0);
 };
@@ -153,9 +153,9 @@ Bool_t DSelector_phi_c_2H_data::Process(Long64_t locEntry)
         if(dComboBeamWrapper->Get_X4().Z()             < 51.0 || dComboBeamWrapper->Get_X4().Z() > 79.0)    dComboWrapper->Set_IsComboCut(true);
         if(sqrt(pow(dComboBeamWrapper->Get_X4().X(),2) + pow(dComboBeamWrapper->Get_X4().Y(),2)) > 1.0)     dComboWrapper->Set_IsComboCut(true);
         if((locKPlusP4+locKMinusP4).M()                > 1.20)                                              dComboWrapper->Set_IsComboCut(true);
-        // if(dComboWrapper->Get_ConfidenceLevel_KinFit() < 0.0001)                                            dComboWrapper->Set_IsComboCut(true);
-        // if(dKPlusWrapper->Get_PIDFOM()                 < 0.0001)                                            dComboWrapper->Set_IsComboCut(true);
-        // if(dKMinusWrapper->Get_PIDFOM()                < 0.0001)                                            dComboWrapper->Set_IsComboCut(true);
+        if(dComboWrapper->Get_ConfidenceLevel_KinFit() < 1e-5)                                              dComboWrapper->Set_IsComboCut(true);
+        if(dKPlusWrapper->Get_PIDFOM()                 < 1e-5)                                              dComboWrapper->Set_IsComboCut(true);
+        if(dKMinusWrapper->Get_PIDFOM()                < 1e-5)                                              dComboWrapper->Set_IsComboCut(true);
 
         if(dComboWrapper->Get_IsComboCut())  continue;
 
@@ -190,7 +190,7 @@ Bool_t DSelector_phi_c_2H_data::Process(Long64_t locEntry)
 			continue;
 
         // FILL FLAT TREE
-        // dFlatTreeInterface->Fill_Fundamental<Double_t>("WeightFactor", locHistAccidWeightFactor);
+        dFlatTreeInterface->Fill_Fundamental<Double_t>("accidweight", locHistAccidWeightFactor);
         Fill_FlatTree(); //for the active combo
 	}
     // END OF COMBO LOOP
