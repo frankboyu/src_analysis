@@ -194,7 +194,7 @@ Bool_t DSelector_phi_c_2H_data::Process(Long64_t locEntry)
         if(dComboWrapper->Get_ConfidenceLevel_KinFit() < 1e-4)                                              dComboWrapper->Set_IsComboCut(true);
         if(dKPlusWrapper->Get_PIDFOM()                 < 1e-4)                                              dComboWrapper->Set_IsComboCut(true);
         if(dKMinusWrapper->Get_PIDFOM()                < 1e-4)                                              dComboWrapper->Set_IsComboCut(true);
-        if((locKPlusP4+locKMinusP4).M()                > 1.20)                                              dComboWrapper->Set_IsComboCut(true);
+        if((locKPlusP4+locKMinusP4).M()                > 1.10)                                              dComboWrapper->Set_IsComboCut(true);
 
         if(dComboWrapper->Get_IsComboCut())  continue;
 
