@@ -5,11 +5,6 @@
 #include "DSelector/DHistogramActions.h"
 #include "DSelector/DCutActions.h"
 
-// #include "TH1I.h"
-// #include "TH2I.h"
-// #include "TH1F.h"
-// #include "TH2F.h"
-
 class DSelector_phi_c_2H_data : public DSelector
 {
 	public:
@@ -39,7 +34,7 @@ class DSelector_phi_c_2H_data : public DSelector
         DChargedTrackHypothesis* dKPlusWrapper;
 		DChargedTrackHypothesis* dKMinusWrapper;
 
-		// HISTOGRAMS
+		// DECLARE HISTOGRAMS
         TH1D* dHist_NumUnusedTracks_Before;
         TH1D* dHist_NumUnusedShowers_Before;
         TH1F* dHist_PhotonEnergy_Before;
@@ -53,9 +48,6 @@ class DSelector_phi_c_2H_data : public DSelector
 
         TH1F* dHist_PhotonTiming_Raw;
         TH1F* dHist_PhotonTiming_Weighted;
-
-        // FLAT TREE BRANCHES
-        dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("accidweight");
 
 	ClassDef(DSelector_phi_c_2H_data, 0);
 };
@@ -86,7 +78,7 @@ void DSelector_phi_c_2H_data::Init(TTree *locTree)
 	dPreviousRunNumber = 0;
     Initialize_Actions();
 
-    // CUSTOM HISTOGRAMS
+    // DEFINE HISTOGRAMS
     dHist_NumUnusedTracks_Before       = new TH1D("NumUnusedTracks_Before",     ";Unused Tracks               ;Events/1",                10,  0.0,  10.0);
     dHist_NumUnusedShowers_Before      = new TH1D("NumUnusedShowers_Before",    ";Unused Showers              ;Events/1",                10,  0.0,  10.0);
     dHist_PhotonEnergy_Before          = new TH1F("PhotonEnergy_Before",        ";Photon Energy (GeV)         ;Events/0.01 GeV",        900,  3.0,  12.0);
@@ -100,6 +92,9 @@ void DSelector_phi_c_2H_data::Init(TTree *locTree)
 
     dHist_PhotonTiming_Raw             = new TH1F("PhotonTiming_Raw",           ";#Delta t_{Beam-RF} (ns)     ;Events/0.1 ns",          360,-18.0,  18.0);
     dHist_PhotonTiming_Weighted        = new TH1F("PhotonTiming_Weighted",      ";#Delta t_{Beam-RF} (ns)     ;Events/0.1 ns",          360,-18.0,  18.0);
+
+    // FLAT TREE BRANCHES
+    dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("accidweight");
 }
 // END OF INITIALIZATION
 
