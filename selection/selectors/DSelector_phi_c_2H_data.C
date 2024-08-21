@@ -94,9 +94,9 @@ void DSelector_phi_c_2H_data::Init(TTree *locTree)
     dHist_VertexXY_Before              = new TH2F("VertexXY_Before",            ";Vertex X (cm)               ;Vertex Y (cm)",          100, -5.0,   5.0,  100, -5.0,   5.0);
     dHist_InvariantMassPhi_Before      = new TH1F("InvariantMassPhi_Before",    ";M_{K^{+}K^{-}} (GeV)        ;Events/0.01 GeV",        500,  0.0,   5.0);
 
-    dHist_ConfidenceLevel_After        = new TH1F("ConfidenceLevel_After",      ";Confidence Level            ;Events/0.001",          1000,  0.0,   0.1);
-    dHist_KPlusPIDFOM_After            = new TH1F("KPlusPIDFOM_After",          ";PIDFOM_{K^{+}}              ;Events/0.001",          1000,  0.0,   0.1);
-    dHist_KMinusPIDFOM_After           = new TH1F("KMinusPIDFOM_After",         ";PIDFOM_{K^{-}}              ;Events/0.001",          1000,  0.0,   0.1);
+    dHist_ConfidenceLevel_After        = new TH1F("ConfidenceLevel_After",      ";Confidence Level            ;Events/0.001",          1000,  0.0,  0.01);
+    dHist_KPlusPIDFOM_After            = new TH1F("KPlusPIDFOM_After",          ";PIDFOM_{K^{+}}              ;Events/0.001",          1000,  0.0,  0.01);
+    dHist_KMinusPIDFOM_After           = new TH1F("KMinusPIDFOM_After",         ";PIDFOM_{K^{-}}              ;Events/0.001",          1000,  0.0,  0.01);
 
     dHist_PhotonTiming_Raw             = new TH1F("PhotonTiming_Raw",           ";#Delta t_{Beam-RF} (ns)     ;Events/0.1 ns",          360,-18.0,  18.0);
     dHist_PhotonTiming_Weighted        = new TH1F("PhotonTiming_Weighted",      ";#Delta t_{Beam-RF} (ns)     ;Events/0.1 ns",          360,-18.0,  18.0);
@@ -157,8 +157,7 @@ Bool_t DSelector_phi_c_2H_data::Process(Long64_t locEntry)
         // if(dKPlusWrapper->Get_PIDFOM()                 < 0.0001)                                            dComboWrapper->Set_IsComboCut(true);
         // if(dKMinusWrapper->Get_PIDFOM()                < 0.0001)                                            dComboWrapper->Set_IsComboCut(true);
 
-        if(dComboWrapper->Get_IsComboCut())
-			continue;
+        if(dComboWrapper->Get_IsComboCut())  continue;
 
         // FILL HISTOGRAMS
         dHist_ConfidenceLevel_After ->Fill(dComboWrapper->Get_ConfidenceLevel_KinFit());
