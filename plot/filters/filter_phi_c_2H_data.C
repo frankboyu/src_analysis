@@ -34,16 +34,16 @@ int filter_phi_c_2H_data()
     // Create histogram
     TH1F *hist_MPhi                 = new TH1F("hist_MPhi", "hist_MPhi", 400, 0.9, 1.3);
     TH1F *hist_MissingMass          = new TH1F("hist_MissingMass", "hist_MissingMass", 200, 1.0, 3.0);
-    TH2F *hist_MPhi_ThetaPhi_Before = new TH2F("hist_MPhi_ThetaPhi_Before", "hist_MPhi_ThetaPhi_Before", 400, 0.9, 1.3, 200, 0.0, 20.0);
-    TH2F *hist_MPhi_ThetaPhi_After  = new TH2F("hist_MPhi_ThetaPhi_After", "hist_MPhi_ThetaPhi_After", 400, 0.9, 1.3, 200, 0.0, 20.0);
-    TH2F *hist_MPhi_MinusT_Before   = new TH2F("hist_MPhi_MinusT_Before", "hist_MPhi_MinusT_Before", 400, 0.9, 1.3, 200, 0.0, 2.0);
-    TH2F *hist_MPhi_MinusT_After    = new TH2F("hist_MPhi_MinusT_After", "hist_MPhi_MinusT_After", 400, 0.9, 1.3, 200, 0.0, 2.0);
-    TH2F *hist_MPhi_yPhi_Before     = new TH2F("hist_MPhi_yPhi_Before", "hist_MPhi_yPhi_Before", 400, 0.9, 1.3, 200, 0.0, 2.0);
-    TH2F *hist_MPhi_yPhi_After      = new TH2F("hist_MPhi_yPhi_After", "hist_MPhi_yPhi_After", 400, 0.9, 1.3, 200, 0.0, 2.0);
+    TH2F *hist_MPhi_ThetaPhi        = new TH2F("hist_MPhi_ThetaPhi", "hist_MPhi_ThetaPhi", 400, 0.9, 1.3, 200, 0.0, 20.0);
+    TH2F *hist_MPhi_MinusT          = new TH2F("hist_MPhi_MinusT", "hist_MPhi_MinusT", 400, 0.9, 1.3, 200, 0.0, 2.0);
+    TH2F *hist_MPhi_yPhi            = new TH2F("hist_MPhi_yPhi", "hist_MPhi_yPhi", 400, 0.9, 1.3, 200, 0.0, 2.0);
+    TH2F *hist_MPhi_MissingMass     = new TH2F("hist_MPhi_MissingMass", "hist_MPhi_MissingMass", 400, 0.9, 1.3, 200, 1.0, 3.0);
+    TH2F *hist_MPhi_DeltaE          = new TH2F("hist_MPhi_DeltaE", "hist_MPhi_DeltaE", 400, 0.9, 1.3, 200, -2.0, 2.0);
     TH2F *hist_MPhi_MRho            = new TH2F("hist_MPhi_MRho", "hist_MPhi_MRho", 400, 0.9, 1.3, 800, 0.3, 1.1);
     TH2F *hist_ThetaPhi_yPhi        = new TH2F("hist_ThetaPhi_yPhi", "hist_ThetaPhi_yPhi", 200, 0.0, 20.0, 200, 0.0, 2.0);
     TH2F *hist_MissingMass_yPhi     = new TH2F("hist_MissingMass_yPhi", "hist_MissingMass_yPhi", 200, 1.0, 3.0, 200, 0.0, 2.0);
     TH2F *hist_DeltaE_yPhi          = new TH2F("hist_DeltaE_yPhi", "hist_DeltaE_yPhi", 200, -2.0, 2.0, 200, 0.0, 2.0);
+    TH2F *hist_DeltaE_MissingMass   = new TH2F("hist_DeltaE_MissingMass", "hist_DeltaE_MissingMass", 200, -2.0, 2.0, 200, 1.0, 3.0);
 
     // Loop over tree entries
     for (Long64_t i = 0; i < chain->GetEntries(); i++)
@@ -69,39 +69,39 @@ int filter_phi_c_2H_data()
         double y_phi                = minus_t/(2*mass_deuteron*(BeamP4->E()-PhiP4->E()));
 
         // Fill histograms: before filter
-        hist_MPhi_ThetaPhi_Before->Fill(phi_mass, phi_theta, WeightFactor);
-        hist_MPhi_MinusT_Before->Fill(phi_mass, minus_t, WeightFactor);
-        hist_MPhi_yPhi_Before->Fill(phi_mass, y_phi, WeightFactor);
 
         // Filter events
         // if (y_phi < 0.6) continue;
         hist_MPhi->Fill(phi_mass, WeightFactor);
-        if (phi_mass < 1.01 || phi_mass > 1.03) continue;
+        // if (phi_mass < 1.01 || phi_mass > 1.03) continue;
 
         // Fill histograms: after filter
         hist_MissingMass->Fill(MissingP4->M(), WeightFactor);
-        hist_MPhi_ThetaPhi_After->Fill(phi_mass, phi_theta, WeightFactor);
-        hist_MPhi_MinusT_After->Fill(phi_mass, minus_t, WeightFactor);
-        hist_MPhi_yPhi_After->Fill(phi_mass, y_phi, WeightFactor);
+        hist_MPhi_ThetaPhi->Fill(phi_mass, phi_theta, WeightFactor);
+        hist_MPhi_MinusT->Fill(phi_mass, minus_t, WeightFactor);
+        hist_MPhi_yPhi->Fill(phi_mass, y_phi, WeightFactor);
+        hist_MPhi_MissingMass->Fill(phi_mass, MissingP4->M(), WeightFactor);
+        hist_MPhi_DeltaE->Fill(phi_mass, phi_energy_expected - PhiP4COM->E(), WeightFactor);
         hist_MPhi_MRho->Fill(phi_mass, rho_mass, WeightFactor);
         hist_ThetaPhi_yPhi->Fill(phi_theta, y_phi, WeightFactor);
         hist_MissingMass_yPhi->Fill(MissingP4->M(), y_phi, WeightFactor);
         hist_DeltaE_yPhi->Fill(phi_energy_expected - PhiP4COM->E(), y_phi, WeightFactor);
+        hist_DeltaE_MissingMass->Fill(phi_energy_expected - PhiP4COM->E(), MissingP4->M(), WeightFactor);
     }
 
     // Save histograms to file
     hist_MPhi->Write();
     hist_MissingMass->Write();
-    hist_MPhi_ThetaPhi_Before->Write();
-    hist_MPhi_MinusT_Before->Write();
-    hist_MPhi_yPhi_Before->Write();
-    hist_MPhi_ThetaPhi_After->Write();
-    hist_MPhi_MinusT_After->Write();
-    hist_MPhi_yPhi_After->Write();
+    hist_MPhi_ThetaPhi->Write();
+    hist_MPhi_MinusT->Write();
+    hist_MPhi_yPhi->Write();
+    hist_MPhi_MissingMass->Write();
+    hist_MPhi_DeltaE->Write();
     hist_MPhi_MRho->Write();
     hist_ThetaPhi_yPhi->Write();
     hist_MissingMass_yPhi->Write();
     hist_DeltaE_yPhi->Write();
+    hist_DeltaE_MissingMass->Write();
     output_file->Close();
 
     return 0;
