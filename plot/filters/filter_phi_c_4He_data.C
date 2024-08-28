@@ -29,17 +29,18 @@ int filter_phi_c_4He_data()
 
     // Create histogram
     TH1F *hist_MPhi                 = new TH1F("hist_MPhi", "hist_MPhi", 400, 0.9, 1.3);
-    TH1F *hist_MissingMass          = new TH1F("hist_MissingMass", "hist_MissingMass", 200, 3.0, 5.0);
+    TH1F *hist_MissingMass          = new TH1F("hist_MissingMass", "hist_MissingMass", 500, 0.0, 5.0);
+    TH2F *hist_MissingMass2D        = new TH2F("hist_MissingMass2D", "hist_MissingMass2D", 500, 0.0, 5.0, 500, 0.0, 5.0);
     TH2F *hist_MPhi_ThetaPhi        = new TH2F("hist_MPhi_ThetaPhi", "hist_MPhi_ThetaPhi", 400, 0.9, 1.3, 200, 0.0, 20.0);
     TH2F *hist_MPhi_MinusT          = new TH2F("hist_MPhi_MinusT", "hist_MPhi_MinusT", 400, 0.9, 1.3, 200, 0.0, 2.0);
-    TH2F *hist_MPhi_yPhi            = new TH2F("hist_MPhi_yPhi", "hist_MPhi_yPhi", 400, 0.9, 1.3, 200, 0.0, 2.0);
-    TH2F *hist_MPhi_MissingMass     = new TH2F("hist_MPhi_MissingMass", "hist_MPhi_MissingMass", 400, 0.9, 1.3, 200, 3.0, 5.0);
+    TH2F *hist_MPhi_yPhi            = new TH2F("hist_MPhi_yPhi", "hist_MPhi_yPhi", 400, 0.9, 1.3, 500, 0.0, 5.0);
+    TH2F *hist_MPhi_MissingMass     = new TH2F("hist_MPhi_MissingMass", "hist_MPhi_MissingMass", 400, 0.9, 1.3, 500, 0.0, 5.0);
     TH2F *hist_MPhi_DeltaE          = new TH2F("hist_MPhi_DeltaE", "hist_MPhi_DeltaE", 400, 0.9, 1.3, 200, -2.0, 2.0);
     TH2F *hist_MPhi_MRho            = new TH2F("hist_MPhi_MRho", "hist_MPhi_MRho", 400, 0.9, 1.3, 800, 0.3, 1.1);
-    TH2F *hist_ThetaPhi_yPhi        = new TH2F("hist_ThetaPhi_yPhi", "hist_ThetaPhi_yPhi", 200, 0.0, 20.0, 200, 0.0, 2.0);
-    TH2F *hist_MissingMass_yPhi     = new TH2F("hist_MissingMass_yPhi", "hist_MissingMass_yPhi", 200, 3.0, 5.0, 200, 0.0, 2.0);
-    TH2F *hist_DeltaE_yPhi          = new TH2F("hist_DeltaE_yPhi", "hist_DeltaE_yPhi", 200, -2.0, 2.0, 200, 0.0, 2.0);
-    TH2F *hist_DeltaE_MissingMass   = new TH2F("hist_DeltaE_MissingMass", "hist_DeltaE_MissingMass", 200, -2.0, 2.0, 200, 3.0, 5.0);
+    TH2F *hist_ThetaPhi_yPhi        = new TH2F("hist_ThetaPhi_yPhi", "hist_ThetaPhi_yPhi", 200, 0.0, 20.0, 500, 0.0, 5.0);
+    TH2F *hist_MissingMass_yPhi     = new TH2F("hist_MissingMass_yPhi", "hist_MissingMass_yPhi", 500, 0.0, 5.0, 500, 0.0, 5.0);
+    TH2F *hist_DeltaE_yPhi          = new TH2F("hist_DeltaE_yPhi", "hist_DeltaE_yPhi", 200, -2.0, 2.0, 500, 0.0, 5.0);
+    TH2F *hist_DeltaE_MissingMass   = new TH2F("hist_DeltaE_MissingMass", "hist_DeltaE_MissingMass", 200, -2.0, 2.0, 500, 0.0, 5.0);
 
     // Loop over tree entries
     for (Long64_t i = 0; i < chain->GetEntries(); i++)
@@ -49,14 +50,16 @@ int filter_phi_c_4He_data()
 
         // Calculate variables
         TLorentzVector *TargetP4 = new TLorentzVector(0.0, 0.0, 0.0, mass_helium4);
+        TLorentzVector *TargetP4wrtNucleon = new TLorentzVector(0.0, 0.0, 0.0, mass_proton);
         TLorentzVector *MissingP4 = new TLorentzVector(*BeamP4 + *TargetP4 - *KPlusP4 - *KMinusP4);
+        TLorentzVector *MissingP4wrtNucleon = new TLorentzVector(*BeamP4 + *TargetP4wrtNucleon - *KPlusP4 - *KMinusP4);
         TLorentzVector *PhiP4 = new TLorentzVector(*KPlusP4 + *KMinusP4);
         TLorentzVector *PhiP4COM = new TLorentzVector(*KPlusP4 + *KMinusP4);
         PhiP4COM->Boost(-(*BeamP4+*TargetP4).BoostVector());
         TLorentzVector *KPlusP4AsPion = new TLorentzVector(KPlusP4->X(), KPlusP4->Y(), KPlusP4->Z(), sqrt(KPlusP4->P()*KPlusP4->P() + mass_pion*mass_pion));
         TLorentzVector *KMinusP4AsPion = new TLorentzVector(KMinusP4->X(), KMinusP4->Y(), KMinusP4->Z(), sqrt(KMinusP4->P()*KMinusP4->P() + mass_pion*mass_pion));
 
-        double sqrt_s               = (*BeamP4 + *MissingP4).Mag();
+        double sqrt_s               = (*BeamP4 + *TargetP4).Mag();
         double minus_t              = -(*BeamP4 - *PhiP4).Mag2();
         double minus_u              = -(*BeamP4 - *MissingP4).Mag2();
         double phi_mass             = (*KPlusP4 + *KMinusP4).M();
@@ -68,12 +71,13 @@ int filter_phi_c_4He_data()
         // Fill histograms: before filter
 
         // Filter events
-        if (y_phi < 0.4) continue;
+        // if (y_phi < 0.4) continue;
         hist_MPhi->Fill(phi_mass, WeightFactor);
-        // if (phi_mass < 1.01 || phi_mass > 1.03) continue;
+        if (phi_mass < 1.01 || phi_mass > 1.03) continue;
 
         // Fill histograms: after filter
         hist_MissingMass->Fill(MissingP4->M(), WeightFactor);
+        hist_MissingMass2D->Fill(MissingP4->M(), MissingP4wrtNucleon->M(), WeightFactor);
         hist_MPhi_ThetaPhi->Fill(phi_mass, phi_theta, WeightFactor);
         hist_MPhi_MinusT->Fill(phi_mass, minus_t, WeightFactor);
         hist_MPhi_yPhi->Fill(phi_mass, y_phi, WeightFactor);
@@ -89,6 +93,7 @@ int filter_phi_c_4He_data()
     // Save histograms to file
     hist_MPhi->Write();
     hist_MissingMass->Write();
+    hist_MissingMass2D->Write();
     hist_MPhi_ThetaPhi->Write();
     hist_MPhi_MinusT->Write();
     hist_MPhi_yPhi->Write();
