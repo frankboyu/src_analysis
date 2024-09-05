@@ -1,108 +1,176 @@
+#include <iostream>
+#include <cmath>
+#include <stdio.h>
+#include <string.h>
+
 using namespace std;
 using namespace ROOT;
 using namespace RooFit;
+using namespace ROOT::RDF;
+using namespace ROOT::Detail::RDF;
 
-double mass_proton      = 0.938272;
 double mass_deuteron    = 1.875612;
-double mass_pion        = 0.13957018;
+double mass_proton      = 0.938272;
+double mass_pion        = 0.139570;
 double mass_phi         = 1.019461;
+double RadToDeg         = 180.0 / 3.14159265;
 
-int filter_phi_c_2H_data()
+void filter_phi_c_2H_test()
 {
-    // Open the file and get the tree
-    TChain *chain = new TChain("flattree_phi_c_2H_data");
-    chain->Add("/work/halld2/home/boyu/src_analysis/selection/output/flattree_phi_c_2H_data_ver01/*.root");
-    TFile *output_file = new TFile("output/plots_phi_c_2H_data.root", "RECREATE");
+    string InputFile  = "/work/halld2/home/boyu/src_analysis/selection/output/flattree_phi_c_2H_data_ver02/*090213.root";
+    string InputTree  = "flattree_phi_c_2H_data";
+    string OutputFile = "output/filteredtree_phi_c_2H_data.root";
+    string OutputTree = "filteredtree_phi_c_2H_data";
 
-    // Set branch addresses
-    TLorentzVector *BeamP4      = new TLorentzVector();
-    TLorentzVector *KPlusP4     = new TLorentzVector();
-    TLorentzVector *KMinusP4    = new TLorentzVector();
-    TLorentzVector *MissingP4   = new TLorentzVector();
-    double WeightFactor;
-    int RunNumber, Entry, Combo;
+    EnableImplicitMT();
 
-    chain->SetBranchAddress("BeamP4", &BeamP4);
-    chain->SetBranchAddress("KPlusP4", &KPlusP4);
-    chain->SetBranchAddress("KMinusP4", &KMinusP4);
-    chain->SetBranchAddress("MissingP4", &MissingP4);
-    chain->SetBranchAddress("WeightFactor", &WeightFactor);
-    chain->SetBranchAddress("RunNumber", &RunNumber);
-    chain->SetBranchAddress("Entry", &Entry);
-    chain->SetBranchAddress("Combo", &Combo);
+    TChain chain(InputTree.c_str());
+    chain.Add(InputFile.c_str());
+    RDataFrame rdf_raw(chain);
 
-    // Create histogram
-    TH1F *hist_MPhi                 = new TH1F("hist_MPhi", "hist_MPhi", 400, 0.9, 1.3);
-    TH1F *hist_MissingMass          = new TH1F("hist_MissingMass", "hist_MissingMass", 200, 1.0, 3.0);
-    TH2F *hist_MPhi_ThetaPhi        = new TH2F("hist_MPhi_ThetaPhi", "hist_MPhi_ThetaPhi", 400, 0.9, 1.3, 200, 0.0, 20.0);
-    TH2F *hist_MPhi_MinusT          = new TH2F("hist_MPhi_MinusT", "hist_MPhi_MinusT", 400, 0.9, 1.3, 200, 0.0, 2.0);
-    TH2F *hist_MPhi_yPhi            = new TH2F("hist_MPhi_yPhi", "hist_MPhi_yPhi", 400, 0.9, 1.3, 200, 0.0, 2.0);
-    TH2F *hist_MPhi_MissingMass     = new TH2F("hist_MPhi_MissingMass", "hist_MPhi_MissingMass", 400, 0.9, 1.3, 200, 1.0, 3.0);
-    TH2F *hist_MPhi_DeltaE          = new TH2F("hist_MPhi_DeltaE", "hist_MPhi_DeltaE", 400, 0.9, 1.3, 200, -2.0, 2.0);
-    TH2F *hist_MPhi_MRho            = new TH2F("hist_MPhi_MRho", "hist_MPhi_MRho", 400, 0.9, 1.3, 800, 0.3, 1.1);
-    TH2F *hist_ThetaPhi_yPhi        = new TH2F("hist_ThetaPhi_yPhi", "hist_ThetaPhi_yPhi", 200, 0.0, 20.0, 200, 0.0, 2.0);
-    TH2F *hist_MissingMass_yPhi     = new TH2F("hist_MissingMass_yPhi", "hist_MissingMass_yPhi", 200, 1.0, 3.0, 200, 0.0, 2.0);
-    TH2F *hist_DeltaE_yPhi          = new TH2F("hist_DeltaE_yPhi", "hist_DeltaE_yPhi", 200, -2.0, 2.0, 200, 0.0, 2.0);
-    TH2F *hist_DeltaE_MissingMass   = new TH2F("hist_DeltaE_MissingMass", "hist_DeltaE_MissingMass", 200, -2.0, 2.0, 200, 1.0, 3.0);
+    vector<TH1*> hist_list;
 
-    // Loop over tree entries
-    for (Long64_t i = 0; i < chain->GetEntries(); i++)
-    // for (Long64_t i = 0; i < 10000; i++)
-    {
-        chain->GetEntry(i);
+    auto rdf_def = rdf_raw
+    .Define("kin_cl","TMath::Prob(kin_chisq,kin_ndf)")
+    .Define("target_p4","TLorentzVector(0, 0, 0, mass_deuteron)")
+    .Define("phi_p4_meas","kp_p4_meas + km_p4_meas")
+    .Define("phi_p4_kin","kp_p4_kin + km_p4_kin")
+    .Define("missd_p4_meas","beam_p4_meas + target_p4 - phi_p4_meas")  // missd_p4_kin already defined in default branches
+    // .Define("pip_p4_meas","TLorentzVector(kp_p4_meas.X(), kp_p4_meas.Y(), kp_p4_meas.Z(), sqrt(kp_p4_meas.P()*kp_p4_meas.P() + mass_pion*mass_pion))")
+    // .Define("pip_p4_kin","TLorentzVector(kp_p4_kin.X(), kp_p4_kin.Y(), kp_p4_kin.Z(), sqrt(kp_p4_kin.P()*kp_p4_kin.P() + mass_pion*mass_pion))")
+    // .Define("pim_p4_meas","TLorentzVector(km_p4_meas.X(), km_p4_meas.Y(), km_p4_meas.Z(), sqrt(km_p4_meas.P()*km_p4_meas.P() + mass_pion*mass_pion))")
+    // .Define("pim_p4_kin","TLorentzVector(km_p4_kin.X(), km_p4_kin.Y(), km_p4_kin.Z(), sqrt(km_p4_kin.P()*km_p4_kin.P() + mass_pion*mass_pion))")
+    // .Define("beam_p4com_meas","beam_p4_meas.Boost(-(beam_p4_meas + target_p4).BoostVector())")
+    // .Define("beam_p4com_kin","beam_p4_kin.Boost(-(beam_p4_kin + target_p4).BoostVector())")
+    // .Define("phi_p4com_meas","phi_p4_meas.Boost(-(beam_p4_meas + target_p4).BoostVector())")
+    // .Define("phi_p4com_kin","phi_p4_kin.Boost(-(beam_p4_kin + target_p4).BoostVector())")
+    .Define("sqrt_s_meas", "(beam_p4_meas + target_p4).Mag()")
+    .Define("sqrt_s_kin", "(beam_p4_kin + target_p4).Mag()")
+    .Define("minus_t_meas", "-(beam_p4_meas - phi_p4_meas).Mag2()")
+    .Define("minus_t_kin", "-(beam_p4_kin - phi_p4_kin).Mag2()")
+    .Define("minus_u_meas", "-(beam_p4_meas - missd_p4_meas).Mag2()")
+    .Define("minus_u_kin", "-(beam_p4_kin - missd_p4_kin).Mag2()")
+    .Define("phi_mass_meas","phi_p4_meas.M()")
+    .Define("phi_mass_kin","phi_p4_kin.M()")
+    .Define("phi_theta_meas","phi_p4_meas.Theta()*RadToDeg")
+    .Define("phi_theta_kin","phi_p4_kin.Theta()*RadToDeg")
+    // .Define("rho_mass_meas","pip_p4_meas + pim_p4_meas")
+    // .Define("rho_mass_kin","pip_p4_kin + pim_p4_kin")
+    .Define("y_phi_meas","minus_t_meas/(2*mass_deuteron*(beam_p4_meas.E()-phi_p4_meas.E()))")
+    .Define("y_phi_kin","minus_t_kin/(2*mass_deuteron*(beam_p4_kin.E()-phi_p4_kin.E()))")
+    // .Define("DeltaE_meas","(s_meas - pow(mass_deuteron, 2) + pow(mass_phi, 2)) / (2.0 * sqrt(s_meas)) - phi_p4com_meas.E()")
+    // .Define("DeltaE_kin","(s_kin - pow(mass_deuteron, 2) + pow(mass_phi, 2)) / (2.0 * sqrt(s_kin)) - phi_p4com_kin.E()")
+    ;
 
-        // Calculate variables
-        TLorentzVector *TargetP4 = new TLorentzVector(0.0, 0.0, 0.0, mass_deuteron);
-        TLorentzVector *PhiP4 = new TLorentzVector(*KPlusP4 + *KMinusP4);
-        TLorentzVector *PhiP4COM = new TLorentzVector(*KPlusP4 + *KMinusP4);
-        PhiP4COM->Boost(-(*BeamP4+*TargetP4).BoostVector());
-        TLorentzVector *KPlusP4AsPion = new TLorentzVector(KPlusP4->X(), KPlusP4->Y(), KPlusP4->Z(), sqrt(KPlusP4->P()*KPlusP4->P() + mass_pion*mass_pion));
-        TLorentzVector *KMinusP4AsPion = new TLorentzVector(KMinusP4->X(), KMinusP4->Y(), KMinusP4->Z(), sqrt(KMinusP4->P()*KMinusP4->P() + mass_pion*mass_pion));
+    // Filter events and save to new tree
+    auto rdf_no_filter = rdf_def;
+    auto rdf_cl_filtered = rdf_no_filter.Filter([](double kin_cl) {return kin_cl > 0.01 ;}, {"kin_cl"});
+    auto rdf_pidfom_filtered = rdf_cl_filtered.Filter([](double kp_pidfom, double km_pidfom) {return (kp_pidfom > 0.01) && (km_pidfom > 0.01);}, {"kp_pidfom","km_pidfom"});
+    auto rdf_y_phi_filtered = rdf_pidfom_filtered.Filter([](double y_phi_meas) {return y_phi_meas > 0.4;}, {"y_phi_meas"});
+    auto rdf_phi_mass_filtered = rdf_y_phi_filtered.Filter([](double phi_mass_meas) {return phi_mass_meas > 1.01 && phi_mass_meas < 1.03;}, {"phi_mass_meas"});
 
-        double sqrt_s               = (*BeamP4 + *MissingP4).Mag();
-        double minus_t              = -(*BeamP4 - *PhiP4).Mag2();
-        double minus_u              = -(*BeamP4 - *MissingP4).Mag2();
-        double phi_mass             = (*KPlusP4 + *KMinusP4).M();
-        double phi_energy_expected  = (pow(sqrt_s, 2) - pow(TargetP4->M(), 2) + pow(mass_phi, 2)) / (2. * sqrt_s);
-        double rho_mass             = (*KPlusP4AsPion + *KMinusP4AsPion).M();
-        double phi_theta            = (*KPlusP4 + *KMinusP4).Theta() * 180.0 / TMath::Pi();
-        double y_phi                = minus_t/(2*mass_deuteron*(BeamP4->E()-PhiP4->E()));
+    rdf_phi_mass_filtered.Snapshot("filteredtree_phi_c_2H_data",OutputFile);
 
-        // Fill histograms: before filter
 
-        // Filter events
-        // if (y_phi < 0.6) continue;
-        hist_MPhi->Fill(phi_mass, WeightFactor);
-        // if (phi_mass < 1.01 || phi_mass > 1.03) continue;
 
-        // Fill histograms: after filter
-        hist_MissingMass->Fill(MissingP4->M(), WeightFactor);
-        hist_MPhi_ThetaPhi->Fill(phi_mass, phi_theta, WeightFactor);
-        hist_MPhi_MinusT->Fill(phi_mass, minus_t, WeightFactor);
-        hist_MPhi_yPhi->Fill(phi_mass, y_phi, WeightFactor);
-        hist_MPhi_MissingMass->Fill(phi_mass, MissingP4->M(), WeightFactor);
-        hist_MPhi_DeltaE->Fill(phi_mass, phi_energy_expected - PhiP4COM->E(), WeightFactor);
-        hist_MPhi_MRho->Fill(phi_mass, rho_mass, WeightFactor);
-        hist_ThetaPhi_yPhi->Fill(phi_theta, y_phi, WeightFactor);
-        hist_MissingMass_yPhi->Fill(MissingP4->M(), y_phi, WeightFactor);
-        hist_DeltaE_yPhi->Fill(phi_energy_expected - PhiP4COM->E(), y_phi, WeightFactor);
-        hist_DeltaE_MissingMass->Fill(phi_energy_expected - PhiP4COM->E(), MissingP4->M(), WeightFactor);
-    }
 
-    // Save histograms to file
-    hist_MPhi->Write();
-    hist_MissingMass->Write();
-    hist_MPhi_ThetaPhi->Write();
-    hist_MPhi_MinusT->Write();
-    hist_MPhi_yPhi->Write();
-    hist_MPhi_MissingMass->Write();
-    hist_MPhi_DeltaE->Write();
-    hist_MPhi_MRho->Write();
-    hist_ThetaPhi_yPhi->Write();
-    hist_MissingMass_yPhi->Write();
-    hist_DeltaE_yPhi->Write();
-    hist_DeltaE_MissingMass->Write();
-    output_file->Close();
 
-    return 0;
+
+// TH2DModel alphaCM_cosGammaProxy_model("alphaCM_cosGammaProxy", ";CM Lightcone Fraction;Cos Gamma Proxy",300,0,3,400,-1,1);
+// TH2DModel alphaCM_thetaP_model("alphaCM_thetaP", ";CM Lightcone Fraction;Proton Angle [degrees]",300,0,3,360,0,180);
+// TH1DModel zVertex_model("zVertex", ";z Vertex [cm];Counts",1000,0,200);
+// TH2DModel xyVertex_model("xyVertex", ";x Vertex [cm];y Vertex [cm]",100,-5,5,100,-5,5);
+// TH1DModel E_model("lead_energy", ";Lead Energy [GeV];Counts",1200,0,12);
+// TH1DModel omega_model("omega_mass", ";Omega Mass [GeV];Counts",500,0,5);
+// TH2DModel proton_momenta_model("proton_momenta", ";Lead Momentum [GeV];Recoil Momentum [GeV]",200,0,10,200,0,10);
+// TH1DModel mass_model("rho_mass", ";2-Pion Mass [GeV];Counts",500,0,5);
+// TH2DModel kmiss_rec_model("kmiss_rec", ";k_miss [GeV];Recoil Momentum [GeV]",200,0,2,200,0,2);
+// TH1DModel Emiss_model("Emiss", ";2N Missing Energy [GeV];Counts",200,-10,10);
+
+    int N_filters = 5;
+    RNode rdfs [] = {rdf_no_filter, rdf_cl_filtered, rdf_pidfom_filtered, rdf_y_phi_filtered, rdf_phi_mass_filtered};
+    string labels [] = {"no_cut", "cl_cut", "pidfom_cut", "y_phi_cut", "phi_mass_cut"};
+
+    // Fill and write histograms
+    TFile * histFile = new TFile(OutputFile.c_str(), "update");
+    histFile->cd();
+
+    TH1D h_z = *rdf_pidfom_filtered.Histo1D({"zVertex", ";z Vertex [cm];Counts",1000,0,2},"phi_mass_meas","accidweight");
+    h_z.Write();
+
+
+//   for (int i = 0; i < N_filters; i++) {
+
+//     cout << i << "\n";
+
+//     auto rdf = rdfs[i];
+//     string label = labels[i];
+
+//     TH2D h_classic = *rdf.Histo2D<double,double>(alphaCM_cosGammaProxy_model,"alphaCM_kin","cosGamma_proxy","accidweight");
+//     h_classic.SetName(("classic_" + label).c_str());
+//     //hists.push_back(&h_classic);
+//     //h_classic.Write();
+//     cout << "e\n";
+//     TH2D h_angular = *rdf.Histo2D<double,double>(alphaCM_thetaP_model,"alphaCM_kin","thetaP","accidweight");
+//     h_angular.SetName(("angular_" + label).c_str());
+//     //hists.push_back(&h_angular);
+//     //h_angular.Write();
+//     cout << "f\n";
+//     TH1D h_mass = *rdf.Histo1D<double>(mass_model,"m2pi_kin","accidweight");
+//     h_mass.SetName(("mass_" + label).c_str());
+//     //hists.push_back(&h_mass);
+//     //h_mass.Write();
+//     cout << "g\n";
+
+//     h_classic.Write();
+//     h_angular.Write();
+//     h_mass.Write();
+
+//   }
+
+//   // Before cuts
+//   TH1D h_z = *rdf_no_filter.Histo1D(zVertex_model,"zVertex","accidweight");
+//   hists.push_back(&h_z);
+//   //h_z.Write();
+//   TH2D h_xy = *rdf_no_filter.Histo2D(xyVertex_model,"xVertex","yVertex","accidweight");
+//   hists.push_back(&h_xy);
+//   //h_xy.Write();
+
+//   // After vertex cut
+//   TH1D h_energy = *rdf_vertex_filtered.Histo1D(E_model,"eLead","accidweight");
+//   hists.push_back(&h_energy);
+//   //h_energy.Write();
+
+//   // After energy cut
+//   TH1D h_omega1 = *rdf_energy_filtered.Histo1D(omega_model,"omega1_m_meas","accidweight");
+//   h_omega1.SetName("omega1_mass");
+//   hists.push_back(&h_omega1);
+//   //h_omega1.Write();
+//   TH1D h_omega2 = *rdf_energy_filtered.Histo1D(omega_model,"omega2_m_meas","accidweight");
+//   h_omega2.SetName("omega2_mass");
+//   hists.push_back(&h_omega2);
+//   //h_omega2.Write();
+
+//   // After diffractive background cut
+//   TH2D h_proton_momenta = *rdf_bg_filtered.Histo2D(proton_momenta_model,"pLead","pRec","accidweight");
+//   hists.push_back(&h_proton_momenta);
+//   //h_proton_momenta.Write();
+
+//   TH2D h_kmiss_rec = *rdf_bg_filtered.Histo2D(kmiss_rec_model,"kmiss","pRec","accidweight");
+//   hists.push_back(&h_kmiss_rec);
+//   //h_kmiss_rec.Write();
+
+//   // After momentum cuts
+//   TH1D h_Emiss = *rdf_rec_filtered.Histo1D(Emiss_model,"Emiss2N","accidweight");
+//   hists.push_back(&h_Emiss);
+//   //h_Emiss.Write();
+
+//   for (TH1* hist : hists)
+//     {
+//       hist->Write();
+//     }
+
+//   histFile->Close();
+
+
 }
