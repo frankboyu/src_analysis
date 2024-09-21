@@ -4,3 +4,6 @@ ver02   analysis launch ver09, missing deuteron, version_5.19.0.xml. DSelector r
 
 flattree_phi_c_4He_data
 ver01   analysis launch ver09, missing helium, version_5.19.0.xml
+
+flattree_phi_p_2H_data
+ver01   analysis launch ver06, missing neutron, version_5.17.0.xml
