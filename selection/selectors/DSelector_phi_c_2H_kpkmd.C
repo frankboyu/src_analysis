@@ -5,12 +5,12 @@
 #include "DSelector/DHistogramActions.h"
 #include "DSelector/DCutActions.h"
 
-class DSelector_phi_d_2H_data : public DSelector
+class DSelector_phi_c_2H_kpkmd : public DSelector
 {
 	public:
 
-		DSelector_phi_d_2H_data(TTree* locTree = NULL) : DSelector(locTree){}
-		virtual ~DSelector_phi_d_2H_data(){}
+		DSelector_phi_c_2H_kpkmd(TTree* locTree = NULL) : DSelector(locTree){}
+		virtual ~DSelector_phi_c_2H_kpkmd(){}
 
 		void   Init(TTree *tree);
 		Bool_t Process(Long64_t entry);
@@ -69,10 +69,10 @@ class DSelector_phi_d_2H_data : public DSelector
         TH1F* dHist_KMinusPIDFOM_Weighted;
         TH1F* dHist_InvariantMassPhi_Weighted;
 
-	ClassDef(DSelector_phi_d_2H_data, 0);
+	ClassDef(DSelector_phi_c_2H_kpkmd, 0);
 };
 
-void DSelector_phi_d_2H_data::Get_ComboWrappers(void)
+void DSelector_phi_c_2H_kpkmd::Get_ComboWrappers(void)
 {
 	dStep0Wrapper     = dComboWrapper->Get_ParticleComboStep(0);
 	dComboBeamWrapper = static_cast<DBeamParticle*>(dStep0Wrapper->Get_InitialParticle());
@@ -81,13 +81,13 @@ void DSelector_phi_d_2H_data::Get_ComboWrappers(void)
 	dDeuteronWrapper  = static_cast<DChargedTrackHypothesis*>(dStep0Wrapper->Get_FinalParticle(2));
 }
 
-void DSelector_phi_d_2H_data::Init(TTree *locTree)
+void DSelector_phi_c_2H_kpkmd::Init(TTree *locTree)
 {
 	// SET OUTPUT FILE NAME
 	dOutputFileName                             = "";
 	dOutputTreeFileName                         = "";
-	dFlatTreeFileName                           = "flattree_phi_d_2H_data.root";
-	dFlatTreeName                               = "flattree_phi_d_2H_data";
+	dFlatTreeFileName                           = "flattree_phi_c_2H_kpkmd.root";
+	dFlatTreeName                               = "flattree_phi_c_2H_kpkmd";
     dSaveDefaultFlatBranches                    = true;
 	dSaveTLorentzVectorsAsFundamentaFlatTree    = false;
 
@@ -139,11 +139,13 @@ void DSelector_phi_d_2H_data::Init(TTree *locTree)
     dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("accidweight");
 	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("kp_pidfom");  // the PIDFOM in the default flat branches kp_pid_fom is corrupted and always 0
 	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("km_pidfom");  // the PIDFOM in the default flat branches km_pid_fom is corrupted and always 0
-    dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("deuteron_pidfom");
+
+    // CHECK IF MC
+    dIsMC = (dTreeInterface->Get_Branch("MCWeight") != NULL);
 }
 // END OF INITIALIZATION
 
-Bool_t DSelector_phi_d_2H_data::Process(Long64_t locEntry)
+Bool_t DSelector_phi_c_2H_kpkmd::Process(Long64_t locEntry)
 {
 	// CALL THIS FIRST
 	DSelector::Process(locEntry); // gets the data from the tree for the entry
@@ -156,9 +158,6 @@ Bool_t DSelector_phi_d_2H_data::Process(Long64_t locEntry)
 		dIsPolarizedFlag   = dAnalysisUtilities.Get_IsPolarizedBeam(locRunNumber, dIsPARAFlag);
 		dPreviousRunNumber = locRunNumber;
 	}
-
-    // MC INFORMATION
-	dIsMC = (dTreeInterface->Get_Branch("MCWeight") != NULL);
 
 	// LOOP OVER COMBOS
 	for(UInt_t loc_i = 0; loc_i < Get_NumCombos(); ++loc_i)
@@ -255,7 +254,6 @@ Bool_t DSelector_phi_d_2H_data::Process(Long64_t locEntry)
         dFlatTreeInterface->Fill_Fundamental<Double_t>("accidweight", locHistAccidWeightFactor);
 		dFlatTreeInterface->Fill_Fundamental<Double_t>("kp_pidfom", dKPlusWrapper->Get_PIDFOM());
 		dFlatTreeInterface->Fill_Fundamental<Double_t>("km_pidfom", dKMinusWrapper->Get_PIDFOM());
-        dFlatTreeInterface->Fill_Fundamental<Double_t>("deuteron_pidfom", dDeuteronWrapper->Get_PIDFOM());
         Fill_FlatTree(); //for the active combo
 	}
     // END OF COMBO LOOP
@@ -264,7 +262,7 @@ Bool_t DSelector_phi_d_2H_data::Process(Long64_t locEntry)
 }
 // END OF PROCESSING
 
-void DSelector_phi_d_2H_data::Finalize(void)
+void DSelector_phi_c_2H_kpkmd::Finalize(void)
 {
 	// CALL THIS LAST
 	DSelector::Finalize(); // saves results to the output file
