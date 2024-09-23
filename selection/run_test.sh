@@ -1,9 +1,9 @@
 #!/bin/bash
 
-INPUTFILE=/work/halld2/home/boyu/src_analysis/sim/output/phi_p_2H_ver01/root/trees/tree_gd_kpkmprotmissn__B4_F4_T2_S5_gen_MF_090208_000.root
-TREE_NAME=gd_kpkmprotmissn__B4_F4_T2_S5_Tree
-SELECTOR_FILE=phi_p_2H_data
-TAG=4_simtest
+INPUTFILE=/cache/halld/RunPeriod-2021-11/analysis/ver09/tree_gd_kpkmd__B4_F4_T0_S4/merged/*.root
+TREE_NAME=gd_kpkmd__B4_F4_T0_S4_Tree
+SELECTOR_FILE=phi_c_2H_kpkmd
+TAG=2_all
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
 gxenv $HALLD_VERSIONS/version_5.17.0.xml

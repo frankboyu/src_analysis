@@ -1,6 +1,9 @@
-flattree_phi_c_2H_data
-ver01   analysis launch ver05, missing deuteron, version_5.17.0.xml
-ver02   analysis launch ver09, missing deuteron, version_5.19.0.xml. DSelector remade to only do loose selection and print all default branches.
+flattree_phi_c_2H_kpkm_data
+ver01   analysis launch ver05, version_5.17.0.xml
+ver02   analysis launch ver09, version_5.19.0.xml. DSelector remade to only do loose selection and print all default branches.
+
+flattree_phi_c_2H_kpkmd_data
+ver01   analysis launch ver09, version_5.17.0.xml
 
 flattree_phi_c_4He_data
 ver01   analysis launch ver09, missing helium, version_5.19.0.xml
