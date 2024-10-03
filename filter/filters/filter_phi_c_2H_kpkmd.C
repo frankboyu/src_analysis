@@ -55,10 +55,22 @@ void filter_phi_c_2H_kpkmd()
     .Define("phi_p4com_kin","boost_lorentz_vector(phi_p4_kin, -(beam_p4_kin + target_p4).BoostVector())")
     .Define("kp_p_meas","kp_p4_meas.P()")
     .Define("kp_p_kin","kp_p4_kin.P()")
+    .Define("kp_theta_meas","kp_p4_meas.Theta()*RadToDeg")
+    .Define("kp_theta_kin","kp_p4_kin.Theta()*RadToDeg")
+    .Define("kp_t_meas","kp_x4_meas.T()")
+    .Define("kp_t_kin","kp_x4_kin.T()")
     .Define("km_p_meas","km_p4_meas.P()")
     .Define("km_p_kin","km_p4_kin.P()")
+    .Define("km_theta_meas","km_p4_meas.Theta()*RadToDeg")
+    .Define("km_theta_kin","km_p4_kin.Theta()*RadToDeg")
+    .Define("km_t_meas","km_x4_meas.T()")
+    .Define("km_t_kin","km_x4_kin.T()")
     .Define("d_p_meas","d_p4_meas.P()")
     .Define("d_p_kin","d_p4_kin.P()")
+    .Define("d_theta_meas","d_p4_meas.Theta()*RadToDeg")
+    .Define("d_theta_kin","d_p4_kin.Theta()*RadToDeg")
+    .Define("d_t_meas","d_x4_meas.T()")
+    .Define("d_t_kin","d_x4_kin.T()")
     .Define("phi_mass_meas","phi_p4_meas.M()")
     .Define("phi_mass_kin","phi_p4_kin.M()")
     .Define("phi_theta_meas","phi_p4_meas.Theta()*RadToDeg")
@@ -108,44 +120,44 @@ void filter_phi_c_2H_kpkmd()
         TDirectory * dir = histFile->mkdir(label.c_str());
         dir->cd();
 
-        TH1D hist_massKK = *rdf.Histo1D({("massKK_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);Counts", 400, 0.9, 1.3},"phi_mass_meas","accidweight");
+        TH1D hist_t_kp              = *rdf.Histo1D({("t_kp_"+ label).c_str(), ";t_{K^{+}} (ns);Counts", 200, -2.0, 2.0},"kp_t_meas","accidweight");
+        hist_t_kp.Write();
+        TH1D hist_t_km              = *rdf.Histo1D({("t_km_"+ label).c_str(), ";t_{K^{-}} (ns);Counts", 200, -2.0, 2.0},"km_t_meas","accidweight");
+        hist_t_km.Write();
+        TH1D hist_t_d               = *rdf.Histo1D({("t_d_"+ label).c_str(), ";t_{D} (ns);Counts", 200, -2.0, 2.0},"d_t_meas","accidweight");
+        hist_t_d.Write();
+        TH1D hist_massKK            = *rdf.Histo1D({("massKK_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);Counts", 400, 0.9, 1.3},"phi_mass_meas","accidweight");
         hist_massKK.Write();
-        TH1D hist_yphi = *rdf.Histo1D({("yphi_"+ label).c_str(), ";y_{#phi};Counts", 200, 0.0, 2.0},"yphi_meas","accidweight");
+        TH1D hist_yphi              = *rdf.Histo1D({("yphi_"+ label).c_str(), ";y_{#phi};Counts", 200, 0.0, 2.0},"yphi_meas","accidweight");
         hist_yphi.Write();
-        TH1D hist_minust = *rdf.Histo1D({("minust_"+ label).c_str(), ";-t (GeV^{2}/c^{2});Counts", 200, 0.0, 2.0},"minust_meas","accidweight");
+        TH1D hist_minust            = *rdf.Histo1D({("minust_"+ label).c_str(), ";-t (GeV^{2}/c^{2});Counts", 200, 0.0, 2.0},"minust_meas","accidweight");
         hist_minust.Write();
-        TH1D hist_Emiss = *rdf.Histo1D({("Emiss_"+ label).c_str(), ";E_{miss} (GeV);Counts", 400, -2.0, 2.0},"miss_energy_meas","accidweight");
+        TH1D hist_Emiss             = *rdf.Histo1D({("Emiss_"+ label).c_str(), ";E_{miss} (GeV);Counts", 400, -2.0, 2.0},"miss_energy_meas","accidweight");
         hist_Emiss.Write();
-        TH2D hist_dEdx_kp = *rdf.Histo2D({("dEdx_kp_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 100, 0.0, 10.0, 200, 0.0, 2e-5},"kp_p_meas","kp_dedx_fdc","accidweight");
+        TH2D hist_kinematics_kp     = *rdf.Histo2D({("kinematics_kp_"+ label).c_str(), ";p (GeV/c);#theta (deg)", 100, 0.0, 10.0, 100, 0.0, 180.0},"kp_p_meas","kp_theta_meas","accidweight");
+        hist_kinematics_kp.Write();
+        TH2D hist_kinematics_km     = *rdf.Histo2D({("kinematics_km_"+ label).c_str(), ";p (GeV/c);#theta (deg)", 100, 0.0, 10.0, 100, 0.0, 180.0},"km_p_meas","km_theta_meas","accidweight");
+        hist_kinematics_km.Write();
+        TH2D hist_kinematics_d      = *rdf.Histo2D({("kinematics_d_"+ label).c_str(), ";p (GeV/c);#theta (deg)", 100, 0.0, 3.0, 100, 0.0, 180.0},"d_p_meas","d_theta_meas","accidweight");
+        hist_kinematics_d.Write();
+        TH2D hist_dEdx_kp           = *rdf.Histo2D({("dEdx_kp_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 100, 0.0, 10.0, 200, 0.0, 2e-5},"kp_p_meas","kp_dedx_fdc","accidweight");
         hist_dEdx_kp.Write();
-        TH2D hist_dEdx_km = *rdf.Histo2D({("dEdx_km_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 100, 0.0, 10.0, 200, 0.0, 2e-5},"km_p_meas","km_dedx_fdc","accidweight");
+        TH2D hist_dEdx_km           = *rdf.Histo2D({("dEdx_km_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 100, 0.0, 10.0, 200, 0.0, 2e-5},"km_p_meas","km_dedx_fdc","accidweight");
         hist_dEdx_km.Write();
-        TH2D hist_dEdx_d = *rdf.Histo2D({("dEdx_d_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 100, 0.0, 3.0, 200, 0.0, 2e-5},"d_p_meas","d_dedx_cdc","accidweight");
+        TH2D hist_dEdx_d            = *rdf.Histo2D({("dEdx_d_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 100, 0.0, 3.0, 200, 0.0, 2e-5},"d_p_meas","d_dedx_cdc","accidweight");
         hist_dEdx_d.Write();
-        // TH2D hist_massKK_massmiss = *rdf.Histo2D({("massKK_massmiss_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);m_{miss} (GeV/c^{2})", 400, 0.9, 1.3, 400, 0.0, 4.0},"phi_mass_meas","miss_mass_meas","accidweight");
-        // hist_massKK_massmiss.Write();
-        // TH2D hist_massKK_pMinusMiss = *rdf.Histo2D({("massKK_pMinusMiss_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);p_{miss}^{-} (GeV/c)", 400, 0.9, 1.3, 100, 1.0, 3.0},"phi_mass_meas","miss_pMinus_meas","accidweight");
-        // hist_massKK_pMinusMiss.Write();
-        TH2D hist_massKK_yphi = *rdf.Histo2D({("massKK_yphi_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);y_{#phi}", 400, 0.9, 1.3, 200, 0.0, 2.0},"phi_mass_meas","yphi_meas","accidweight");
+        TH2D hist_massKK_yphi       = *rdf.Histo2D({("massKK_yphi_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);y_{#phi}", 400, 0.9, 1.3, 200, 0.0, 2.0},"phi_mass_meas","yphi_meas","accidweight");
         hist_massKK_yphi.Write();
-        TH2D hist_massKK_thetaKK = *rdf.Histo2D({("massKK_thetaKK_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);#theta_{K^{+}K^{-}} (deg)", 400, 0.9, 1.3, 100, 0.0, 10.0},"phi_mass_meas","phi_theta_meas","accidweight");
+        TH2D hist_massKK_thetaKK    = *rdf.Histo2D({("massKK_thetaKK_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);#theta_{K^{+}K^{-}} (deg)", 400, 0.9, 1.3, 100, 0.0, 10.0},"phi_mass_meas","phi_theta_meas","accidweight");
         hist_massKK_thetaKK.Write();
-        TH2D hist_massKK_minust = *rdf.Histo2D({("massKK_minust_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);-t (GeV^{2}/c^{2})", 400, 0.9, 1.3, 200, 0.0, 2.0},"phi_mass_meas","minust_meas","accidweight");
+        TH2D hist_massKK_minust     = *rdf.Histo2D({("massKK_minust_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);-t (GeV^{2}/c^{2})", 400, 0.9, 1.3, 200, 0.0, 2.0},"phi_mass_meas","minust_meas","accidweight");
         hist_massKK_minust.Write();
-        TH2D hist_massKK_deltaE = *rdf.Histo2D({("massKK_deltaE_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);#DeltaE (GeV)", 400, 0.9, 1.3, 100, -0.5, 0.5},"phi_mass_meas","deltaE_meas","accidweight");
+        TH2D hist_massKK_deltaE     = *rdf.Histo2D({("massKK_deltaE_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);#DeltaE (GeV)", 400, 0.9, 1.3, 100, -0.5, 0.5},"phi_mass_meas","deltaE_meas","accidweight");
         hist_massKK_deltaE.Write();
-        TH2D hist_massKK_massPiPi = *rdf.Histo2D({("massKK_massPiPi_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);m_{#pi^{+}#pi^{-}} (GeV/c^{2})", 400, 0.9, 1.3, 200, 0.0, 2.0},"phi_mass_meas","rho_mass_meas","accidweight");
+        TH2D hist_massKK_massPiPi   = *rdf.Histo2D({("massKK_massPiPi_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);m_{#pi^{+}#pi^{-}} (GeV/c^{2})", 400, 0.9, 1.3, 200, 0.0, 2.0},"phi_mass_meas","rho_mass_meas","accidweight");
         hist_massKK_massPiPi.Write();
-        TH2D hist_thetaKK_yphi = *rdf.Histo2D({("thetaKK_yphi_"+ label).c_str(), ";#theta_{K^{+}K^{-}} (deg);y_{#phi}", 100, 0.0, 10.0, 200, 0.0, 2.0},"phi_theta_meas","yphi_meas","accidweight");
+        TH2D hist_thetaKK_yphi      = *rdf.Histo2D({("thetaKK_yphi_"+ label).c_str(), ";#theta_{K^{+}K^{-}} (deg);y_{#phi}", 100, 0.0, 10.0, 200, 0.0, 2.0},"phi_theta_meas","yphi_meas","accidweight");
         hist_thetaKK_yphi.Write();
-        // TH2D hist_massmiss_yphi = *rdf.Histo2D({("massmiss_yphi_"+ label).c_str(), ";m_{miss} (GeV/c^{2});y_{#phi}", 400, 0.0, 4.0, 200, 0.0, 2.0},"miss_mass_meas","yphi_meas","accidweight");
-        // hist_massmiss_yphi.Write();
-        // TH2D hist_pMinusMiss_yphi = *rdf.Histo2D({("pMinusMiss_yphi_"+ label).c_str(), ";p_{miss}^{-} (GeV/c);y_{#phi}", 100, 1.0, 3.0, 200, 0.0, 2.0},"miss_pMinus_meas","yphi_meas","accidweight");
-        // hist_pMinusMiss_yphi.Write();
-        // TH2D hist_massmiss_deltaE = *rdf.Histo2D({("massmiss_deltaE_"+ label).c_str(), ";m_{miss} (GeV/c^{2});#DeltaE (GeV)", 400, 0.0, 4.0, 100, -0.5, 0.5},"miss_mass_meas","deltaE_meas","accidweight");
-        // hist_massmiss_deltaE.Write();
-        // TH2D hist_pMinusMiss_deltaE = *rdf.Histo2D({("pMinusMiss_deltaE_"+ label).c_str(), ";p_{miss}^{-} (GeV/c);#DeltaE (GeV)", 100, 1.0, 3.0, 100, -0.5, 0.5},"miss_pMinus_meas","deltaE_meas","accidweight");
-        // hist_pMinusMiss_deltaE.Write();
     }
 
     histFile->Close();
