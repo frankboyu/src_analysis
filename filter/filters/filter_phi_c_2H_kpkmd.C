@@ -120,11 +120,11 @@ void filter_phi_c_2H_kpkmd()
         TDirectory * dir = histFile->mkdir(label.c_str());
         dir->cd();
 
-        TH1D hist_DeltaT_kp         = *rdf.Histo1D({("DeltaT_kp_"+ label).c_str(), ";t_{K^{+}} (ns);Counts", 200, -2.0, 2.0},"kp_DeltaT_meas","accidweight");
+        TH1D hist_DeltaT_kp         = *rdf.Histo1D({("DeltaT_kp_"+ label).c_str(), ";t_{K^{+}} (ns);Counts", 1000, -10.0, 10.0},"kp_DeltaT_meas","accidweight");
         hist_DeltaT_kp.Write();
-        TH1D hist_DeltaT_km         = *rdf.Histo1D({("DeltaT_km_"+ label).c_str(), ";t_{K^{-}} (ns);Counts", 200, -2.0, 2.0},"km_DeltaT_meas","accidweight");
+        TH1D hist_DeltaT_km         = *rdf.Histo1D({("DeltaT_km_"+ label).c_str(), ";t_{K^{-}} (ns);Counts", 1000, -10.0, 10.0},"km_DeltaT_meas","accidweight");
         hist_DeltaT_km.Write();
-        TH1D hist_DeltaT_d          = *rdf.Histo1D({("DeltaT_d_"+ label).c_str(), ";t_{D} (ns);Counts", 200, -2.0, 2.0},"d_DeltaT_meas","accidweight");
+        TH1D hist_DeltaT_d          = *rdf.Histo1D({("DeltaT_d_"+ label).c_str(), ";t_{D} (ns);Counts", 1000, -10.0, 10.0},"d_DeltaT_meas","accidweight");
         hist_DeltaT_d.Write();
         TH1D hist_massKK            = *rdf.Histo1D({("massKK_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);Counts", 400, 0.9, 1.3},"phi_mass_meas","accidweight");
         hist_massKK.Write();
