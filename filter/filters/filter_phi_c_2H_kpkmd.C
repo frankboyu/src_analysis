@@ -108,9 +108,9 @@ void filter_phi_c_2H_kpkmd()
     histFile->cd();
     vector<TH1*> hist_list;
 
-    int N_filters = 5;
-    RNode rdfs [] = {rdf_no_filtered, rdf_dEdx_filtered, rdf_cl_filtered, rdf_pidfom_filtered, rdf_yphi_filtered, rdf_phi_mass_filtered};
-    string labels [] = {"no_cut", "dEdx_cut", "cl_cut", "pidfom_cut", "yphi_cut", "phi_mass_cut"};
+    int N_filters = 6;
+    RNode rdfs []       = {rdf_no_filtered, rdf_dEdx_filtered,  rdf_cl_filtered,    rdf_pidfom_filtered,    rdf_yphi_filtered,  rdf_phi_mass_filtered};
+    string labels []    = {"no_cut",        "dEdx_cut",         "cl_cut",           "pidfom_cut",           "yphi_cut",         "phi_mass_cut"};
 
     for (int i = 0; i < N_filters; i++)
     {
