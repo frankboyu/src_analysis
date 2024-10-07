@@ -39,20 +39,23 @@ void filter_phi_c_2H_kpkmd()
     RDataFrame rdf_raw(chain);
 
     auto rdf_def = rdf_raw
-    .Define("kin_cl",               "TMath::Prob(kin_chisq,kin_ndf)")
-    .Define("target_p4",            "TLorentzVector(0, 0, 0, mass_deuteron)")
+    .Define("deuteron_p4",          "TLorentzVector(0, 0, 0, mass_deuteron)")
+    .Define("nucleon_p4",           "TLorentzVector(0, 0, 0, mass_proton)")
     .Define("phi_p4_meas",          "kp_p4_meas + km_p4_meas")
     .Define("phi_p4_kin",           "kp_p4_kin + km_p4_kin")
-    .Define("miss_p4_meas",         "beam_p4_meas + target_p4 - phi_p4_meas - d_p4_meas")
-    .Define("miss_p4_kin",          "beam_p4_kin + target_p4 - phi_p4_kin - d_p4_kin")
+    .Define("miss_p4_meas",         "beam_p4_meas + deuteron_p4 - phi_p4_meas - d_p4_meas")
+    .Define("miss_p4_kin",          "beam_p4_kin + deuteron_p4 - phi_p4_kin - d_p4_kin")
+    .Define("missd_p4_meas",        "beam_p4_meas + deuteron_p4 - phi_p4_meas")
+    .Define("missd_p4_kin",         "beam_p4_kin + deuteron_p4 - phi_p4_kin")
     .Define("kp_as_pip_p4_meas",    "TLorentzVector(kp_p4_meas.Vect(), TMath::Sqrt(kp_p4_meas.P()*kp_p4_meas.P() + mass_pion*mass_pion))")
     .Define("kp_as_pip_p4_kin",     "TLorentzVector(kp_p4_kin.Vect(), TMath::Sqrt(kp_p4_kin.P()*kp_p4_kin.P() + mass_pion*mass_pion))")
     .Define("km_as_pim_p4_meas",    "TLorentzVector(km_p4_meas.Vect(), TMath::Sqrt(km_p4_meas.P()*km_p4_meas.P() + mass_pion*mass_pion))")
     .Define("km_as_pim_p4_kin",     "TLorentzVector(km_p4_kin.Vect(), TMath::Sqrt(km_p4_kin.P()*km_p4_kin.P() + mass_pion*mass_pion))")
-    .Define("beam_p4com_meas",      "boost_lorentz_vector(beam_p4_meas, -(beam_p4_meas + target_p4).BoostVector())")
-    .Define("beam_p4com_kin",       "boost_lorentz_vector(beam_p4_kin, -(beam_p4_kin + target_p4).BoostVector())")
-    .Define("phi_p4com_meas",       "boost_lorentz_vector(phi_p4_meas, -(beam_p4_meas + target_p4).BoostVector())")
-    .Define("phi_p4com_kin",        "boost_lorentz_vector(phi_p4_kin, -(beam_p4_kin + target_p4).BoostVector())")
+    .Define("beam_p4com_meas",      "boost_lorentz_vector(beam_p4_meas, -(beam_p4_meas + deuteron_p4).BoostVector())")
+    .Define("beam_p4com_kin",       "boost_lorentz_vector(beam_p4_kin, -(beam_p4_kin + deuteron_p4).BoostVector())")
+    .Define("phi_p4com_meas",       "boost_lorentz_vector(phi_p4_meas, -(beam_p4_meas + deuteron_p4).BoostVector())")
+    .Define("phi_p4com_kin",        "boost_lorentz_vector(phi_p4_kin, -(beam_p4_kin + deuteron_p4).BoostVector())")
+    .Define("kin_cl",               "TMath::Prob(kin_chisq,kin_ndf)")
     .Define("kp_p_meas",            "kp_p4_meas.P()")
     .Define("kp_p_kin",             "kp_p4_kin.P()")
     .Define("kp_theta_meas",        "kp_p4_meas.Theta()*RadToDeg")
@@ -71,18 +74,22 @@ void filter_phi_c_2H_kpkmd()
     .Define("d_theta_kin",          "d_p4_kin.Theta()*RadToDeg")
     .Define("d_DeltaT_meas",        "rftime + (d_x4_meas.Z()-65.0)/29.9792458 - d_x4_meas.T()")
     .Define("d_DeltaT_kin",         "rftime + (d_x4_meas.Z()-65.0)/29.9792458 - d_x4_kin.T()")
+    .Define("missd_m_meas",         "missd_p4_meas.M()")
+    .Define("missd_m_kin",          "missd_p4_kin.M()")
+    .Define("missd_pMinus_meas",    "missd_p4_meas.Minus()")
+    .Define("missd_pMinus_kin",     "missd_p4_kin.Minus()")
     .Define("phi_mass_meas",        "phi_p4_meas.M()")
     .Define("phi_mass_kin",         "phi_p4_kin.M()")
     .Define("phi_theta_meas",       "phi_p4_meas.Theta()*RadToDeg")
     .Define("phi_theta_kin",        "phi_p4_kin.Theta()*RadToDeg")
     .Define("miss_energy_meas",     "miss_p4_meas.E()")
     .Define("miss_energy_kin",      "miss_p4_kin.E()")
-    .Define("sqrts_meas",           "(beam_p4_meas + target_p4).Mag()")
-    .Define("sqrts_kin",            "(beam_p4_kin + target_p4).Mag()")
+    .Define("sqrts_meas",           "(beam_p4_meas + deuteron_p4).Mag()")
+    .Define("sqrts_kin",            "(beam_p4_kin + deuteron_p4).Mag()")
     .Define("minust_meas",          "-(beam_p4_meas - phi_p4_meas).Mag2()")
     .Define("minust_kin",           "-(beam_p4_kin - phi_p4_kin).Mag2()")
-    .Define("minusu_meas",          "-(target_p4 - phi_p4_meas).Mag2()")
-    .Define("minusu_kin",           "-(target_p4 - phi_p4_kin).Mag2()")
+    .Define("minusu_meas",          "-(deuteron_p4 - phi_p4_meas).Mag2()")
+    .Define("minusu_kin",           "-(deuteron_p4 - phi_p4_kin).Mag2()")
     .Define("rho_mass_meas",        "(kp_as_pip_p4_meas + km_as_pim_p4_meas).M()")
     .Define("rho_mass_kin",         "(kp_as_pip_p4_kin + km_as_pim_p4_kin).M()")
     .Define("yphi_meas",            "minust_meas/(2*mass_deuteron*(beam_p4_meas.E()-phi_p4_meas.E()))")
@@ -120,11 +127,11 @@ void filter_phi_c_2H_kpkmd()
         TDirectory * dir = histFile->mkdir(label.c_str());
         dir->cd();
 
-        TH1D hist_DeltaT_kp         = *rdf.Histo1D({("DeltaT_kp_"+ label).c_str(), ";t_{K^{+}} (ns);Counts", 1000, -10.0, 10.0},"kp_DeltaT_meas","accidweight");
+        TH1D hist_DeltaT_kp         = *rdf.Histo1D({("DeltaT_kp_"+ label).c_str(), ";#Delta t_{K^{+}} (ns);Counts", 1000, -10.0, 10.0},"kp_DeltaT_meas","accidweight");
         hist_DeltaT_kp.Write();
-        TH1D hist_DeltaT_km         = *rdf.Histo1D({("DeltaT_km_"+ label).c_str(), ";t_{K^{-}} (ns);Counts", 1000, -10.0, 10.0},"km_DeltaT_meas","accidweight");
+        TH1D hist_DeltaT_km         = *rdf.Histo1D({("DeltaT_km_"+ label).c_str(), ";#Delta t_{K^{-}} (ns);Counts", 1000, -10.0, 10.0},"km_DeltaT_meas","accidweight");
         hist_DeltaT_km.Write();
-        TH1D hist_DeltaT_d          = *rdf.Histo1D({("DeltaT_d_"+ label).c_str(), ";t_{D} (ns);Counts", 1000, -10.0, 10.0},"d_DeltaT_meas","accidweight");
+        TH1D hist_DeltaT_d          = *rdf.Histo1D({("DeltaT_d_"+ label).c_str(), ";#Delta t_{d} (ns);Counts", 1000, -10.0, 10.0},"d_DeltaT_meas","accidweight");
         hist_DeltaT_d.Write();
         TH1D hist_massKK            = *rdf.Histo1D({("massKK_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);Counts", 400, 0.9, 1.3},"phi_mass_meas","accidweight");
         hist_massKK.Write();
@@ -134,6 +141,10 @@ void filter_phi_c_2H_kpkmd()
         hist_minust.Write();
         TH1D hist_Emiss             = *rdf.Histo1D({("Emiss_"+ label).c_str(), ";E_{miss} (GeV);Counts", 400, -2.0, 2.0},"miss_energy_meas","accidweight");
         hist_Emiss.Write();
+        TH1D hist_massMissd         = *rdf.Histo1D({("massMissd_"+ label).c_str(), ";m_{missd} (GeV/c^{2});Counts", 200, 1.0, 3.0},"missd_m_meas","accidweight");
+        hist_massMissd.Write();
+        TH1D hist_pMinusMissd       = *rdf.Histo1D({("pMinusMissd_"+ label).c_str(), ";p_{missd}^{-} (GeV/c);Counts", 100, 1.0, 3.0},"missd_pMinus_meas","accidweight");
+        hist_pMinusMissd.Write();
         TH2D hist_kinematics_kp     = *rdf.Histo2D({("kinematics_kp_"+ label).c_str(), ";p (GeV/c);#theta (deg)", 100, 0.0, 10.0, 100, 0.0, 180.0},"kp_p_meas","kp_theta_meas","accidweight");
         hist_kinematics_kp.Write();
         TH2D hist_kinematics_km     = *rdf.Histo2D({("kinematics_km_"+ label).c_str(), ";p (GeV/c);#theta (deg)", 100, 0.0, 10.0, 100, 0.0, 180.0},"km_p_meas","km_theta_meas","accidweight");
