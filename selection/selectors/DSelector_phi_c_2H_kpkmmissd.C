@@ -5,12 +5,12 @@
 #include "DSelector/DHistogramActions.h"
 #include "DSelector/DCutActions.h"
 
-class DSelector_phi_c_2H_data : public DSelector
+class DSelector_phi_c_2H_kpkmmissd : public DSelector
 {
 	public:
 
-		DSelector_phi_c_2H_data(TTree* locTree = NULL) : DSelector(locTree){}
-		virtual ~DSelector_phi_c_2H_data(){}
+		DSelector_phi_c_2H_kpkmmissd(TTree* locTree = NULL) : DSelector(locTree){}
+		virtual ~DSelector_phi_c_2H_kpkmmissd(){}
 
 		void   Init(TTree *tree);
 		Bool_t Process(Long64_t entry);
@@ -68,10 +68,10 @@ class DSelector_phi_c_2H_data : public DSelector
         TH1F* dHist_KMinusPIDFOM_Weighted;
         TH1F* dHist_InvariantMassPhi_Weighted;
 
-	ClassDef(DSelector_phi_c_2H_data, 0);
+	ClassDef(DSelector_phi_c_2H_kpkmmissd, 0);
 };
 
-void DSelector_phi_c_2H_data::Get_ComboWrappers(void)
+void DSelector_phi_c_2H_kpkmmissd::Get_ComboWrappers(void)
 {
 	dStep0Wrapper     = dComboWrapper->Get_ParticleComboStep(0);
 	dComboBeamWrapper = static_cast<DBeamParticle*>(dStep0Wrapper->Get_InitialParticle());
@@ -79,13 +79,13 @@ void DSelector_phi_c_2H_data::Get_ComboWrappers(void)
     dKMinusWrapper    = static_cast<DChargedTrackHypothesis*>(dStep0Wrapper->Get_FinalParticle(1));
 }
 
-void DSelector_phi_c_2H_data::Init(TTree *locTree)
+void DSelector_phi_c_2H_kpkmmissd::Init(TTree *locTree)
 {
 	// SET OUTPUT FILE NAME
 	dOutputFileName          = "";
 	dOutputTreeFileName      = "";
-	dFlatTreeFileName        = "flattree_phi_c_2H_data.root";
-	dFlatTreeName            = "flattree_phi_c_2H_data";
+	dFlatTreeFileName        = "flattree_phi_c_2H_kpkmmissd.root";
+	dFlatTreeName            = "flattree_phi_c_2H_kpkmmissd";
     dSaveDefaultFlatBranches = true;
 
 	// INITIALIZE THE TREE INTERFACE AND WRAPPERS
@@ -139,7 +139,7 @@ void DSelector_phi_c_2H_data::Init(TTree *locTree)
 }
 // END OF INITIALIZATION
 
-Bool_t DSelector_phi_c_2H_data::Process(Long64_t locEntry)
+Bool_t DSelector_phi_c_2H_kpkmmissd::Process(Long64_t locEntry)
 {
 	// CALL THIS FIRST
 	DSelector::Process(locEntry); // gets the data from the tree for the entry
@@ -257,7 +257,7 @@ Bool_t DSelector_phi_c_2H_data::Process(Long64_t locEntry)
 }
 // END OF PROCESSING
 
-void DSelector_phi_c_2H_data::Finalize(void)
+void DSelector_phi_c_2H_kpkmmissd::Finalize(void)
 {
 	// CALL THIS LAST
 	DSelector::Finalize(); // saves results to the output file
