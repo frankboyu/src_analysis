@@ -25,6 +25,7 @@ TLorentzVector boost_lorentz_vector(TLorentzVector p4, TVector3 boost_vector)
 void filter_phi_c_2H_kpkmmissd()
 {
     string InputFile  = "/work/halld2/home/boyu/src_analysis/selection/output/flattree_phi_c_2H_kpkmmissd_sim_test.root";
+    string InputFile  = "/work/halld2/home/boyu/src_analysis/selection/output/flattree_phi_c_2H_kpkmmissd_sim_test.root";
     string InputTree  = "flattree_phi_c_2H_kpkmmissd";
     string OutputFile = "output/filtered_phi_c_2H_kpkmmissd_sim.root";
     string OutputTree = "filtered_phi_c_2H_kpkmmissd";
@@ -115,6 +116,7 @@ void filter_phi_c_2H_kpkmmissd()
     auto rdf_no_filtered        = rdf_def;
     auto rdf_cl_filtered        = rdf_no_filtered.Filter([](double kin_cl) {return kin_cl > 0.01 ;}, {"kin_cl"});
     auto rdf_pidfom_filtered    = rdf_cl_filtered.Filter([](double kp_pidfom, double km_pidfom) {return (kp_pidfom > 0.01) && (km_pidfom > 0.01);}, {"kp_pidfom","km_pidfom"});
+    auto rdf_yphi_filtered      = rdf_pidfom_filtered.Filter([](double yphi_meas) {return yphi_meas > 0.0;}, {"yphi_meas"});
     auto rdf_yphi_filtered      = rdf_pidfom_filtered.Filter([](double yphi_meas) {return yphi_meas > 0.0;}, {"yphi_meas"});
     auto rdf_phi_mass_filtered  = rdf_yphi_filtered.Filter([](double phi_mass_meas) {return phi_mass_meas > 1.01 && phi_mass_meas < 1.03;}, {"phi_mass_meas"});
 
