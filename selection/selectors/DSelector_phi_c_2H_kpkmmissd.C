@@ -136,6 +136,12 @@ void DSelector_phi_c_2H_kpkmmissd::Init(TTree *locTree)
     dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("accidweight");
 	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("kp_pidfom");  // the PIDFOM in the default flat branches kp_pid_fom is corrupted and always 0
 	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("km_pidfom");  // the PIDFOM in the default flat branches km_pid_fom is corrupted and always 0
+    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("beam_x4_truth");
+    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("kp_x4_truth");
+    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("km_x4_truth");
+    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("beam_p4_truth");
+    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("kp_p4_truth");
+    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("km_p4_truth");
 }
 // END OF INITIALIZATION
 
@@ -173,6 +179,28 @@ Bool_t DSelector_phi_c_2H_kpkmmissd::Process(Long64_t locEntry)
         TLorentzVector locBeamP4     = dComboBeamWrapper->Get_P4_Measured();
         TLorentzVector locKPlusP4    = dKPlusWrapper->Get_P4_Measured();
 		TLorentzVector locKMinusP4   = dKMinusWrapper->Get_P4_Measured();
+
+        //GET THROWN P4
+        TLorentzVector locBeamX4_Thrown, locKPlusX4_Thrown, locKMinusX4_Thrown, locBeamP4_Thrown, locKPlusP4_Thrown, locKMinusP4_Thrown;
+        if(dThrownBeam != NULL)
+        {
+            locBeamX4_Thrown = dThrownBeam->Get_X4();
+            locBeamP4_Thrown = dThrownBeam->Get_P4();
+        }
+        for(UInt_t loc_i = 0; loc_i < Get_NumThrown(); ++loc_i)
+        {
+            dThrownWrapper->Set_ArrayIndex(loc_i);
+            if (dThrownWrapper->Get_PID() == KPlus)
+            {
+                locKPlusX4_Thrown = dThrownWrapper->Get_X4();
+                locKPlusP4_Thrown = dThrownWrapper->Get_P4();
+            }
+            else if (dThrownWrapper->Get_PID() == KMinus)
+            {
+                locKMinusX4_Thrown = dThrownWrapper->Get_X4();
+                locKMinusP4_Thrown = dThrownWrapper->Get_P4();
+            }
+        }
 
         // FILL HISTOGRAMS BEFORE CUTS
         dHist_NumUnusedTracks_Before    ->Fill(dComboWrapper->Get_NumUnusedTracks());
@@ -249,6 +277,12 @@ Bool_t DSelector_phi_c_2H_kpkmmissd::Process(Long64_t locEntry)
         dFlatTreeInterface->Fill_Fundamental<Double_t>("accidweight", locHistAccidWeightFactor);
 		dFlatTreeInterface->Fill_Fundamental<Double_t>("kp_pidfom", dKPlusWrapper->Get_PIDFOM());
 		dFlatTreeInterface->Fill_Fundamental<Double_t>("km_pidfom", dKMinusWrapper->Get_PIDFOM());
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_x4_truth", locBeamX4_Thrown);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("kp_x4_truth", locKPlusX4_Thrown);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("km_x4_truth", locKMinusX4_Thrown);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_p4_truth", locBeamP4_Thrown);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("kp_p4_truth", locKPlusP4_Thrown);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("km_p4_truth", locKMinusP4_Thrown);
         Fill_FlatTree(); //for the active combo
 	}
     // END OF COMBO LOOP
