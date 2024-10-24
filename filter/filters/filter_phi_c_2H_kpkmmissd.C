@@ -114,6 +114,8 @@ void filter_phi_c_2H_kpkmmissd()
     .Define("deltaE_meas",          "(pow(sqrts_meas, 2) - pow(mass_deuteron, 2) + pow(mass_phi, 2)) / (2.0 * sqrts_meas) - phi_p4com_meas.E()")
     .Define("deltaE_kin",           "(pow(sqrts_kin, 2) - pow(mass_deuteron, 2) + pow(mass_phi, 2)) / (2.0 * sqrts_kin) - phi_p4com_kin.E()")
     .Define("deltaE_truth",         "(pow(sqrts_truth, 2) - pow(mass_deuteron, 2) + pow(mass_phi, 2)) / (2.0 * sqrts_truth) - phi_p4com_truth.E()")
+    .Define("deltaT_test",          "minust_meas-minust_truth")
+    .Define("deltaE_test",          "(beam_p4_meas.E()-phi_p4_meas.E())-(beam_p4_truth.E()-phi_p4_truth.E())")
     ;
 
     // Filter events and save to new tree
@@ -121,7 +123,7 @@ void filter_phi_c_2H_kpkmmissd()
     auto rdf_no_filtered        = rdf_def;
     auto rdf_cl_filtered        = rdf_no_filtered.Filter([](double kin_cl) {return kin_cl > 0.0 ;}, {"kin_cl"});
     auto rdf_pidfom_filtered    = rdf_cl_filtered.Filter([](double kp_pidfom, double km_pidfom) {return (kp_pidfom > 0.0) && (km_pidfom > 0.0);}, {"kp_pidfom","km_pidfom"});
-    auto rdf_yphi_filtered      = rdf_pidfom_filtered.Filter([](double yphi_meas) {return yphi_meas > 0.0;}, {"yphi_meas"});
+    auto rdf_yphi_filtered      = rdf_pidfom_filtered.Filter([](double yphi_meas) {return true;}, {"yphi_meas"});
     auto rdf_phi_mass_filtered  = rdf_yphi_filtered.Filter([](double phi_mass_meas) {return phi_mass_meas > 0.0 && phi_mass_meas < 2.0;}, {"phi_mass_meas"});
 
     rdf_phi_mass_filtered.Snapshot(OutputTree, OutputFile);
@@ -150,7 +152,7 @@ void filter_phi_c_2H_kpkmmissd()
         hist_DeltaT_km.Write();
         TH1D hist_massKK            = *rdf.Histo1D({("massKK_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);Counts", 400, 0.9, 1.3},"phi_mass_meas","accidweight");
         hist_massKK.Write();
-        TH1D hist_yphi              = *rdf.Histo1D({("yphi_"+ label).c_str(), ";y_{#phi};Counts", 200, 0.0, 2.0},"yphi_meas","accidweight");
+        TH1D hist_yphi              = *rdf.Histo1D({("yphi_"+ label).c_str(), ";y_{#phi};Counts", 400, -4.0, 4.0},"yphi_meas","accidweight");
         hist_yphi.Write();
         TH1D hist_minust            = *rdf.Histo1D({("minust_"+ label).c_str(), ";-t (GeV^{2}/c^{2});Counts", 200, 0.0, 2.0},"minust_meas","accidweight");
         hist_minust.Write();
@@ -178,6 +180,10 @@ void filter_phi_c_2H_kpkmmissd()
         hist_massKK_massPiPi.Write();
         TH2D hist_thetaKK_yphi      = *rdf.Histo2D({("thetaKK_yphi_"+ label).c_str(), ";#theta_{K^{+}K^{-}} (deg);y_{#phi}", 100, 0.0, 10.0, 200, 0.0, 2.0},"phi_theta_meas","yphi_meas","accidweight");
         hist_thetaKK_yphi.Write();
+        TH2D hist_test              = *rdf.Histo2D({("test"+ label).c_str(), ";#Delta t;#Delta E", 300, -3.0, 3.0, 300, -3.0, 3.0},"deltaT_test","deltaE_test","accidweight");
+        hist_test.Write();
+        TH2D hist_test2             = *rdf.Histo2D({("test2"+ label).c_str(), ";y_{meas};y_{truth}", 300, -3.0, 3.0, 300, -3.0, 3.0},"yphi_meas","yphi_truth","accidweight");
+        hist_test2.Write();
     }
 
     histFile->Close();
