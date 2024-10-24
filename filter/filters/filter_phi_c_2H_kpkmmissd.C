@@ -39,6 +39,7 @@ void filter_phi_c_2H_kpkmmissd()
     RDataFrame rdf_raw(chain);
 
     auto rdf_def = rdf_raw
+    .Define("kin_cl",               "TMath::Prob(kin_chisq,kin_ndf)")
     .Define("deuteron_p4",          "TLorentzVector(0, 0, 0, mass_deuteron)")
     .Define("nucleon_p4",           "TLorentzVector(0, 0, 0, mass_proton)")
     .Define("phi_p4_meas",          "kp_p4_meas + km_p4_meas")
@@ -59,7 +60,9 @@ void filter_phi_c_2H_kpkmmissd()
     .Define("phi_p4com_meas",       "boost_lorentz_vector(phi_p4_meas, -(beam_p4_meas + deuteron_p4).BoostVector())")
     .Define("phi_p4com_kin",        "boost_lorentz_vector(phi_p4_kin, -(beam_p4_kin + deuteron_p4).BoostVector())")
     .Define("phi_p4com_truth",      "boost_lorentz_vector(phi_p4_truth, -(beam_p4_truth + deuteron_p4).BoostVector())")
-    .Define("kin_cl",               "TMath::Prob(kin_chisq,kin_ndf)")
+    .Define("beam_E_meas",          "beam_p4_meas.E()")
+    .Define("beam_E_kin",           "beam_p4_kin.E()")
+    .Define("beam_E_truth",         "beam_p4_truth.E()")
     .Define("kp_p_meas",            "kp_p4_meas.P()")
     .Define("kp_p_kin",             "kp_p4_kin.P()")
     .Define("kp_p_truth",           "kp_p4_truth.P()")
@@ -87,6 +90,9 @@ void filter_phi_c_2H_kpkmmissd()
     .Define("phi_mass_meas",        "phi_p4_meas.M()")
     .Define("phi_mass_kin",         "phi_p4_kin.M()")
     .Define("phi_mass_truth",       "phi_p4_truth.M()")
+    .Define("phi_E_meas",           "phi_p4_meas.E()")
+    .Define("phi_E_kin",            "phi_p4_kin.E()")
+    .Define("phi_E_truth",          "phi_p4_truth.E()")
     .Define("phi_theta_meas",       "phi_p4_meas.Theta()*RadToDeg")
     .Define("phi_theta_kin",        "phi_p4_kin.Theta()*RadToDeg")
     .Define("phi_theta_truth",      "phi_p4_truth.Theta()*RadToDeg")
@@ -113,10 +119,10 @@ void filter_phi_c_2H_kpkmmissd()
     // Filter events and save to new tree
     cout << "Filtering events...\n";
     auto rdf_no_filtered        = rdf_def;
-    auto rdf_cl_filtered        = rdf_no_filtered.Filter([](double kin_cl) {return kin_cl > 0.01 ;}, {"kin_cl"});
-    auto rdf_pidfom_filtered    = rdf_cl_filtered.Filter([](double kp_pidfom, double km_pidfom) {return (kp_pidfom > 0.01) && (km_pidfom > 0.01);}, {"kp_pidfom","km_pidfom"});
+    auto rdf_cl_filtered        = rdf_no_filtered.Filter([](double kin_cl) {return kin_cl > 0.0 ;}, {"kin_cl"});
+    auto rdf_pidfom_filtered    = rdf_cl_filtered.Filter([](double kp_pidfom, double km_pidfom) {return (kp_pidfom > 0.0) && (km_pidfom > 0.0);}, {"kp_pidfom","km_pidfom"});
     auto rdf_yphi_filtered      = rdf_pidfom_filtered.Filter([](double yphi_meas) {return yphi_meas > 0.0;}, {"yphi_meas"});
-    auto rdf_phi_mass_filtered  = rdf_yphi_filtered.Filter([](double phi_mass_meas) {return phi_mass_meas > 1.01 && phi_mass_meas < 1.03;}, {"phi_mass_meas"});
+    auto rdf_phi_mass_filtered  = rdf_yphi_filtered.Filter([](double phi_mass_meas) {return phi_mass_meas > 0.0 && phi_mass_meas < 2.0;}, {"phi_mass_meas"});
 
     rdf_phi_mass_filtered.Snapshot(OutputTree, OutputFile);
 
