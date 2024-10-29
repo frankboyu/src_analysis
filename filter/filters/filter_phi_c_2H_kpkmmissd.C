@@ -114,8 +114,10 @@ void filter_phi_c_2H_kpkmmissd()
     .Define("deltaE_meas",          "(pow(sqrts_meas, 2) - pow(mass_deuteron, 2) + pow(mass_phi, 2)) / (2.0 * sqrts_meas) - phi_p4com_meas.E()")
     .Define("deltaE_kin",           "(pow(sqrts_kin, 2) - pow(mass_deuteron, 2) + pow(mass_phi, 2)) / (2.0 * sqrts_kin) - phi_p4com_kin.E()")
     .Define("deltaE_truth",         "(pow(sqrts_truth, 2) - pow(mass_deuteron, 2) + pow(mass_phi, 2)) / (2.0 * sqrts_truth) - phi_p4com_truth.E()")
-    .Define("deltaT_test",          "minust_meas-minust_truth")
-    .Define("deltaE_test",          "(beam_p4_meas.E()-phi_p4_meas.E())-(beam_p4_truth.E()-phi_p4_truth.E())")
+    .Define("numerator_truth",      "minust_truth")
+    .Define("numerator_diff",       "minust_meas-minust_truth")
+    .Define("denominator_truth",    "beam_p4_truth.E()-phi_p4_truth.E()")
+    .Define("denominator_diff",     "(beam_p4_meas.E()-phi_p4_meas.E())-(beam_p4_truth.E()-phi_p4_truth.E())")
     ;
 
     // Filter events and save to new tree
@@ -180,7 +182,7 @@ void filter_phi_c_2H_kpkmmissd()
         hist_massKK_massPiPi.Write();
         TH2D hist_thetaKK_yphi      = *rdf.Histo2D({("thetaKK_yphi_"+ label).c_str(), ";#theta_{K^{+}K^{-}} (deg);y_{#phi}", 100, 0.0, 10.0, 200, 0.0, 2.0},"phi_theta_meas","yphi_meas","accidweight");
         hist_thetaKK_yphi.Write();
-        TH2D hist_test              = *rdf.Histo2D({("test"+ label).c_str(), ";#Delta t;#Delta E", 300, -3.0, 3.0, 300, -3.0, 3.0},"deltaT_test","deltaE_test","accidweight");
+        TH2D hist_test              = *rdf.Histo2D({("test"+ label).c_str(), ";#Delta t;#Delta E", 300, -3.0, 3.0, 300, -3.0, 3.0},"numerator_diff","denominator_diff","accidweight");
         hist_test.Write();
         TH2D hist_test2             = *rdf.Histo2D({("test2"+ label).c_str(), ";y_{meas};y_{truth}", 300, -3.0, 3.0, 300, -3.0, 3.0},"yphi_meas","yphi_truth","accidweight");
         hist_test2.Write();
