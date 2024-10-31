@@ -1,0 +1,38 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+phi_162 = np.loadtxt("input/phi_1.62.txt", delimiter=",")
+phi_172 = np.loadtxt("input/phi_1.72.txt", delimiter=",")
+phi_182 = np.loadtxt("input/phi_1.82.txt", delimiter=",")
+phi_192 = np.loadtxt("input/phi_1.92.txt", delimiter=",")
+phi_sub = np.loadtxt("input/phi_sub_1.70.txt", delimiter=",")
+
+plt.figure(dpi=200)
+plt.plot(phi_162[:,0], phi_162[:,1], 'o-', label="H, 1.57-1.67 GeV")
+plt.plot(phi_172[:,0], phi_172[:,1], 'o-', label="H, 1.67-1.77 GeV")
+# plt.plot(phi_182[:,0], phi_182[:,1], 'o-', label="H, 1.77-1.87 GeV")
+# plt.plot(phi_192[:,0], phi_192[:,1], 'o-', label="H, 1.87-1.97 GeV")
+plt.plot(phi_sub[:,0], phi_sub[:,1], 'v-', label="D, 1.65-1.75 GeV")
+plt.xlabel("$-t (GeV^2)$")
+plt.ylabel(r"${d\sigma}/{dt}(\mu b/GeV^2)$")
+plt.legend()
+plt.savefig("output/phi_subthreshold.png")
+plt.close()
+
+jpsi_82  = np.loadtxt("input/jpsi_8.2_9.3.txt", delimiter=",")
+jpsi_93  = np.loadtxt("input/jpsi_9.3_10.4.txt", delimiter=",")
+jpsi_104 = np.loadtxt("input/jpsi_10.4_11.5.txt", delimiter=",")
+jpsi_sub_70 = np.loadtxt("input/jpsi_sub_7_8.2.txt", delimiter=",")
+jpsi_sub_82 = np.loadtxt("input/jpsi_sub_8.2_10.6.txt", delimiter=",")
+
+plt.figure(dpi=200)
+plt.plot(jpsi_82[:,0], jpsi_82[:,1], 'o-', label="H, 8.2-9.3 GeV")
+plt.plot(jpsi_93[:,0], jpsi_93[:,1], 'o-', label="H, 9.3-10.4 GeV")
+# plt.plot(jpsi_104[:,0], jpsi_104[:,1], 'o-', label="H, 10.4-11.4 GeV")
+plt.plot(jpsi_sub_70[:,0], jpsi_sub_70[:,1], 'v-', label="He and C, 7.0-8.2 GeV")
+# plt.plot(jpsi_sub_82[:,0], jpsi_sub_82[:,1], 'v-', label="He and C, 8.2-10.6 GeV")
+plt.xlabel("$-t (GeV^2)$")
+plt.ylabel(r"${d\sigma}/{dt}(nb/GeV^2)$")
+plt.legend()
+plt.savefig("output/jpsi_subthreshold.png")
+plt.close()
