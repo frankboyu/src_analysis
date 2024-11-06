@@ -10,4 +10,4 @@ gxenv /work/halld2/home/boyu/src_software_builds/halld_versions_srcct/recon_srcc
 
 mkdir -p output/test/${REACTION}_${TAG}
 cd output/test/${REACTION}_${TAG}
-gluex_MC.py ../../../configs/wrapper_${REACTION}.cfg ${RUN} ${EVENTS} per_file=1000000 batch=0
+gluex_MC.py ../../../configs/wrapper_${REACTION}.cfg ${RUN} ${EVENTS} per_file=1000000 batch=1
