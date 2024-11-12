@@ -1,7 +1,7 @@
 #!/bin/bash
 
 REACTION=piminus_p_2H
-XML_VERSION=ver01_2.1
+XML_VERSION=ver01_1.1
 RUN=90213
 EVENTS=10000
 
