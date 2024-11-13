@@ -8,6 +8,16 @@ mass_deuteron    = 1.875612;
 def func(t, a, b):
     return a * np.exp(b * t)
 
+# Function to fit the forward cross section
+def linear(s, k, c):
+    return k*s+c
+
+def geometric(s, k, c):
+    return k*np.power(s,c)
+
+def exponential(s, k, c):
+    return k*np.exp(c*s)
+
 # Function to fit the data at all energies
 def func2(x, b, k, c):
     t, E = x
