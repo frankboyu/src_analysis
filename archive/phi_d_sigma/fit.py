@@ -110,11 +110,11 @@ plt.savefig('output/dsdt0_vs_E_extended.png')
 plt.close()
 
 # Combined fit
-xdata = np.stack((ds[0][:,0], energy[0]*np.ones(ds[0][:,0].shape)), axis=1)
+xdata = np.stack((ds[0][:,0], energy_com[0]*np.ones(ds[0][:,0].shape)), axis=1)
 ydata = ds[0][:,3]
 yerr = ds[0][:,4]
 for i in range(1,8):
-    xdata = np.concatenate((xdata, np.stack((ds[i][:,0], energy[i]*np.ones(ds[i][:,0].shape)), axis=1)), axis=0)
+    xdata = np.concatenate((xdata, np.stack((ds[i][:,0], energy_com[i]*np.ones(ds[i][:,0].shape)), axis=1)), axis=0)
     ydata = np.concatenate((ydata, ds[i][:,3]))
     yerr = np.concatenate((yerr, ds[i][:,4]))
 xdata = xdata.transpose()
@@ -132,11 +132,11 @@ for i in range(4):
     ax[0,i].set_xticks([])
 
 for i in range(8):
-    this_popt = np.array([popt_combined[1]*energy[i]+popt_combined[2], popt_combined[0]])
+    this_popt = np.array([geometric(energy_com[i], *popt_combined[1:]), popt_combined[0]])
     ax[i//4,i%4].errorbar(ds[i][:,0], ds[i][:,3], yerr=ds[i][:,4], fmt='o', label='data')
     ax[i//4,i%4].plot(ds[i][:,0], func(ds[i][:,0], *this_popt), 'r--', label='fit: a=%5.3f, b=%5.3f' % tuple(this_popt))
     ax[i//4,i%4].set_xlim(-0.4,0)
-    ax[i//4,i%4].text(0.05, 0.9, r'$E_{\gamma}$='+str(round(energy[i]-0.05, 2))+'-'+str(round(energy[i]+0.05, 2))+'GeV', fontsize=12, transform=ax[i//4,i%4].transAxes)
+    ax[i//4,i%4].text(0.05, 0.9, r'$E_{\gamma}$='+str(round(energy_com[i]-0.05, 2))+'-'+str(round(energy_com[i]+0.05, 2))+'GeV', fontsize=12, transform=ax[i//4,i%4].transAxes)
 plt.savefig('output/combined_fit.png')
 plt.close()
 
