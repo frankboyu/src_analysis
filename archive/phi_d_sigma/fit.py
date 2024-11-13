@@ -2,7 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 
-# Function to fit the data at a fixed energy
+mass_deuteron    = 1.875612;
+
+# Function to fit the differential cross section at a fixed photon energy
 def func(t, a, b):
     return a * np.exp(b * t)
 
@@ -13,6 +15,9 @@ def func2(x, b, k, c):
 
 # Read in the data points
 energy = np.array([1.62, 1.72, 1.82, 1.92, 2.02, 2.12, 2.22, 2.32])
+energy_com = 2*energy*mass_deuteron + mass_deuteron*mass_deuteron
+energy_extended = np.arange(1.5, 10.5, 0.1)
+energy_com_extended = 2*energy_extended*mass_deuteron + mass_deuteron*mass_deuteron
 ds = []
 ds.append(np.genfromtxt('input/Table1.csv', delimiter=','))
 ds.append(np.genfromtxt('input/Table2.csv', delimiter=','))
