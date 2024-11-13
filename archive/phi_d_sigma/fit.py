@@ -20,8 +20,8 @@ def exponential(s, k, c):
 
 # Function to fit the data at all energies
 def func2(x, b, k, c):
-    t, E = x
-    return (k*E+c) * np.exp(b * t)
+    t, s = x
+    return geometric(s, k, c) * np.exp(b * t)
 
 # Read in the data points
 energy = np.array([1.62, 1.72, 1.82, 1.92, 2.02, 2.12, 2.22, 2.32])
