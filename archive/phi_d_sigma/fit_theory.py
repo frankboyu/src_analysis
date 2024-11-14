@@ -9,7 +9,7 @@ def diff_cs_log(s, k, c):
     return k*s+c
 
 def forward_cs(s, k, c, b):
-    return k*np.power((s-b),c)
+    return k*np.power(abs(s-b),c)
 
 # t dependence
 minus_t = (np.genfromtxt('input/theory_slope.txt', delimiter=','))[:,0]
