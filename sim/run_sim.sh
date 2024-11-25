@@ -2,12 +2,15 @@
 
 REACTION=$1
 EVENTS=$2
+WRAPPER_VERSION=gluex_MCwrapper_srcct-v2.10.1
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
-gxenv /work/halld2/home/boyu/src_software_builds/halld_versions_srcct/recon_srcct-2021_11-ver01_2_1.xml
+gxenv $HALLD_VERSIONS/version.xml
+export MCWRAPPER_CENTRAL=/work/halld2/home/boyu/src_software_builds/${WRAPPER_VERSION}
+export PATH=/work/halld2/home/boyu/src_software_builds/${WRAPPER_VERSION}:${PATH}
 
-python3.6 get_configs.py ${REACTION}             # Generate the config files for each individual run.
-python3.6 get_number.py ${REACTION} ${EVENTS}    # Generate a text file of the number of events for each individual run
+python get_configs.py ${REACTION}             # Generate the config files for each individual run.
+python get_number.py ${REACTION} ${EVENTS}    # Generate a text file of the number of events for each individual run
 
 while read -r run number;
 do
