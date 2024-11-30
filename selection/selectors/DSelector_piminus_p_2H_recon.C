@@ -241,7 +241,7 @@ Bool_t DSelector_piminus_p_2H_recon::Process(Long64_t locEntry)
         if(dComboWrapper->Get_ConfidenceLevel_KinFit()      < 1e-4)                                                             dComboWrapper->Set_IsComboCut(true);
         if(dPiMinusWrapper->Get_PIDFOM()                    < 1e-4)                                                             dComboWrapper->Set_IsComboCut(true);
         if(dProtonWrapper->Get_PIDFOM()                     < 1e-4)                                                             dComboWrapper->Set_IsComboCut(true);
-        if((locPiMinusP4 + locProtonP4 - locBeamP4).P()     > 0.2)                                                              dComboWrapper->Set_IsComboCut(true);
+        if((locPiMinusP4 + locProtonP4 - locBeamP4).P()     > 0.4)                                                              dComboWrapper->Set_IsComboCut(true);
         if((locPiMinusP4 + locProtonP4 - locBeamP4).Minus() < 0.4  || (locPiMinusP4 + locProtonP4 - locBeamP4).Minus() > 1.4)   dComboWrapper->Set_IsComboCut(true);
 
         if(dComboWrapper->Get_IsComboCut())  continue;
@@ -280,16 +280,16 @@ Bool_t DSelector_piminus_p_2H_recon::Process(Long64_t locEntry)
         dHist_PhotonTiming_Weighted->Fill(locDeltaT_RF, locHistAccidWeightFactor);
 
         // FILL WEIGHTED HISTOGRAMS
-        dHist_NumUnusedTracks_After  ->Fill(dComboWrapper->Get_NumUnusedTracks(), locHistAccidWeightFactor);
-        dHist_NumUnusedShowers_After ->Fill(dComboWrapper->Get_NumUnusedShowers(), locHistAccidWeightFactor);
-        dHist_PhotonEnergy_After     ->Fill(locBeamP4.E(), locHistAccidWeightFactor);
-        dHist_VertexZ_After          ->Fill(dComboBeamWrapper->Get_X4().Z(), locHistAccidWeightFactor);
-        dHist_VertexXY_After         ->Fill(dComboBeamWrapper->Get_X4().X(), dComboBeamWrapper->Get_X4().Y(), locHistAccidWeightFactor);
-        dHist_ConfidenceLevel_After  ->Fill(dComboWrapper->Get_ConfidenceLevel_KinFit(), locHistAccidWeightFactor);
-        dHist_PiMinusPIDFOM_After    ->Fill(dPiMinusWrapper->Get_PIDFOM(), locHistAccidWeightFactor);
-        dHist_ProtonPIDFOM_After     ->Fill(dProtonWrapper->Get_PIDFOM(), locHistAccidWeightFactor);
-        dHist_MissingMomentum_After  ->Fill(locMissingP4.P(), locHistAccidWeightFactor);
-        dHist_MissingPMinus_After    ->Fill(locMissingP4.Minus(), locHistAccidWeightFactor);
+        dHist_NumUnusedTracks_Weighted  ->Fill(dComboWrapper->Get_NumUnusedTracks(), locHistAccidWeightFactor);
+        dHist_NumUnusedShowers_Weighted ->Fill(dComboWrapper->Get_NumUnusedShowers(), locHistAccidWeightFactor);
+        dHist_PhotonEnergy_Weighted     ->Fill(locBeamP4.E(), locHistAccidWeightFactor);
+        dHist_VertexZ_Weighted          ->Fill(dComboBeamWrapper->Get_X4().Z(), locHistAccidWeightFactor);
+        dHist_VertexXY_Weighted         ->Fill(dComboBeamWrapper->Get_X4().X(), dComboBeamWrapper->Get_X4().Y(), locHistAccidWeightFactor);
+        dHist_ConfidenceLevel_Weighted  ->Fill(dComboWrapper->Get_ConfidenceLevel_KinFit(), locHistAccidWeightFactor);
+        dHist_PiMinusPIDFOM_Weighted    ->Fill(dPiMinusWrapper->Get_PIDFOM(), locHistAccidWeightFactor);
+        dHist_ProtonPIDFOM_Weighted     ->Fill(dProtonWrapper->Get_PIDFOM(), locHistAccidWeightFactor);
+        dHist_MissingMomentum_Weighted  ->Fill(locMissingP4.P(), locHistAccidWeightFactor);
+        dHist_MissingPMinus_Weighted    ->Fill(locMissingP4.Minus(), locHistAccidWeightFactor);
 
 
 		// EXECUTE ANALYSIS ACTIONS
