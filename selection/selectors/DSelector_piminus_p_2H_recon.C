@@ -196,10 +196,10 @@ Bool_t DSelector_piminus_p_2H_recon::Process(Long64_t locEntry)
 		TLorentzVector locBeamP4    = dComboBeamWrapper->Get_P4();
 		TLorentzVector locPiMinusP4 = dPiMinusWrapper->Get_P4();
 		TLorentzVector locProtonP4  = dProtonWrapper->Get_P4();
-        TLorentzVector locMissingP4 = locPiMinusP4 + locProtonP4 - locBeamP4;
 
         //GET THROWN P4
-        TLorentzVector locBeamX4_Thrown, locPiMinusX4_Thrown, locProtonX4_Thrown, locBeamP4_Thrown, locPiMinusP4_Thrown, locProtonP4_Thrown;
+        TLorentzVector locBeamX4_Thrown, locPiMinusX4_Thrown, locProtonX4_Thrown;
+        TLorentzVector locBeamP4_Thrown, locPiMinusP4_Thrown, locProtonP4_Thrown;
         if(dThrownBeam != NULL)
         {
             locBeamX4_Thrown = dThrownBeam->Get_X4();
@@ -229,8 +229,8 @@ Bool_t DSelector_piminus_p_2H_recon::Process(Long64_t locEntry)
         dHist_ConfidenceLevel_Before  ->Fill(dComboWrapper->Get_ConfidenceLevel_KinFit());
         dHist_PiMinusPIDFOM_Before    ->Fill(dPiMinusWrapper->Get_PIDFOM());
         dHist_ProtonPIDFOM_Before     ->Fill(dProtonWrapper->Get_PIDFOM());
-        dHist_MissingMomentum_Before  ->Fill(locMissingP4.P());
-        dHist_MissingPMinus_Before    ->Fill(locMissingP4.Minus());
+        dHist_MissingMomentum_Before  ->Fill((locPiMinusP4 + locProtonP4 - locBeamP4).P());
+        dHist_MissingPMinus_Before    ->Fill((locPiMinusP4 + locProtonP4 - locBeamP4).Minus());
 
         // PERFORM CUTS
         if(dComboWrapper->Get_NumUnusedTracks()             > 0)                                                                dComboWrapper->Set_IsComboCut(true);
@@ -255,8 +255,8 @@ Bool_t DSelector_piminus_p_2H_recon::Process(Long64_t locEntry)
         dHist_ConfidenceLevel_After  ->Fill(dComboWrapper->Get_ConfidenceLevel_KinFit());
         dHist_PiMinusPIDFOM_After    ->Fill(dPiMinusWrapper->Get_PIDFOM());
         dHist_ProtonPIDFOM_After     ->Fill(dProtonWrapper->Get_PIDFOM());
-        dHist_MissingMomentum_After  ->Fill(locMissingP4.P());
-        dHist_MissingPMinus_After    ->Fill(locMissingP4.Minus());
+        dHist_MissingMomentum_After  ->Fill((locPiMinusP4 + locProtonP4 - locBeamP4).P());
+        dHist_MissingPMinus_After    ->Fill((locPiMinusP4 + locProtonP4 - locBeamP4).Minus());
 
 		// GET THE ACCIDENTAL WEIGHT FACTOR
 		TLorentzVector locBeamX4                       = dComboBeamWrapper->Get_X4_Measured();
@@ -288,8 +288,8 @@ Bool_t DSelector_piminus_p_2H_recon::Process(Long64_t locEntry)
         dHist_ConfidenceLevel_Weighted  ->Fill(dComboWrapper->Get_ConfidenceLevel_KinFit(), locHistAccidWeightFactor);
         dHist_PiMinusPIDFOM_Weighted    ->Fill(dPiMinusWrapper->Get_PIDFOM(), locHistAccidWeightFactor);
         dHist_ProtonPIDFOM_Weighted     ->Fill(dProtonWrapper->Get_PIDFOM(), locHistAccidWeightFactor);
-        dHist_MissingMomentum_Weighted  ->Fill(locMissingP4.P(), locHistAccidWeightFactor);
-        dHist_MissingPMinus_Weighted    ->Fill(locMissingP4.Minus(), locHistAccidWeightFactor);
+        dHist_MissingMomentum_Weighted  ->Fill((locPiMinusP4 + locProtonP4 - locBeamP4).P(), locHistAccidWeightFactor);
+        dHist_MissingPMinus_Weighted    ->Fill((locPiMinusP4 + locProtonP4 - locBeamP4).Minus(), locHistAccidWeightFactor);
 
 
 		// EXECUTE ANALYSIS ACTIONS
