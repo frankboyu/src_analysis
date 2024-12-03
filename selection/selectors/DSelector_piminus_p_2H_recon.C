@@ -46,7 +46,6 @@ class DSelector_piminus_p_2H_recon : public DSelector
         TH1F* dHist_ConfidenceLevel_Before;
         TH1F* dHist_PiMinusPIDFOM_Before;
         TH1F* dHist_ProtonPIDFOM_Before;
-        TH1F* dHist_MissingMomentum_Before;
         TH1F* dHist_MissingPMinus_Before;
 
         TH1F* dHist_NumUnusedTracks_After;
@@ -57,7 +56,6 @@ class DSelector_piminus_p_2H_recon : public DSelector
         TH1F* dHist_ConfidenceLevel_After;
         TH1F* dHist_PiMinusPIDFOM_After;
         TH1F* dHist_ProtonPIDFOM_After;
-        TH1F* dHist_MissingMomentum_After;
         TH1F* dHist_MissingPMinus_After;
 
         TH1F* dHist_PhotonTiming_Raw;
@@ -71,7 +69,6 @@ class DSelector_piminus_p_2H_recon : public DSelector
         TH1F* dHist_ConfidenceLevel_Weighted;
         TH1F* dHist_PiMinusPIDFOM_Weighted;
         TH1F* dHist_ProtonPIDFOM_Weighted;
-        TH1F* dHist_MissingMomentum_Weighted;
         TH1F* dHist_MissingPMinus_Weighted;
 
 	ClassDef(DSelector_piminus_p_2H_recon, 0);
@@ -112,7 +109,6 @@ void DSelector_piminus_p_2H_recon::Init(TTree *locTree)
     dHist_ConfidenceLevel_Before    = new TH1F("ConfidenceLevel_Before",    ";Confidence Level            ;Events/0.001",          1000,  0.0,   1.0);
     dHist_PiMinusPIDFOM_Before      = new TH1F("PiMinusPIDFOM_Before",      ";PIDFOM_{#pi^{-}}            ;Events/0.001",          1000,  0.0,   1.0);
     dHist_ProtonPIDFOM_Before       = new TH1F("ProtonPIDFOM_Before",       ";PIDFOM_{p}                  ;Events/0.001",          1000,  0.0,   1.0);
-    dHist_MissingMomentum_Before    = new TH1F("MissingMomentum_Before",    ";P_{miss} (GeV)              ;Events/0.01 GeV",       1000,  0.0,  10.0);
     dHist_MissingPMinus_Before      = new TH1F("MissingPMinus_Before",      ";P^{-}_{miss} (GeV)          ;Events/0.01 GeV",        200,  0.0,   2.0);
 
     dHist_NumUnusedTracks_After     = new TH1F("NumUnusedTracks_After",     ";Unused Tracks               ;Events/1",                10,  0.0,  10.0);
@@ -123,7 +119,6 @@ void DSelector_piminus_p_2H_recon::Init(TTree *locTree)
     dHist_ConfidenceLevel_After     = new TH1F("ConfidenceLevel_After",     ";Confidence Level            ;Events/0.001",          1000,  0.0,   1.0);
     dHist_PiMinusPIDFOM_After       = new TH1F("PiMinusPIDFOM_After",       ";PIDFOM_{#pi^{-}}            ;Events/0.001",          1000,  0.0,   1.0);
     dHist_ProtonPIDFOM_After        = new TH1F("ProtonPIDFOM_After",        ";PIDFOM_{p}                  ;Events/0.001",          1000,  0.0,   1.0);
-    dHist_MissingMomentum_After     = new TH1F("MissingMomentum_After",     ";P_{miss} (GeV)              ;Events/0.01 GeV",       1000,  0.0,  10.0);
     dHist_MissingPMinus_After       = new TH1F("MissingPMinus_After",       ";P^{-}_{miss} (GeV)          ;Events/0.01 GeV",        200,  0.0,   2.0);
 
     dHist_PhotonTiming_Raw          = new TH1F("PhotonTiming_Raw",          ";#Delta t_{Beam-RF} (ns)     ;Events/0.1 ns",          360,-18.0,  18.0);
@@ -137,7 +132,6 @@ void DSelector_piminus_p_2H_recon::Init(TTree *locTree)
     dHist_ConfidenceLevel_Weighted  = new TH1F("ConfidenceLevel_Weighted",  ";Confidence Level            ;Events/0.001",          1000,  0.0,   1.0);
     dHist_PiMinusPIDFOM_Weighted    = new TH1F("PiMinusPIDFOM_Weighted",    ";PIDFOM_{#pi^{-}}            ;Events/0.001",          1000,  0.0,   1.0);
     dHist_ProtonPIDFOM_Weighted     = new TH1F("ProtonPIDFOM_Weighted",     ";PIDFOM_{p}                  ;Events/0.001",          1000,  0.0,   1.0);
-    dHist_MissingMomentum_Weighted  = new TH1F("MissingMomentum_Weighted",  ";P_{miss} (GeV)              ;Events/0.01 GeV",       1000,  0.0,  10.0);
     dHist_MissingPMinus_Weighted    = new TH1F("MissingPMinus_Weighted",    ";P^{-}_{miss} (GeV)          ;Events/0.01 GeV",        200,  0.0,   2.0);
 
 
@@ -229,7 +223,6 @@ Bool_t DSelector_piminus_p_2H_recon::Process(Long64_t locEntry)
         dHist_ConfidenceLevel_Before  ->Fill(dComboWrapper->Get_ConfidenceLevel_KinFit());
         dHist_PiMinusPIDFOM_Before    ->Fill(dPiMinusWrapper->Get_PIDFOM());
         dHist_ProtonPIDFOM_Before     ->Fill(dProtonWrapper->Get_PIDFOM());
-        dHist_MissingMomentum_Before  ->Fill((locPiMinusP4 + locProtonP4 - locBeamP4).P());
         dHist_MissingPMinus_Before    ->Fill((locPiMinusP4 + locProtonP4 - locBeamP4).Minus());
 
         // PERFORM CUTS
@@ -241,7 +234,6 @@ Bool_t DSelector_piminus_p_2H_recon::Process(Long64_t locEntry)
         if(dComboWrapper->Get_ConfidenceLevel_KinFit()      < 1e-4)                                                             dComboWrapper->Set_IsComboCut(true);
         if(dPiMinusWrapper->Get_PIDFOM()                    < 1e-4)                                                             dComboWrapper->Set_IsComboCut(true);
         if(dProtonWrapper->Get_PIDFOM()                     < 1e-4)                                                             dComboWrapper->Set_IsComboCut(true);
-        if((locPiMinusP4 + locProtonP4 - locBeamP4).P()     > 0.4)                                                              dComboWrapper->Set_IsComboCut(true);
         if((locPiMinusP4 + locProtonP4 - locBeamP4).Minus() < 0.4  || (locPiMinusP4 + locProtonP4 - locBeamP4).Minus() > 1.4)   dComboWrapper->Set_IsComboCut(true);
 
         if(dComboWrapper->Get_IsComboCut())  continue;
@@ -255,7 +247,6 @@ Bool_t DSelector_piminus_p_2H_recon::Process(Long64_t locEntry)
         dHist_ConfidenceLevel_After  ->Fill(dComboWrapper->Get_ConfidenceLevel_KinFit());
         dHist_PiMinusPIDFOM_After    ->Fill(dPiMinusWrapper->Get_PIDFOM());
         dHist_ProtonPIDFOM_After     ->Fill(dProtonWrapper->Get_PIDFOM());
-        dHist_MissingMomentum_After  ->Fill((locPiMinusP4 + locProtonP4 - locBeamP4).P());
         dHist_MissingPMinus_After    ->Fill((locPiMinusP4 + locProtonP4 - locBeamP4).Minus());
 
 		// GET THE ACCIDENTAL WEIGHT FACTOR
@@ -288,7 +279,6 @@ Bool_t DSelector_piminus_p_2H_recon::Process(Long64_t locEntry)
         dHist_ConfidenceLevel_Weighted  ->Fill(dComboWrapper->Get_ConfidenceLevel_KinFit(), locHistAccidWeightFactor);
         dHist_PiMinusPIDFOM_Weighted    ->Fill(dPiMinusWrapper->Get_PIDFOM(), locHistAccidWeightFactor);
         dHist_ProtonPIDFOM_Weighted     ->Fill(dProtonWrapper->Get_PIDFOM(), locHistAccidWeightFactor);
-        dHist_MissingMomentum_Weighted  ->Fill((locPiMinusP4 + locProtonP4 - locBeamP4).P(), locHistAccidWeightFactor);
         dHist_MissingPMinus_Weighted    ->Fill((locPiMinusP4 + locProtonP4 - locBeamP4).Minus(), locHistAccidWeightFactor);
 
 
