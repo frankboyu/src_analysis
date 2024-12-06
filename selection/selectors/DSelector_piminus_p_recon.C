@@ -87,9 +87,25 @@ void DSelector_piminus_p_recon::Init(TTree *locTree)
 	// SET OUTPUT FILE NAME
 	dOutputFileName          = "";
 	dOutputTreeFileName      = "";
-	dFlatTreeFileName        = "flattree_piminus_p_recon.root";
 	dFlatTreeName            = "flattree_piminus_p_recon";
     dSaveDefaultFlatBranches = true;
+
+    if      (locTree->GetBranch("MCWeight") == NULL && strncmp(locTree->GetName(), "gd_pimprotmissprot__B4_F4_T1_S4", strlen(locTree->GetName())))
+        dFlatTreeFileName = "flattree_piminus_p_recon_data_2H_missprot.root";
+    else if (locTree->GetBranch("MCWeight") == NULL && strncmp(locTree->GetName(), "gd_pimprotinc__B4_F4_T1_S4", strlen(locTree->GetName())))
+        dFlatTreeFileName = "flattree_piminus_p_recon_data_2H_inc.root";
+    else if (locTree->GetBranch("MCWeight") == NULL && strncmp(locTree->GetName(), "ghe_pimprotinc__B4_F4_T1_S4", strlen(locTree->GetName())))
+        dFlatTreeFileName = "flattree_piminus_p_recon_data_4He_inc.root";
+    else if (locTree->GetBranch("MCWeight") == NULL && strncmp(locTree->GetName(), "gc12_pimprotinc__B4_F4_T2_S5", strlen(locTree->GetName())))
+        dFlatTreeFileName = "flattree_piminus_p_recon_data_12C_inc.root";
+    else if (locTree->GetBranch("MCWeight") != NULL && strncmp(locTree->GetName(), "gd_pimprotmissprot__B4_F4_T1_S4", strlen(locTree->GetName())))
+        dFlatTreeFileName = "flattree_piminus_p_recon_sim_2H_missprot.root";
+    else if (locTree->GetBranch("MCWeight") != NULL && strncmp(locTree->GetName(), "gd_pimprotinc__B4_F4_T1_S4", strlen(locTree->GetName())))
+        dFlatTreeFileName = "flattree_piminus_p_recon_sim_2H_inc.root";
+    else if (locTree->GetBranch("MCWeight") != NULL && strncmp(locTree->GetName(), "ghe_pimprotinc__B4_F4_T1_S4", strlen(locTree->GetName())))
+        dFlatTreeFileName = "flattree_piminus_p_recon_sim_4He_inc.root";
+    else if (locTree->GetBranch("MCWeight") != NULL && strncmp(locTree->GetName(), "gc12_pimprotinc__B4_F4_T2_S5", strlen(locTree->GetName())))
+        dFlatTreeFileName = "flattree_piminus_p_recon_sim_12C_inc.root";
 
 	// INITIALIZE THE TREE INTERFACE AND WRAPPERS
     bool locInitializedPriorFlag = dInitializedFlag;               // save whether have been initialized previously
