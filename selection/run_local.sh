@@ -1,8 +1,8 @@
 #!/bin/bash
 
-INPUTFILE=/cache/halld/RunPeriod-2021-11/analysis/ver06/tree_gd_pimprotinc__B4_F4_T1_S4/merged/tree_gd_pimprotinc__B4_F4_T1_S4_090213.root
-TREE_NAME=gd_pimprotinc__B4_F4_T1_S4_Tree
-SELECTOR_FILE=piminus_p_2H_recon
+INPUTFILE=/work/halld2/home/boyu/src_analysis/sim/output/piminus_p_12C_ver01/root/trees/*090262_000.root
+TREE_NAME=gc12_pimprotinc__B4_F4_T2_S5_Tree
+SELECTOR_FILE=piminus_p_recon
 TAG=test
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
