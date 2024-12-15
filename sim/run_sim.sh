@@ -18,7 +18,9 @@ do
     gluex_MC.py configs/wrapper_${REACTION}_${run}.cfg ${run} ${number} per_file=1000000 batch=1 logdir=/farm_out/boyu/src_analysis/sim
 done < list.txt
 
-swif2 run -workflow src_analysis_sim
+swif2 run -workflow src_analysis_sim_deuterium
+swif2 run -workflow src_analysis_sim_helium
+swif2 run -workflow src_analysis_sim_carbon
 
 rm list.txt
 rm configs/wrapper_${REACTION}_*.cfg

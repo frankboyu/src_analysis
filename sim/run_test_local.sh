@@ -1,7 +1,7 @@
 #!/bin/bash
 
-REACTION=piminus_p_2H
-XML_VERSION=ver01_4
+REACTION=phi_d_2H
+XML_VERSION=dev
 RUN=90213
 EVENTS=10000
 
