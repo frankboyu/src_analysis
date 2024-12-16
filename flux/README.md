@@ -2,10 +2,6 @@
 
 Scripts to calculate the photon flux
 
-JLab: /work/halld2/home/boyu/src_analysis/flux
-
-GitHub: https://github.com/frankboyu/src_analysis/tree/master/flux
-
 ### Usage
 
 To calculate the flux of each run
