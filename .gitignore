@@ -2,3 +2,6 @@
 .vscode-server
 .ipynb_checkpoints
 *.root
+*.hddm
+*.in
+*.conf
