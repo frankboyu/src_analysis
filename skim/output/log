@@ -1,6 +1,15 @@
 phi_c_2H
-ver01: K+ K- topology
-ver02: K+ d, K- d topology
+ver01: (K+K-D), (K+K-)D, (K+K-)D
+ver02: (K+D)K-, (K-D)K+
 
 phi_c_4He
-ver01: first try
+ver01: (K+K-He), (K+K-)X, (K+K-)He
+
+piminus_p_2H
+ver01: (π-p)X F2, (π-p)X F4, (π-p)p F4
+
+piminus_p_4He
+ver01: (π-p)X F2, (π-p)X F4, (π-p)T F4
+
+piminus_p_12C
+ver01: (π-p)X F2, (π-p)X F4, (π-p)11B F4

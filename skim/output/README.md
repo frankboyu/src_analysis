@@ -1,1 +1,0 @@
-Output files are stored at /work/halld2/home/boyu/src_analysis/skim/output/ and backed up on tape at /mss/halld/home/boyu/src_analysis/skim/
