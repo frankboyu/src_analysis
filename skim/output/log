@@ -1,15 +1,45 @@
+phi_p_2H
+ver03: (K+K-p)X, (K+K-p)n
+ver06: (K+K-p)X, (K+K-p)n, with updated PIDFOM
+
+phi_p_4He
+ver03: (K+K-p)X
+ver06: (K+K-p)X, with updated PIDFOM
+
+phi_p_12C
+ver03: (K+K-p)X
+ver06: (K+K-p)X, with updated PIDFOM
+ver09: (K+K-p)X, with updated material map
+
+phi_n_2H
+ver05: (K+K-n)X, (K+K-n)p
+
+phi_n_4He
+ver05: (K+K-n)X
+
+phi_n_12C
+ver05: (K+K-n)X
+
 phi_c_2H
-ver01: (K+K-D), (K+K-)D, (K+K-)D
-ver02: (K+D)K-, (K-D)K+
+ver05: (K+K-)D, (K+K-)X
+ver09: (K+K-)D, (K+K-)X, (K+K-D), (K+d)K-, (K-d)K+, with updated PIDFOM
 
 phi_c_4He
-ver01: (K+K-He), (K+K-)X, (K+K-)He
+ver05: (K+K-)He, (K+K-)X
+ver09: (K+K-)He, (K+K-)X, with updated PIDFOM
+
+phi_c_12C
+ver05: (K+K-)C, (K+K-)X
 
 piminus_p_2H
-ver01: (π-p)X F2, (π-p)X F4, (π-p)p F4
+ver03: (π-p)X, (π-p)p
+ver06: (π-p)X, (π-p)p, with updated PIDFOM
 
 piminus_p_4He
-ver01: (π-p)X F2, (π-p)X F4, (π-p)T F4
+ver03: (π-p)X
+ver06: (π-p)X, with updated PIDFOM
 
 piminus_p_12C
-ver01: (π-p)X F2, (π-p)X F4, (π-p)11B F4
+ver03: (π-p)X
+ver06: (π-p)X, with updated PIDFOM
+ver09: (π-p)X, with updated material map
