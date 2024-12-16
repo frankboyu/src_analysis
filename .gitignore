@@ -5,3 +5,8 @@
 *.hddm
 *.in
 *.conf
+*.d
+*.so
+*.pcm
+
+temp
