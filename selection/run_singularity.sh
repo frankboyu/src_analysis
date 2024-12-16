@@ -1,1 +1,0 @@
-singularity shell --cleanenv --bind /scigroup/mcwrapper/ --bind /u --bind /group/halld/ --bind /scratch/slurm/ --bind /lustre/enp/swif2 --bind /cvmfs --bind /work/osgpool/ --bind /work/halld --bind /cache/halld --bind /volatile/halld --bind /work/halld2 /cvmfs/singularity.opensciencegrid.org/jeffersonlab/gluex_prod:v1
