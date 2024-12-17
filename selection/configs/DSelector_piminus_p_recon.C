@@ -6,7 +6,6 @@
 #include "DSelector/DCutActions.h"
 
 double RadToDeg     = 180.0/3.1415926;
-double mass_neutron = 0.939565421;
 
 class DSelector_piminus_p_recon : public DSelector
 {
@@ -90,21 +89,21 @@ void DSelector_piminus_p_recon::Init(TTree *locTree)
 	dFlatTreeName            = "flattree_piminus_p_recon";
     dSaveDefaultFlatBranches = true;
 
-    if      (locTree->GetBranch("MCWeight") == NULL && strncmp(locTree->GetName(), "gd_pimprotmissprot__B4_F4_T1_S4",   strlen(locTree->GetName())))
+    if      (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gd_pimprotmissprot__B4_F4_T1_S4_Tree",   strlen(locTree->GetName())))
         dFlatTreeFileName = "flattree_piminus_p_recon_data_2H_missprot.root";
-    else if (locTree->GetBranch("MCWeight") == NULL && strncmp(locTree->GetName(), "gd_pimprotinc__B4_F4_T1_S4",        strlen(locTree->GetName())))
+    else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gd_pimprotinc__B4_F4_T1_S4_Tree",        strlen(locTree->GetName())))
         dFlatTreeFileName = "flattree_piminus_p_recon_data_2H_inc.root";
-    else if (locTree->GetBranch("MCWeight") == NULL && strncmp(locTree->GetName(), "ghe_pimprotinc__B4_F4_T1_S4",       strlen(locTree->GetName())))
+    else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "ghe_pimprotinc__B4_F4_T1_S4_Tree",       strlen(locTree->GetName())))
         dFlatTreeFileName = "flattree_piminus_p_recon_data_4He_inc.root";
-    else if (locTree->GetBranch("MCWeight") == NULL && strncmp(locTree->GetName(), "gc12_pimprotinc__B4_F4_T2_S5",      strlen(locTree->GetName())))
+    else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gc12_pimprotinc__B4_F4_T2_S5_Tree",      strlen(locTree->GetName())))
         dFlatTreeFileName = "flattree_piminus_p_recon_data_12C_inc.root";
-    else if (locTree->GetBranch("MCWeight") != NULL && strncmp(locTree->GetName(), "gd_pimprotmissprot__B4_F4_T1_S4",   strlen(locTree->GetName())))
+    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gd_pimprotmissprot__B4_F4_T1_S4_Tree",   strlen(locTree->GetName())))
         dFlatTreeFileName = "flattree_piminus_p_recon_sim_2H_missprot.root";
-    else if (locTree->GetBranch("MCWeight") != NULL && strncmp(locTree->GetName(), "gd_pimprotinc__B4_F4_T1_S4",        strlen(locTree->GetName())))
+    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gd_pimprotinc__B4_F4_T1_S4_Tree",        strlen(locTree->GetName())))
         dFlatTreeFileName = "flattree_piminus_p_recon_sim_2H_inc.root";
-    else if (locTree->GetBranch("MCWeight") != NULL && strncmp(locTree->GetName(), "ghe_pimprotinc__B4_F4_T1_S4",       strlen(locTree->GetName())))
+    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "ghe_pimprotinc__B4_F4_T1_S4_Tree",       strlen(locTree->GetName())))
         dFlatTreeFileName = "flattree_piminus_p_recon_sim_4He_inc.root";
-    else if (locTree->GetBranch("MCWeight") != NULL && strncmp(locTree->GetName(), "gc12_pimprotinc__B4_F4_T2_S5",      strlen(locTree->GetName())))
+    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gc12_pimprotinc__B4_F4_T2_S5_Tree",      strlen(locTree->GetName())))
         dFlatTreeFileName = "flattree_piminus_p_recon_sim_12C_inc.root";
 
 	// INITIALIZE THE TREE INTERFACE AND WRAPPERS
@@ -149,7 +148,6 @@ void DSelector_piminus_p_recon::Init(TTree *locTree)
     dHist_PiMinusPIDFOM_Weighted    = new TH1F("PiMinusPIDFOM_Weighted",    ";PIDFOM_{#pi^{-}}            ;Events/0.001",          1000,  0.0,   1.0);
     dHist_ProtonPIDFOM_Weighted     = new TH1F("ProtonPIDFOM_Weighted",     ";PIDFOM_{p}                  ;Events/0.001",          1000,  0.0,   1.0);
     dHist_MissingPMinus_Weighted    = new TH1F("MissingPMinus_Weighted",    ";P^{-}_{miss} (GeV)          ;Events/0.01 GeV",        200,  0.0,   2.0);
-
 
     // CUSTOM OUTPUT BRACHES: FLAT TREE
     dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("accidweight");
