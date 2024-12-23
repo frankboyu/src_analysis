@@ -48,7 +48,7 @@ elif (target == 'carbon'):
 elif (target == 'empty'):
     rcdb_query = "@is_src_production and @status_approved and run_config == 'FCAL_BCAL_PS_SRC_m9.conf' and beam_on_current > 55.0 and (target_type=='EMPTY & Ready' or target_type=='OFF')"
 
-db         = rcdb.RCDBProvider("mysql://rcdb@hallddb/rcdb")
+db         = rcdb.RCDBProvider(os.environ.get('RCDB_CONNECTION'))
 run_list   = db.select_runs(rcdb_query, 90001, 90662)
 
 #LOOP OVER RUNS
