@@ -15,15 +15,15 @@ def LoadCCDB():
 
 def PSAcceptance(x, par):
 
-    emin = par[1]
-    emax = par[2]
+    min = par[1]
+    max = par[2]
 
-    if (x[0] >= 2*emin and x[0] < (emin + emax)):
-        return par[0]*(1-2*emin/x[0])
-    elif (x[0] >= (emin + emax) and x[0] < 2*emax):
-        return par[0]*(2*emax/x[0] - 1)
-    else:
-        return 0
+    if x[0] > 2*min and x[0] < min + max:
+        return par[0]*(1-2*min/x[0])
+    elif x[0] >= min + max:
+        return par[0]*(2*max/x[0] - 1)
+    
+    return 0.
 
 #CONSTANT DEFINITIONS
 tagh_limits = [1, 125, 179, 274]  # all values are closed brackets, 126-127 overlap with TAGM, thus discarded
@@ -70,7 +70,8 @@ for run in run_list:
     tagh_scaled_energy_assignment    = ccdb_conn.get_assignment("/PHOTON_BEAM/hodoscope/scaled_energy_range",      run_number, ccdb_variation)
     tagm_scaled_energy_assignment    = ccdb_conn.get_assignment("/PHOTON_BEAM/microscope/scaled_energy_range",     run_number, ccdb_variation)
     photon_endpoint_assignment       = ccdb_conn.get_assignment("/PHOTON_BEAM/endpoint_energy",                    run_number, ccdb_variation)
-    photon_endpoint_calib_assignment = ccdb_conn.get_assignment("/PHOTON_BEAM/hodoscope/endpoint_calib",           run_number, ccdb_variation)
+    photon_endpoint_calib_assignment = ccdb_conn.get_assignment("/PHOTON_BEAM/endpoint_energy",                    run_number, ccdb_variation)    # revert to Sasha's version
+    # photon_endpoint_calib_assignment = ccdb_conn.get_assignment("/PHOTON_BEAM/hodoscope/endpoint_calib",           run_number, ccdb_variation)  # GlueX version
     PS_accept_assignment             = ccdb_conn.get_assignment("/PHOTON_BEAM/pair_spectrometer/lumi/PS_accept",   run_number, ccdb_variation)
 
     tagh_tagged_flux      = tagh_tagged_flux_assignment     .constant_set.data_table
@@ -83,7 +84,7 @@ for run in run_list:
 
     #PRINT THE RAW CONTENT IN THE DATABASE
     file_raw  = open("output/"+target+"/flux_raw_"+str(run_number)+".txt", "w")
-    file_raw.write('{:>5.2f}    {:>6.3f}    {:>8.6f}    {:>7.5f}    {:>7.5f}\n\n'.format(float(photon_endpoint_calib[0][0]), float(photon_endpoint[0][0]), float(PS_accept[0][0]), float(PS_accept[0][1]), float(PS_accept[0][2])))
+    file_raw.write('{:>6.3f}    {:>6.3f}    {:>8.6f}    {:>7.5f}    {:>7.5f}\n\n'.format(float(photon_endpoint_calib[0][0]), float(photon_endpoint[0][0]), float(PS_accept[0][0]), float(PS_accept[0][1]), float(PS_accept[0][2])))
 
     for i in range(len(tagh_scaled_energy)):
         file_raw.write('{:>3.0f}    {:>8.6f}    {:>8.6f}    {:>9.3f}    {:>7.3f}\n'.format(float(tagh_scaled_energy[i][0]), float(tagh_scaled_energy[i][1]), float(tagh_scaled_energy[i][2]), float(tagh_tagged_flux[i][1]), float(tagh_tagged_flux[i][2])))
@@ -178,16 +179,28 @@ for run in run_list:
 
     if (len(flux_all) > 0):
 
+        # GlueX version
+        # hist_edges.append(flux_all[0][4])
+        # for i in range(len(flux_all)):
+        #     hist_edges.append(flux_all[i][2])
+        #     hist_flux. append(flux_all[i][5])
+        #     if (i != len(flux_all)-1 and flux_all[i][2] > flux_all[i+1][4]):
+        #         hist_edges.append(flux_all[i+1][4])
+        #         hist_flux. append(0.0)
+
+        # Sasha's version
         hist_edges.append(flux_all[0][4])
-
-        for i in range(len(flux_all)):
-
-            hist_edges.append(flux_all[i][2])
-            hist_flux. append(flux_all[i][5])
-
-            if (i != len(flux_all)-1 and flux_all[i][2] > flux_all[i+1][4]):
-                hist_edges.append(flux_all[i+1][4])
+        hist_flux.append(flux_all[0][5])
+        for i in range(1, len(flux_all)):
+            if (flux_all[i-1][2] > flux_all[i][4]):
+                hist_edges.append(flux_all[i-1][2])
                 hist_flux. append(0.0)
+                hist_edges.append(flux_all[i][4])
+                hist_flux. append(flux_all[i][5])
+            else:
+                hist_edges.append(flux_all[i][4])
+                hist_flux. append(flux_all[i][5])
+        hist_edges.append(flux_all[len(flux_all)-1][2])
 
         hist_edges.reverse()
         hist_flux .reverse()
