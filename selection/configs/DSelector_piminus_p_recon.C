@@ -27,6 +27,7 @@ private:
 
     // MONTE CARLO INFORMATION
     bool dIsMC;
+    string dTag;
 
     // PARTICLE WRAPPERS
     DParticleComboStep*      dStep0Wrapper;
@@ -84,28 +85,31 @@ void DSelector_piminus_p_recon::Get_ComboWrappers(void)
 
 void DSelector_piminus_p_recon::Init(TTree *locTree)
 {
-	// SET OUTPUT FILE NAME
-	dOutputFileName          = "";
-	dOutputTreeFileName      = "";
-	dFlatTreeName            = "flattree_piminus_p_recon";
-    dSaveDefaultFlatBranches = true;
-
+    // DETERMINE THE TAG NAME
     if      (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gd_pimprotmissprot__B4_F4_T1_S4_Tree",   strlen(locTree->GetName())))
-        dFlatTreeFileName = "flattree_piminus_p_recon_data_2H_missprot.root";
+        dTag = "data_2H_missprot";
     else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gd_pimprotinc__B4_F4_T1_S4_Tree",        strlen(locTree->GetName())))
-        dFlatTreeFileName = "flattree_piminus_p_recon_data_2H_inc.root";
+        dTag = "data_2H_inc";
     else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "ghe_pimprotinc__B4_F4_T1_S4_Tree",       strlen(locTree->GetName())))
-        dFlatTreeFileName = "flattree_piminus_p_recon_data_4He_inc.root";
+        dTag = "data_4He_inc";
     else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gc12_pimprotinc__B4_F4_T2_S5_Tree",      strlen(locTree->GetName())))
-        dFlatTreeFileName = "flattree_piminus_p_recon_data_12C_inc.root";
+        dTag = "data_12C_inc";
     else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gd_pimprotmissprot__B4_F4_T1_S4_Tree",   strlen(locTree->GetName())))
-        dFlatTreeFileName = "flattree_piminus_p_recon_sim_2H_missprot.root";
+        dTag = "sim_2H_missprot";
     else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gd_pimprotinc__B4_F4_T1_S4_Tree",        strlen(locTree->GetName())))
-        dFlatTreeFileName = "flattree_piminus_p_recon_sim_2H_inc.root";
+        dTag = "sim_2H_inc";
     else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "ghe_pimprotinc__B4_F4_T1_S4_Tree",       strlen(locTree->GetName())))
-        dFlatTreeFileName = "flattree_piminus_p_recon_sim_4He_inc.root";
+        dTag = "sim_4He_inc";
     else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gc12_pimprotinc__B4_F4_T2_S5_Tree",      strlen(locTree->GetName())))
-        dFlatTreeFileName = "flattree_piminus_p_recon_sim_12C_inc.root";
+        dTag = "sim_12C_inc";
+    cout << "Tag: " << dTag << endl;
+
+    // SET OUTPUT FILE NAME
+	dOutputFileName          = Form("selectedhist_piminus_p_recon_%s.root", dTag.c_str());
+	dOutputTreeFileName      = "";
+    dFlatTreeFileName        = Form("selectedtree_piminus_p_recon_%s.root", dTag.c_str());
+	dFlatTreeName            = "selectedtree_piminus_p_recon";
+    dSaveDefaultFlatBranches = true;
 
 	// INITIALIZE THE TREE INTERFACE AND WRAPPERS
     bool locInitializedPriorFlag = dInitializedFlag;               // save whether have been initialized previously
