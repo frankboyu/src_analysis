@@ -23,11 +23,11 @@ TLorentzVector boost_lorentz_vector(TLorentzVector p4, TVector3 boost_vector)
     return p4_boosted;
 }
 
-void filter_piminus_p_recon(string Reaction, int HistFlag, int TreeFlag)
+void filter_piminus_p_recon(string Tag, string Mode)
 {
-    string InputFile  = Form("/work/halld2/home/boyu/src_analysis/selection/output/flattree_piminus_p_recon_%s/*90262.root",Reaction.c_str());
-    string HistFile   = Form("output/filteredhist_piminus_p_recon_%s.root",Reaction.c_str());
-    string TreeFile   = Form("output/filteredtree_piminus_p_recon_%s.root",Reaction.c_str());
+    string InputFile  = Form("/work/halld2/home/boyu/src_analysis/selection/output/flattree_piminus_p_recon_%s/*.root",Tag.c_str());
+    string HistFile   = Form("output/filteredhist_piminus_p_recon_%s.root",Tag.c_str());
+    string TreeFile   = Form("output/filteredtree_piminus_p_recon_%s.root",Tag.c_str());
 
     // Read input files
     cout << "Reading input files...\n";
@@ -127,14 +127,14 @@ void filter_piminus_p_recon(string Reaction, int HistFlag, int TreeFlag)
     auto rdf_proton_kinematics_filtered = rdf_miss_pminus_filtered.Filter([](double coherent_2pi_missing_mass_kin) {return coherent_2pi_missing_mass_kin > 0.0;}, {"coherent_2pi_missing_mass_kin"});
 
     // Save to new tree
-    if (TreeFlag == 1)
+    if (Mode == "tree" || Mode == "both")
     {
         cout << "Saving to new tree...\n";
         rdf_proton_kinematics_filtered.Snapshot("filtered_piminus_p_recon",TreeFile);
     }
 
     // Plot histograms
-    if (HistFlag == 1)
+    if (Mode == "hist" || Mode == "both")
     {
         cout << "Plotting histograms...\n";
         TFile * histFile = new TFile(HistFile.c_str(),"RECREATE");
