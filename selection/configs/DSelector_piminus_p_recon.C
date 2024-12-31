@@ -86,21 +86,30 @@ void DSelector_piminus_p_recon::Get_ComboWrappers(void)
 void DSelector_piminus_p_recon::Init(TTree *locTree)
 {
     // DETERMINE THE TAG NAME
-    if      (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gd_pimprotmissprot__B4_F4_T1_S4_Tree",   strlen(locTree->GetName())))
+    if      (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gd_pimprotmissprot",   strlen("gd_pimprotmissprot")))
         dTag = "data_2H_missprot";
-    else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gd_pimprotinc__B4_F4_T1_S4_Tree",        strlen(locTree->GetName())))
+    else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gd_pimprotinc",        strlen("gd_pimprotinc")))
         dTag = "data_2H_inc";
-    else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "ghe_pimprotinc__B4_F4_T1_S4_Tree",       strlen(locTree->GetName())))
+    else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "ghe_pimprotmisstri",   strlen("ghe_pimprotmisstri")))
+        dTag = "data_4He_misstri";
+    else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "ghe_pimprotinc",       strlen("ghe_pimprotinc")))
         dTag = "data_4He_inc";
-    else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gc12_pimprotinc__B4_F4_T2_S5_Tree",      strlen(locTree->GetName())))
+    else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gc12_pimprotmissb11",  strlen("gc12_pimprotmissb11")))
+        dTag = "data_12C_missb11";
+    else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gc12_pimprotinc",      strlen("gc12_pimprotinc")))
         dTag = "data_12C_inc";
-    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gd_pimprotmissprot__B4_F4_T1_S4_Tree",   strlen(locTree->GetName())))
+
+    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gd_pimprotmissprot",   strlen("gd_pimprotmissprot")))
         dTag = "sim_2H_missprot";
-    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gd_pimprotinc__B4_F4_T1_S4_Tree",        strlen(locTree->GetName())))
+    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gd_pimprotinc",        strlen("gd_pimprotinc")))
         dTag = "sim_2H_inc";
-    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "ghe_pimprotinc__B4_F4_T1_S4_Tree",       strlen(locTree->GetName())))
+    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "ghe_pimprotmisstri",   strlen("ghe_pimprotmisstri")))
+        dTag = "sim_4He_misstri";
+    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "ghe_pimprotinc",       strlen("ghe_pimprotinc")))
         dTag = "sim_4He_inc";
-    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gc12_pimprotinc__B4_F4_T2_S5_Tree",      strlen(locTree->GetName())))
+    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gc12_pimprotmissb11",  strlen("gc12_pimprotmissb11")))
+        dTag = "sim_12C_missb11";
+    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gc12_pimprotinc",      strlen("gc12_pimprotinc")))
         dTag = "sim_12C_inc";
 
     // SET OUTPUT FILE NAME
