@@ -102,7 +102,6 @@ void DSelector_piminus_p_recon::Init(TTree *locTree)
         dTag = "sim_4He_inc";
     else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gc12_pimprotinc__B4_F4_T2_S5_Tree",      strlen(locTree->GetName())))
         dTag = "sim_12C_inc";
-    cout << "Tag: " << dTag << endl;
 
     // SET OUTPUT FILE NAME
 	dOutputFileName          = Form("selectedhist_piminus_p_recon_%s.root", dTag.c_str());
