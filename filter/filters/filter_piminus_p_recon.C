@@ -23,9 +23,9 @@ TLorentzVector boost_lorentz_vector(TLorentzVector p4, TVector3 boost_vector)
     return p4_boosted;
 }
 
-void filter_piminus_p_recon(string Tag, string Mode)
+void filter_piminus_p_recon(string Tag, string InputMode, string OutputMode)
 {
-    string InputFile  = Form("/work/halld2/home/boyu/src_analysis/selection/output/flattree_piminus_p_recon_%s/*.root",Tag.c_str());
+    string InputFile  = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_piminus_p_recon_%s.root",Tag.c_str());
     string HistFile   = Form("output/filteredhist_piminus_p_recon_%s.root",Tag.c_str());
     string TreeFile   = Form("output/filteredtree_piminus_p_recon_%s.root",Tag.c_str());
 
@@ -38,7 +38,16 @@ void filter_piminus_p_recon(string Tag, string Mode)
     cout << "Defining data frame...\n";
     RDataFrame rdf_raw(chain);
 
-    auto rdf_def = rdf_raw
+    if (InputMode == "all")
+        auto rdf_input = rdf_raw;
+    else if (InputMode == "one" && Tag.find("2H") != string::npos)
+        auto rdf_input = rdf_raw.Filter("run == 90213");
+    else if (InputMode == "one" && Tag.find("4He") != string::npos)
+        auto rdf_input = rdf_raw.Filter("run == 90061");
+    else if (InputMode == "one" && Tag.find("12C") != string::npos)
+        auto rdf_input = rdf_raw.Filter("run == 90290");
+
+    auto rdf_def = rdf_input
     .Define("kin_cl","TMath::Prob(kin_chisq,kin_ndf)")
 
     .Define("beam_p4com_meas","boost_lorentz_vector(beam_p4_meas, -(pim_p4_meas + p_p4_meas).BoostVector())")
@@ -119,6 +128,7 @@ void filter_piminus_p_recon(string Tag, string Mode)
 
     // Filter events and save to new tree
     cout << "Filtering events...\n";
+    // Edit this!!!!
     auto rdf_no_filter                  = rdf_def.Filter([](double minus_t_kin, double minus_u_kin) {return (minus_t_kin > 0.5) && (minus_u_kin > 0.5);}, {"minus_t_kin","minus_u_kin"});;
     auto rdf_cl_filtered                = rdf_no_filter.Filter([](double kin_cl) {return kin_cl > 0.01 ;}, {"kin_cl"});
     auto rdf_pidfom_filtered            = rdf_cl_filtered.Filter([](double pim_pidfom, double p_pidfom) {return (pim_pidfom > 0.01) && (p_pidfom > 0.01);}, {"pim_pidfom","p_pidfom"});
@@ -126,15 +136,15 @@ void filter_piminus_p_recon(string Tag, string Mode)
     auto rdf_miss_pminus_filtered       = rdf_miss_p_filtered.Filter([](double miss_pminus_kin) {return miss_pminus_kin > 0.5 && miss_pminus_kin < 1.3;}, {"miss_pminus_kin"});
     auto rdf_proton_kinematics_filtered = rdf_miss_pminus_filtered.Filter([](double coherent_2pi_missing_mass_kin) {return coherent_2pi_missing_mass_kin > 0.0;}, {"coherent_2pi_missing_mass_kin"});
 
-    // Save to new tree
-    if (Mode == "tree" || Mode == "both")
+    // Save tree
+    if (OutputMode == "tree" || OutputMode == "both")
     {
         cout << "Saving to new tree...\n";
         rdf_proton_kinematics_filtered.Snapshot("filtered_piminus_p_recon",TreeFile);
     }
 
-    // Plot histograms
-    if (Mode == "hist" || Mode == "both")
+    // Save histograms
+    if (OutputMode == "hist" || OutputMode == "both")
     {
         cout << "Plotting histograms...\n";
         TFile * histFile = new TFile(HistFile.c_str(),"RECREATE");
