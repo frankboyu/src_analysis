@@ -7,28 +7,18 @@ mass_neutron = 0.939565
 mass_piminus = 0.139570
 Deg_To_Rad = np.pi/180
 
-fig, axs = plt.subplots(1, 3, figsize=(15, 5), dpi=200)
-axs[0].set_xlabel('Pion momentum [GeV]')
-axs[0].set_ylabel('Pion theta [deg]')
-axs[0].set_title('Pion momentum vs theta')
-axs[0].grid()
-axs[1].set_xlabel('Proton momentum [GeV]')
-axs[1].set_ylabel('Proton theta [deg]')
-axs[1].set_title('Proton momentum vs theta')
-axs[1].grid()
-axs[2].set_xlabel('Pion theta [deg]')
-axs[2].set_ylabel('Proton theta [deg]')
-axs[2].set_title('Pion theta vs Proton theta')
-axs[2].grid()
+energy_list = np.arange(6.0, 11.0, 0.5)
+theta_list = np.arange(10, 171, 1)
 
-for energy in np.arange(6.0, 11.0, 0.5):
+piminus_p = np.zeros((len(energy_list), len(theta_list)))
+piminus_theta = np.zeros((len(energy_list), len(theta_list)))
+proton_p = np.zeros((len(energy_list), len(theta_list)))
+proton_theta = np.zeros((len(energy_list), len(theta_list)))
+minus_t = np.zeros((len(energy_list), len(theta_list)))
+minus_u = np.zeros((len(energy_list), len(theta_list)))
 
-    piminus_p = []
-    piminus_theta = []
-    proton_p = []
-    proton_theta = []
-
-    for theta in range(10, 171, 1):
+for i, energy in enumerate(energy_list):
+    for j, theta in enumerate(theta_list):
         P4_gamma = root.TLorentzVector(0, 0, energy, energy)
         P4_neutron = root.TLorentzVector(0, 0, 0, mass_neutron)
         s = (P4_gamma + P4_neutron).Mag2()
@@ -45,15 +35,60 @@ for energy in np.arange(6.0, 11.0, 0.5):
         P4_piminus.Boost(boost_cm)
         P4_proton.Boost(boost_cm)
 
-        piminus_p.append(P4_piminus.P())
-        piminus_theta.append(P4_piminus.Theta()/Deg_To_Rad)
-        proton_p.append(P4_proton.P())
-        proton_theta.append(P4_proton.Theta()/Deg_To_Rad)
+        piminus_p[i][j] = P4_piminus.P()
+        piminus_theta[i][j] = P4_piminus.Theta()/Deg_To_Rad
+        proton_p[i][j] = P4_proton.P()
+        proton_theta[i][j] = P4_proton.Theta()/Deg_To_Rad
 
-    axs[0].plot(piminus_p, piminus_theta, label=format(energy, '.1f')+' GeV')
-    axs[1].plot(proton_p, proton_theta, label=format(energy, '.1f')+' GeV')
-    axs[2].plot(piminus_theta, proton_theta, label=format(energy, '.1f')+' GeV')
+        minus_t[i][j] = -(P4_gamma - P4_piminus).Mag2()
+        minus_u[i][j] = -(P4_gamma - P4_proton).Mag2()
 
 
+for i, energy in enumerate(energy_list):
+    plt.plot(piminus_p[i], piminus_theta[i], label=format(energy, '.1f')+' GeV')
+plt.xlabel('Pion momentum [GeV]')
+plt.ylabel('Pion theta [deg]')
+plt.title('Pion momentum vs theta')
 plt.legend()
-plt.savefig('kinematics.png')
+plt.grid()
+plt.savefig('output/piminus_p_theta.png')
+plt.close()
+
+for i, energy in enumerate(energy_list):
+    plt.plot(proton_p[i], proton_theta[i], label=format(energy, '.1f')+' GeV')
+plt.xlabel('Proton momentum [GeV]')
+plt.ylabel('Proton theta [deg]')
+plt.title('Proton momentum vs theta')
+plt.legend()
+plt.grid()
+plt.savefig('output/proton_p_theta.png')
+plt.close()
+
+for i, energy in enumerate(energy_list):
+    plt.plot(piminus_theta[i], proton_theta[i], label=format(energy, '.1f')+' GeV')
+plt.xlabel('Pion theta [deg]')
+plt.ylabel('Proton theta [deg]')
+plt.title('Pion theta vs Proton theta')
+plt.legend()
+plt.grid()
+plt.savefig('output/piminus_theta_proton_theta.png')
+plt.close()
+
+for i, energy in enumerate(energy_list):
+    plt.plot(piminus_p[i], proton_p[i], label=format(energy, '.1f')+' GeV')
+plt.xlabel('Pion momentum [GeV]')
+plt.ylabel('Proton momentum [GeV]')
+plt.title('Pion momentum vs Proton momentum')
+plt.legend()
+plt.grid()
+plt.savefig('output/piminus_p_proton_p.png')
+plt.close()
+
+for i, energy in enumerate(energy_list):
+    plt.plot(minus_t[i], theta_list, label=format(energy, '.1f')+' GeV')
+plt.xlabel('-t [GeV^2]')
+plt.ylabel('ThetaCM [deg]')
+plt.title('-t vs thetaCM')
+plt.legend()
+plt.grid()
+plt.savefig('output/minus_t_thetaCM.png')
