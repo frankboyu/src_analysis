@@ -25,27 +25,26 @@ TLorentzVector boost_lorentz_vector(TLorentzVector p4, TVector3 boost_vector)
 
 void filter_piminus_p_recon(string Tag, string InputMode, string OutputMode)
 {
-    string InputFile  = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_piminus_p_recon_%s.root",Tag.c_str());
-    string HistFile   = Form("output/filteredhist_piminus_p_recon_%s.root",Tag.c_str());
-    string TreeFile   = Form("output/filteredtree_piminus_p_recon_%s.root",Tag.c_str());
+    string InputFile  = Form("/work/halld2/home/boyu/src_analysis/selection/output/test/selectedtree_piminus_p_recon_%s.root",Tag.c_str());
+    string HistFile   = Form("output/test/filteredhist_piminus_p_recon_%s.root",Tag.c_str());
+    string TreeFile   = Form("output/test/filteredtree_piminus_p_recon_%s.root",Tag.c_str());
 
     // Read input files
     cout << "Reading input files...\n";
-    TChain chain("flattree_piminus_p_recon");
+    TChain chain("selectedtree_piminus_p_recon");
     chain.Add(InputFile.c_str());
 
     // Define data frame
     cout << "Defining data frame...\n";
     RDataFrame rdf_raw(chain);
 
-    if (InputMode == "all")
-        auto rdf_input = rdf_raw;
-    else if (InputMode == "one" && Tag.find("2H") != string::npos)
-        auto rdf_input = rdf_raw.Filter("run == 90213");
+    auto rdf_input = RNode(rdf_raw);
+    if (InputMode == "one" && Tag.find("2H") != string::npos)
+        rdf_input = rdf_input.Filter([](unsigned int run) {return run == 90213 ;}, {"run"});
     else if (InputMode == "one" && Tag.find("4He") != string::npos)
-        auto rdf_input = rdf_raw.Filter("run == 90061");
+        rdf_input = rdf_input.Filter([](unsigned int run) {return run == 90061 ;}, {"run"});
     else if (InputMode == "one" && Tag.find("12C") != string::npos)
-        auto rdf_input = rdf_raw.Filter("run == 90290");
+        rdf_input = rdf_input.Filter([](unsigned int run) {return run == 90291 ;}, {"run"});
 
     auto rdf_def = rdf_input
     .Define("kin_cl","TMath::Prob(kin_chisq,kin_ndf)")
@@ -128,19 +127,19 @@ void filter_piminus_p_recon(string Tag, string InputMode, string OutputMode)
 
     // Filter events and save to new tree
     cout << "Filtering events...\n";
-    // Edit this!!!!
-    auto rdf_no_filter                  = rdf_def.Filter([](double minus_t_kin, double minus_u_kin) {return (minus_t_kin > 0.5) && (minus_u_kin > 0.5);}, {"minus_t_kin","minus_u_kin"});;
+    auto rdf_no_filter                  = rdf_def.Filter([](double minus_t_kin, double minus_u_kin) {return (minus_t_kin > 0.5) && (minus_u_kin > 0.5);}, {"minus_t_kin","minus_u_kin"});
     auto rdf_cl_filtered                = rdf_no_filter.Filter([](double kin_cl) {return kin_cl > 0.01 ;}, {"kin_cl"});
     auto rdf_pidfom_filtered            = rdf_cl_filtered.Filter([](double pim_pidfom, double p_pidfom) {return (pim_pidfom > 0.01) && (p_pidfom > 0.01);}, {"pim_pidfom","p_pidfom"});
-    auto rdf_miss_p_filtered            = rdf_pidfom_filtered.Filter([](double miss_p_kin) {return miss_p_kin < 0.5;}, {"miss_p_kin"});
+    auto rdf_miss_p_filtered            = rdf_pidfom_filtered.Filter([](double miss_p_kin) {return miss_p_kin < 0.3;}, {"miss_p_kin"});
     auto rdf_miss_pminus_filtered       = rdf_miss_p_filtered.Filter([](double miss_pminus_kin) {return miss_pminus_kin > 0.5 && miss_pminus_kin < 1.3;}, {"miss_pminus_kin"});
-    auto rdf_proton_kinematics_filtered = rdf_miss_pminus_filtered.Filter([](double coherent_2pi_missing_mass_kin) {return coherent_2pi_missing_mass_kin > 0.0;}, {"coherent_2pi_missing_mass_kin"});
+    auto rdf_kinematics_filtered        = rdf_miss_pminus_filtered.Filter([](double minus_t_kin, double minus_u_kin) {return (minus_t_kin > 0.5) && (minus_u_kin > 0.5);}, {"minus_t_kin","minus_u_kin"});
+    auto rdf_output                     = rdf_kinematics_filtered;
 
     // Save tree
     if (OutputMode == "tree" || OutputMode == "both")
     {
         cout << "Saving to new tree...\n";
-        rdf_proton_kinematics_filtered.Snapshot("filtered_piminus_p_recon",TreeFile);
+        rdf_output.Snapshot("filteredtree_piminus_p_recon",TreeFile);
     }
 
     // Save histograms
@@ -152,8 +151,8 @@ void filter_piminus_p_recon(string Tag, string InputMode, string OutputMode)
         vector<TH1*> hist_list;
 
         int N_filters = 6;
-        RNode rdfs [] = {rdf_no_filter, rdf_cl_filtered, rdf_pidfom_filtered, rdf_miss_p_filtered, rdf_miss_pminus_filtered, rdf_proton_kinematics_filtered};
-        string labels [] = {"NoCut", "CLCut", "PIDFOMCut", "MissPCut", "MissPminusCut", "ProtonKinematicsCut"};
+        RNode rdfs [] = {rdf_no_filter, rdf_cl_filtered, rdf_pidfom_filtered, rdf_miss_p_filtered, rdf_miss_pminus_filtered, rdf_kinematics_filtered};
+        string labels [] = {"NoCut", "CLCut", "PIDFOMCut", "MissPCut", "MissPminusCut", "KinematicsCut"};
 
 
         for (int i = 0; i < N_filters; i++)
@@ -170,6 +169,8 @@ void filter_piminus_p_recon(string Tag, string InputMode, string OutputMode)
             hist_accidweight.Write();
             TH1D hist_kin_cl = *rdf.Histo1D({("kin_cl_"+ label).c_str(), ";kin_cl;Counts", 100, 0.0, 1.0},"kin_cl","accidweight");
             hist_kin_cl.Write();
+            TH1D hist_run = *rdf.Histo1D({("run_"+ label).c_str(), ";run;Counts", 700, 90000, 90700},"run","accidweight");
+            hist_run.Write();
 
             // PID
             TH1D hist_pim_pidfom = *rdf.Histo1D({("pim_pidfom_"+ label).c_str(), ";pim_pidfom;Counts", 100, 0.0, 1.0},"pim_pidfom","accidweight");
@@ -205,22 +206,26 @@ void filter_piminus_p_recon(string Tag, string InputMode, string OutputMode)
             hist_coherent_2pi.Write();
 
             // Initial neutron
-            TH1D hist_miss_pminus = *rdf.Histo1D({("miss_pminus_"+ label).c_str(), ";P_{miss}^- (GeV/c);Counts", 100, 0.4, 1.4},"miss_pminus_kin","accidweight");
+            TH1D hist_miss_pminus = *rdf.Histo1D({("miss_pminus_"+ label).c_str(), ";P_{miss}^{-} (GeV/c);Counts", 100, 0.4, 1.4},"miss_pminus_kin","accidweight");
             hist_miss_pminus.Write();
             TH1D hist_miss_mass = *rdf.Histo1D({("miss_mass_"+ label).c_str(), ";m_{miss} (GeV/c^{2});Counts", 100, 0.0, 4.0},"miss_mass_kin","accidweight");
             hist_miss_mass.Write();
             TH1D hist_miss_p = *rdf.Histo1D({("miss_p_"+ label).c_str(), ";P_{miss} (GeV/c);Counts", 100, 0.0, 4.0},"miss_p_kin","accidweight");
             hist_miss_p.Write();
-            TH2D hist_miss_pminus_miss_p = *rdf.Histo2D({("miss_pminus_miss_p_"+ label).c_str(), ";P_{miss}^- (GeV/c);P_{miss} (GeV/c)", 100, 0.4, 1.4, 100, 0.0, 4.0},"miss_pminus_kin","miss_p_kin","accidweight");
+            TH2D hist_miss_pminus_miss_p = *rdf.Histo2D({("miss_pminus_miss_p_"+ label).c_str(), ";P_{miss}^{-} (GeV/c);P_{miss} (GeV/c)", 100, 0.4, 1.4, 50, 0.0, 1.0},"miss_pminus_kin","miss_p_kin","accidweight");
             hist_miss_pminus_miss_p.Write();
             TH2D hist_miss_p_energy_balance = *rdf.Histo2D({("miss_p_energy_balance_"+ label).c_str(), ";P_{miss} (GeV/c);E_{miss} - m_{n} (GeV)", 100, 0.0, 4.0, 400, -4.0, 4.0},"miss_p_kin","miss_energy_balance_kin","accidweight");
             hist_miss_p_energy_balance.Write();
 
             // Kinematics
-            TH1D hist_minus_t = *rdf.Histo1D({("minus_t_"+ label).c_str(), ";-t (GeV^{2}/c^{2});Counts", 200, 0.0, 20.0},"minus_t_kin","accidweight");
-            hist_minus_t.Write();
             TH1D hist_sqrt_s = *rdf.Histo1D({("sqrt_s_"+ label).c_str(), ";#sqrt{s} (GeV);Counts", 100, 0.0, 10.0},"sqrt_s_kin","accidweight");
             hist_sqrt_s.Write();
+            TH1D hist_minus_t = *rdf.Histo1D({("minus_t_"+ label).c_str(), ";-t (GeV^{2}/c^{2});Counts", 200, 0.0, 20.0},"minus_t_kin","accidweight");
+            hist_minus_t.Write();
+            TH1D hist_thetaCM = *rdf.Histo1D({("thetaCM_"+ label).c_str(), ";#theta_{CM} (deg);Counts", 180, 0.0, 180.0},"thetaCM_kin","accidweight");
+            hist_thetaCM.Write();
+            TH2D hist_minus_t_thetaCM = *rdf.Histo2D({("minus_t_thetaCM_"+ label).c_str(), ";-t (GeV^{2}/c^{2});#theta_{CM} (deg)", 200, 0.0, 20.0, 180, 0.0, 180.0},"minus_t_kin","thetaCM_kin","accidweight");
+            hist_minus_t_thetaCM.Write();
             TH2D hist_theta_pim_p = *rdf.Histo2D({("theta_pim_p_"+ label).c_str(), ";#theta_{#pi^{-}} (deg);#theta_{p} (deg)", 180, 0.0, 180.0, 180, 0.0, 180.0},"pim_theta_kin","p_theta_kin","accidweight");
             hist_theta_pim_p.Write();
             TH1D hist_coplanarity = *rdf.Histo1D({("coplanarity_"+ label).c_str(), ";Coplanarity (deg);Counts", 360, 0.0, 360.0},"coplanarity_kin","accidweight");
@@ -249,6 +254,8 @@ void filter_piminus_p_recon(string Tag, string InputMode, string OutputMode)
             hist_kinematics_p_neither.Write();
 
             // Thrown information
+            TH1D hist_miss_p_truth = *rdf.Histo1D({("miss_p_truth_"+ label).c_str(), ";P_{miss} (GeV/c);Counts", 100, 0.0, 4.0},"miss_p_truth","accidweight");
+            hist_miss_p_truth.Write();
             TH2D hist_thetaCM_wrt_truth = *rdf.Histo2D({("thetaCM_wrt_truth_"+ label).c_str(), ";#theta_{CM} (deg);#theta_{CM}^{truth} (deg)", 36, 0.0, 180.0, 36, 0.0, 180.0},"thetaCM_kin","thetaCM_truth","accidweight");
             hist_thetaCM_wrt_truth.Write();
 
