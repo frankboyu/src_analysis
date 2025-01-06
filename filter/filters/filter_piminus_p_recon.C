@@ -25,9 +25,9 @@ TLorentzVector boost_lorentz_vector(TLorentzVector p4, TVector3 boost_vector)
 
 void filter_piminus_p_recon(string Tag, string InputMode, string OutputMode)
 {
-    string InputFile  = Form("/work/halld2/home/boyu/src_analysis/selection/output/test/selectedtree_piminus_p_recon_%s.root",Tag.c_str());
-    string HistFile   = Form("output/test/filteredhist_piminus_p_recon_%s.root",Tag.c_str());
-    string TreeFile   = Form("output/test/filteredtree_piminus_p_recon_%s.root",Tag.c_str());
+    string InputFile  = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_piminus_p_recon_%s.root",Tag.c_str());
+    string HistFile   = Form("output/filteredhist_piminus_p_recon_%s.root",Tag.c_str());
+    string TreeFile   = Form("output/filteredtree_piminus_p_recon_%s.root",Tag.c_str());
 
     // Read input files
     cout << "Reading input files...\n";
