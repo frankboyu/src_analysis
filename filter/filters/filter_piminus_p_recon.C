@@ -127,10 +127,20 @@ void filter_piminus_p_recon(string Tag, string InputMode, string OutputMode)
 
     // Filter events and save to new tree
     cout << "Filtering events...\n";
+    string miss_p_cut; // Default value
+    if (Tag.find("inc") != string::npos)
+        miss_p_cut = "0.5";
+    else if (Tag.find("missprot") != string::npos)
+        miss_p_cut = "0.2";
+    else if (Tag.find("misstri") != string::npos)
+        miss_p_cut = "0.25";
+    else if (Tag.find("missb11") != string::npos)
+        miss_p_cut = "0.3";
+
     auto rdf_no_filter                  = rdf_def.Filter([](double minus_t_kin, double minus_u_kin) {return (minus_t_kin > 0.5) && (minus_u_kin > 0.5);}, {"minus_t_kin","minus_u_kin"});
     auto rdf_cl_filtered                = rdf_no_filter.Filter([](double kin_cl) {return kin_cl > 0.01 ;}, {"kin_cl"});
     auto rdf_pidfom_filtered            = rdf_cl_filtered.Filter([](double pim_pidfom, double p_pidfom) {return (pim_pidfom > 0.01) && (p_pidfom > 0.01);}, {"pim_pidfom","p_pidfom"});
-    auto rdf_miss_p_filtered            = rdf_pidfom_filtered.Filter([](double miss_p_kin) {return miss_p_kin < 0.3;}, {"miss_p_kin"});
+    auto rdf_miss_p_filtered            = rdf_pidfom_filtered.Filter("(miss_p_kin < " + miss_p_cut + ")");
     auto rdf_miss_pminus_filtered       = rdf_miss_p_filtered.Filter([](double miss_pminus_kin) {return miss_pminus_kin > 0.5 && miss_pminus_kin < 1.3;}, {"miss_pminus_kin"});
     auto rdf_kinematics_filtered        = rdf_miss_pminus_filtered.Filter([](double minus_t_kin, double minus_u_kin) {return (minus_t_kin > 0.5) && (minus_u_kin > 0.5);}, {"minus_t_kin","minus_u_kin"});
     auto rdf_output                     = rdf_kinematics_filtered;
