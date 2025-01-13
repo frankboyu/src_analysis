@@ -23,11 +23,11 @@ TLorentzVector boost_lorentz_vector(TLorentzVector p4, TVector3 boost_vector)
     return p4_boosted;
 }
 
-void filter_piminus_p_recon(string Tag, string InputMode, string OutputMode)
+void filter_piminus_p_recon(string Reaction, string InputMode, string OutputMode)
 {
-    string InputFile  = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_piminus_p_recon_%s.root",Tag.c_str());
-    string HistFile   = Form("output/filteredhist_piminus_p_recon_%s.root",Tag.c_str());
-    string TreeFile   = Form("output/filteredtree_piminus_p_recon_%s.root",Tag.c_str());
+    string InputFile  = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_piminus_p_recon_%s.root",Reaction.c_str());
+    string HistFile   = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_piminus_p_recon_%s.root",Reaction.c_str());
+    string TreeFile   = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_piminus_p_recon_%s.root",Reaction.c_str());
 
     // Read input files
     cout << "Reading input files...\n";
@@ -128,14 +128,14 @@ void filter_piminus_p_recon(string Tag, string InputMode, string OutputMode)
     // Filter events and save to new tree
     cout << "Filtering events...\n";
     string miss_p_cut; // Default value
-    if (Tag.find("inc") != string::npos)
-        miss_p_cut = "0.5";
-    else if (Tag.find("missprot") != string::npos)
-        miss_p_cut = "0.2";
-    else if (Tag.find("misstri") != string::npos)
+    if (Reaction.find("inc") != string::npos)
+        miss_p_cut = "0.50";
+    else if (Reaction.find("missprot") != string::npos)
+        miss_p_cut = "0.20";
+    else if (Reaction.find("misstri") != string::npos)
         miss_p_cut = "0.25";
-    else if (Tag.find("missb11") != string::npos)
-        miss_p_cut = "0.3";
+    else if (Reaction.find("missb11") != string::npos)
+        miss_p_cut = "0.30";
 
     auto rdf_no_filter                  = rdf_def.Filter("(minus_t_kin > 0.5) && (minus_u_kin > 0.5)");
     auto rdf_cl_filtered                = rdf_no_filter.Filter("kin_cl > 0.01");
@@ -146,14 +146,14 @@ void filter_piminus_p_recon(string Tag, string InputMode, string OutputMode)
     auto rdf_output                     = rdf_kinematics_filtered;
 
     // Save tree
-    if (OutputMode == "tree" || OutputMode == "both")
+    if (OutputMode == "tree" || OutputMode == "all")
     {
         cout << "Saving to new tree...\n";
         rdf_output.Snapshot("filteredtree_piminus_p_recon",TreeFile);
     }
 
     // Save histograms
-    if (OutputMode == "hist" || OutputMode == "both")
+    if (OutputMode == "hist" || OutputMode == "all")
     {
         cout << "Plotting histograms...\n";
         TFile * histFile = new TFile(HistFile.c_str(),"RECREATE");
