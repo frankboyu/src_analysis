@@ -39,12 +39,12 @@ void filter_piminus_p_recon(string Tag, string InputMode, string OutputMode)
     RDataFrame rdf_raw(chain);
 
     auto rdf_input = RNode(rdf_raw);
-    if (InputMode == "one" && Tag.find("2H") != string::npos)
-        rdf_input = rdf_input.Filter([](unsigned int run) {return run == 90213 ;}, {"run"});
-    else if (InputMode == "one" && Tag.find("4He") != string::npos)
-        rdf_input = rdf_input.Filter([](unsigned int run) {return run == 90061 ;}, {"run"});
-    else if (InputMode == "one" && Tag.find("12C") != string::npos)
-        rdf_input = rdf_input.Filter([](unsigned int run) {return run == 90291 ;}, {"run"});
+    if (InputMode == "one" && Reaction.find("2H") != string::npos)
+        rdf_input = rdf_input.Filter("run == 90213");
+    else if (InputMode == "one" && Reaction.find("4He") != string::npos)
+        rdf_input = rdf_input.Filter("run == 90061");
+    else if (InputMode == "one" && Reaction.find("12C") != string::npos)
+        rdf_input = rdf_input.Filter("run == 90291");
 
     auto rdf_def = rdf_input
     .Define("kin_cl","TMath::Prob(kin_chisq,kin_ndf)")
@@ -137,12 +137,12 @@ void filter_piminus_p_recon(string Tag, string InputMode, string OutputMode)
     else if (Tag.find("missb11") != string::npos)
         miss_p_cut = "0.3";
 
-    auto rdf_no_filter                  = rdf_def.Filter([](double minus_t_kin, double minus_u_kin) {return (minus_t_kin > 0.5) && (minus_u_kin > 0.5);}, {"minus_t_kin","minus_u_kin"});
-    auto rdf_cl_filtered                = rdf_no_filter.Filter([](double kin_cl) {return kin_cl > 0.01 ;}, {"kin_cl"});
-    auto rdf_pidfom_filtered            = rdf_cl_filtered.Filter([](double pim_pidfom, double p_pidfom) {return (pim_pidfom > 0.01) && (p_pidfom > 0.01);}, {"pim_pidfom","p_pidfom"});
+    auto rdf_no_filter                  = rdf_def.Filter("(minus_t_kin > 0.5) && (minus_u_kin > 0.5)");
+    auto rdf_cl_filtered                = rdf_no_filter.Filter("kin_cl > 0.01");
+    auto rdf_pidfom_filtered            = rdf_cl_filtered.Filter("(pim_pidfom > 0.01) && (p_pidfom > 0.01)");
     auto rdf_miss_p_filtered            = rdf_pidfom_filtered.Filter("(miss_p_kin < " + miss_p_cut + ")");
-    auto rdf_miss_pminus_filtered       = rdf_miss_p_filtered.Filter([](double miss_pminus_kin) {return miss_pminus_kin > 0.5 && miss_pminus_kin < 1.3;}, {"miss_pminus_kin"});
-    auto rdf_kinematics_filtered        = rdf_miss_pminus_filtered.Filter([](double minus_t_kin, double minus_u_kin) {return (minus_t_kin > 0.5) && (minus_u_kin > 0.5);}, {"minus_t_kin","minus_u_kin"});
+    auto rdf_miss_pminus_filtered       = rdf_miss_p_filtered.Filter("(miss_pminus_kin > 0.5) && (miss_pminus_kin < 1.3)");
+    auto rdf_kinematics_filtered        = rdf_miss_pminus_filtered.Filter("(minus_t_kin > 0.5) && (minus_u_kin > 0.5)");
     auto rdf_output                     = rdf_kinematics_filtered;
 
     // Save tree
