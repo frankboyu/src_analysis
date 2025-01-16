@@ -1,6 +1,6 @@
 #!/bin/bash
 
-REACTION=piminus_p_2H
+REACTION=piplus_n_2H
 RUN=90213
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
