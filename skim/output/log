@@ -20,16 +20,9 @@ ver05: (K+K-n)X
 phi_n_12C
 ver05: (K+K-n)X
 
-phi_c_2H
+phi_d_2H
 ver05: (K+K-)D, (K+K-)X
 ver09: (K+K-)D, (K+K-)X, (K+K-D), (K+d)K-, (K-d)K+, with updated PIDFOM
-
-phi_c_4He
-ver05: (K+K-)He, (K+K-)X
-ver09: (K+K-)He, (K+K-)X, with updated PIDFOM
-
-phi_c_12C
-ver05: (K+K-)C, (K+K-)X
 
 piminus_p_2H
 ver03: (π-p)X, (π-p)p
