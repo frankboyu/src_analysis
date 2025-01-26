@@ -1,13 +1,12 @@
-import rcdb
-import sys
+import os, sys, math, array, pprint, rcdb, ccdb, MySQLdb
+import numpy as np
+import ROOT as root
 
-rcdb_query = "@is_src_production and @status_approved and target_type=='FULL & Ready Helium'"
-
-db = rcdb.RCDBProvider("mysql://rcdb@hallddb/rcdb")
+db         = rcdb.RCDBProvider(os.environ.get('RCDB_CONNECTION'))
+rcdb_query = "@is_src_production and @status_approved"
+good_runs = db.select_runs(rcdb_query, 90001, 90662)
 
 file = open("runs.txt", "w")
-
-good_runs = db.select_runs(rcdb_query, 90001, 90662)
 
 for run in good_runs:
     print(run)
