@@ -216,3 +216,17 @@ for run in run_list:
         print("EMPTY FLUX! NO OUTPUT!")
 
 file_total.close()
+
+file_summed = open("output/"+target+"/flux_summed_"+target+".txt", "w")
+for i, run in enumerate(run_list):
+    if (i == 0):
+        summed_flux = np.loadtxt("output/"+target+"/flux_corr_"+str(run.number)+".txt")
+    else:
+        if(np.shape(np.loadtxt("output/"+target+"/flux_corr_"+str(run.number)+".txt")) != np.shape(summed_flux)):
+            print("ERROR: Different dimensions of flux files")
+            sys.exit(1)
+        summed_flux[:,5] = summed_flux[:,5] + np.loadtxt("output/"+target+"/flux_corr_"+str(run.number)+".txt")[:,5]
+        summed_flux[:,6] = np.sqrt(summed_flux[:,6]**2 + np.loadtxt("output/"+target+"/flux_corr_"+str(run.number)+".txt")[:,6]**2)
+
+for i in range(len(summed_flux)):
+    file_summed.write('{:>3.0f}    {:>3.0f}    {:>13.10f}    {:>13.10f}    {:>13.10f}    {:>17.16e}    {:>17.16e}\n'.format(summed_flux[i][0], summed_flux[i][1], summed_flux[i][2], summed_flux[i][3], summed_flux[i][4], summed_flux[i][5], summed_flux[i][6]))
