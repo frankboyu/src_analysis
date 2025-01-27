@@ -5,28 +5,29 @@
 #include "DSelector/DHistogramActions.h"
 #include "DSelector/DCutActions.h"
 
-class DSelector_phi_c_2H_kpkmd : public DSelector
+class DSelector_phi_d_recon : public DSelector
 {
-	public:
+public:
 
-		DSelector_phi_c_2H_kpkmd(TTree* locTree = NULL) : DSelector(locTree){}
-		virtual ~DSelector_phi_c_2H_kpkmd(){}
+    DSelector_phi_d_recon(TTree* locTree = NULL) : DSelector(locTree){}
+    virtual ~DSelector_phi_d_recon(){}
 
-		void   Init(TTree *tree);
-		Bool_t Process(Long64_t entry);
+    void   Init(TTree *tree);
+    Bool_t Process(Long64_t entry);
 
-	private:
+private:
 
-		void Get_ComboWrappers(void);
-		void Finalize(void);
+    void Get_ComboWrappers(void);
+    void Finalize(void);
 
-		// BEAM POLARIZATION INFORMATION
-		UInt_t dPreviousRunNumber;
-		bool   dIsPolarizedFlag;
-		bool   dIsPARAFlag;
+    // BEAM POLARIZATION INFORMATION
+    UInt_t dPreviousRunNumber;
+    bool   dIsPolarizedFlag;
+    bool   dIsPARAFlag;
 
-		// MONTE CARLO INFORMATION
-        bool dIsMC;
+    // MONTE CARLO INFORMATION
+    bool dIsMC;
+    string dTag;
 
 		// PARTICLE WRAPPERS
 		DParticleComboStep*      dStep0Wrapper;
@@ -69,10 +70,10 @@ class DSelector_phi_c_2H_kpkmd : public DSelector
         TH1F* dHist_KMinusPIDFOM_Weighted;
         TH1F* dHist_InvariantMassPhi_Weighted;
 
-	ClassDef(DSelector_phi_c_2H_kpkmd, 0);
+	ClassDef(DSelector_phi_d_recon, 0);
 };
 
-void DSelector_phi_c_2H_kpkmd::Get_ComboWrappers(void)
+void DSelector_phi_d_recon::Get_ComboWrappers(void)
 {
 	dStep0Wrapper     = dComboWrapper->Get_ParticleComboStep(0);
 	dComboBeamWrapper = static_cast<DBeamParticle*>(dStep0Wrapper->Get_InitialParticle());
@@ -81,13 +82,13 @@ void DSelector_phi_c_2H_kpkmd::Get_ComboWrappers(void)
 	dDeuteronWrapper  = static_cast<DChargedTrackHypothesis*>(dStep0Wrapper->Get_FinalParticle(2));
 }
 
-void DSelector_phi_c_2H_kpkmd::Init(TTree *locTree)
+void DSelector_phi_d_recon::Init(TTree *locTree)
 {
 	// SET OUTPUT FILE NAME
 	dOutputFileName                             = "";
 	dOutputTreeFileName                         = "";
-	dFlatTreeFileName                           = "flattree_phi_c_2H_kpkmd.root";
-	dFlatTreeName                               = "flattree_phi_c_2H_kpkmd";
+	dFlatTreeFileName                           = "selectedtree_phi_d_recon_data_2H_kpkmd.root";
+	dFlatTreeName                               = "selectedtree_phi_d_recon";
     dSaveDefaultFlatBranches                    = true;
 	dSaveTLorentzVectorsAsFundamentaFlatTree    = false;
 
@@ -140,12 +141,10 @@ void DSelector_phi_c_2H_kpkmd::Init(TTree *locTree)
 	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("kp_pidfom");  // the PIDFOM in the default flat branches kp_pid_fom is corrupted and always 0
 	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("km_pidfom");  // the PIDFOM in the default flat branches km_pid_fom is corrupted and always 0
 
-    // CHECK IF MC
-    dIsMC = (dTreeInterface->Get_Branch("MCWeight") != NULL);
 }
 // END OF INITIALIZATION
 
-Bool_t DSelector_phi_c_2H_kpkmd::Process(Long64_t locEntry)
+Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
 {
 	// CALL THIS FIRST
 	DSelector::Process(locEntry); // gets the data from the tree for the entry
@@ -159,6 +158,9 @@ Bool_t DSelector_phi_c_2H_kpkmd::Process(Long64_t locEntry)
 		dPreviousRunNumber = locRunNumber;
 	}
 
+    // MC INFORMATION
+	dIsMC = (dTreeInterface->Get_Branch("MCWeight") != NULL);
+
 	// LOOP OVER COMBOS
 	for(UInt_t loc_i = 0; loc_i < Get_NumCombos(); ++loc_i)
 	{
@@ -166,6 +168,13 @@ Bool_t DSelector_phi_c_2H_kpkmd::Process(Long64_t locEntry)
 		dComboWrapper->Set_ComboIndex(loc_i);  // set branch array indices
 		if(dComboWrapper->Get_IsComboCut())    // check whether the combo has been cut
 			continue;                          // combo has been cut previously
+
+        // DISCARD EVENTS WITH NO L1 TRIGGER BITS
+        if (dComboWrapper->Get_L1TriggerBits() == 0)
+        {
+            dComboWrapper->Set_IsComboCut(true);
+            continue;
+        }
 
 		// GET PARTICLE INDICES
 		Int_t locBeamID         = dComboBeamWrapper->Get_BeamID();
@@ -218,7 +227,7 @@ Bool_t DSelector_phi_c_2H_kpkmd::Process(Long64_t locEntry)
 		TLorentzVector locBeamX4                       = dComboBeamWrapper->Get_X4_Measured();
 		Double_t       locBunchPeriod                  = dAnalysisUtilities.Get_BeamBunchPeriod(Get_RunNumber());
 		Double_t       locDeltaT_RF                    = dAnalysisUtilities.Get_DeltaT_RF(Get_RunNumber(), locBeamX4, dComboWrapper);
-		Int_t          locRelBeamBucket                = dAnalysisUtilities.Get_RelativeBeamBucket(Get_RunNumber(), locBeamX4, dComboWrapper); // 0 for in-time events, non-zero integer for out-of-time photons
+		Int_t          locRelBeamBucket                = dAnalysisUtilities.Get_RelativeBeamBucket(Get_RunNumber(), locBeamX4, dComboWrapper);          // 0 for in-time events, non-zero integer for out-of-time photons
 		Int_t          locNumOutOfTimeBunchesInTree    = 4;                                                                                             // Number of out-of-time beam bunches in tree on a single side
 		Bool_t         locSkipNearestOutOfTimeBunch    = true;                                                                                          // true: skip events from nearest out-of-time bunch on either side (recommended).
 		Int_t          locNumOutOfTimeBunchesToUse     = locSkipNearestOutOfTimeBunch ? locNumOutOfTimeBunchesInTree-1:locNumOutOfTimeBunchesInTree;
@@ -226,13 +235,12 @@ Bool_t DSelector_phi_c_2H_kpkmd::Process(Long64_t locEntry)
 		Double_t       locAccidentalScalingFactorError = dAnalysisUtilities.Get_AccidentalScalingFactorError(Get_RunNumber(), locBeamP4.E());           // ideal value would be 1, but deviations observed, need added factor.
 		Double_t       locHistAccidWeightFactor        = locRelBeamBucket==0 ? 1 : -locAccidentalScalingFactor/(2*locNumOutOfTimeBunchesToUse) ;        // weight by 1 for in-time events, ScalingFactor*(1/NBunches) for out-of-time
 
+        dHist_PhotonTiming_Raw->Fill(locDeltaT_RF);
         if(locSkipNearestOutOfTimeBunch && abs(locRelBeamBucket)==1)                                                                                    // skip nearest out-of-time bunch: tails of in-time distribution also leak in
         {
             dComboWrapper->Set_IsComboCut(true);
 			continue;
         }
-
-        dHist_PhotonTiming_Raw->Fill(locDeltaT_RF);
         dHist_PhotonTiming_Weighted->Fill(locDeltaT_RF, locHistAccidWeightFactor);
 
 		// FILL WEIGHTED HISTOGRAMS
@@ -262,7 +270,7 @@ Bool_t DSelector_phi_c_2H_kpkmd::Process(Long64_t locEntry)
 }
 // END OF PROCESSING
 
-void DSelector_phi_c_2H_kpkmd::Finalize(void)
+void DSelector_phi_d_recon::Finalize(void)
 {
 	// CALL THIS LAST
 	DSelector::Finalize(); // saves results to the output file
