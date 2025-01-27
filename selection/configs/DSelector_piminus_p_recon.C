@@ -175,7 +175,6 @@ void DSelector_piminus_p_recon::Init(TTree *locTree)
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("beam_p4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("pim_p4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("p_p4_truth");
-
 }
 // END OF INITIALIZATION
 
@@ -342,5 +341,3 @@ void DSelector_piminus_p_recon::Finalize(void)
 	DSelector::Finalize(); // saves results to the output file
 }
 // END OF FINALIZATION
-
-
