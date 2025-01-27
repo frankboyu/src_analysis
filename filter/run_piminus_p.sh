@@ -6,10 +6,10 @@ OUTPUTMODE=$3
 echo "Start time"
 date
 
-REACTION_LIST=("data_2H_missprot")
-# REACTION_LIST+=("data_2H_missprot" "data_2H_inc" "data_4He_inc" "data_12C_inc")
-# REACTION_LIST+=("sim_2H_missprot_flat" "sim_2H_inc_flat" "sim_4He_inc_flat" "sim_12C_inc_flat")
-# REACTION_LIST+=("sim_2H_missprot_model" "sim_2H_inc_model" "sim_4He_inc_model" "sim_12C_inc_model")
+REACTION_LIST=()
+REACTION_LIST+=("data_2H_missprot" "data_2H_inc" "data_4He_inc" "data_12C_inc")
+REACTION_LIST+=("sim_2H_missprot_flat" "sim_2H_inc_flat" "sim_4He_inc_flat" "sim_12C_inc_flat")
+REACTION_LIST+=("sim_2H_missprot_model" "sim_2H_inc_model" "sim_4He_inc_model" "sim_12C_inc_model")
 
 if [ "$RUNMODE" == "local" ]; then
     source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh

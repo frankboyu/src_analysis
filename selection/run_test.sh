@@ -1,8 +1,8 @@
 #!/bin/bash
 
-INPUTFILE=/work/halld2/home/boyu/src_analysis/skim/output/piminus_p_2H_test/tree_gd_pimprotmissprot__B4_F4_T1_S4/090213/*000.root
-TREENAME=gd_pimprotmissprot__B4_F4_T1_S4_Tree
-SELECTOR=piplus_n_recon
+INPUTFILE=/work/halld2/home/boyu/src_analysis/skim/output/phi_d_2H_test/tree_gd_kpkmd__B4_F4.root
+TREENAME=gd_kpkmd__B4_F4_Tree
+SELECTOR=phi_d_recon
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
 gxenv $HALLD_VERSIONS/version.xml
