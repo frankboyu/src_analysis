@@ -32,7 +32,9 @@ conv_length = 75e-6
 Be_rl       = 35.28e-2
 conv_rl     = conv_length/Be_rl
 ps_scale    = 1./((7/9.) * conv_rl)
-ccdb_variation   = "default"
+ccdb_variation  = "default"
+Navagadro       = 6.02214e23
+units_cm2_b     = 1e-24
 
 #FILE IO
 target = sys.argv[1]
@@ -41,12 +43,24 @@ file_total = open("output/"+target+"/flux_total_"+target+".txt", "w")
 #RCDB CONNECTION
 if (target == 'deuterium'):
     rcdb_query = "@is_src_production and @status_approved and run_config == 'FCAL_BCAL_PS_SRC_m9.conf' and beam_on_current > 55.0 and target_type=='FULL & Ready Deuterium'"
+    density         = 0.1638
+    atomic_mass     = 2.014
+    target_length   = 29.5
 elif (target == 'helium'):
     rcdb_query = "@is_src_production and @status_approved and run_config == 'FCAL_BCAL_PS_SRC_m9.conf' and beam_on_current > 55.0 and target_type=='FULL & Ready Helium'"
+    density         = 0.1217
+    atomic_mass     = 4.003
+    target_length   = 29.5
 elif (target == 'carbon'):
     rcdb_query = "@is_src_production and @status_approved and run_config == 'FCAL_BCAL_PS_SRC_m9.conf' and beam_on_current > 55.0 and target_type=='FULL & Ready Carbon'"
+    density         = 1.824
+    atomic_mass     = 12.0108
+    target_length   = 1.848
 elif (target == 'empty'):
     rcdb_query = "@is_src_production and @status_approved and run_config == 'FCAL_BCAL_PS_SRC_m9.conf' and beam_on_current > 55.0 and (target_type=='EMPTY & Ready' or target_type=='OFF')"
+    density = 1.0
+    atomic_mass = 1.0
+    target_length = 1.0
 
 db         = rcdb.RCDBProvider(os.environ.get('RCDB_CONNECTION'))
 run_list   = db.select_runs(rcdb_query, 90001, 90662)
@@ -217,16 +231,19 @@ for run in run_list:
 
 file_total.close()
 
-file_summed = open("output/"+target+"/flux_summed_"+target+".txt", "w")
+file_summed = open("output/"+target+"/lumi_summed_"+target+".txt", "w")
 for i, run in enumerate(run_list):
     if (i == 0):
-        summed_flux = np.loadtxt("output/"+target+"/flux_corr_"+str(run.number)+".txt")
+        summed_lumi = np.loadtxt("output/"+target+"/flux_corr_"+str(run.number)+".txt")
     else:
-        if(np.shape(np.loadtxt("output/"+target+"/flux_corr_"+str(run.number)+".txt")) != np.shape(summed_flux)):
+        if(np.shape(np.loadtxt("output/"+target+"/flux_corr_"+str(run.number)+".txt")) != np.shape(summed_lumi)):
             print("ERROR: Different dimensions of flux files")
             sys.exit(1)
-        summed_flux[:,5] = summed_flux[:,5] + np.loadtxt("output/"+target+"/flux_corr_"+str(run.number)+".txt")[:,5]
-        summed_flux[:,6] = np.sqrt(summed_flux[:,6]**2 + np.loadtxt("output/"+target+"/flux_corr_"+str(run.number)+".txt")[:,6]**2)
+        summed_lumi[:,5] = summed_lumi[:,5] + np.loadtxt("output/"+target+"/flux_corr_"+str(run.number)+".txt")[:,5]
+        summed_lumi[:,6] = np.sqrt(summed_lumi[:,6]**2 + np.loadtxt("output/"+target+"/flux_corr_"+str(run.number)+".txt")[:,6]**2)
 
-for i in range(len(summed_flux)):
-    file_summed.write('{:>3.0f}    {:>3.0f}    {:>13.10f}    {:>13.10f}    {:>13.10f}    {:>17.16e}    {:>17.16e}\n'.format(summed_flux[i][0], summed_flux[i][1], summed_flux[i][2], summed_flux[i][3], summed_flux[i][4], summed_flux[i][5], summed_flux[i][6]))
+summed_lumi[:,5] *= density*target_length*Navagadro*units_cm2_b/atomic_mass/1e12
+summed_lumi[:,6] *= density*target_length*Navagadro*units_cm2_b/atomic_mass/1e12
+
+for i in range(len(summed_lumi)):
+    file_summed.write('{:>3.0f}    {:>3.0f}    {:>13.10f}    {:>13.10f}    {:>13.10f}    {:>17.16e}    {:>17.16e}\n'.format(summed_lumi[i][0], summed_lumi[i][1], summed_lumi[i][2], summed_lumi[i][3], summed_lumi[i][4], summed_lumi[i][5], summed_lumi[i][6]))
