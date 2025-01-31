@@ -1,7 +1,7 @@
 #!/bin/bash
 
-INPUTFILE=/work/halld2/home/boyu/src_analysis/skim/output/phi_d_2H_test/tree_gd_kpkmd__B4_F4.root
-TREENAME=gd_kpkmd__B4_F4_Tree
+INPUTFILE=/cache/halld/RunPeriod-2021-11/analysis/ver10/tree_ghe_kpkmdinc__B4_F4/merged/tree_ghe_kpkmdinc__B4_F4_090660.root
+TREENAME=ghe_kpkmdinc__B4_F4_Tree
 SELECTOR=phi_d_recon
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
