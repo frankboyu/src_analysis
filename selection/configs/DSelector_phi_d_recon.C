@@ -99,7 +99,7 @@ void DSelector_phi_d_recon::Init(TTree *locTree)
         dTag = "sim_12C";
 
     // SET OUTPUT FILE NAME
-	dOutputFileName          = "";
+	dOutputFileName          = Form("selectedhist_phi_d_recon_%s.root", dTag.c_str());
 	dOutputTreeFileName      = "";
     dFlatTreeFileName        = Form("selectedtree_phi_d_recon_%s.root", dTag.c_str());
 	dFlatTreeName            = "selectedtree_phi_d_recon";
