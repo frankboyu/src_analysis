@@ -29,46 +29,46 @@ private:
     bool dIsMC;
     string dTag;
 
-		// PARTICLE WRAPPERS
-		DParticleComboStep*      dStep0Wrapper;
-		DBeamParticle*           dComboBeamWrapper;
-        DChargedTrackHypothesis* dKPlusWrapper;
-		DChargedTrackHypothesis* dKMinusWrapper;
-		DChargedTrackHypothesis* dDeuteronWrapper;
+    // PARTICLE WRAPPERS
+    DParticleComboStep*      dStep0Wrapper;
+    DBeamParticle*           dComboBeamWrapper;
+    DChargedTrackHypothesis* dKPlusWrapper;
+    DChargedTrackHypothesis* dKMinusWrapper;
+    DChargedTrackHypothesis* dDeuteronWrapper;
 
-		// DECLARE HISTOGRAMS
-        TH1D* dHist_NumUnusedTracks_Before;
-        TH1D* dHist_NumUnusedShowers_Before;
-        TH1F* dHist_PhotonEnergy_Before;
-        TH1F* dHist_VertexZ_Before;
-        TH2F* dHist_VertexXY_Before;
-		TH1F* dHist_ConfidenceLevel_Before;
-        TH1F* dHist_KPlusPIDFOM_Before;
-        TH1F* dHist_KMinusPIDFOM_Before;
-        TH1F* dHist_InvariantMassPhi_Before;
+    // CUSTOM HISTOGRAMS
+    TH1F* dHist_NumUnusedTracks_Before;
+    TH1F* dHist_NumUnusedShowers_Before;
+    TH1F* dHist_PhotonEnergy_Before;
+    TH1F* dHist_VertexZ_Before;
+    TH2F* dHist_VertexXY_Before;
+    TH1F* dHist_ConfidenceLevel_Before;
+    TH1F* dHist_KPlusPIDFOM_Before;
+    TH1F* dHist_KMinusPIDFOM_Before;
+    TH1F* dHist_InvariantMassPhi_Before;
 
-		TH1D* dHist_NumUnusedTracks_After;
-        TH1D* dHist_NumUnusedShowers_After;
-        TH1F* dHist_PhotonEnergy_After;
-        TH1F* dHist_VertexZ_After;
-        TH2F* dHist_VertexXY_After;
-		TH1F* dHist_ConfidenceLevel_After;
-        TH1F* dHist_KPlusPIDFOM_After;
-        TH1F* dHist_KMinusPIDFOM_After;
-        TH1F* dHist_InvariantMassPhi_After;
+    TH1F* dHist_NumUnusedTracks_After;
+    TH1F* dHist_NumUnusedShowers_After;
+    TH1F* dHist_PhotonEnergy_After;
+    TH1F* dHist_VertexZ_After;
+    TH2F* dHist_VertexXY_After;
+    TH1F* dHist_ConfidenceLevel_After;
+    TH1F* dHist_KPlusPIDFOM_After;
+    TH1F* dHist_KMinusPIDFOM_After;
+    TH1F* dHist_InvariantMassPhi_After;
 
-        TH1F* dHist_PhotonTiming_Raw;
-        TH1F* dHist_PhotonTiming_Weighted;
+    TH1F* dHist_PhotonTiming_Raw;
+    TH1F* dHist_PhotonTiming_Weighted;
 
-		TH1D* dHist_NumUnusedTracks_Weighted;
-        TH1D* dHist_NumUnusedShowers_Weighted;
-        TH1F* dHist_PhotonEnergy_Weighted;
-        TH1F* dHist_VertexZ_Weighted;
-        TH2F* dHist_VertexXY_Weighted;
-		TH1F* dHist_ConfidenceLevel_Weighted;
-        TH1F* dHist_KPlusPIDFOM_Weighted;
-        TH1F* dHist_KMinusPIDFOM_Weighted;
-        TH1F* dHist_InvariantMassPhi_Weighted;
+    TH1F* dHist_NumUnusedTracks_Weighted;
+    TH1F* dHist_NumUnusedShowers_Weighted;
+    TH1F* dHist_PhotonEnergy_Weighted;
+    TH1F* dHist_VertexZ_Weighted;
+    TH2F* dHist_VertexXY_Weighted;
+    TH1F* dHist_ConfidenceLevel_Weighted;
+    TH1F* dHist_KPlusPIDFOM_Weighted;
+    TH1F* dHist_KMinusPIDFOM_Weighted;
+    TH1F* dHist_InvariantMassPhi_Weighted;
 
 	ClassDef(DSelector_phi_d_recon, 0);
 };
@@ -84,13 +84,26 @@ void DSelector_phi_d_recon::Get_ComboWrappers(void)
 
 void DSelector_phi_d_recon::Init(TTree *locTree)
 {
-	// SET OUTPUT FILE NAME
-	dOutputFileName                             = "";
-	dOutputTreeFileName                         = "";
-	dFlatTreeFileName                           = "selectedtree_phi_d_recon_data_2H_kpkmd.root";
-	dFlatTreeName                               = "selectedtree_phi_d_recon";
-    dSaveDefaultFlatBranches                    = true;
-	dSaveTLorentzVectorsAsFundamentaFlatTree    = false;
+    // DETERMINE THE TAG NAME
+    if      (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gd_kpkmd",         strlen("gd_kpkmd")))
+        dTag = "data_2H";
+    else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "ghe_kpkmdinc",     strlen("ghe_kpkmdinc")))
+        dTag = "data_4He";
+    else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gc12_kpkmdinc",    strlen("gc12_kpkmdinc")))
+        dTag = "data_12C";
+    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gd_kpkmd",         strlen("gd_kpkmd")))
+        dTag = "sim_2H";
+    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "ghe_kpkmdinc",     strlen("ghe_kpkmdinc")))
+        dTag = "sim_4He";
+    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gc12_kpkmdinc",    strlen("gc12_kpkmdinc")))
+        dTag = "sim_12C";
+
+    // SET OUTPUT FILE NAME
+	dOutputFileName          = "";
+	dOutputTreeFileName      = "";
+    dFlatTreeFileName        = Form("selectedtree_phi_d_recon_%s.root", dTag.c_str());
+	dFlatTreeName            = "selectedtree_phi_d_recon";
+    dSaveDefaultFlatBranches = true;
 
 	// INITIALIZE THE TREE INTERFACE AND WRAPPERS
     bool locInitializedPriorFlag = dInitializedFlag;               // save whether have been initialized previously
@@ -101,9 +114,9 @@ void DSelector_phi_d_recon::Init(TTree *locTree)
 	dPreviousRunNumber = 0;
     Initialize_Actions();
 
-    // DEFINE HISTOGRAMS
-    dHist_NumUnusedTracks_Before	= new TH1D("NumUnusedTracks_Before",    ";Unused Tracks               ;Events/1",                10,  0.0,  10.0);
-    dHist_NumUnusedShowers_Before   = new TH1D("NumUnusedShowers_Before",   ";Unused Showers              ;Events/1",                10,  0.0,  10.0);
+    // CUSTOM HISTOGRAMS
+    dHist_NumUnusedTracks_Before    = new TH1F("NumUnusedTracks_Before",    ";Unused Tracks               ;Events/1",                10,  0.0,  10.0);
+    dHist_NumUnusedShowers_Before   = new TH1F("NumUnusedShowers_Before",   ";Unused Showers              ;Events/1",                10,  0.0,  10.0);
     dHist_PhotonEnergy_Before       = new TH1F("PhotonEnergy_Before",       ";Photon Energy (GeV)         ;Events/0.01 GeV",        900,  3.0,  12.0);
     dHist_VertexZ_Before            = new TH1F("VertexZ_Before",            ";Vertex Z (cm)               ;Events/1 cm",            200,  0.0, 200.0);
     dHist_VertexXY_Before           = new TH2F("VertexXY_Before",           ";Vertex X (cm)               ;Vertex Y (cm)",          100, -5.0,   5.0,  100, -5.0,   5.0);
@@ -112,8 +125,8 @@ void DSelector_phi_d_recon::Init(TTree *locTree)
     dHist_KMinusPIDFOM_Before       = new TH1F("KMinusPIDFOM_Before",       ";PIDFOM_{K^{-}}              ;Events/0.001",          1000,  0.0,  1.0);
     dHist_InvariantMassPhi_Before   = new TH1F("InvariantMassPhi_Before",	";M_{K^{+}K^{-}} (GeV)        ;Events/0.01 GeV",        500,  0.0,   5.0);
 
-    dHist_NumUnusedTracks_After     = new TH1D("NumUnusedTracks_After",     ";Unused Tracks               ;Events/1",                10,  0.0,  10.0);
-    dHist_NumUnusedShowers_After    = new TH1D("NumUnusedShowers_After",    ";Unused Showers              ;Events/1",                10,  0.0,  10.0);
+    dHist_NumUnusedTracks_After     = new TH1F("NumUnusedTracks_After",     ";Unused Tracks               ;Events/1",                10,  0.0,  10.0);
+    dHist_NumUnusedShowers_After    = new TH1F("NumUnusedShowers_After",    ";Unused Showers              ;Events/1",                10,  0.0,  10.0);
     dHist_PhotonEnergy_After        = new TH1F("PhotonEnergy_After",        ";Photon Energy (GeV)         ;Events/0.01 GeV",        900,  3.0,  12.0);
     dHist_VertexZ_After             = new TH1F("VertexZ_After",             ";Vertex Z (cm)               ;Events/1 cm",            200,  0.0, 200.0);
     dHist_VertexXY_After            = new TH2F("VertexXY_After",            ";Vertex X (cm)               ;Vertex Y (cm)",          100, -5.0,   5.0,  100, -5.0,   5.0);
@@ -125,8 +138,8 @@ void DSelector_phi_d_recon::Init(TTree *locTree)
     dHist_PhotonTiming_Raw          = new TH1F("PhotonTiming_Raw",          ";#Delta t_{Beam-RF} (ns)     ;Events/0.1 ns",          360,-18.0,  18.0);
     dHist_PhotonTiming_Weighted     = new TH1F("PhotonTiming_Weighted",     ";#Delta t_{Beam-RF} (ns)     ;Events/0.1 ns",          360,-18.0,  18.0);
 
-    dHist_NumUnusedTracks_Weighted  = new TH1D("NumUnusedTracks_Weighted",  ";Unused Tracks               ;Events/1",                10,  0.0,  10.0);
-    dHist_NumUnusedShowers_Weighted = new TH1D("NumUnusedShowers_Weighted", ";Unused Showers              ;Events/1",                10,  0.0,  10.0);
+    dHist_NumUnusedTracks_Weighted  = new TH1F("NumUnusedTracks_Weighted",  ";Unused Tracks               ;Events/1",                10,  0.0,  10.0);
+    dHist_NumUnusedShowers_Weighted = new TH1F("NumUnusedShowers_Weighted", ";Unused Showers              ;Events/1",                10,  0.0,  10.0);
     dHist_PhotonEnergy_Weighted     = new TH1F("PhotonEnergy_Weighted",     ";Photon Energy (GeV)         ;Events/0.01 GeV",        900,  3.0,  12.0);
     dHist_VertexZ_Weighted          = new TH1F("VertexZ_Weighted",          ";Vertex Z (cm)               ;Events/1 cm",            200,  0.0, 200.0);
     dHist_VertexXY_Weighted         = new TH2F("VertexXY_Weighted",         ";Vertex X (cm)               ;Vertex Y (cm)",          100, -5.0,   5.0,  100, -5.0,   5.0);
@@ -135,12 +148,18 @@ void DSelector_phi_d_recon::Init(TTree *locTree)
     dHist_KMinusPIDFOM_Weighted     = new TH1F("KMinusPIDFOM_Weighted",     ";PIDFOM_{K^{-}}              ;Events/0.001",          1000,  0.0,  1.0);
     dHist_InvariantMassPhi_Weighted = new TH1F("InvariantMassPhi_Weighted", ";M_{K^{+}K^{-}} (GeV)        ;Events/0.01 GeV",        500,  0.0,   5.0);
 
-
-    // FLAT TREE BRANCHES
+    // CUSTOM OUTPUT BRACHES: FLAT TREE
     dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("accidweight");
 	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("kp_pidfom");  // the PIDFOM in the default flat branches kp_pid_fom is corrupted and always 0
 	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("km_pidfom");  // the PIDFOM in the default flat branches km_pid_fom is corrupted and always 0
-
+    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("beam_x4_truth");
+    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("kp_x4_truth");
+    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("km_x4_truth");
+    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("d_x4_truth");
+    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("beam_p4_truth");
+    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("kp_p4_truth");
+    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("km_p4_truth");
+    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("d_p4_truth");
 }
 // END OF INITIALIZATION
 
@@ -183,10 +202,38 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
 		Int_t locDeuteronTrackID = dDeuteronWrapper->Get_TrackID();
 
 		// GET RECONSTRUCTED P4
-        TLorentzVector locBeamP4     = dComboBeamWrapper->Get_P4_Measured();
-        TLorentzVector locKPlusP4    = dKPlusWrapper->Get_P4_Measured();
-		TLorentzVector locKMinusP4   = dKMinusWrapper->Get_P4_Measured();
-		TLorentzVector locDeuteronP4 = dDeuteronWrapper->Get_P4_Measured();
+        TLorentzVector locBeamP4     = dComboBeamWrapper->Get_P4();
+        TLorentzVector locKPlusP4    = dKPlusWrapper->Get_P4();
+		TLorentzVector locKMinusP4   = dKMinusWrapper->Get_P4();
+		TLorentzVector locDeuteronP4 = dDeuteronWrapper->Get_P4();
+
+        //GET THROWN P4
+        TLorentzVector locBeamX4_Thrown, locKPlusX4_Thrown, locKMinusX4_Thrown, locDeuteronX4_Thrown;
+        TLorentzVector locBeamP4_Thrown, locKPlusP4_Thrown, locKMinusP4_Thrown, locDeuteronP4_Thrown;
+        if(dThrownBeam != NULL)
+        {
+            locBeamX4_Thrown = dThrownBeam->Get_X4();
+            locBeamP4_Thrown = dThrownBeam->Get_P4();
+        }
+        for(UInt_t loc_i = 0; loc_i < Get_NumThrown(); ++loc_i)
+        {
+            dThrownWrapper->Set_ArrayIndex(loc_i);
+            if (dThrownWrapper->Get_PID() == KPlus)
+            {
+                locKPlusX4_Thrown = dThrownWrapper->Get_X4();
+                locKPlusP4_Thrown = dThrownWrapper->Get_P4();
+            }
+            else if (dThrownWrapper->Get_PID() == KMinus)
+            {
+                locKMinusX4_Thrown = dThrownWrapper->Get_X4();
+                locKMinusP4_Thrown = dThrownWrapper->Get_P4();
+            }
+            else if (dThrownWrapper->Get_PID() == Deuteron)
+            {
+                locDeuteronX4_Thrown = dThrownWrapper->Get_X4();
+                locDeuteronP4_Thrown = dThrownWrapper->Get_P4();
+            }
+        }
 
         // FILL HISTOGRAMS BEFORE CUTS
         dHist_NumUnusedTracks_Before    ->Fill(dComboWrapper->Get_NumUnusedTracks());
@@ -262,6 +309,14 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
         dFlatTreeInterface->Fill_Fundamental<Double_t>("accidweight", locHistAccidWeightFactor);
 		dFlatTreeInterface->Fill_Fundamental<Double_t>("kp_pidfom", dKPlusWrapper->Get_PIDFOM());
 		dFlatTreeInterface->Fill_Fundamental<Double_t>("km_pidfom", dKMinusWrapper->Get_PIDFOM());
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_x4_truth", locBeamX4_Thrown);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("kp_x4_truth", locKPlusX4_Thrown);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("km_x4_truth", locKMinusX4_Thrown);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("d_x4_truth", locDeuteronX4_Thrown);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_p4_truth", locBeamP4_Thrown);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("kp_p4_truth", locKPlusP4_Thrown);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("km_p4_truth", locKMinusP4_Thrown);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("d_p4_truth", locDeuteronP4_Thrown);
         Fill_FlatTree(); //for the active combo
 	}
     // END OF COMBO LOOP
