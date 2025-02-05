@@ -155,11 +155,9 @@ void filter_piminus_p_recon(string Reaction, string InputMode, string OutputMode
         histFile->cd();
         vector<TH1*> hist_list;
 
-        int N_filters = 6;
         RNode rdfs [] = {rdf_no_filter, rdf_cl_filtered, rdf_pidfom_filtered, rdf_miss_p_filtered, rdf_miss_pminus_filtered, rdf_kinematics_filtered};
         string labels [] = {"NoCut", "CLCut", "PIDFOMCut", "MissPCut", "MissPminusCut", "KinematicsCut"};
-
-
+        int N_filters = sizeof(labels) / sizeof(labels[0]);
         for (int i = 0; i < N_filters; i++)
         {
             auto rdf = rdfs[i];
@@ -263,6 +261,7 @@ void filter_piminus_p_recon(string Reaction, string InputMode, string OutputMode
             hist_miss_p_truth.Write();
             TH2D hist_thetaCM_wrt_truth = *rdf.Histo2D({("thetaCM_wrt_truth_"+ label).c_str(), ";#theta_{CM} (deg);#theta_{CM}^{truth} (deg)", 36, 0.0, 180.0, 36, 0.0, 180.0},"thetaCM_kin","thetaCM_truth","accidweight");
             hist_thetaCM_wrt_truth.Write();
+            // Bin by bin look at pminus, compare with truth!
 
         }
         histFile->Close();
