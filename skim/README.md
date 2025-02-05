@@ -12,6 +12,10 @@ Run ReactionFilter plugin of hd_root to skim the reconstructed data
 
     ```sh run_sigularity.sh```
 
+    If the input file needs to be cached from tape, run
+
+    ```sh run_jcache.sh```
+
 2.  To run a test skim on one run
 
     ```sh run_test_batch.sh```
