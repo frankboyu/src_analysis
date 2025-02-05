@@ -42,7 +42,6 @@ void filter_piminus_p_recon(string Reaction, string InputMode, string OutputMode
         rdf_input = rdf_input.Filter("run == 90291");
 
     auto rdf_def = rdf_input
-    .Define("kin_cl","TMath::Prob(kin_chisq,kin_ndf)")
 
     .Define("beam_p4com_meas","boost_lorentz_vector(beam_p4_meas, -(pim_p4_meas + p_p4_meas).BoostVector())")
     .Define("beam_p4com_kin","boost_lorentz_vector(beam_p4_kin, -(pim_p4_kin + p_p4_kin).BoostVector())")
@@ -118,11 +117,12 @@ void filter_piminus_p_recon(string Reaction, string InputMode, string OutputMode
     .Define("coherent_2pi_missing_mass_kin","(beam_p4_kin + TLorentzVector(0.0, 0.0, 0.0, mass_deuteron) - pim_p4_kin - p_as_pip_p4_kin).M()")
     .Define("coherent_2pi_missing_mass_truth","(beam_p4_truth + TLorentzVector(0.0, 0.0, 0.0, mass_deuteron) - pim_p4_truth - p_as_pip_p4_truth).M()")
 
+    .Define("kin_cl","TMath::Prob(kin_chisq,kin_ndf)")
     ;
 
     // Filter events and save to new tree
     cout << "Filtering events...\n";
-    string miss_p_cut; // Default value
+    string miss_p_cut;
     if (Reaction.find("inc") != string::npos)
         miss_p_cut = "0.50";
     else if (Reaction.find("missprot") != string::npos)
@@ -151,7 +151,7 @@ void filter_piminus_p_recon(string Reaction, string InputMode, string OutputMode
     if (OutputMode == "hist" || OutputMode == "all")
     {
         cout << "Plotting histograms...\n";
-        TFile * histFile = new TFile(HistFile.c_str(),"RECREATE");
+        TFile * histFile = new TFile(HistFile.c_str(), "RECREATE");
         histFile->cd();
         vector<TH1*> hist_list;
 
@@ -267,6 +267,5 @@ void filter_piminus_p_recon(string Reaction, string InputMode, string OutputMode
         }
         histFile->Close();
     }
-
     cout << "Done!\n";
 }
