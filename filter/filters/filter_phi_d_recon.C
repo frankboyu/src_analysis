@@ -184,7 +184,7 @@ void filter_phi_d_recon(string Reaction, string input_mode, string output_mode)
     if (output_mode == "tree" || output_mode == "all")
     {
         cout << "Saving to new tree...\n";
-        rdf_output.Snapshot("filteredtree_piminus_p_recon",tree_name);
+        rdf_output.Snapshot("filteredtree_phi_d_recon",tree_name);
     }
 
     // Save histograms
