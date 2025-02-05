@@ -45,7 +45,7 @@ void filter_piminus_p_recon(string Reaction, string InputMode, string OutputMode
     .Define("kin_cl","TMath::Prob(kin_chisq,kin_ndf)")
 
     .Define("beam_p4com_meas","boost_lorentz_vector(beam_p4_meas, -(pim_p4_meas + p_p4_meas).BoostVector())")
-    .Define("beam_p4com_kin","boost_lorentz_vector(beam_p4_kin, -(pim_p4_meas + p_p4_meas).BoostVector())")
+    .Define("beam_p4com_kin","boost_lorentz_vector(beam_p4_kin, -(pim_p4_kin + p_p4_kin).BoostVector())")
     .Define("beam_p4com_truth","boost_lorentz_vector(beam_p4_truth, -(pim_p4_truth + p_p4_truth).BoostVector())")
     .Define("beam_E_meas","beam_p4_meas.E()")
     .Define("beam_E_kin","beam_p4_kin.E()")
