@@ -17,3 +17,5 @@ flux_corr_RUN.txt: photon flux of each run. Format: combined bin number, TAGH/TA
 flux_hist_RUN.txt: root file containing a flux histogram of each run. Used by the simulation as the input flux.
 
 flux_total_TARGET.txt: the summed flux of each run on the specified target.
+
+lumi_summed_TARGET.txt: the summed luminosity of each tagger on the specified target. (same as flux for empty target)
