@@ -3,18 +3,13 @@
 #include <cmath>
 #include <stdio.h>
 #include <cstring>
+#include </work/halld2/home/boyu/src_analysis/filter/filters/const.h>
 
 using namespace std;
 using namespace ROOT;
 using namespace RooFit;
 using namespace ROOT::RDF;
 using namespace ROOT::Detail::RDF;
-
-double mass_deuteron    = 1.875612;
-double mass_proton      = 0.938272;
-double mass_neutron     = 0.939565;
-double mass_pion        = 0.139570;
-double RadToDeg         = 180.0 / 3.14159265;
 
 TLorentzVector boost_lorentz_vector(TLorentzVector p4, TVector3 boost_vector)
 {
