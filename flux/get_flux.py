@@ -22,7 +22,7 @@ def PSAcceptance(x, par):
         return par[0]*(1-2*min/x[0])
     elif x[0] >= min + max:
         return par[0]*(2*max/x[0] - 1)
-    
+
     return 0.
 
 #CONSTANT DEFINITIONS
