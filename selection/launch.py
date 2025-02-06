@@ -231,9 +231,9 @@ def add_job(WORKFLOW, FILEPATH, config_dict):
 	STUBNAME = RUNNO if(FILENO == "-1") else RUNNO + "_" + FILENO
 	FILENAME = PREFIX + "_" + RUNNO + "." + EXTENSION if(FILENO == "-1") else PREFIX + "_" + RUNNO + "_" + FILENO + "." + EXTENSION
 	if(WORKFLOW.find("ver") == -1):
-		JOBNAME = WORKFLOW + "_" + STUBNAME + "_" + DATE
+		JOBNAME = WORKFLOW + "_" + config_dict["TREE_NAME"] + "_" + STUBNAME + "_" + DATE
 	else:
-		JOBNAME = WORKFLOW + "_" + STUBNAME
+		JOBNAME = WORKFLOW + "_" + config_dict["TREE_NAME"] + "_" + STUBNAME
 
 	# SETUP OTHER VARIABLES:
 	INPUTDATA_TYPE = "mss" if(INDATA_DIR[:5] == "/mss/") else "file"
