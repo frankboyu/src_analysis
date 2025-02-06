@@ -90,8 +90,8 @@ void DSelector_piminus_p_recon::Init(TTree *locTree)
         dTag = "data_2H_missprot";
     else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gd_pimprotinc",        strlen("gd_pimprotinc")))
         dTag = "data_2H_inc";
-    else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "ghe_pimprotmisstri",   strlen("ghe_pimprotmisstri")))
-        dTag = "data_4He_misstri";
+    else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "ghe_pimprotmisshe3",   strlen("ghe_pimprotmisshe3")))
+        dTag = "data_4He_misshe3";
     else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "ghe_pimprotinc",       strlen("ghe_pimprotinc")))
         dTag = "data_4He_inc";
     else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gc12_pimprotmissb11",  strlen("gc12_pimprotmissb11")))
@@ -103,8 +103,8 @@ void DSelector_piminus_p_recon::Init(TTree *locTree)
         dTag = "sim_2H_missprot";
     else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gd_pimprotinc",        strlen("gd_pimprotinc")))
         dTag = "sim_2H_inc";
-    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "ghe_pimprotmisstri",   strlen("ghe_pimprotmisstri")))
-        dTag = "sim_4He_misstri";
+    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "ghe_pimprotmisshe3",   strlen("ghe_pimprotmisshe3")))
+        dTag = "sim_4He_misshe3";
     else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "ghe_pimprotinc",       strlen("ghe_pimprotinc")))
         dTag = "sim_4He_inc";
     else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gc12_pimprotmissb11",  strlen("gc12_pimprotmissb11")))
