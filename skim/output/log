@@ -1,18 +1,22 @@
-piminus_p_2H
-ver03: (π-p)X, (π-p)p
-ver06: (π-p)X, (π-p)p, with updated PIDFOM
-ver06: (π-p)X, (π-p)p, with PWIA hypothesis on all targets
+phi_d_2H
+ver05: (K+K-)D, (K+K-)X
+ver09: (K+K-)D, (K+K-)X, (K+K-D), (K+d)K-, (K-d)K+, with updated PIDFOM
+ver10: (K+K-D), (K+d)K-, (K-d)K+, with default dE/dx cut on deuterons
 
-piminus_p_4He
-ver03: (π-p)X
-ver06: (π-p)X, with updated PIDFOM
-ver06: (π-p)X, (π-p)3He, with PWIA hypothesis on all targets
+phi_d_4He
+ver10: (K+K-D)X, with default dE/dx cut on deuterons
 
-piminus_p_12C
-ver03: (π-p)X
-ver06: (π-p)X, with updated PIDFOM
-ver09: (π-p)X, with updated material map
-ver06: (π-p)X, (π-p)11B, with PWIA hypothesis on all targets
+phi_d_12C
+ver10: (K+K-D)X, with default dE/dx cut on deuterons
+
+phi_n_2H
+ver05: (K+K-n)X, (K+K-n)p
+
+phi_n_4He
+ver05: (K+K-n)X
+
+phi_n_12C
+ver05: (K+K-n)X
 
 phi_p_2H
 ver03: (K+K-p)X, (K+K-p)n
@@ -30,25 +34,21 @@ ver06: (K+K-p)X, with updated PIDFOM
 ver09: (K+K-p)X, with updated material map
 ver10: (K+K-p)X, (K+K-p)11C, with PWIA hypothesis on all targets
 
-phi_n_2H
-ver05: (K+K-n)X, (K+K-n)p
+piminus_p_2H
+ver03: (π-p)X, (π-p)p
+ver06: (π-p)X, (π-p)p, with updated PIDFOM
+ver10: (π-p)X, (π-p)p, with PWIA hypothesis on all targets
 
-phi_n_4He
-ver05: (K+K-n)X
+piminus_p_4He
+ver03: (π-p)X
+ver06: (π-p)X, with updated PIDFOM
+ver10: (π-p)X, (π-p)3He, with PWIA hypothesis on all targets
 
-phi_n_12C
-ver05: (K+K-n)X
-
-phi_d_2H
-ver05: (K+K-)D, (K+K-)X
-ver09: (K+K-)D, (K+K-)X, (K+K-D), (K+d)K-, (K-d)K+, with updated PIDFOM
-ver10: (K+K-D), (K+d)K-, (K-d)K+, with default dE/dx cut on deuterons
-
-phi_d_4He
-ver10: (K+K-D)X, with default dE/dx cut on deuterons
-
-phi_d_12C
-ver10: (K+K-D)X, with default dE/dx cut on deuterons
+piminus_p_12C
+ver03: (π-p)X
+ver06: (π-p)X, with updated PIDFOM
+ver09: (π-p)X, with updated material map
+ver10: (π-p)X, (π-p)11B, with PWIA hypothesis on all targets
 
 rho_d_2H
 ver10: (π+π-D), (π+d)π-, (π-d)π+, with default dE/dx cut on deuterons
