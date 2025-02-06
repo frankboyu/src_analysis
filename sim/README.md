@@ -12,6 +12,10 @@ Simulation suite for the SRC/CT analysis.
 
     `sh run_singularity.sh`
 
+    If the simulation softwares need to be compiled, run
+
+    `sh run_compile.sh`
+
 2.  To test the simulation or run small sample size of simulation on the batch system
 
     `sh run_test_batch.sh`
@@ -19,3 +23,7 @@ Simulation suite for the SRC/CT analysis.
 3.  Run simulaiton of large sample size on the batch system
 
     `sh run_sim.sh REACTION EVENTS`
+
+4.  To organize the output trees for further processing
+
+    `sh run_postprocess.sh`
