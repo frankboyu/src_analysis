@@ -1,11 +1,17 @@
 piminus_p_2H
 ver01: flat, t, u > 0.0, ana ver06, 10M
 ver02: model, t, u > 0.5, ana ver06, 10M
+ver03: model, t, u > 0.5, ana ver10, 10M
+ver04: flat, t, u > 0.5, ana ver10, 10M
 
 piminus_p_4He
 ver01: flat, t, u > 0.0, ana ver06, 10M
 ver02: model, t, u > 0.5, ana ver06, 10M
+ver03: model, t, u > 0.5, ana ver10, 10M
+ver04: flat, t, u > 0.5, ana ver10, 10M
 
 piminus_p_12C
 ver01: flat, t, u > 0.0, ana ver06, 10M
 ver02: model, t, u > 0.5, ana ver06, 10M
+ver03: model, t, u > 0.5, ana ver10, 10M
+ver04: flat, t, u > 0.5, ana ver10, 10M
