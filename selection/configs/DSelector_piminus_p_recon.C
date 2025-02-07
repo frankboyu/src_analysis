@@ -12,8 +12,8 @@ public:
     DSelector_piminus_p_recon(TTree* locTree = NULL) : DSelector(locTree){}
     virtual ~DSelector_piminus_p_recon(){}
 
-    void   Init(TTree *tree);
-    Bool_t Process(Long64_t entry);
+    void    Init(TTree *tree);
+    Bool_t  Process(Long64_t entry);
 
 private:
 
@@ -21,9 +21,9 @@ private:
     void Finalize(void);
 
     // BEAM POLARIZATION INFORMATION
-    UInt_t dPreviousRunNumber;
-    bool   dIsPolarizedFlag;
-    bool   dIsPARAFlag;
+    UInt_t  dPreviousRunNumber;
+    bool    dIsPolarizedFlag;
+    bool    dIsPARAFlag;
 
     // MONTE CARLO INFORMATION
     bool dIsMC;
@@ -72,7 +72,7 @@ private:
     TH1F* dHist_MissingMomentum_Weighted;
     TH1F* dHist_MissingPMinus_Weighted;
 
-	ClassDef(DSelector_piminus_p_recon, 0);
+    ClassDef(DSelector_piminus_p_recon, 0);
 };
 
 void DSelector_piminus_p_recon::Get_ComboWrappers(void)
@@ -113,19 +113,20 @@ void DSelector_piminus_p_recon::Init(TTree *locTree)
         dTag = "sim_12C_inc";
 
     // SET OUTPUT FILE NAME
-	dOutputFileName          = Form("selectedhist_piminus_p_recon_%s.root", dTag.c_str());
-	dOutputTreeFileName      = "";
+    dOutputFileName          = Form("selectedhist_piminus_p_recon_%s.root", dTag.c_str());
+    dOutputTreeFileName      = "";
     dFlatTreeFileName        = Form("selectedtree_piminus_p_recon_%s.root", dTag.c_str());
-	dFlatTreeName            = "selectedtree_piminus_p_recon";
+    dFlatTreeName            = "selectedtree_piminus_p_recon";
     dSaveDefaultFlatBranches = true;
+    //dSkipNoTriggerEvents     = false;
 
-	// INITIALIZE THE TREE INTERFACE AND WRAPPERS
+	// INITIALIZE THE TREE INTERFACE
     bool locInitializedPriorFlag = dInitializedFlag;               // save whether have been initialized previously
 	DSelector::Init(locTree);                                      // this must be called to initialize wrappers for each new TTree
 	if(locInitializedPriorFlag)
 		return;                                                    // have already created histograms, etc. below: exit
-	Get_ComboWrappers();
 	dPreviousRunNumber = 0;
+	Get_ComboWrappers();
     Initialize_Actions();
 
     // CUSTOM HISTOGRAMS
@@ -327,7 +328,7 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_p4_truth", locBeamP4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("pim_p4_truth", locPiMinusP4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("p_p4_truth", locProtonP4_Thrown);
-        Fill_FlatTree(); //for the active combo
+        Fill_FlatTree();
 	}
     // END OF COMBO LOOP
 
