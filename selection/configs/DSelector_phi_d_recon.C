@@ -12,8 +12,8 @@ public:
     DSelector_phi_d_recon(TTree* locTree = NULL) : DSelector(locTree){}
     virtual ~DSelector_phi_d_recon(){}
 
-    void   Init(TTree *tree);
-    Bool_t Process(Long64_t entry);
+    void    Init(TTree *tree);
+    Bool_t  Process(Long64_t entry);
 
 private:
 
@@ -21,9 +21,9 @@ private:
     void Finalize(void);
 
     // BEAM POLARIZATION INFORMATION
-    UInt_t dPreviousRunNumber;
-    bool   dIsPolarizedFlag;
-    bool   dIsPARAFlag;
+    UInt_t  dPreviousRunNumber;
+    bool    dIsPolarizedFlag;
+    bool    dIsPARAFlag;
 
     // MONTE CARLO INFORMATION
     bool dIsMC;
@@ -99,19 +99,20 @@ void DSelector_phi_d_recon::Init(TTree *locTree)
         dTag = "sim_12C";
 
     // SET OUTPUT FILE NAME
-	dOutputFileName          = Form("selectedhist_phi_d_recon_%s.root", dTag.c_str());
-	dOutputTreeFileName      = "";
+    dOutputFileName          = Form("selectedhist_phi_d_recon_%s.root", dTag.c_str());
+    dOutputTreeFileName      = "";
     dFlatTreeFileName        = Form("selectedtree_phi_d_recon_%s.root", dTag.c_str());
-	dFlatTreeName            = "selectedtree_phi_d_recon";
+    dFlatTreeName            = "selectedtree_phi_d_recon";
     dSaveDefaultFlatBranches = true;
+    //dSkipNoTriggerEvents     = false;
 
-	// INITIALIZE THE TREE INTERFACE AND WRAPPERS
+	// INITIALIZE THE TREE INTERFACE
     bool locInitializedPriorFlag = dInitializedFlag;               // save whether have been initialized previously
 	DSelector::Init(locTree);                                      // this must be called to initialize wrappers for each new TTree
 	if(locInitializedPriorFlag)
 		return;                                                    // have already created histograms, etc. below: exit
-	Get_ComboWrappers();
 	dPreviousRunNumber = 0;
+	Get_ComboWrappers();
     Initialize_Actions();
 
     // CUSTOM HISTOGRAMS
@@ -317,7 +318,7 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("kp_p4_truth", locKPlusP4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("km_p4_truth", locKMinusP4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("d_p4_truth", locDeuteronP4_Thrown);
-        Fill_FlatTree(); //for the active combo
+        Fill_FlatTree();
 	}
     // END OF COMBO LOOP
 
