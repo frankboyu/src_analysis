@@ -34,7 +34,7 @@ void DSelector_piminus_p_thrown::Init(TTree *locTree)
     dOutputTreeFileName      = "";
     dFlatTreeFileName        = "selectedtree_piminus_p_thrown.root";
     dFlatTreeName            = "selectedtree_piminus_p_thrown";
-    dSaveDefaultFlatBranches = false;
+    dSaveDefaultFlatBranches = true;
     dSkipNoTriggerEvents     = false;
 
 	// INITIALIZE THE TREE INTERFACE
