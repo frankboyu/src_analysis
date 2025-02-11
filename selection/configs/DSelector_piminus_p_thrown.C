@@ -70,25 +70,14 @@ Bool_t DSelector_piminus_p_thrown::Process(Long64_t locEntry)
         //GET THROWN P4
         TLorentzVector locBeamX4_Thrown, locPiMinusX4_Thrown, locProtonX4_Thrown;
         TLorentzVector locBeamP4_Thrown, locPiMinusP4_Thrown, locProtonP4_Thrown;
-        if(dThrownBeam != NULL)
-        {
-            locBeamX4_Thrown = dThrownBeam->Get_X4();
-            locBeamP4_Thrown = dThrownBeam->Get_P4();
-        }
-        for(UInt_t loc_i = 0; loc_i < Get_NumThrown(); ++loc_i)
-        {
-            dThrownWrapper->Set_ArrayIndex(loc_i);
-            if (dThrownWrapper->Get_PID() == PiMinus)
-            {
-                locPiMinusX4_Thrown = dThrownWrapper->Get_X4();
-                locPiMinusP4_Thrown = dThrownWrapper->Get_P4();
-            }
-            else if (dThrownWrapper->Get_PID() == Proton)
-            {
-                locProtonX4_Thrown = dThrownWrapper->Get_X4();
-                locProtonP4_Thrown = dThrownWrapper->Get_P4();
-            }
-        }
+        locBeamX4_Thrown = dThrownBeam->Get_X4();
+        locBeamP4_Thrown = dThrownBeam->Get_P4();
+        dThrownWrapper->Set_ArrayIndex(0);
+        locPiMinusX4_Thrown = dThrownWrapper->Get_X4();
+        locPiMinusP4_Thrown = dThrownWrapper->Get_P4();
+        dThrownWrapper->Set_ArrayIndex(1);
+        locProtonX4_Thrown = dThrownWrapper->Get_X4();
+        locProtonP4_Thrown = dThrownWrapper->Get_P4();
 
         // FILL FLAT TREE
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_x4_truth", locBeamX4_Thrown);

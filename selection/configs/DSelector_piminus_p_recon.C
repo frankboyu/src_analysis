@@ -224,25 +224,39 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
         //GET THROWN P4
         TLorentzVector locBeamX4_Thrown, locPiMinusX4_Thrown, locProtonX4_Thrown;
         TLorentzVector locBeamP4_Thrown, locPiMinusP4_Thrown, locProtonP4_Thrown;
-        if(dThrownBeam != NULL)
+
+        locBeamX4_Thrown = dThrownBeam->Get_X4();
+        locBeamP4_Thrown = dThrownBeam->Get_P4();
+
+        dThrownWrapper->Set_ArrayIndex(0);
+        locPiMinusX4_Thrown = dThrownWrapper->Get_X4();
+        locPiMinusP4_Thrown = dThrownWrapper->Get_P4();
+        dThrownWrapper->Set_ArrayIndex(1);
+        locProtonX4_Thrown = dThrownWrapper->Get_X4();
+        locProtonP4_Thrown = dThrownWrapper->Get_P4();
+
+        // GET BGGEN INFORMATION
+        string locThrownTag;
+        if (dPiMinusWrapper->Get_ThrownIndex() >= 0)
         {
-            locBeamX4_Thrown = dThrownBeam->Get_X4();
-            locBeamP4_Thrown = dThrownBeam->Get_P4();
+            dThrownWrapper->Set_ArrayIndex(dPiMinusWrapper->Get_ThrownIndex());
+            locThrownTag += to_string(dThrownWrapper->Get_PID()) + "_";
         }
-        for(UInt_t loc_i = 0; loc_i < Get_NumThrown(); ++loc_i)
+        else
         {
-            dThrownWrapper->Set_ArrayIndex(loc_i);
-            if (dThrownWrapper->Get_PID() == PiMinus)
-            {
-                locPiMinusX4_Thrown = dThrownWrapper->Get_X4();
-                locPiMinusP4_Thrown = dThrownWrapper->Get_P4();
-            }
-            else if (dThrownWrapper->Get_PID() == Proton)
-            {
-                locProtonX4_Thrown = dThrownWrapper->Get_X4();
-                locProtonP4_Thrown = dThrownWrapper->Get_P4();
-            }
+            locThrownTag += "-1_";
         }
+        if (dProtonWrapper->Get_ThrownIndex() >= 0)
+        {
+            dThrownWrapper->Set_ArrayIndex(dProtonWrapper->Get_ThrownIndex());
+            locThrownTag += to_string(dThrownWrapper->Get_PID()) + "_";
+        }
+        else
+        {
+            locThrownTag += "-1_";
+        }
+        locThrownTag += Get_ThrownTopologyString();
+        cout << "Thrown Tag: " << locThrownTag << endl;
 
         // FILL HISTOGRAMS BEFORE CUTS
         dHist_NumUnusedTracks_Before  ->Fill(dComboWrapper->Get_NumUnusedTracks());
