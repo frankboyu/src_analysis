@@ -225,10 +225,8 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
         //GET THROWN P4
         TLorentzVector locBeamX4_Thrown, locPiMinusX4_Thrown, locProtonX4_Thrown;
         TLorentzVector locBeamP4_Thrown, locPiMinusP4_Thrown, locProtonP4_Thrown;
-
         locBeamX4_Thrown = dThrownBeam->Get_X4();
         locBeamP4_Thrown = dThrownBeam->Get_P4();
-
         dThrownWrapper->Set_ArrayIndex(0);
         locPiMinusX4_Thrown = dThrownWrapper->Get_X4();
         locPiMinusP4_Thrown = dThrownWrapper->Get_P4();
