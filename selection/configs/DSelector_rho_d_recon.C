@@ -45,6 +45,7 @@ private:
     TH1F* dHist_ConfidenceLevel_Before;
     TH1F* dHist_PiPlusPIDFOM_Before;
     TH1F* dHist_PiMinusPIDFOM_Before;
+    TH1F* dHist_DeuterondEdxCDC_Before;
     TH1F* dHist_InvariantMassRho_Before;
 
     TH1F* dHist_NumUnusedTracks_After;
@@ -55,6 +56,7 @@ private:
     TH1F* dHist_ConfidenceLevel_After;
     TH1F* dHist_PiPlusPIDFOM_After;
     TH1F* dHist_PiMinusPIDFOM_After;
+    TH1F* dHist_DeuterondEdxCDC_After;
     TH1F* dHist_InvariantMassRho_After;
 
     TH1F* dHist_PhotonTiming_Raw;
@@ -68,6 +70,7 @@ private:
     TH1F* dHist_ConfidenceLevel_Weighted;
     TH1F* dHist_PiPlusPIDFOM_Weighted;
     TH1F* dHist_PiMinusPIDFOM_Weighted;
+    TH1F* dHist_DeuterondEdxCDC_Weighted;
     TH1F* dHist_InvariantMassRho_Weighted;
 
 	ClassDef(DSelector_rho_d_recon, 0);
@@ -105,7 +108,7 @@ void DSelector_rho_d_recon::Init(TTree *locTree)
     dFlatTreeName            = "selectedtree_rho_d_recon";
     dSaveDefaultFlatBranches = true;
 
-	// INITIALIZE THE TREE INTERFACE AND WRAPPERS
+	// INITIALIZE THE TREE INTERFACE
     bool locInitializedPriorFlag = dInitializedFlag;               // save whether have been initialized previously
 	DSelector::Init(locTree);                                      // this must be called to initialize wrappers for each new TTree
 	if(locInitializedPriorFlag)
@@ -123,6 +126,7 @@ void DSelector_rho_d_recon::Init(TTree *locTree)
     dHist_ConfidenceLevel_Before    = new TH1F("ConfidenceLevel_Before",    ";Confidence Level            ;Events/0.001",          1000,  0.0,  1.0);
     dHist_PiPlusPIDFOM_Before       = new TH1F("PiPlusPIDFOM_Before",       ";PIDFOM_{#pi^{+}}            ;Events/0.001",          1000,  0.0,  1.0);
     dHist_PiMinusPIDFOM_Before      = new TH1F("PiMinusPIDFOM_Before",      ";PIDFOM_{#pi^{-}}            ;Events/0.001",          1000,  0.0,  1.0);
+    dHist_DeuterondEdxCDC_Before    = new TH1F("DeuterondEdxCDC_Before",    ";dE/dx_{CDC} (keV/cm)        ;Events/0.1 keV/cm",      400,  0.0,  40.0);
     dHist_InvariantMassRho_Before   = new TH1F("InvariantMassRho_Before",	";M_{#pi^{+}#pi^{-}} (GeV)    ;Events/0.01 GeV",        500,  0.0,   5.0);
 
     dHist_NumUnusedTracks_After     = new TH1F("NumUnusedTracks_After",     ";Unused Tracks               ;Events/1",                10,  0.0,  10.0);
@@ -133,6 +137,7 @@ void DSelector_rho_d_recon::Init(TTree *locTree)
     dHist_ConfidenceLevel_After     = new TH1F("ConfidenceLevel_After",     ";Confidence Level            ;Events/0.001",          1000,  0.0,  1.0);
     dHist_PiPlusPIDFOM_After        = new TH1F("PiPlusPIDFOM_After",        ";PIDFOM_{#pi^{+}}            ;Events/0.001",          1000,  0.0,  1.0);
     dHist_PiMinusPIDFOM_After       = new TH1F("PiMinusPIDFOM_After",       ";PIDFOM_{#pi^{-}}            ;Events/0.001",          1000,  0.0,  1.0);
+    dHist_DeuterondEdxCDC_After     = new TH1F("DeuterondEdxCDC_After",     ";dE/dx_{CDC} (keV/cm)        ;Events/0.1 keV/cm",      400,  0.0,  40.0);
     dHist_InvariantMassRho_After    = new TH1F("InvariantMassRho_After",    ";M_{#pi^{+}#pi^{-}} (GeV)    ;Events/0.01 GeV",        500,  0.0,   5.0);
 
     dHist_PhotonTiming_Raw          = new TH1F("PhotonTiming_Raw",          ";#Delta t_{Beam-RF} (ns)     ;Events/0.1 ns",          360,-18.0,  18.0);
@@ -146,6 +151,7 @@ void DSelector_rho_d_recon::Init(TTree *locTree)
     dHist_ConfidenceLevel_Weighted  = new TH1F("ConfidenceLevel_Weighted",  ";Confidence Level            ;Events/0.001",          1000,  0.0,  1.0);
     dHist_PiPlusPIDFOM_Weighted     = new TH1F("PiPlusPIDFOM_Weighted",     ";PIDFOM_{#pi^{+}}            ;Events/0.001",          1000,  0.0,  1.0);
     dHist_PiMinusPIDFOM_Weighted    = new TH1F("PiMinusPIDFOM_Weighted",    ";PIDFOM_{#pi^{-}}            ;Events/0.001",          1000,  0.0,  1.0);
+    dHist_DeuterondEdxCDC_Weighted  = new TH1F("DeuterondEdxCDC_Weighted",  ";dE/dx_{CDC} (keV/cm)        ;Events/0.1 keV/cm",      400,  0.0,  40.0);
     dHist_InvariantMassRho_Weighted = new TH1F("InvariantMassRho_Weighted", ";M_{#pi^{+}#pi^{-}} (GeV)    ;Events/0.01 GeV",        500,  0.0,   5.0);
 
     // CUSTOM OUTPUT BRACHES: FLAT TREE
@@ -160,6 +166,7 @@ void DSelector_rho_d_recon::Init(TTree *locTree)
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("pip_p4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("pim_p4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("d_p4_truth");
+    // dFlatTreeInterface->Create_Branch_NoSplitTObject<TObjString>("ThrownTopology");
 }
 // END OF INITIALIZATION
 
@@ -207,32 +214,52 @@ Bool_t DSelector_rho_d_recon::Process(Long64_t locEntry)
 		TLorentzVector locPiMinusP4  = dPiMinusWrapper->Get_P4();
 		TLorentzVector locDeuteronP4 = dDeuteronWrapper->Get_P4();
 
-        //GET THROWN P4
+        //GET THROWN P4 AND TOPOLOGY
         TLorentzVector locBeamX4_Thrown, locPiPlusX4_Thrown, locPiMinusX4_Thrown, locDeuteronX4_Thrown;
         TLorentzVector locBeamP4_Thrown, locPiPlusP4_Thrown, locPiMinusP4_Thrown, locDeuteronP4_Thrown;
-        if(dThrownBeam != NULL)
+        TString locThrownTopology;
+        if (Get_NumThrown() > 0)
         {
             locBeamX4_Thrown = dThrownBeam->Get_X4();
             locBeamP4_Thrown = dThrownBeam->Get_P4();
-        }
-        for(UInt_t loc_i = 0; loc_i < Get_NumThrown(); ++loc_i)
-        {
-            dThrownWrapper->Set_ArrayIndex(loc_i);
-            if (dThrownWrapper->Get_PID() == PiPlus)
+            dThrownWrapper->Set_ArrayIndex(0);
+            locPiPlusX4_Thrown = dThrownWrapper->Get_X4();
+            locPiPlusP4_Thrown = dThrownWrapper->Get_P4();
+            dThrownWrapper->Set_ArrayIndex(1);
+            locPiMinusX4_Thrown = dThrownWrapper->Get_X4();
+            locPiMinusP4_Thrown = dThrownWrapper->Get_P4();
+            dThrownWrapper->Set_ArrayIndex(2);
+            locDeuteronX4_Thrown = dThrownWrapper->Get_X4();
+            locDeuteronP4_Thrown = dThrownWrapper->Get_P4();
+
+            if (dPiPlusWrapper->Get_ThrownIndex() >= 0)
             {
-                locPiPlusX4_Thrown = dThrownWrapper->Get_X4();
-                locPiPlusP4_Thrown = dThrownWrapper->Get_P4();
+                dThrownWrapper->Set_ArrayIndex(dPiPlusWrapper->Get_ThrownIndex());
+                locThrownTopology += to_string(dThrownWrapper->Get_PID()) + "_";
             }
-            else if (dThrownWrapper->Get_PID() == PiMinus)
+            else
             {
-                locPiMinusX4_Thrown = dThrownWrapper->Get_X4();
-                locPiMinusP4_Thrown = dThrownWrapper->Get_P4();
+                locThrownTopology += "-1_";
             }
-            else if (dThrownWrapper->Get_PID() == Deuteron)
+            if (dPiMinusWrapper->Get_ThrownIndex() >= 0)
             {
-                locDeuteronX4_Thrown = dThrownWrapper->Get_X4();
-                locDeuteronP4_Thrown = dThrownWrapper->Get_P4();
+                dThrownWrapper->Set_ArrayIndex(dPiMinusWrapper->Get_ThrownIndex());
+                locThrownTopology += to_string(dThrownWrapper->Get_PID()) + "_";
             }
+            else
+            {
+                locThrownTopology += "-1_";
+            }
+            if (dDeuteronWrapper->Get_ThrownIndex() >= 0)
+            {
+                dThrownWrapper->Set_ArrayIndex(dDeuteronWrapper->Get_ThrownIndex());
+                locThrownTopology += to_string(dThrownWrapper->Get_PID()) + "_";
+            }
+            else
+            {
+                locThrownTopology += "-1_";
+            }
+            locThrownTopology += Get_ThrownTopologyString();
         }
 
         // FILL HISTOGRAMS BEFORE CUTS
@@ -244,6 +271,7 @@ Bool_t DSelector_rho_d_recon::Process(Long64_t locEntry)
         dHist_ConfidenceLevel_Before    ->Fill(dComboWrapper->Get_ConfidenceLevel_KinFit());
         dHist_PiPlusPIDFOM_Before       ->Fill(dPiPlusWrapper->Get_PIDFOM());
         dHist_PiMinusPIDFOM_Before      ->Fill(dPiMinusWrapper->Get_PIDFOM());
+        dHist_DeuterondEdxCDC_Before    ->Fill(dDeuteronWrapper->Get_dEdx_CDC()*1e6);
         dHist_InvariantMassRho_Before   ->Fill((locPiPlusP4+locPiMinusP4).M());
 
         // PERFORM CUTS
@@ -255,8 +283,8 @@ Bool_t DSelector_rho_d_recon::Process(Long64_t locEntry)
         if(dComboWrapper->Get_ConfidenceLevel_KinFit() < 1e-4)                                              dComboWrapper->Set_IsComboCut(true);
         if(dPiPlusWrapper->Get_PIDFOM()                < 1e-4)                                              dComboWrapper->Set_IsComboCut(true);
         if(dPiMinusWrapper->Get_PIDFOM()               < 1e-4)                                              dComboWrapper->Set_IsComboCut(true);
-        if((locPiPlusP4+locPiMinusP4).M()              > 1.10)                                              dComboWrapper->Set_IsComboCut(true);
         if(dDeuteronWrapper->Get_dEdx_CDC()            == 0.0)                                              dComboWrapper->Set_IsComboCut(true);
+        if((locPiPlusP4+locPiMinusP4).M()              > 1.10)                                              dComboWrapper->Set_IsComboCut(true);
 
         if(dComboWrapper->Get_IsComboCut())  continue;
 
@@ -269,6 +297,7 @@ Bool_t DSelector_rho_d_recon::Process(Long64_t locEntry)
         dHist_ConfidenceLevel_After ->Fill(dComboWrapper->Get_ConfidenceLevel_KinFit());
         dHist_PiPlusPIDFOM_After    ->Fill(dPiPlusWrapper->Get_PIDFOM());
         dHist_PiMinusPIDFOM_After   ->Fill(dPiMinusWrapper->Get_PIDFOM());
+        dHist_DeuterondEdxCDC_After ->Fill(dDeuteronWrapper->Get_dEdx_CDC()*1e6);
         dHist_InvariantMassRho_After->Fill((locPiPlusP4+locPiMinusP4).M());
 
 		// GET THE ACCIDENTAL WEIGHT FACTOR
@@ -300,7 +329,8 @@ Bool_t DSelector_rho_d_recon::Process(Long64_t locEntry)
 		dHist_ConfidenceLevel_Weighted  ->Fill(dComboWrapper->Get_ConfidenceLevel_KinFit(), locHistAccidWeightFactor);
 		dHist_PiPlusPIDFOM_Weighted     ->Fill(dPiPlusWrapper->Get_PIDFOM(), locHistAccidWeightFactor);
 		dHist_PiMinusPIDFOM_Weighted    ->Fill(dPiMinusWrapper->Get_PIDFOM(), locHistAccidWeightFactor);
-		dHist_InvariantMassRho_Weighted ->Fill((locPiPlusP4+locPiMinusP4).M(), locHistAccidWeightFactor);
+        dHist_DeuterondEdxCDC_Weighted  ->Fill(dDeuteronWrapper->Get_dEdx_CDC()*1e6, locHistAccidWeightFactor);
+        dHist_InvariantMassRho_Weighted ->Fill((locPiPlusP4+locPiMinusP4).M(), locHistAccidWeightFactor);
 
 		// EXECUTE ANALYSIS ACTIONS
         if(!Execute_Actions()) // if the active combo fails a cut, IsComboCutFlag automatically set
@@ -318,6 +348,7 @@ Bool_t DSelector_rho_d_recon::Process(Long64_t locEntry)
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("pip_p4_truth", locPiPlusP4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("pim_p4_truth", locPiMinusP4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("d_p4_truth", locDeuteronP4_Thrown);
+        // dFlatTreeInterface->Fill_TObject<TObjString>("ThrownTopology", locThrownTopology.Data());
         Fill_FlatTree();
 	}
     // END OF COMBO LOOP
