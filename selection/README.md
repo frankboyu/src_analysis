@@ -4,16 +4,18 @@ Select the events with tighter cuts and flatten the trees, using DSelector schem
 
 ### Usage
 
-1.  To run the DSelector over simulation or a small sample of data interactively on the command line
+1.  To test the DSelector interactively on the command line
 
     `sh run_test.sh`
 
-2.  To run the DSelector over the entire data set on the batch system
+2.  To run the DSelector locally
+
+    `sh run_local.sh INPUTFILE TREENAME SELECTOR`
+
+3.  To run the DSelector on the batch system
 
     `sh run_selection.sh REACTION`
 
-    REACTION is one of the suffix in the configs folder
+4.  To merge the output files from step 3
 
-3.  To merge the output files
-
-    `sh merge.sh REACTION`
+    `sh run_merge.sh REACTION`

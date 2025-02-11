@@ -1,7 +1,6 @@
 #!/bin/bash
 
-echo "Start time"
-date
+start=`date +%s`
 
 INPUTFILE=/work/halld2/home/boyu/src_analysis/sim/output/piminus_p_4He_ver03/root/thrown/*.root
 TREENAME=Thrown_Tree
@@ -13,5 +12,5 @@ gxenv $HALLD_VERSIONS/version.xml
 cd output/test/
 root -b -q $ROOT_ANALYSIS_HOME/scripts/Load_DSelector.C ../../process_chain.C'("'$INPUTFILE'", "'$TREENAME'", "'../../configs/DSelector_${SELECTOR}.C+'", '1')'
 
-echo "End time"
-date
+end=`date +%s`
+echo "Time taken: $(echo "scale=2; ($end - $start) / 60" | bc -l) minutes"

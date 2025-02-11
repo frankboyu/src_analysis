@@ -3,12 +3,12 @@
 start=`date +%s`
 
 # data
-# sh run_batch.sh piminus_p_recon_data_2H_inc
-# sh run_batch.sh piminus_p_recon_data_2H_missprot
-# sh run_batch.sh piminus_p_recon_data_4He_inc
-# sh run_batch.sh piminus_p_recon_data_4He_misshe3
-# sh run_batch.sh piminus_p_recon_data_12C_inc
-# sh run_batch.sh piminus_p_recon_data_12C_missb11
+sh run_batch.sh piminus_p_recon_data_2H_inc
+sh run_batch.sh piminus_p_recon_data_2H_missprot
+sh run_batch.sh piminus_p_recon_data_4He_inc
+sh run_batch.sh piminus_p_recon_data_4He_misshe3
+sh run_batch.sh piminus_p_recon_data_12C_inc
+sh run_batch.sh piminus_p_recon_data_12C_missb11
 
 # sim
 sh run_local.sh '/work/halld2/home/boyu/src_analysis/sim/output/piminus_p_2H_ver03/root/tree_gd_pimprotinc__B4_F4_T1_S4_gen_MF/*.root' 'gd_pimprotinc__B4_F4_T1_S4_Tree' 'piminus_p_recon'
