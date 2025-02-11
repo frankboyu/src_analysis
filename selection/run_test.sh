@@ -2,8 +2,8 @@
 
 start=`date +%s`
 
-INPUTFILE=/cache/halld/RunPeriod-2021-11/analysis/ver10/tree_gd_pippimd__B4_F4/merged/tree_gd_pippimd__B4_F4_090208.root
-TREENAME=gd_pippimd__B4_F4_Tree
+INPUTFILE=/cache/halld/RunPeriod-2021-11/analysis/ver10/tree_ghe_pippimdinc__B4_F4/merged/tree_ghe_pippimdinc__B4_F4_090061.root
+TREENAME=ghe_pippimdinc__B4_F4_Tree
 SELECTOR=rho_d_recon
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
