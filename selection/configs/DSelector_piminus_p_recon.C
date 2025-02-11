@@ -222,39 +222,41 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
 		TLorentzVector locPiMinusP4 = dPiMinusWrapper->Get_P4();
 		TLorentzVector locProtonP4  = dProtonWrapper->Get_P4();
 
-        //GET THROWN P4
+        //GET THROWN P4 AND TOPOLOGY
         TLorentzVector locBeamX4_Thrown, locPiMinusX4_Thrown, locProtonX4_Thrown;
         TLorentzVector locBeamP4_Thrown, locPiMinusP4_Thrown, locProtonP4_Thrown;
-        locBeamX4_Thrown = dThrownBeam->Get_X4();
-        locBeamP4_Thrown = dThrownBeam->Get_P4();
-        dThrownWrapper->Set_ArrayIndex(0);
-        locPiMinusX4_Thrown = dThrownWrapper->Get_X4();
-        locPiMinusP4_Thrown = dThrownWrapper->Get_P4();
-        dThrownWrapper->Set_ArrayIndex(1);
-        locProtonX4_Thrown = dThrownWrapper->Get_X4();
-        locProtonP4_Thrown = dThrownWrapper->Get_P4();
-
-        // GET THROWN TOPOLOGY
         TString locThrownTopology;
-        if (dPiMinusWrapper->Get_ThrownIndex() >= 0)
+        if (Get_NumThrown() > 0)
         {
-            dThrownWrapper->Set_ArrayIndex(dPiMinusWrapper->Get_ThrownIndex());
-            locThrownTopology += to_string(dThrownWrapper->Get_PID()) + "_";
+            locBeamX4_Thrown = dThrownBeam->Get_X4();
+            locBeamP4_Thrown = dThrownBeam->Get_P4();
+            dThrownWrapper->Set_ArrayIndex(0);
+            locPiMinusX4_Thrown = dThrownWrapper->Get_X4();
+            locPiMinusP4_Thrown = dThrownWrapper->Get_P4();
+            dThrownWrapper->Set_ArrayIndex(1);
+            locProtonX4_Thrown = dThrownWrapper->Get_X4();
+            locProtonP4_Thrown = dThrownWrapper->Get_P4();
+
+            if (dPiMinusWrapper->Get_ThrownIndex() >= 0)
+            {
+                dThrownWrapper->Set_ArrayIndex(dPiMinusWrapper->Get_ThrownIndex());
+                locThrownTopology += to_string(dThrownWrapper->Get_PID()) + "_";
+            }
+            else
+            {
+                locThrownTopology += "-1_";
+            }
+            if (dProtonWrapper->Get_ThrownIndex() >= 0)
+            {
+                dThrownWrapper->Set_ArrayIndex(dProtonWrapper->Get_ThrownIndex());
+                locThrownTopology += to_string(dThrownWrapper->Get_PID()) + "_";
+            }
+            else
+            {
+                locThrownTopology += "-1_";
+            }
+            locThrownTopology += Get_ThrownTopologyString();
         }
-        else
-        {
-            locThrownTopology += "-1_";
-        }
-        if (dProtonWrapper->Get_ThrownIndex() >= 0)
-        {
-            dThrownWrapper->Set_ArrayIndex(dProtonWrapper->Get_ThrownIndex());
-            locThrownTopology += to_string(dThrownWrapper->Get_PID()) + "_";
-        }
-        else
-        {
-            locThrownTopology += "-1_";
-        }
-        locThrownTopology += Get_ThrownTopologyString();
 
         // FILL HISTOGRAMS BEFORE CUTS
         dHist_NumUnusedTracks_Before  ->Fill(dComboWrapper->Get_NumUnusedTracks());
