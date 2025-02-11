@@ -218,7 +218,7 @@ Bool_t DSelector_rho_d_recon::Process(Long64_t locEntry)
         TLorentzVector locBeamX4_Thrown, locPiPlusX4_Thrown, locPiMinusX4_Thrown, locDeuteronX4_Thrown;
         TLorentzVector locBeamP4_Thrown, locPiPlusP4_Thrown, locPiMinusP4_Thrown, locDeuteronP4_Thrown;
         TString locThrownTopology;
-        if (Get_NumThrown() > 0)
+        if (dIsMC)
         {
             locBeamX4_Thrown = dThrownBeam->Get_X4();
             locBeamP4_Thrown = dThrownBeam->Get_P4();

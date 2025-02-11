@@ -98,7 +98,6 @@ void DSelector_piminus_p_recon::Init(TTree *locTree)
         dTag = "data_12C_missb11";
     else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gc12_pimprotinc",      strlen("gc12_pimprotinc")))
         dTag = "data_12C_inc";
-
     else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gd_pimprotmissprot",   strlen("gd_pimprotmissprot")))
         dTag = "sim_2H_missprot";
     else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gd_pimprotinc",        strlen("gd_pimprotinc")))
@@ -226,7 +225,7 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
         TLorentzVector locBeamX4_Thrown, locPiMinusX4_Thrown, locProtonX4_Thrown;
         TLorentzVector locBeamP4_Thrown, locPiMinusP4_Thrown, locProtonP4_Thrown;
         TString locThrownTopology;
-        if (Get_NumThrown() > 0)
+        if (dIsMC)
         {
             locBeamX4_Thrown = dThrownBeam->Get_X4();
             locBeamP4_Thrown = dThrownBeam->Get_P4();
