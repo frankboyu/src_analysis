@@ -2,9 +2,9 @@
 
 start=`date +%s`
 
-INPUTFILE=/work/halld2/home/boyu/src_analysis/sim/output/piminus_p_2H_test/root/trees/tree_gd_pimprotmissprot__B4_F4_T1_S4_gen_MF_090213_000.root
-TREENAME=gd_pimprotmissprot__B4_F4_T1_S4_Tree
-SELECTOR=piminus_p_recon
+INPUTFILE=/cache/halld/RunPeriod-2021-11/analysis/ver10/tree_gd_kpkmd__B4_F4/merged/tree_gd_kpkmd__B4_F4_090208.root
+TREENAME=gd_kpkmd__B4_F4_Tree
+SELECTOR=phi_d_recon
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
 gxenv $HALLD_VERSIONS/version.xml
