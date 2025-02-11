@@ -176,6 +176,7 @@ void DSelector_piminus_p_recon::Init(TTree *locTree)
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("beam_p4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("pim_p4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("p_p4_truth");
+    // dFlatTreeInterface->Create_Branch_NoSplitTObject<TObjString>("ThrownTopology");
 }
 // END OF INITIALIZATION
 
@@ -235,28 +236,27 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
         locProtonX4_Thrown = dThrownWrapper->Get_X4();
         locProtonP4_Thrown = dThrownWrapper->Get_P4();
 
-        // GET BGGEN INFORMATION
-        string locThrownTag;
+        // GET THROWN TOPOLOGY
+        TString locThrownTopology;
         if (dPiMinusWrapper->Get_ThrownIndex() >= 0)
         {
             dThrownWrapper->Set_ArrayIndex(dPiMinusWrapper->Get_ThrownIndex());
-            locThrownTag += to_string(dThrownWrapper->Get_PID()) + "_";
+            locThrownTopology += to_string(dThrownWrapper->Get_PID()) + "_";
         }
         else
         {
-            locThrownTag += "-1_";
+            locThrownTopology += "-1_";
         }
         if (dProtonWrapper->Get_ThrownIndex() >= 0)
         {
             dThrownWrapper->Set_ArrayIndex(dProtonWrapper->Get_ThrownIndex());
-            locThrownTag += to_string(dThrownWrapper->Get_PID()) + "_";
+            locThrownTopology += to_string(dThrownWrapper->Get_PID()) + "_";
         }
         else
         {
-            locThrownTag += "-1_";
+            locThrownTopology += "-1_";
         }
-        locThrownTag += Get_ThrownTopologyString();
-        cout << "Thrown Tag: " << locThrownTag << endl;
+        locThrownTopology += Get_ThrownTopologyString();
 
         // FILL HISTOGRAMS BEFORE CUTS
         dHist_NumUnusedTracks_Before  ->Fill(dComboWrapper->Get_NumUnusedTracks());
@@ -342,6 +342,7 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_p4_truth", locBeamP4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("pim_p4_truth", locPiMinusP4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("p_p4_truth", locProtonP4_Thrown);
+        // dFlatTreeInterface->Fill_TObject<TObjString>("ThrownTopology", locThrownTopology.Data());
         Fill_FlatTree();
 	}
     // END OF COMBO LOOP
