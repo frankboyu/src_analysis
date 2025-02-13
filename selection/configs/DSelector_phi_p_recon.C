@@ -94,11 +94,11 @@ void DSelector_phi_p_recon::Init(TTree *locTree)
         dTag = "data_2H_inc";
     else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "ghe_kpkmprotmisstri",  strlen("ghe_kpkmprotmisstri")))
         dTag = "data_4He_misstri";
-    else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "ghe_kpkmprotmissinc",  strlen("ghe_kpkmprotmissinc")))
+    else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "ghe_kpkmprotinc",      strlen("ghe_kpkmprotinc")))
         dTag = "data_4He_inc";
     else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gc12_kpkmprotmissb11", strlen("gc12_kpkmprotmissb11")))
         dTag = "data_12C_missb11";
-    else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gc12_kpkmprotmissinc", strlen("gc12_kpkmprotmissinc")))
+    else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gc12_kpkmprotinc",     strlen("gc12_kpkmprotinc")))
         dTag = "data_12C_inc";
     else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gd_kpkmprotmissn",     strlen("gd_kpkmprotmissn")))
         dTag = "sim_2H_missn";
@@ -106,11 +106,11 @@ void DSelector_phi_p_recon::Init(TTree *locTree)
         dTag = "sim_2H_inc";
     else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "ghe_kpkmprotmisstri",  strlen("ghe_kpkmprotmisstri")))
         dTag = "sim_4He_misstri";
-    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "ghe_kpkmprotmissinc",  strlen("ghe_kpkmprotmissinc")))
+    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "ghe_kpkmprotinc",      strlen("ghe_kpkmprotinc")))
         dTag = "sim_4He_inc";
     else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gc12_kpkmprotmissb11", strlen("gc12_kpkmprotmissb11")))
         dTag = "sim_12C_missb11";
-    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gc12_kpkmprotmissinc", strlen("gc12_kpkmprotmissinc")))
+    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gc12_kpkmprotinc",     strlen("gc12_kpkmprotinc")))
         dTag = "sim_12C_inc";
 
     // SET OUTPUT FILE NAME
