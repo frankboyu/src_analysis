@@ -3,8 +3,7 @@ RUNMODE=$1
 INPUTMODE=$2
 OUTPUTMODE=$3
 
-echo "Start time"
-date
+start=`date +%s`
 
 REACTION_LIST=()
 REACTION_LIST+=("data_2H_missprot" "data_2H_inc" "data_4He_inc" "data_12C_inc")
@@ -32,5 +31,5 @@ elif [ "$RUNMODE" == "batch" ]; then
     swif2 run -workflow src_analysis_filter
 fi
 
-echo "End time"
-date
+end=`date +%s`
+echo "Time taken: $(echo "scale=2; ($end - $start) / 60" | bc -l) minutes"
