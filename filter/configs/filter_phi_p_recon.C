@@ -2,18 +2,13 @@
 #include <cmath>
 #include <stdio.h>
 #include <cstring>
+#include </work/halld2/home/boyu/src_analysis/filter/filters/const.h>
 
 using namespace std;
 using namespace ROOT;
 using namespace RooFit;
 using namespace ROOT::RDF;
 using namespace ROOT::Detail::RDF;
-
-double mass_deuteron    = 1.875612;
-double mass_proton      = 0.938272;
-double mass_pion        = 0.139570;
-double mass_phi         = 1.019461;
-double RadToDeg         = 180.0 / 3.14159265;
 
 TLorentzVector boost_lorentz_vector(TLorentzVector p4, TVector3 boost_vector)
 {
@@ -41,7 +36,6 @@ void filter_phi_c_2H_data()
     auto rdf_def = rdf_raw
     .Define("kin_cl","TMath::Prob(kin_chisq,kin_ndf)")
     .Define("target_p4","TLorentzVector(0, 0, 0, mass_deuteron)")
-    .Define("missd_p4_meas","beam_p4_meas + target_p4 - kp_p4_meas - km_p4_meas")  // missd_p4_kin already defined in default branches
     .Define("phi_p4_meas","kp_p4_meas + km_p4_meas")
     .Define("phi_p4_kin","kp_p4_kin + km_p4_kin")
     .Define("kp_as_pip_p4_meas","TLorentzVector(kp_p4_meas.Vect(), TMath::Sqrt(kp_p4_meas.P()*kp_p4_meas.P() + mass_pion*mass_pion))")

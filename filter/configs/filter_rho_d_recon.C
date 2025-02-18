@@ -261,7 +261,7 @@ void filter_rho_d_recon(string Reaction, string input_mode, string output_mode)
             TH1D hist_yrho              = *rdf.Histo1D({("yrho_"+ label).c_str(), ";y_{#rho};Counts", 200, 0.0, 2.0},"y_rho_kin","accidweight");
             hist_yrho.Write();
             TH1D hist_phi_mass          = *rdf.Histo1D({("phi_mass_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c^{2});Counts", 200, 0.0, 2.0},"phi_mass_kin","accidweight");
-            hist_rho_mass.Write();
+            hist_phi_mass.Write();
             TH1D hist_energy_balance    = *rdf.Histo1D({("energy_balance_"+ label).c_str(), ";E_{target} - M_{d} (GeV);Counts", 400, -2.0, 2.0},"energy_balance_kin","accidweight");
             hist_energy_balance.Write();
         }

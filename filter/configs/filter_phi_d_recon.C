@@ -17,11 +17,20 @@ TLorentzVector boost_lorentz_vector(TLorentzVector p4, TVector3 boost_vector)
     return p4_boosted;
 }
 
-void filter_phi_d_recon(string Reaction, string input_mode, string output_mode)
+void filter_phi_d_recon(string reaction_name, string input_mode, string output_mode)
 {
-    string input_name  = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_phi_d_recon_%s.root",Reaction.c_str());
-    string hist_name   = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_recon_%s.root",Reaction.c_str());
-    string tree_name   = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_phi_d_recon_%s.root",Reaction.c_str());
+    string input_name  = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_phi_d_recon_%s.root",reaction_name.c_str());
+    string hist_name   = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_recon_%s.root",reaction_name.c_str());
+    string tree_name   = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_phi_d_recon_%s.root",reaction_name.c_str());
+
+    // Determine reaction specific parameters
+    double mass_target;
+    if (reaction_name.find("2H") != string::npos)
+        mass_target = mass_2H;
+    else if (reaction_name.find("4He") != string::npos)
+        mass_target = mass_4He;
+    else if (reaction_name.find("12C") != string::npos)
+        mass_target = mass_12C;
 
     // Read input files
     cout << "Reading input files...\n";
@@ -33,14 +42,17 @@ void filter_phi_d_recon(string Reaction, string input_mode, string output_mode)
     RDataFrame rdf_raw(chain);
 
     auto rdf_def = RNode(rdf_raw);
-    if (input_mode == "one" && Reaction.find("2H") != string::npos)
+    if (input_mode == "one" && reaction_name.find("2H") != string::npos)
         rdf_def = rdf_def.Filter("run == 90213");
-    else if (input_mode == "one" && Reaction.find("4He") != string::npos)
+    else if (input_mode == "one" && reaction_name.find("4He") != string::npos)
         rdf_def = rdf_def.Filter("run == 90061");
-    else if (input_mode == "one" && Reaction.find("12C") != string::npos)
+    else if (input_mode == "one" && reaction_name.find("12C") != string::npos)
         rdf_def = rdf_def.Filter("run == 90291");
 
     auto rdf_input = rdf_def
+
+    .Define("kinfit_fom",               "TMath::Prob(kin_chisq,kin_ndf)")
+    .Define("target_p4",                "TLorentzVector(0, 0, 0, mass_target)")
 
     .Define("beam_p4com_meas",          "boost_lorentz_vector(beam_p4_meas, -(kp_p4_meas + km_p4_meas + d_p4_meas).BoostVector())")
     .Define("beam_p4com_kin",           "boost_lorentz_vector(beam_p4_kin, -(kp_p4_kin + km_p4_kin + d_p4_kin).BoostVector())")
@@ -48,29 +60,9 @@ void filter_phi_d_recon(string Reaction, string input_mode, string output_mode)
     .Define("beam_energy_meas",         "beam_p4_meas.E()")
     .Define("beam_energy_kin",          "beam_p4_kin.E()")
     .Define("beam_energy_truth",        "beam_p4_truth.E()")
-    .Define("beam_DeltaT_meas",         "rftime - beam_x4_meas.T()")
-    .Define("beam_DeltaT_kin",          "rftime - beam_x4_kin.T()")
-    .Define("beam_DeltaT_truth",        "rftime - beam_x4_truth.T()")
-
-    .Define("target_p4_meas",           "kp_p4_meas + km_p4_meas + d_p4_meas - beam_p4_meas")
-    .Define("target_p4_kin",            "kp_p4_kin + km_p4_kin + d_p4_kin - beam_p4_kin")
-    .Define("target_p4_truth",          "kp_p4_truth + km_p4_truth + d_p4_truth - beam_p4_truth")
-    .Define("target_p4rest",            "TLorentzVector(0, 0, 0, mass_deuteron)")
-    .Define("target_energy_meas",       "target_p4_meas.E()")
-    .Define("target_energy_kin",        "target_p4_kin.E()")
-    .Define("target_energy_truth",      "target_p4_truth.E()")
-    .Define("target_mass_meas",         "target_p4_meas.M()")
-    .Define("target_mass_kin",          "target_p4_kin.M()")
-    .Define("target_mass_truth",        "target_p4_truth.M()")
-    .Define("target_momentum_meas",     "target_p4_meas.P()")
-    .Define("target_momentum_kin",      "target_p4_kin.P()")
-    .Define("target_momentum_truth",    "target_p4_truth.P()")
-    .Define("target_pminus_meas",       "target_p4_meas.Minus()")
-    .Define("target_pminus_kin",        "target_p4_kin.Minus()")
-    .Define("target_pminus_truth",      "target_p4_truth.Minus()")
-    .Define("target_theta_meas",        "target_p4_meas.Theta()*RadToDeg")
-    .Define("target_theta_kin",         "target_p4_kin.Theta()*RadToDeg")
-    .Define("target_theta_truth",       "target_p4_truth.Theta()*RadToDeg")
+    .Define("beam_DeltaT_meas",         "beam_x4_meas.T() - rftime")
+    .Define("beam_DeltaT_kin",          "beam_x4_kin.T() - rftime")
+    .Define("beam_DeltaT_truth",        "beam_x4_truth.T() - rftime")
 
     .Define("kp_p4pion_meas",           "TLorentzVector(kp_p4_meas.Vect(), TMath::Sqrt(kp_p4_meas.P()*kp_p4_meas.P() + mass_piplus*mass_piplus))")
     .Define("kp_p4pion_kin",            "TLorentzVector(kp_p4_kin.Vect(), TMath::Sqrt(kp_p4_kin.P()*kp_p4_kin.P() + mass_piplus*mass_piplus))")
@@ -110,6 +102,22 @@ void filter_phi_d_recon(string Reaction, string input_mode, string output_mode)
     .Define("km_dedx_cdc_kev_per_cm",   "1000000*km_dedx_cdc")
     .Define("km_dedx_st_kev_per_cm",    "1000000*km_dedx_st")
 
+    .Define("d_energy_meas",            "d_p4_meas.E()")
+    .Define("d_energy_kin",             "d_p4_kin.E()")
+    .Define("d_energy_truth",           "d_p4_truth.E()")
+    .Define("d_momentum_meas",          "d_p4_meas.P()")
+    .Define("d_momentum_kin",           "d_p4_kin.P()")
+    .Define("d_momentum_truth",         "d_p4_truth.P()")
+    .Define("d_theta_meas",             "d_p4_meas.Theta()*RadToDeg")
+    .Define("d_theta_kin",              "d_p4_kin.Theta()*RadToDeg")
+    .Define("d_theta_truth",            "d_p4_truth.Theta()*RadToDeg")
+    .Define("d_DeltaT_meas",            "rftime + (d_x4_meas.Z()-65.0)/29.9792458 - d_x4_meas.T()")
+    .Define("d_DeltaT_kin",             "rftime + (d_x4_meas.Z()-65.0)/29.9792458 - d_x4_kin.T()")
+    .Define("d_DeltaT_truth",           "rftime + (d_x4_meas.Z()-65.0)/29.9792458 - d_x4_truth.T()")
+    .Define("d_dedx_fdc_kev_per_cm",    "1000000*d_dedx_fdc")
+    .Define("d_dedx_cdc_kev_per_cm",    "1000000*d_dedx_cdc")
+    .Define("d_dedx_st_kev_per_cm",     "1000000*d_dedx_st")
+
     .Define("phi_p4_meas",              "kp_p4_meas + km_p4_meas")
     .Define("phi_p4_kin",               "kp_p4_kin + km_p4_kin")
     .Define("phi_p4_truth",             "kp_p4_truth + km_p4_truth")
@@ -129,21 +137,27 @@ void filter_phi_d_recon(string Reaction, string input_mode, string output_mode)
     .Define("phi_theta_kin",            "phi_p4_kin.Theta()*RadToDeg")
     .Define("phi_theta_truth",          "phi_p4_truth.Theta()*RadToDeg")
 
-    .Define("d_energy_meas",            "d_p4_meas.E()")
-    .Define("d_energy_kin",             "d_p4_kin.E()")
-    .Define("d_energy_truth",           "d_p4_truth.E()")
-    .Define("d_momentum_meas",          "d_p4_meas.P()")
-    .Define("d_momentum_kin",           "d_p4_kin.P()")
-    .Define("d_momentum_truth",         "d_p4_truth.P()")
-    .Define("d_theta_meas",             "d_p4_meas.Theta()*RadToDeg")
-    .Define("d_theta_kin",              "d_p4_kin.Theta()*RadToDeg")
-    .Define("d_theta_truth",            "d_p4_truth.Theta()*RadToDeg")
-    .Define("d_DeltaT_meas",            "rftime + (d_x4_meas.Z()-65.0)/29.9792458 - d_x4_meas.T()")
-    .Define("d_DeltaT_kin",             "rftime + (d_x4_meas.Z()-65.0)/29.9792458 - d_x4_kin.T()")
-    .Define("d_DeltaT_truth",           "rftime + (d_x4_meas.Z()-65.0)/29.9792458 - d_x4_truth.T()")
-    .Define("d_dedx_fdc_kev_per_cm",    "1000000*d_dedx_fdc")
-    .Define("d_dedx_cdc_kev_per_cm",    "1000000*d_dedx_cdc")
-    .Define("d_dedx_st_kev_per_cm",     "1000000*d_dedx_st")
+    .Define("target_p4_meas",           "kp_p4_meas + km_p4_meas + d_p4_meas - beam_p4_meas")
+    .Define("target_p4_kin",            "kp_p4_kin + km_p4_kin + d_p4_kin - beam_p4_kin")
+    .Define("target_p4_truth",          "kp_p4_truth + km_p4_truth + d_p4_truth - beam_p4_truth")
+    .Define("target_energy_meas",       "target_p4_meas.E()")
+    .Define("target_energy_kin",        "target_p4_kin.E()")
+    .Define("target_energy_truth",      "target_p4_truth.E()")
+    .Define("target_mass_meas",         "target_p4_meas.M()")
+    .Define("target_mass_kin",          "target_p4_kin.M()")
+    .Define("target_mass_truth",        "target_p4_truth.M()")
+    .Define("target_momentum_meas",     "target_p4_meas.P()")
+    .Define("target_momentum_kin",      "target_p4_kin.P()")
+    .Define("target_momentum_truth",    "target_p4_truth.P()")
+    .Define("target_pminus_meas",       "target_p4_meas.Minus()")
+    .Define("target_pminus_kin",        "target_p4_kin.Minus()")
+    .Define("target_pminus_truth",      "target_p4_truth.Minus()")
+    .Define("target_theta_meas",        "target_p4_meas.Theta()*RadToDeg")
+    .Define("target_theta_kin",         "target_p4_kin.Theta()*RadToDeg")
+    .Define("target_theta_truth",       "target_p4_truth.Theta()*RadToDeg")
+    .Define("energy_balance_meas",      "target_energy_meas - mass_deuteron")
+    .Define("energy_balance_kin",       "target_energy_kin - mass_deuteron")
+    .Define("energy_balance_truth",     "target_energy_truth - mass_deuteron")
 
     .Define("sqrts_meas",               "(kp_p4_meas + km_p4_meas + d_p4_meas).Mag()")
     .Define("sqrts_kin",                "(kp_p4_kin + km_p4_kin + d_p4_kin).Mag()")
@@ -160,18 +174,13 @@ void filter_phi_d_recon(string Reaction, string input_mode, string output_mode)
     .Define("rho_mass_meas",            "(kp_p4pion_meas + km_p4pion_meas).M()")
     .Define("rho_mass_kin",             "(kp_p4pion_kin + km_p4pion_kin).M()")
     .Define("rho_mass_truth",           "(kp_p4pion_truth + km_p4pion_truth).M()")
-    .Define("energy_balance_meas",      "target_energy_meas - mass_deuteron")
-    .Define("energy_balance_kin",       "target_energy_kin - mass_deuteron")
-    .Define("energy_balance_truth",     "target_energy_truth - mass_deuteron")
-
-    .Define("kin_cl",                   "TMath::Prob(kin_chisq,kin_ndf)")
     ;
 
     // Filter events and save to new tree
     cout << "Filtering events...\n";
     auto rdf_NoCut              = rdf_input;
     auto rdf_dEdxCut            = rdf_NoCut.Filter("(d_dedx_cdc_kev_per_cm > (TMath::Exp(-4.5*d_momentum_meas+5.0)+2)) && (d_dedx_cdc_kev_per_cm > 5.0) && (d_dedx_cdc_kev_per_cm < 20.0)");
-    auto rdf_KinFitFOMCut       = rdf_dEdxCut.Filter("kin_cl > 0.01");
+    auto rdf_KinFitFOMCut       = rdf_dEdxCut.Filter("kinfit_fom > 0.01");
     auto rdf_PIDFOMCut          = rdf_KinFitFOMCut.Filter("(kp_pidfom > 0.01) && (km_pidfom > 0.01)");
     auto rdf_PhiMassCut         = rdf_PIDFOMCut.Filter("(phi_mass_kin > 1.01) && (phi_mass_kin < 1.03)");
     auto rdf_output             = rdf_PhiMassCut;
