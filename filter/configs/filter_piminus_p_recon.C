@@ -21,9 +21,9 @@ TLorentzVector boost_lorentz_vector(TLorentzVector p4, TVector3 boost_vector)
 
 void filter_piminus_p_recon(string reaction_name, string input_mode, string output_mode)
 {
-    string input_name   = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_piminus_p_recon_%s_090213.root",reaction_name.c_str());
-    string hist_name    = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_piminus_p_recon_%s.root",reaction_name.c_str());
-    string tree_name    = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_piminus_p_recon_%s.root",reaction_name.c_str());
+    string input_name   = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_piminus_p_recon_%s_%s.root",reaction_name.c_str(), input_mode.c_str());
+    string hist_name    = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_piminus_p_recon_%s_%s.root",reaction_name.c_str(), input_mode.c_str());
+    string tree_name    = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_piminus_p_recon_%s_%s.root",reaction_name.c_str(), input_mode.c_str());
 
     // Determine reaction specific parameters
     if (reaction_name.find("2H") != string::npos)
@@ -42,15 +42,7 @@ void filter_piminus_p_recon(string reaction_name, string input_mode, string outp
     cout << "Defining data frame...\n";
     RDataFrame rdf_raw(chain);
 
-    auto rdf_def = RNode(rdf_raw);
-    if (input_mode == "one" && reaction_name.find("2H") != string::npos)
-        rdf_def = rdf_def.Filter("run == 90213");
-    else if (input_mode == "one" && reaction_name.find("4He") != string::npos)
-        rdf_def = rdf_def.Filter("run == 90061");
-    else if (input_mode == "one" && reaction_name.find("12C") != string::npos)
-        rdf_def = rdf_def.Filter("run == 90291");
-
-    auto rdf_input = rdf_def
+    auto rdf_input = rdf_raw
     .Define("kinfit_fom",                   "TMath::Prob(kin_chisq,kin_ndf)")
     .Define("target_p4",                    "TLorentzVector(0, 0, 0, mass_target)")
     .Define("N2_p4",                        "TLorentzVector(0, 0, 0, mass_2H)")
@@ -194,7 +186,7 @@ void filter_piminus_p_recon(string reaction_name, string input_mode, string outp
         miss_p_cut = "0.50";
     else if (reaction_name.find("missprot") != string::npos)
         miss_p_cut = "0.20";
-    else if (reaction_name.find("misstri") != string::npos)
+    else if (reaction_name.find("misshe3") != string::npos)
         miss_p_cut = "0.25";
     else if (reaction_name.find("missb11") != string::npos)
         miss_p_cut = "0.30";
@@ -212,14 +204,14 @@ void filter_piminus_p_recon(string reaction_name, string input_mode, string outp
     int N_filters = sizeof(labels) / sizeof(labels[0]);
 
     // Save tree
-    if (output_mode == "tree" || output_mode == "all")
+    if (output_mode == "tree" || output_mode == "both")
     {
         cout << "Saving to new tree...\n";
         rdf_output.Snapshot("filteredtree_piminus_p_recon",tree_name.c_str());
     }
 
     // Save histograms
-    if (output_mode == "hist" || output_mode == "all")
+    if (output_mode == "hist" || output_mode == "both")
     {
         cout << "Plotting histograms...\n";
         TFile * hist_file = new TFile(hist_name.c_str(), "RECREATE");

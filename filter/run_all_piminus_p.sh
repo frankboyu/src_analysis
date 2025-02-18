@@ -1,21 +1,24 @@
 #!/bin/bash
 RUNMODE=$1
-INPUTMODE=$2
-OUTPUTMODE=$3
 
 start=`date +%s`
 
 REACTION_LIST=()
-REACTION_LIST+=("data_2H_missprot" "data_2H_inc" "data_4He_inc" "data_4He_misshe3" "data_12C_inc" "data_12C_missb11")
-REACTION_LIST+=("sim_2H_missprot_flat" "sim_2H_inc_flat" "sim_4He_inc_flat" "sim_4He_misshe3_flat" "sim_12C_inc_flat" "sim_12C_missb11_flat")
-REACTION_LIST+=("sim_2H_missprot_model" "sim_2H_inc_model" "sim_4He_inc_model" "sim_4He_misshe3_model" "sim_12C_inc_model" "sim_12C_missb11_model")
+REACTION_LIST+=("data_2H_missprot"      "data_2H_inc"       "data_4He_inc"      "data_4He_misshe3"      "data_12C_inc"      "data_12C_missb11")
+REACTION_LIST+=("sim_2H_missprot_flat"  "sim_2H_inc_flat"   "sim_4He_inc_flat"  "sim_4He_misshe3_flat"  "sim_12C_inc_flat"  "sim_12C_missb11_flat")
+REACTION_LIST+=("sim_2H_missprot_model" "sim_2H_inc_model"  "sim_4He_inc_model" "sim_4He_misshe3_model" "sim_12C_inc_model" "sim_12C_missb11_model")
 
-if [ "$RUNMODE" == "local" ]; then
+if [ "$RUNMODE" == "tree" ]; then
     for REACTION in "${REACTION_LIST[@]}"
     do
-        sh /work/halld2/home/boyu/src_analysis/filter/run_filter.sh piminus_p_recon $REACTION $INPUTMODE $OUTPUTMODE
+        sh /work/halld2/home/boyu/src_analysis/filter/run_filter.sh piminus_p_recon $REACTION all tree
     done
-elif [ "$RUNMODE" == "batch" ]; then
+elif [ "$RUNMODE" == "hist_one" ]; then
+    for REACTION in "${REACTION_LIST[@]}"
+    do
+        sh /work/halld2/home/boyu/src_analysis/filter/run_filter.sh piminus_p_recon $REACTION one hist
+    done
+elif [ "$RUNMODE" == "hist_all" ]; then
     for REACTION in "${REACTION_LIST[@]}"
     do
         JOB_WORKFLOW="-workflow src_analysis_filter"
@@ -23,7 +26,7 @@ elif [ "$RUNMODE" == "batch" ]; then
         JOB_RESOURCES="-account halld -partition production -os el9 -cores 1 -ram 4GB -disk 8GB -time 24hrs"
         JOB_OUT="-stdout /farm_out/boyu/src_analysis/filter/piminus_p_${REACTION}_${INPUTMODE}_${OUTPUTMODE}_$(date '+%Y-%m-%d').out"
         JOB_ERR="-stderr /farm_out/boyu/src_analysis/filter/piminus_p_${REACTION}_${INPUTMODE}_${OUTPUTMODE}_$(date '+%Y-%m-%d').err"
-        JOB_COMMAND="sh /work/halld2/home/boyu/src_analysis/filter/run_filter.sh piminus_p_recon $REACTION $INPUTMODE $OUTPUTMODE"
+        JOB_COMMAND="sh /work/halld2/home/boyu/src_analysis/filter/run_filter.sh piminus_p_recon $REACTION all hist"
         swif2 add-job $JOB_WORKFLOW $JOB_NAME $JOB_RESOURCES $JOB_OUT $JOB_ERR $JOB_COMMAND
     done
     swif2 run -workflow src_analysis_filter
