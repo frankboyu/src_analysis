@@ -305,15 +305,15 @@ void filter_piminus_p_recon(string reaction_name, string input_mode, string outp
             TH1D hist_rho_mass = *rdf.Histo1D({("rho_mass_"+ label).c_str(), ";m_{#pi^{+}#pi^{-}} (GeV/c^{2});Counts", 400, 0.0, 4.0},"rho_mass_kin","accidweight");
             hist_rho_mass.Write();
 
-            TH1D hist_n_mass = *rdf.Histo1D({("n_mass_"+ label).c_str(), ";m_{n} (GeV/c^{2});Counts", 100, 0.0, 4.0},"n_mass_kin","accidweight");
+            TH1D hist_n_mass = *rdf.Histo1D({("n_mass_"+ label).c_str(), ";m_{n} (GeV/c^{2});Counts", 400, -4.0, 4.0},"n_mass_kin","accidweight");
             hist_n_mass.Write();
             TH1D hist_n_mass_truth = *rdf.Histo1D({("n_mass_truth_"+ label).c_str(), ";m_{n} (GeV/c^{2});Counts", 100, 0.0, 4.0},"n_mass_truth","accidweight");
             hist_n_mass_truth.Write();
-            TH1D hist_n_momentum = *rdf.Histo1D({("n_momentum_"+ label).c_str(), ";P_{n} (GeV/c);Counts", 100, 0.0, 4.0},"n_momentum_kin","accidweight");
+            TH1D hist_n_momentum = *rdf.Histo1D({("n_momentum_"+ label).c_str(), ";P_{n} (GeV/c);Counts", 100, 0.0, 1.0},"n_momentum_kin","accidweight");
             hist_n_momentum.Write();
             TH1D hist_n_momentum_truth = *rdf.Histo1D({("n_momentum_truth_"+ label).c_str(), ";P_{n} (GeV/c);Counts", 100, 0.0, 4.0},"n_momentum_truth","accidweight");
             hist_n_momentum_truth.Write();
-            TH1D hist_n_pminus = *rdf.Histo1D({("n_pminus_"+ label).c_str(), ";P_{n}^{-} (GeV/c);Counts", 100, 0.4, 1.4},"n_pminus_kin","accidweight");
+            TH1D hist_n_pminus = *rdf.Histo1D({("n_pminus_"+ label).c_str(), ";P_{n}^{-} (GeV/c);Counts", 120, 0.3, 1.5},"n_pminus_kin","accidweight");
             hist_n_pminus.Write();
             TH1D hist_n_pminus_truth = *rdf.Histo1D({("n_pminus_truth_"+ label).c_str(), ";P_{n}^{-} (GeV/c);Counts", 100, 0.4, 1.4},"n_pminus_truth","accidweight");
             hist_n_pminus_truth.Write();
@@ -321,18 +321,18 @@ void filter_piminus_p_recon(string reaction_name, string input_mode, string outp
             hist_n_energy_balance.Write();
             TH1D hist_n_energy_balance_truth = *rdf.Histo1D({("n_energy_balance_truth_"+ label).c_str(), ";E_{n} - m_{n} (GeV);Counts", 400, -4.0, 4.0},"n_energy_balance_truth","accidweight");
             hist_n_energy_balance_truth.Write();
-            TH2D hist_n_momentum_pminus = *rdf.Histo2D({("n_momentum_pminus_"+ label).c_str(), ";P_{n} (GeV/c);P_{n}^{-} (GeV/c)", 100, 0.0, 4.0, 100, 0.4, 1.4},"n_momentum_kin","n_pminus_kin","accidweight");
+            TH2D hist_n_momentum_pminus = *rdf.Histo2D({("n_momentum_pminus_"+ label).c_str(), ";P_{n} (GeV/c);P_{n}^{-} (GeV/c)", 100, 0.0, 1.0, 100, 0.4, 1.4},"n_momentum_kin","n_pminus_kin","accidweight");
             hist_n_momentum_pminus.Write();
 
-            TH1D hist_N2miss_mass = *rdf.Histo1D({("N2miss_mass_"+ label).c_str(), ";m_{n} (GeV/c^{2});Counts", 100, 0.0, 4.0},"N2miss_mass_kin","accidweight");
+            TH1D hist_N2miss_mass = *rdf.Histo1D({("N2miss_mass_"+ label).c_str(), ";m_{n} (GeV/c^{2});Counts", 400, -4.0, 4.0},"N2miss_mass_kin","accidweight");
             hist_N2miss_mass.Write();
             TH1D hist_N2miss_mass_truth = *rdf.Histo1D({("N2miss_mass_truth_"+ label).c_str(), ";m_{n} (GeV/c^{2});Counts", 100, 0.0, 4.0},"N2miss_mass_truth","accidweight");
             hist_N2miss_mass_truth.Write();
-            TH1D hist_N2miss_momentum = *rdf.Histo1D({("N2miss_momentum_"+ label).c_str(), ";P_{n} (GeV/c);Counts", 100, 0.0, 4.0},"N2miss_momentum_kin","accidweight");
+            TH1D hist_N2miss_momentum = *rdf.Histo1D({("N2miss_momentum_"+ label).c_str(), ";P_{n} (GeV/c);Counts", 100, 0.0, 1.0},"N2miss_momentum_kin","accidweight");
             hist_N2miss_momentum.Write();
             TH1D hist_N2miss_momentum_truth = *rdf.Histo1D({("N2miss_momentum_truth_"+ label).c_str(), ";P_{n} (GeV/c);Counts", 100, 0.0, 4.0},"N2miss_momentum_truth","accidweight");
             hist_N2miss_momentum_truth.Write();
-            TH1D hist_N2miss_pminus = *rdf.Histo1D({("N2miss_pminus_"+ label).c_str(), ";P_{n}^{-} (GeV/c);Counts", 100, 0.4, 1.4},"N2miss_pminus_kin","accidweight");
+            TH1D hist_N2miss_pminus = *rdf.Histo1D({("N2miss_pminus_"+ label).c_str(), ";P_{n}^{-} (GeV/c);Counts", 120, 0.3, 1.5},"N2miss_pminus_kin","accidweight");
             hist_N2miss_pminus.Write();
             TH1D hist_N2miss_pminus_truth = *rdf.Histo1D({("N2miss_pminus_truth_"+ label).c_str(), ";P_{n}^{-} (GeV/c);Counts", 100, 0.4, 1.4},"N2miss_pminus_truth","accidweight");
             hist_N2miss_pminus_truth.Write();
@@ -340,7 +340,7 @@ void filter_piminus_p_recon(string reaction_name, string input_mode, string outp
             hist_N2miss_energy_balance.Write();
             TH1D hist_N2miss_energy_balance_truth = *rdf.Histo1D({("N2miss_energy_balance_truth_"+ label).c_str(), ";E_{n} - m_{n} (GeV);Counts", 400, -4.0, 4.0},"N2miss_energy_balance_truth","accidweight");
             hist_N2miss_energy_balance_truth.Write();
-            TH2D hist_N2miss_momentum_pminus = *rdf.Histo2D({("N2miss_momentum_pminus_"+ label).c_str(), ";P_{n} (GeV/c);P_{n}^{-} (GeV/c)", 100, 0.0, 4.0, 100, 0.4, 1.4},"N2miss_momentum_kin","N2miss_pminus_kin","accidweight");
+            TH2D hist_N2miss_momentum_pminus = *rdf.Histo2D({("N2miss_momentum_pminus_"+ label).c_str(), ";P_{n} (GeV/c);P_{n}^{-} (GeV/c)", 100, 0.0, 1.0, 100, 0.4, 1.4},"N2miss_momentum_kin","N2miss_pminus_kin","accidweight");
             hist_N2miss_momentum_pminus.Write();
         }
         hist_file->Close();
