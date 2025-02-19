@@ -2,13 +2,15 @@
 #include <string>
 #include <cstring>
 #include <cmath>
-#include </work/halld2/home/boyu/src_analysis/filter/filters/const.h>
+#include </work/halld2/home/boyu/src_analysis/filter/configs/const.h>
 
 using namespace std;
 using namespace ROOT;
 using namespace RooFit;
 using namespace ROOT::RDF;
 using namespace ROOT::Detail::RDF;
+
+double mass_target;
 
 TLorentzVector boost_lorentz_vector(TLorentzVector p4, TVector3 boost_vector)
 {
@@ -19,12 +21,11 @@ TLorentzVector boost_lorentz_vector(TLorentzVector p4, TVector3 boost_vector)
 
 void filter_phi_d_recon(string reaction_name, string input_mode, string output_mode)
 {
-    string input_name  = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_phi_d_recon_%s.root",reaction_name.c_str());
+    string input_name  = Form("/work/halld2/home/boyu/src_analysis/selection/output/test/selectedtree_phi_d_recon_%s.root",reaction_name.c_str());
     string hist_name   = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_recon_%s.root",reaction_name.c_str());
     string tree_name   = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_phi_d_recon_%s.root",reaction_name.c_str());
 
     // Determine reaction specific parameters
-    double mass_target;
     if (reaction_name.find("2H") != string::npos)
         mass_target = mass_2H;
     else if (reaction_name.find("4He") != string::npos)
@@ -155,9 +156,9 @@ void filter_phi_d_recon(string reaction_name, string input_mode, string output_m
     .Define("target_theta_meas",        "target_p4_meas.Theta()*RadToDeg")
     .Define("target_theta_kin",         "target_p4_kin.Theta()*RadToDeg")
     .Define("target_theta_truth",       "target_p4_truth.Theta()*RadToDeg")
-    .Define("energy_balance_meas",      "target_energy_meas - mass_deuteron")
-    .Define("energy_balance_kin",       "target_energy_kin - mass_deuteron")
-    .Define("energy_balance_truth",     "target_energy_truth - mass_deuteron")
+    .Define("energy_balance_meas",      "target_energy_meas - mass_2H")
+    .Define("energy_balance_kin",       "target_energy_kin - mass_2H")
+    .Define("energy_balance_truth",     "target_energy_truth - mass_2H")
 
     .Define("sqrts_meas",               "(kp_p4_meas + km_p4_meas + d_p4_meas).Mag()")
     .Define("sqrts_kin",                "(kp_p4_kin + km_p4_kin + d_p4_kin).Mag()")
@@ -168,9 +169,9 @@ void filter_phi_d_recon(string reaction_name, string input_mode, string output_m
     .Define("minusu_meas",              "-(beam_p4_meas - d_p4_meas).Mag2()")
     .Define("minusu_kin",               "-(beam_p4_kin - d_p4_kin).Mag2()")
     .Define("minusu_truth",             "-(beam_p4_truth - d_p4_truth).Mag2()")
-    .Define("y_phi_meas",               "minust_meas/(2*mass_deuteron*(beam_p4_meas.E()-phi_p4_meas.E()))")
-    .Define("y_phi_kin",                "minust_kin/(2*mass_deuteron*(beam_p4_kin.E()-phi_p4_kin.E()))")
-    .Define("y_phi_truth",              "minust_truth/(2*mass_deuteron*(beam_p4_truth.E()-phi_p4_truth.E()))")
+    .Define("y_phi_meas",               "minust_meas/(2*mass_2H*(beam_p4_meas.E()-phi_p4_meas.E()))")
+    .Define("y_phi_kin",                "minust_kin/(2*mass_2H*(beam_p4_kin.E()-phi_p4_kin.E()))")
+    .Define("y_phi_truth",              "minust_truth/(2*mass_2H*(beam_p4_truth.E()-phi_p4_truth.E()))")
     .Define("rho_mass_meas",            "(kp_p4pion_meas + km_p4pion_meas).M()")
     .Define("rho_mass_kin",             "(kp_p4pion_kin + km_p4pion_kin).M()")
     .Define("rho_mass_truth",           "(kp_p4pion_truth + km_p4pion_truth).M()")
