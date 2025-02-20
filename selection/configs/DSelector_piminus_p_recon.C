@@ -273,7 +273,7 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
         if(dComboWrapper->Get_NumUnusedTracks()             > 0)                                                                dComboWrapper->Set_IsComboCut(true);
         if(dComboWrapper->Get_NumUnusedShowers()            > 0)                                                                dComboWrapper->Set_IsComboCut(true);
         if(locBeamP4.E()                                    < 5.8  || locBeamP4.E()                   > 10.7)                   dComboWrapper->Set_IsComboCut(true);
-        if(dComboBeamWrapper->Get_X4().Z()                  < 51.0 || dComboBeamWrapper->Get_X4().Z() > 79.0)                   dComboWrapper->Set_IsComboCut(true);
+        if(dComboBeamWrapper->Get_X4().Z()                  < 52.0 || dComboBeamWrapper->Get_X4().Z() > 78.0)                   dComboWrapper->Set_IsComboCut(true);
         if(sqrt(pow(dComboBeamWrapper->Get_X4().X(),2)      + pow(dComboBeamWrapper->Get_X4().Y(),2)) > 1.0)                    dComboWrapper->Set_IsComboCut(true);
         if(dComboWrapper->Get_ConfidenceLevel_KinFit()      < 1e-4)                                                             dComboWrapper->Set_IsComboCut(true);
         if(dPiMinusWrapper->Get_PIDFOM()                    < 1e-4)                                                             dComboWrapper->Set_IsComboCut(true);
