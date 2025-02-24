@@ -87,17 +87,17 @@ mv output/selectedtree_piminus_p_recon_sim_12C_missb11.root output/selectedtree_
 
 # # thrown
 # sh run_local.sh '/work/halld2/home/boyu/src_analysis/sim/output/piminus_p_2H_ver03/root/thrown/*.root' 'Thrown_Tree' 'piminus_p_thrown'
-# mv output/selectedtree_piminus_p_thrown.root output/selectedtree_piminus_p_thrown_2H_model.root
+# mv output/selectedtree_piminus_p_thrown.root output/selectedtree_piminus_p_thrown_tagged_2H_model.root
 # sh run_local.sh '/work/halld2/home/boyu/src_analysis/sim/output/piminus_p_2H_ver04/root/thrown/*.root' 'Thrown_Tree' 'piminus_p_thrown'
-# mv output/selectedtree_piminus_p_thrown.root output/selectedtree_piminus_p_thrown_2H_flat.root
+# mv output/selectedtree_piminus_p_thrown.root output/selectedtree_piminus_p_thrown_tagged_2H_flat.root
 # sh run_local.sh '/work/halld2/home/boyu/src_analysis/sim/output/piminus_p_4He_ver03/root/thrown/*.root' 'Thrown_Tree' 'piminus_p_thrown'
-# mv output/selectedtree_piminus_p_thrown.root output/selectedtree_piminus_p_thrown_4He_model.root
+# mv output/selectedtree_piminus_p_thrown.root output/selectedtree_piminus_p_thrown_tagged_4He_model.root
 # sh run_local.sh '/work/halld2/home/boyu/src_analysis/sim/output/piminus_p_4He_ver04/root/thrown/*.root' 'Thrown_Tree' 'piminus_p_thrown'
-# mv output/selectedtree_piminus_p_thrown.root output/selectedtree_piminus_p_thrown_4He_flat.root
+# mv output/selectedtree_piminus_p_thrown.root output/selectedtree_piminus_p_thrown_tagged_4He_flat.root
 # sh run_local.sh '/work/halld2/home/boyu/src_analysis/sim/output/piminus_p_12C_ver03/root/thrown/*.root' 'Thrown_Tree' 'piminus_p_thrown'
-# mv output/selectedtree_piminus_p_thrown.root output/selectedtree_piminus_p_thrown_12C_model.root
+# mv output/selectedtree_piminus_p_thrown.root output/selectedtree_piminus_p_thrown_tagged_12C_model.root
 # sh run_local.sh '/work/halld2/home/boyu/src_analysis/sim/output/piminus_p_12C_ver04/root/thrown/*.root' 'Thrown_Tree' 'piminus_p_thrown'
-# mv output/selectedtree_piminus_p_thrown.root output/selectedtree_piminus_p_thrown_12C_flat.root
+# mv output/selectedtree_piminus_p_thrown.root output/selectedtree_piminus_p_thrown_tagged_12C_flat.root
 
 ## bggen
 # sh run_local.sh '/cache/halld/gluex_simulations/REQUESTED_MC/bggen_upd-2021-11-nucleus-Helium-target-proton_3736/trees/tree_ghe_pimprotinc__B4_F4_T1_S4_bggen_upd/*.root' 'ghe_pimprotinc__B4_F4_T1_S4_Tree' 'piminus_p_recon'
