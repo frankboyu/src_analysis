@@ -52,48 +52,42 @@ int get_yield(string Reaction)
     gStyle->SetOptStat(1);
     gStyle->SetOptFit(1);
 
-    vector<double> energy_edges;
-    vector<double> theta_edges;
-    ifstream energy_file("input/bins_energy.txt");
-    ifstream theta_file("input/bins_theta.txt");
-    double value;
-    while (energy_file >> value)
+    ifstream matrix_file("input/bin_edges.txt");
+    vector<vector<double>> matrix;
+    string line;
+    while (getline(matrix_file, line))
     {
-        energy_edges.push_back(value);
+        istringstream iss(line);
+        vector<double> row;
+        double value;
+        while (iss >> value)
+        {
+            row.push_back(value);
+        }
+        matrix.push_back(row);
     }
-    while (theta_file >> value)
-    {
-        theta_edges.push_back(value);
-    }
-    energy_file.close();
-    theta_file.close();
-    int energy_bins = energy_edges.size() - 1;
-    int theta_bins = theta_edges.size() - 1;
+    matrix_file.close();
 
     double this_yield;
-
-    for (int i = 0; i < energy_bins; i++)
+    for (int i = 0; i < matrix.size(); i++)
     {
-        for (int j = 0; j < theta_bins; j++)
+        cout << "Theta: " << matrix[i][0] << " deg" << endl;
+        cout << "Energy: " << matrix[i][2] << " GeV" << endl;
+        if (Reaction.find("sim") != string::npos || Reaction.find("thrown") != string::npos)
         {
-            cout << "Energy: " << energy_edges[i] << " GeV" << endl;
-            cout << "Theta: " << theta_edges[j] << " deg" << endl;
-            if (Reaction.find("sim") != string::npos || Reaction.find("thrown") != string::npos)
-            {
-                this_yield = yield_single_gaus_no_bkg(energy_edges[i], energy_edges[i+1], theta_edges[j], theta_edges[j+1], input_tree);
-            }
-            else if (Reaction.find("data") != string::npos)
-            {
-                if (Reaction.find("miss") != string::npos)
-                    this_yield = yield_single_gaus_no_bkg(energy_edges[i], energy_edges[i+1], theta_edges[j], theta_edges[j+1], input_tree);
-                else if (Reaction.find("inc") != string::npos)
-                    this_yield = yield_single_gaus_quadratic_bkg(energy_edges[i], energy_edges[i+1], theta_edges[j], theta_edges[j+1], input_tree);
-            }
-            fprintf(txt_file, "%3.1f\t%6.1f\t%6.1f\t%6.1f\t%f\n", energy_edges[i], energy_edges[i+1], theta_edges[j], theta_edges[j+1], this_yield);
-            canvas->Update();
-            canvas->Print((pdf_name+"(").c_str());
-            canvas->Clear();
+            this_yield = yield_single_gaus_no_bkg(matrix[i][2], matrix[i][3], matrix[i][0], matrix[i][1], input_tree);
         }
+        else if (Reaction.find("data") != string::npos)
+        {
+            if (Reaction.find("miss") != string::npos)
+                this_yield = yield_single_gaus_no_bkg(matrix[i][2], matrix[i][3], matrix[i][0], matrix[i][1], input_tree);
+            else if (Reaction.find("inc") != string::npos)
+                this_yield = yield_single_gaus_quadratic_bkg(matrix[i][2], matrix[i][3], matrix[i][0], matrix[i][1], input_tree);
+        }
+        fprintf(txt_file, "%3.1f\t%6.1f\t%6.1f\t%6.1f\t%f\n", matrix[i][2], matrix[i][3], matrix[i][0], matrix[i][1], this_yield);
+        canvas->Update();
+        canvas->Print((pdf_name+"(").c_str());
+        canvas->Clear();
     }
     canvas->Print((pdf_name+")").c_str());
 
@@ -255,7 +249,7 @@ double yield_double_gaus_const_bkg(double energy_low, double energy_high, double
     return (model->GetParameter(0)+model->GetParameter(3))/hist->GetBinWidth(1);
 }
 
-double yield_single_gaus_linear_bkg(double energy_low, double energy_high, double theta_low, double theta_high, TTree *input_tree)
+double yield_double_gaus_linear_bkg(double energy_low, double energy_high, double theta_low, double theta_high, TTree *input_tree)
 {
     TH1F *hist = new TH1F(Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, theta_low, theta_high), Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, theta_low, theta_high), 100, 0.4, 1.4);
     if (!strncmp(input_tree->GetName(), "filteredtree_piminus_p_recon",   strlen("filteredtree_piminus_p_recon")))
@@ -280,7 +274,7 @@ double yield_single_gaus_linear_bkg(double energy_low, double energy_high, doubl
     return (model->GetParameter(0)+model->GetParameter(3))/hist->GetBinWidth(1);
 }
 
-double yield_single_gaus_quadratic_bkg(double energy_low, double energy_high, double theta_low, double theta_high, TTree *input_tree)
+double yield_double_gaus_quadratic_bkg(double energy_low, double energy_high, double theta_low, double theta_high, TTree *input_tree)
 {
     TH1F *hist = new TH1F(Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, theta_low, theta_high), Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, theta_low, theta_high), 100, 0.4, 1.4);
     if (!strncmp(input_tree->GetName(), "filteredtree_piminus_p_recon",   strlen("filteredtree_piminus_p_recon")))
