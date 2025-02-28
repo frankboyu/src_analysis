@@ -133,6 +133,9 @@ void filter_piminus_p_recon(string reaction_name, string input_mode, string outp
     .Define("miss_mass_meas",               "miss_p4_meas.M()")
     .Define("miss_mass_kin",                "miss_p4_kin.M()")
     .Define("miss_mass_truth",              "miss_p4_truth.M()")
+    .Define("miss_masssquared_meas",        "miss_p4_meas.M2()")
+    .Define("miss_masssquared_kin",         "miss_p4_kin.M2()")
+    .Define("miss_masssquared_truth",       "miss_p4_truth.M2()")
     .Define("miss_momentum_meas",           "miss_p4_meas.P()")
     .Define("miss_momentum_kin",            "miss_p4_kin.P()")
     .Define("miss_momentum_truth",          "miss_p4_truth.P()")
@@ -149,6 +152,9 @@ void filter_piminus_p_recon(string reaction_name, string input_mode, string outp
     .Define("N2miss_mass_meas",             "N2miss_p4_meas.M()")
     .Define("N2miss_mass_kin",              "N2miss_p4_kin.M()")
     .Define("N2miss_mass_truth",            "N2miss_p4_truth.M()")
+    .Define("N2miss_masssquared_meas",      "N2miss_p4_meas.M2()")
+    .Define("N2miss_masssquared_kin",       "N2miss_p4_kin.M2()")
+    .Define("N2miss_masssquared_truth",     "N2miss_p4_truth.M2()")
     .Define("N2miss_momentum_meas",         "N2miss_p4_meas.P()")
     .Define("N2miss_momentum_kin",          "N2miss_p4_kin.P()")
     .Define("N2miss_momentum_truth",        "N2miss_p4_truth.P()")
@@ -297,6 +303,8 @@ void filter_piminus_p_recon(string reaction_name, string input_mode, string outp
 
             TH1D hist_n_mass_kin = *rdf.Histo1D({("n_mass_kin_"+ label).c_str(), ";m_{n} (GeV/c^{2});Counts", 400, -4.0, 4.0},"n_mass_kin","accidweight");
             hist_n_mass_kin.Write();
+            TH1D hist_n_masssquared_kin = *rdf.Histo1D({("n_masssquared_kin_"+ label).c_str(), ";m_{n}^{2} (GeV^{2}/c^{4});Counts", 400, 0.0, 4.0},"n_masssquared_kin","accidweight");
+            hist_n_masssquared_kin.Write();
             TH1D hist_n_momentum_kin = *rdf.Histo1D({("n_momentum_kin_"+ label).c_str(), ";P_{n} (GeV/c);Counts", 100, 0.0, 1.0},"n_momentum_kin","accidweight");
             hist_n_momentum_kin.Write();
             TH1D hist_n_pminus_kin = *rdf.Histo1D({("n_pminus_kin_"+ label).c_str(), ";P_{n}^{-} (GeV/c);Counts", 120, 0.3, 1.5},"n_pminus_kin","accidweight");
@@ -308,6 +316,8 @@ void filter_piminus_p_recon(string reaction_name, string input_mode, string outp
 
             TH1D hist_N2miss_mass_kin = *rdf.Histo1D({("N2miss_mass_kin_"+ label).c_str(), ";m_{n} (GeV/c^{2});Counts", 400, -4.0, 4.0},"N2miss_mass_kin","accidweight");
             hist_N2miss_mass_kin.Write();
+            TH1D hist_N2miss_masssquared_kin = *rdf.Histo1D({("N2miss_masssquared_kin_"+ label).c_str(), ";m_{n}^{2} (GeV^{2}/c^{4});Counts", 400, 0.0, 4.0},"N2miss_masssquared_kin","accidweight");
+            hist_N2miss_masssquared_kin.Write();
             TH1D hist_N2miss_momentum_kin = *rdf.Histo1D({("N2miss_momentum_kin_"+ label).c_str(), ";P_{n} (GeV/c);Counts", 100, 0.0, 1.0},"N2miss_momentum_kin","accidweight");
             hist_N2miss_momentum_kin.Write();
             TH1D hist_N2miss_pminus_kin = *rdf.Histo1D({("N2miss_pminus_kin_"+ label).c_str(), ";P_{n}^{-} (GeV/c);Counts", 120, 0.3, 1.5},"N2miss_pminus_kin","accidweight");
