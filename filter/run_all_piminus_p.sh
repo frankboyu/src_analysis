@@ -7,8 +7,8 @@ start=`date +%s`
 
 REACTION_LIST=()
 REACTION_LIST+=("data_2H_inc"      "data_2H_missprot"       "data_4He_inc"      "data_4He_misshe3"      "data_12C_inc"      "data_12C_missb11")
-REACTION_LIST+=("sim_2H_inc_flat"  "sim_2H_missprot_flat"   "sim_4He_inc_flat"  "sim_4He_misshe3_flat"  "sim_12C_inc_flat"  "sim_12C_missb11_flat")
-REACTION_LIST+=("sim_2H_inc_model" "sim_2H_missprot_model"  "sim_4He_inc_model" "sim_4He_misshe3_model" "sim_12C_inc_model" "sim_12C_missb11_model")
+# REACTION_LIST+=("sim_2H_inc_flat"  "sim_2H_missprot_flat"   "sim_4He_inc_flat"  "sim_4He_misshe3_flat"  "sim_12C_inc_flat"  "sim_12C_missb11_flat")
+# REACTION_LIST+=("sim_2H_inc_model" "sim_2H_missprot_model"  "sim_4He_inc_model" "sim_4He_misshe3_model" "sim_12C_inc_model" "sim_12C_missb11_model")
 
 if [ "$RUNMODE" == "local" ]; then
     for REACTION in "${REACTION_LIST[@]}"
