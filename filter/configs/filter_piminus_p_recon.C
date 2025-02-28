@@ -198,7 +198,7 @@ void filter_piminus_p_recon(string reaction_name, string input_mode, string outp
         miss_p_cut = "0.30";
 
     auto rdf_NoCut          = rdf_input;
-    auto rdf_KinematicsCut  = rdf_NoCut.Filter("(minust_kin > 0.5) && (minusu_kin > 0.5)");
+    auto rdf_KinematicsCut  = rdf_NoCut.Filter("(minust_kin > 0.2) && (minusu_kin > 0.2)");
     auto rdf_KinFitFOMCut   = rdf_KinematicsCut.Filter("kinfit_fom > 0.01");
     auto rdf_PIDFOMCut      = rdf_KinFitFOMCut.Filter("(pim_pidfom > 0.01) && (p_pidfom > 0.01)");
     auto rdf_MissPCut       = rdf_PIDFOMCut.Filter("(n_momentum_kin < " + miss_p_cut + ")");
