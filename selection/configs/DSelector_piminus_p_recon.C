@@ -46,6 +46,7 @@ private:
     TH1F* dHist_ProtonPIDFOM_Before;
     TH1F* dHist_MissingMomentum_Before;
     TH1F* dHist_MissingPMinus_Before;
+    TH1F* dHist_ThrownTopology_Before;
 
     TH1F* dHist_NumUnusedTracks_After;
     TH1F* dHist_NumUnusedShowers_After;
@@ -57,6 +58,7 @@ private:
     TH1F* dHist_ProtonPIDFOM_After;
     TH1F* dHist_MissingMomentum_After;
     TH1F* dHist_MissingPMinus_After;
+    TH1F* dHist_ThrownTopology_After;
 
     TH1F* dHist_PhotonTiming_Raw;
     TH1F* dHist_PhotonTiming_Weighted;
@@ -71,6 +73,7 @@ private:
     TH1F* dHist_ProtonPIDFOM_Weighted;
     TH1F* dHist_MissingMomentum_Weighted;
     TH1F* dHist_MissingPMinus_Weighted;
+    TH1F* dHist_ThrownTopology_Weighted;
 
     ClassDef(DSelector_piminus_p_recon, 0);
 };
@@ -139,6 +142,7 @@ void DSelector_piminus_p_recon::Init(TTree *locTree)
     dHist_ProtonPIDFOM_Before       = new TH1F("ProtonPIDFOM_Before",       ";PIDFOM_{p}                  ;Events/0.001",          1000,  0.0,   1.0);
     dHist_MissingMomentum_Before    = new TH1F("MissingMomentum_Before",    ";P_{miss} (GeV)              ;Events/0.01 GeV",       1000,  0.0,  10.0);
     dHist_MissingPMinus_Before      = new TH1F("MissingPMinus_Before",      ";P^{-}_{miss} (GeV)          ;Events/0.01 GeV",        200,  0.0,   2.0);
+    dHist_ThrownTopology_Before     = new TH1F("ThrownTopology_Before",     ";Thrown Topology             ;Events/1",                20,  0.0,  20.0);
 
     dHist_NumUnusedTracks_After     = new TH1F("NumUnusedTracks_After",     ";Unused Tracks               ;Events/1",                10,  0.0,  10.0);
     dHist_NumUnusedShowers_After    = new TH1F("NumUnusedShowers_After",    ";Unused Showers              ;Events/1",                10,  0.0,  10.0);
@@ -150,6 +154,7 @@ void DSelector_piminus_p_recon::Init(TTree *locTree)
     dHist_ProtonPIDFOM_After        = new TH1F("ProtonPIDFOM_After",        ";PIDFOM_{p}                  ;Events/0.001",          1000,  0.0,   1.0);
     dHist_MissingMomentum_After     = new TH1F("MissingMomentum_After",     ";P_{miss} (GeV)              ;Events/0.01 GeV",       1000,  0.0,  10.0);
     dHist_MissingPMinus_After       = new TH1F("MissingPMinus_After",       ";P^{-}_{miss} (GeV)          ;Events/0.01 GeV",        200,  0.0,   2.0);
+    dHist_ThrownTopology_After      = new TH1F("ThrownTopology_After",      ";Thrown Topology             ;Events/1",                20,  0.0,  20.0);
 
     dHist_PhotonTiming_Raw          = new TH1F("PhotonTiming_Raw",          ";#Delta t_{Beam-RF} (ns)     ;Events/0.1 ns",          360,-18.0,  18.0);
     dHist_PhotonTiming_Weighted     = new TH1F("PhotonTiming_Weighted",     ";#Delta t_{Beam-RF} (ns)     ;Events/0.1 ns",          360,-18.0,  18.0);
@@ -164,6 +169,7 @@ void DSelector_piminus_p_recon::Init(TTree *locTree)
     dHist_ProtonPIDFOM_Weighted     = new TH1F("ProtonPIDFOM_Weighted",     ";PIDFOM_{p}                  ;Events/0.001",          1000,  0.0,   1.0);
     dHist_MissingMomentum_Weighted  = new TH1F("MissingMomentum_Weighted",  ";P_{miss} (GeV)              ;Events/0.01 GeV",       1000,  0.0,  10.0);
     dHist_MissingPMinus_Weighted    = new TH1F("MissingPMinus_Weighted",    ";P^{-}_{miss} (GeV)          ;Events/0.01 GeV",        200,  0.0,   2.0);
+    dHist_ThrownTopology_Weighted   = new TH1F("ThrownTopology_Weighted",   ";Thrown Topology             ;Events/1",                20,  0.0,  20.0);
 
     // CUSTOM OUTPUT BRACHES: FLAT TREE
     dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("accidweight");
@@ -175,7 +181,6 @@ void DSelector_piminus_p_recon::Init(TTree *locTree)
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("beam_p4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("pim_p4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("p_p4_truth");
-    // dFlatTreeInterface->Create_Branch_NoSplitTObject<TObjString>("ThrownTopology");
 }
 // END OF INITIALIZATION
 
@@ -268,6 +273,7 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
         dHist_ProtonPIDFOM_Before     ->Fill(dProtonWrapper->Get_PIDFOM());
         dHist_MissingMomentum_Before  ->Fill((locPiMinusP4 + locProtonP4 - locBeamP4).P());
         dHist_MissingPMinus_Before    ->Fill((locPiMinusP4 + locProtonP4 - locBeamP4).Minus());
+        dHist_ThrownTopology_Before   ->Fill(locThrownTopology.Data());
 
         // PERFORM CUTS
         if(dComboWrapper->Get_NumUnusedTracks()             > 0)                                                                dComboWrapper->Set_IsComboCut(true);
@@ -294,6 +300,7 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
         dHist_ProtonPIDFOM_After     ->Fill(dProtonWrapper->Get_PIDFOM());
         dHist_MissingMomentum_After  ->Fill((locPiMinusP4 + locProtonP4 - locBeamP4).P());
         dHist_MissingPMinus_After    ->Fill((locPiMinusP4 + locProtonP4 - locBeamP4).Minus());
+        dHist_ThrownTopology_After   ->Fill(locThrownTopology.Data());
 
 		// GET THE ACCIDENTAL WEIGHT FACTOR
 		TLorentzVector locBeamX4                       = dComboBeamWrapper->Get_X4_Measured();
@@ -326,6 +333,7 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
         dHist_ProtonPIDFOM_Weighted     ->Fill(dProtonWrapper->Get_PIDFOM(), locHistAccidWeightFactor);
         dHist_MissingMomentum_Weighted  ->Fill((locPiMinusP4 + locProtonP4 - locBeamP4).P(), locHistAccidWeightFactor);
         dHist_MissingPMinus_Weighted    ->Fill((locPiMinusP4 + locProtonP4 - locBeamP4).Minus(), locHistAccidWeightFactor);
+        dHist_ThrownTopology_Weighted   ->Fill(locThrownTopology.Data(), locHistAccidWeightFactor);
 
 		// EXECUTE ANALYSIS ACTIONS
         if(!Execute_Actions()) // if the active combo fails a cut, IsComboCutFlag automatically set
@@ -341,7 +349,6 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_p4_truth", locBeamP4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("pim_p4_truth", locPiMinusP4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("p_p4_truth", locProtonP4_Thrown);
-        // dFlatTreeInterface->Fill_TObject<TObjString>("ThrownTopology", locThrownTopology.Data());
         Fill_FlatTree();
 	}
     // END OF COMBO LOOP
@@ -353,6 +360,15 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
 void DSelector_piminus_p_recon::Finalize(void)
 {
 	// CALL THIS LAST
+    dHist_ThrownTopology_Before->GetXaxis()->LabelsOption(">");
+    dHist_ThrownTopology_Before->GetXaxis()->SetRangeUser(1, 10);
+    dHist_ThrownTopology_Before->Scale(1/dHist_ThrownTopology_Before->Integral());
+    dHist_ThrownTopology_After->GetXaxis()->LabelsOption(">");
+    dHist_ThrownTopology_After->GetXaxis()->SetRangeUser(1, 10);
+    dHist_ThrownTopology_After->Scale(1/dHist_ThrownTopology_After->Integral());
+    dHist_ThrownTopology_Weighted->GetXaxis()->LabelsOption(">");
+    dHist_ThrownTopology_Weighted->GetXaxis()->SetRangeUser(1, 10);
+    dHist_ThrownTopology_Weighted->Scale(1/dHist_ThrownTopology_Weighted->Integral());
 	DSelector::Finalize(); // saves results to the output file
 }
 // END OF FINALIZATION
