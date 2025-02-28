@@ -8,7 +8,7 @@ mass_piminus = 0.139570
 Deg_To_Rad = np.pi/180
 
 energy_list = np.arange(6.0, 11.0, 0.5)
-theta_list = np.arange(10, 171, 1)
+theta_list = np.arange(1, 180, 1)
 
 piminus_p = np.zeros((len(energy_list), len(theta_list)))
 piminus_theta = np.zeros((len(energy_list), len(theta_list)))
