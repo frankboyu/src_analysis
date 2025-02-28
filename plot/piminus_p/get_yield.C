@@ -24,10 +24,14 @@ using namespace RooFit;
 double pi = TMath::Pi();
 
 double yield_count(double energy_low, double energy_high, double theta_low, double theta_high, TTree *input_tree);
-double yield_root_no_bkg(double energy_low, double energy_high, double theta_low, double theta_high, TTree *input_tree);
-double yield_root_const_bkg(double energy_low, double energy_high, double theta_low, double theta_high, TTree *input_tree);
-double yield_root_linear_bkg(double energy_low, double energy_high, double theta_low, double theta_high, TTree *input_tree);
-double yield_root_quadratic_bkg(double energy_low, double energy_high, double theta_low, double theta_high, TTree *input_tree);
+double yield_single_gaus_no_bkg(double energy_low, double energy_high, double theta_low, double theta_high, TTree *input_tree);
+double yield_single_gaus_const_bkg(double energy_low, double energy_high, double theta_low, double theta_high, TTree *input_tree);
+double yield_single_gaus_linear_bkg(double energy_low, double energy_high, double theta_low, double theta_high, TTree *input_tree);
+double yield_single_gaus_quadratic_bkg(double energy_low, double energy_high, double theta_low, double theta_high, TTree *input_tree);
+double yield_double_gaus_no_bkg(double energy_low, double energy_high, double theta_low, double theta_high, TTree *input_tree);
+double yield_double_gaus_const_bkg(double energy_low, double energy_high, double theta_low, double theta_high, TTree *input_tree);
+double yield_double_gaus_linear_bkg(double energy_low, double energy_high, double theta_low, double theta_high, TTree *input_tree);
+double yield_double_gaus_quadratic_bkg(double energy_low, double energy_high, double theta_low, double theta_high, TTree *input_tree);
 
 TCanvas *canvas = new TCanvas("c1", "c1", 800, 600);
 
@@ -76,14 +80,14 @@ int get_yield(string Reaction)
             cout << "Theta: " << theta_edges[j] << " deg" << endl;
             if (Reaction.find("sim") != string::npos || Reaction.find("thrown") != string::npos)
             {
-                this_yield = yield_root_no_bkg(energy_edges[i], energy_edges[i+1], theta_edges[j], theta_edges[j+1], input_tree);
+                this_yield = yield_single_gaus_no_bkg(energy_edges[i], energy_edges[i+1], theta_edges[j], theta_edges[j+1], input_tree);
             }
             else if (Reaction.find("data") != string::npos)
             {
                 if (Reaction.find("miss") != string::npos)
-                    this_yield = yield_root_no_bkg(energy_edges[i], energy_edges[i+1], theta_edges[j], theta_edges[j+1], input_tree);
+                    this_yield = yield_single_gaus_no_bkg(energy_edges[i], energy_edges[i+1], theta_edges[j], theta_edges[j+1], input_tree);
                 else if (Reaction.find("inc") != string::npos)
-                    this_yield = yield_root_quadratic_bkg(energy_edges[i], energy_edges[i+1], theta_edges[j], theta_edges[j+1], input_tree);
+                    this_yield = yield_single_gaus_quadratic_bkg(energy_edges[i], energy_edges[i+1], theta_edges[j], theta_edges[j+1], input_tree);
             }
             fprintf(txt_file, "%3.1f\t%6.1f\t%6.1f\t%6.1f\t%f\n", energy_edges[i], energy_edges[i+1], theta_edges[j], theta_edges[j+1], this_yield);
             canvas->Update();
@@ -106,11 +110,10 @@ double yield_count(double energy_low, double energy_high, double theta_low, doub
         input_tree->Draw(Form("n_pminus_truth>>hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, theta_low, theta_high), Form("n_pminus_truth>0.5 && n_pminus_truth<1.3 && beam_energy_truth>%f && beam_energy_truth<%f && thetaCM_truth>%f && thetaCM_truth<%f", energy_low, energy_high, theta_low, theta_high));
     hist->Draw();
 
-    double yield = hist->Integral();
-    return yield;
+    return hist->Integral();
 }
 
-double yield_root_no_bkg(double energy_low, double energy_high, double theta_low, double theta_high, TTree *input_tree)
+double yield_single_gaus_no_bkg(double energy_low, double energy_high, double theta_low, double theta_high, TTree *input_tree)
 {
     TH1F *hist = new TH1F(Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, theta_low, theta_high), Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, theta_low, theta_high), 100, 0.4, 1.4);
     if (!strncmp(input_tree->GetName(), "filteredtree_piminus_p_recon",   strlen("filteredtree_piminus_p_recon")))
@@ -130,10 +133,10 @@ double yield_root_no_bkg(double energy_low, double energy_high, double theta_low
     hist->Fit(model, "R");
     model->Draw("same");
 
-    return model->GetParameter(0)/hist->GetBinWidth(1) > 10 ? model->GetParameter(0)/hist->GetBinWidth(1) : 0;
+    return model->GetParameter(0)/hist->GetBinWidth(1);
 }
 
-double yield_root_const_bkg(double energy_low, double energy_high, double theta_low, double theta_high, TTree *input_tree)
+double yield_single_gaus_const_bkg(double energy_low, double energy_high, double theta_low, double theta_high, TTree *input_tree)
 {
     TH1F *hist = new TH1F(Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, theta_low, theta_high), Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, theta_low, theta_high), 100, 0.4, 1.4);
     if (!strncmp(input_tree->GetName(), "filteredtree_piminus_p_recon",   strlen("filteredtree_piminus_p_recon")))
@@ -153,10 +156,10 @@ double yield_root_const_bkg(double energy_low, double energy_high, double theta_
     hist->Fit(model, "R");
     model->Draw("same");
 
-    return model->GetParameter(0)/hist->GetBinWidth(1) > 10 ? model->GetParameter(0)/hist->GetBinWidth(1) : 0;
+    return model->GetParameter(0)/hist->GetBinWidth(1);
 }
 
-double yield_root_linear_bkg(double energy_low, double energy_high, double theta_low, double theta_high, TTree *input_tree)
+double yield_single_gaus_linear_bkg(double energy_low, double energy_high, double theta_low, double theta_high, TTree *input_tree)
 {
     TH1F *hist = new TH1F(Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, theta_low, theta_high), Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, theta_low, theta_high), 100, 0.4, 1.4);
     if (!strncmp(input_tree->GetName(), "filteredtree_piminus_p_recon",   strlen("filteredtree_piminus_p_recon")))
@@ -176,10 +179,10 @@ double yield_root_linear_bkg(double energy_low, double energy_high, double theta
     hist->Fit(model, "R");
     model->Draw("same");
 
-    return model->GetParameter(0)/hist->GetBinWidth(1) > 10 ? model->GetParameter(0)/hist->GetBinWidth(1) : 0;
+    return model->GetParameter(0)/hist->GetBinWidth(1);
 }
 
-double yield_root_quadratic_bkg(double energy_low, double energy_high, double theta_low, double theta_high, TTree *input_tree)
+double yield_single_gaus_quadratic_bkg(double energy_low, double energy_high, double theta_low, double theta_high, TTree *input_tree)
 {
     TH1F *hist = new TH1F(Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, theta_low, theta_high), Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, theta_low, theta_high), 100, 0.4, 1.4);
     if (!strncmp(input_tree->GetName(), "filteredtree_piminus_p_recon",   strlen("filteredtree_piminus_p_recon")))
@@ -199,5 +202,105 @@ double yield_root_quadratic_bkg(double energy_low, double energy_high, double th
     hist->Fit(model, "R");
     model->Draw("same");
 
-    return model->GetParameter(0)/hist->GetBinWidth(1) > 10 ? model->GetParameter(0)/hist->GetBinWidth(1) : 0;
+    return model->GetParameter(0)/hist->GetBinWidth(1);
+}
+
+double yield_double_gaus_no_bkg(double energy_low, double energy_high, double theta_low, double theta_high, TTree *input_tree)
+{
+    TH1F *hist = new TH1F(Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, theta_low, theta_high), Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, theta_low, theta_high), 100, 0.4, 1.4);
+    if (!strncmp(input_tree->GetName(), "filteredtree_piminus_p_recon",   strlen("filteredtree_piminus_p_recon")))
+        input_tree->Draw(Form("n_pminus_kin>>hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, theta_low, theta_high), Form("accidweight*(n_pminus_kin>0.5 && n_pminus_kin<1.3 && beam_energy_kin>%f && beam_energy_kin<%f && thetaCM_kin>%f && thetaCM_kin<%f)", energy_low, energy_high, theta_low, theta_high));
+    else if (!strncmp(input_tree->GetName(), "filteredtree_piminus_p_thrown",   strlen("filteredtree_piminus_p_thrown")))
+        input_tree->Draw(Form("n_pminus_truth>>hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, theta_low, theta_high), Form("n_pminus_truth>0.5 && n_pminus_truth<1.3 && beam_energy_truth>%f && beam_energy_truth<%f && thetaCM_truth>%f && thetaCM_truth<%f", energy_low, energy_high, theta_low, theta_high));
+    hist->Draw();
+
+    if (hist->Integral() < 50)
+        return 0;
+
+    TF1 *model = new TF1("model", "[0]/sqrt(2*TMath::Pi()*[2]*[2])*exp(-0.5*((x-[1])/[2])**2) + [3]/sqrt(2*TMath::Pi()*[4]*[4])*exp(-0.5*((x-[1])/[4])**2)", 0.5, 1.3);
+    model->SetParameters(hist->GetMaximum()*0.9*hist->GetBinWidth(1), 0.9, 0.05, hist->GetMaximum()*0.9*hist->GetBinWidth(1), 0.05);
+    model->SetParLimits(0, 0, hist->GetMaximum());
+    model->SetParLimits(1, 0.7, 1.1);
+    model->SetParLimits(2, 0.01, 0.20);
+    model->SetParLimits(3, 0, hist->GetMaximum());
+    model->SetParLimits(4, 0.01, 0.20);
+    hist->Fit(model, "R");
+    model->Draw("same");
+
+    return (model->GetParameter(0)+model->GetParameter(3))/hist->GetBinWidth(1);
+}
+
+double yield_double_gaus_const_bkg(double energy_low, double energy_high, double theta_low, double theta_high, TTree *input_tree)
+{
+    TH1F *hist = new TH1F(Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, theta_low, theta_high), Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, theta_low, theta_high), 100, 0.4, 1.4);
+    if (!strncmp(input_tree->GetName(), "filteredtree_piminus_p_recon",   strlen("filteredtree_piminus_p_recon")))
+        input_tree->Draw(Form("n_pminus_kin>>hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, theta_low, theta_high), Form("accidweight*(n_pminus_kin>0.5 && n_pminus_kin<1.3 && beam_energy_kin>%f && beam_energy_kin<%f && thetaCM_kin>%f && thetaCM_kin<%f)", energy_low, energy_high, theta_low, theta_high));
+    else if (!strncmp(input_tree->GetName(), "filteredtree_piminus_p_thrown",   strlen("filteredtree_piminus_p_thrown")))
+        input_tree->Draw(Form("n_pminus_truth>>hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, theta_low, theta_high), Form("n_pminus_truth>0.5 && n_pminus_truth<1.3 && beam_energy_truth>%f && beam_energy_truth<%f && thetaCM_truth>%f && thetaCM_truth<%f", energy_low, energy_high, theta_low, theta_high));
+    hist->Draw();
+
+    if (hist->Integral() < 50)
+        return 0;
+
+    TF1 *model = new TF1("model", "[0]/sqrt(2*TMath::Pi()*[2]*[2])*exp(-0.5*((x-[1])/[2])**2) + [3]/sqrt(2*TMath::Pi()*[4]*[4])*exp(-0.5*((x-[1])/[4])**2) + [5]", 0.5, 1.3);
+    model->SetParameters(hist->GetMaximum()*0.9*hist->GetBinWidth(1), 0.9, 0.05, hist->GetMaximum()*0.9*hist->GetBinWidth(1), 0.05, 0.0);
+    model->SetParLimits(0, 0, hist->GetMaximum());
+    model->SetParLimits(1, 0.7, 1.1);
+    model->SetParLimits(2, 0.01, 0.20);
+    model->SetParLimits(3, 0, hist->GetMaximum());
+    model->SetParLimits(4, 0.01, 0.20);
+    hist->Fit(model, "R");
+    model->Draw("same");
+
+    return (model->GetParameter(0)+model->GetParameter(3))/hist->GetBinWidth(1);
+}
+
+double yield_single_gaus_linear_bkg(double energy_low, double energy_high, double theta_low, double theta_high, TTree *input_tree)
+{
+    TH1F *hist = new TH1F(Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, theta_low, theta_high), Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, theta_low, theta_high), 100, 0.4, 1.4);
+    if (!strncmp(input_tree->GetName(), "filteredtree_piminus_p_recon",   strlen("filteredtree_piminus_p_recon")))
+        input_tree->Draw(Form("n_pminus_kin>>hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, theta_low, theta_high), Form("accidweight*(n_pminus_kin>0.5 && n_pminus_kin<1.3 && beam_energy_kin>%f && beam_energy_kin<%f && thetaCM_kin>%f && thetaCM_kin<%f)", energy_low, energy_high, theta_low, theta_high));
+    else if (!strncmp(input_tree->GetName(), "filteredtree_piminus_p_thrown",   strlen("filteredtree_piminus_p_thrown")))
+        input_tree->Draw(Form("n_pminus_truth>>hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, theta_low, theta_high), Form("n_pminus_truth>0.5 && n_pminus_truth<1.3 && beam_energy_truth>%f && beam_energy_truth<%f && thetaCM_truth>%f && thetaCM_truth<%f", energy_low, energy_high, theta_low, theta_high));
+    hist->Draw();
+
+    if (hist->Integral() < 50)
+        return 0;
+
+    TF1 *model = new TF1("model", "[0]/sqrt(2*TMath::Pi()*[2]*[2])*exp(-0.5*((x-[1])/[2])**2) + [3]/sqrt(2*TMath::Pi()*[4]*[4])*exp(-0.5*((x-[1])/[4])**2) + [5]*x + [6]", 0.5, 1.3);
+    model->SetParameters(hist->GetMaximum()*0.9*hist->GetBinWidth(1), 0.9, 0.05, hist->GetMaximum()*0.9*hist->GetBinWidth(1), 0.05, 0.0, 0.0);
+    model->SetParLimits(0, 0, hist->GetMaximum());
+    model->SetParLimits(1, 0.7, 1.1);
+    model->SetParLimits(2, 0.01, 0.20);
+    model->SetParLimits(3, 0, hist->GetMaximum());
+    model->SetParLimits(4, 0.01, 0.20);
+    hist->Fit(model, "R");
+    model->Draw("same");
+
+    return (model->GetParameter(0)+model->GetParameter(3))/hist->GetBinWidth(1);
+}
+
+double yield_single_gaus_quadratic_bkg(double energy_low, double energy_high, double theta_low, double theta_high, TTree *input_tree)
+{
+    TH1F *hist = new TH1F(Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, theta_low, theta_high), Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, theta_low, theta_high), 100, 0.4, 1.4);
+    if (!strncmp(input_tree->GetName(), "filteredtree_piminus_p_recon",   strlen("filteredtree_piminus_p_recon")))
+        input_tree->Draw(Form("n_pminus_kin>>hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, theta_low, theta_high), Form("accidweight*(n_pminus_kin>0.5 && n_pminus_kin<1.3 && beam_energy_kin>%f && beam_energy_kin<%f && thetaCM_kin>%f && thetaCM_kin<%f)", energy_low, energy_high, theta_low, theta_high));
+    else if (!strncmp(input_tree->GetName(), "filteredtree_piminus_p_thrown",   strlen("filteredtree_piminus_p_thrown")))
+        input_tree->Draw(Form("n_pminus_truth>>hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, theta_low, theta_high), Form("n_pminus_truth>0.5 && n_pminus_truth<1.3 && beam_energy_truth>%f && beam_energy_truth<%f && thetaCM_truth>%f && thetaCM_truth<%f", energy_low, energy_high, theta_low, theta_high));
+    hist->Draw();
+
+    if (hist->Integral() < 50)
+        return 0;
+
+    TF1 *model = new TF1("model", "[0]/sqrt(2*TMath::Pi()*[2]*[2])*exp(-0.5*((x-[1])/[2])**2) + [3]/sqrt(2*TMath::Pi()*[4]*[4])*exp(-0.5*((x-[1])/[4])**2) + [5]*x*x + [6]*x + [7]", 0.5, 1.3);
+    model->SetParameters(hist->GetMaximum()*0.9*hist->GetBinWidth(1), 0.9, 0.05, hist->GetMaximum()*0.9*hist->GetBinWidth(1), 0.05, 0.0, 0.0, 0.0);
+    model->SetParLimits(0, 0, hist->GetMaximum());
+    model->SetParLimits(1, 0.7, 1.1);
+    model->SetParLimits(2, 0.01, 0.20);
+    model->SetParLimits(3, 0, hist->GetMaximum());
+    model->SetParLimits(4, 0.01, 0.20);
+    hist->Fit(model, "R");
+    model->Draw("same");
+
+    return (model->GetParameter(0)+model->GetParameter(3))/hist->GetBinWidth(1);
 }
