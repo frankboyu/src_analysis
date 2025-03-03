@@ -373,7 +373,7 @@ def main(argv):
 		file_list.sort()
 
                 # Remove elements ending with ".tar"
-		file_list = [item for item in file_list if not item.endswith(".tar")]
+		# file_list = [item for item in file_list if not item.endswith(".tar")]
 
 		if(options.space):
                         # Select N evenly spaced entries
@@ -383,7 +383,8 @@ def main(argv):
 
 		# Add jobs to workflow
 		for FILEPATH in file_list:
-			add_job(WORKFLOW, FILEPATH, config_dict)
+			if "dana" in FILEPATH:
+				add_job(WORKFLOW, FILEPATH, config_dict)
 
 if __name__ == "__main__":
 	main(sys.argv[1:])
