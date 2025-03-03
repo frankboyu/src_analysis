@@ -190,7 +190,7 @@ p_points = np.arange(0.25, 3, 0.01)
 dE_points = exponential(p_points, *popt)
 plt.plot(p_points, dE_points, label="dE/dx = exp(-4.5*p + 5) + 2")
 plt.plot(np.ones(400)*0.35, np.linspace(0, 40, 400))
-plt.plot(np.ones(400)*1.50, np.linspace(0, 40, 400))
+plt.plot(np.ones(400)*1.30, np.linspace(0, 40, 400))
 # plt.plot(points[:,0], points[:,1], 'r.', label="Data points")
 plt.ylim(0,40)
 
