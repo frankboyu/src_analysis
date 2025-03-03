@@ -48,7 +48,7 @@ Setup_Script()
 	    tar xvf $INPUTFILE --transform='s/.*\///'
 	    rm $INPUTFILE
 	    # update input files
-	    export INPUTFILE=${INPUTFILE/.hddm.tar/_*.hddm}
+	    export INPUTFILE=*.hddm
 	    echo INPUTFILE = $INPUTFILE
 	fi
 
