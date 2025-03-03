@@ -166,8 +166,8 @@ class Hist2D:
         return Hist1D(self.TH2.ProjectionY(),**kwargs)
 
 
-def exponential(x, a, b, c):
-    return np.exp(a*x+b)+c
+def exponential(x, a, b, c, d, e):
+    return np.exp(a*x+b)+c*x*x+d*x+e
 
 points = np.loadtxt('points.txt', delimiter=',', skiprows=1)
 
@@ -176,8 +176,8 @@ print(popt)
 
 # plt.plot(points[:,0], exponential(points[:,0], *popt))
 
-file_data = File("/work/halld2/home/boyu/src_analysis/filter/output/test/filteredtree_phi_d_recon_data_2H_kpkmd_alldata.root")
-file_sim = File("/work/halld2/home/boyu/src_analysis/filter/output/test/filteredtree_phi_d_recon_sim_2H_kpkmd.root")
+file_data = File("alldata.root")
+# file_sim = File("/work/halld2/home/boyu/src_analysis/filter/output/test/filteredtree_phi_d_recon_sim_2H_kpkmd.root")
 
 hist_data = file_data.get('no_cut/dEdx_d_no_cut')
 hist_data.yedge = hist_data.yedge*1000000
@@ -186,9 +186,12 @@ hist_data.plotHeatmap(label="Data")
 # hist_sim.plotHeatmap(label="Sim")
 # plt.legend()
 p_points = np.arange(0.25, 3, 0.01)
-dE_points = np.exp(-5.5*p_points + 5.0) + 2.5
-# dE_points = exponential(p_points, *popt)
+# dE_points = np.exp(-30*p_points+15)+15*p_points*p_points-40*p_points+25
+dE_points = exponential(p_points, *popt)
 plt.plot(p_points, dE_points, label="dE/dx = exp(-4.5*p + 5) + 2")
-plt.plot(points[:,0], points[:,1], 'ro', label="Data points")
+plt.plot(np.ones(400)*0.35, np.linspace(0, 40, 400))
+plt.plot(np.ones(400)*1.50, np.linspace(0, 40, 400))
+# plt.plot(points[:,0], points[:,1], 'r.', label="Data points")
+plt.ylim(0,40)
 
 plt.savefig("fit.png")
