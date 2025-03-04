@@ -142,7 +142,7 @@ void DSelector_piminus_p_recon::Init(TTree *locTree)
     dHist_ProtonPIDFOM_Before       = new TH1F("ProtonPIDFOM_Before",       ";PIDFOM_{p}                  ;Events/0.001",          1000,  0.0,   1.0);
     dHist_MissingMomentum_Before    = new TH1F("MissingMomentum_Before",    ";P_{miss} (GeV)              ;Events/0.01 GeV",       1000,  0.0,  10.0);
     dHist_MissingPMinus_Before      = new TH1F("MissingPMinus_Before",      ";P^{-}_{miss} (GeV)          ;Events/0.01 GeV",        200,  0.0,   2.0);
-    dHist_ThrownTopology_Before     = new TH1F("ThrownTopology_Before",     ";Thrown Topology             ;Events/1",                20,  0.0,  20.0);
+    dHist_ThrownTopology_Before     = new TH1F("ThrownTopology_Before",     ";Thrown Topology             ;Events/1",                20,  0.5,  20.5);
 
     dHist_NumUnusedTracks_After     = new TH1F("NumUnusedTracks_After",     ";Unused Tracks               ;Events/1",                10,  0.0,  10.0);
     dHist_NumUnusedShowers_After    = new TH1F("NumUnusedShowers_After",    ";Unused Showers              ;Events/1",                10,  0.0,  10.0);
@@ -154,7 +154,7 @@ void DSelector_piminus_p_recon::Init(TTree *locTree)
     dHist_ProtonPIDFOM_After        = new TH1F("ProtonPIDFOM_After",        ";PIDFOM_{p}                  ;Events/0.001",          1000,  0.0,   1.0);
     dHist_MissingMomentum_After     = new TH1F("MissingMomentum_After",     ";P_{miss} (GeV)              ;Events/0.01 GeV",       1000,  0.0,  10.0);
     dHist_MissingPMinus_After       = new TH1F("MissingPMinus_After",       ";P^{-}_{miss} (GeV)          ;Events/0.01 GeV",        200,  0.0,   2.0);
-    dHist_ThrownTopology_After      = new TH1F("ThrownTopology_After",      ";Thrown Topology             ;Events/1",                20,  0.0,  20.0);
+    dHist_ThrownTopology_After      = new TH1F("ThrownTopology_After",      ";Thrown Topology             ;Events/1",                20,  0.5,  20.5);
 
     dHist_PhotonTiming_Raw          = new TH1F("PhotonTiming_Raw",          ";#Delta t_{Beam-RF} (ns)     ;Events/0.1 ns",          360,-18.0,  18.0);
     dHist_PhotonTiming_Weighted     = new TH1F("PhotonTiming_Weighted",     ";#Delta t_{Beam-RF} (ns)     ;Events/0.1 ns",          360,-18.0,  18.0);
@@ -169,7 +169,7 @@ void DSelector_piminus_p_recon::Init(TTree *locTree)
     dHist_ProtonPIDFOM_Weighted     = new TH1F("ProtonPIDFOM_Weighted",     ";PIDFOM_{p}                  ;Events/0.001",          1000,  0.0,   1.0);
     dHist_MissingMomentum_Weighted  = new TH1F("MissingMomentum_Weighted",  ";P_{miss} (GeV)              ;Events/0.01 GeV",       1000,  0.0,  10.0);
     dHist_MissingPMinus_Weighted    = new TH1F("MissingPMinus_Weighted",    ";P^{-}_{miss} (GeV)          ;Events/0.01 GeV",        200,  0.0,   2.0);
-    dHist_ThrownTopology_Weighted   = new TH1F("ThrownTopology_Weighted",   ";Thrown Topology             ;Events/1",                20,  0.0,  20.0);
+    dHist_ThrownTopology_Weighted   = new TH1F("ThrownTopology_Weighted",   ";Thrown Topology             ;Events/1",                20,  0.5,  20.5);
 
     // CUSTOM OUTPUT BRACHES: FLAT TREE
     dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("accidweight");
@@ -241,24 +241,24 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
             locProtonX4_Thrown = dThrownWrapper->Get_X4();
             locProtonP4_Thrown = dThrownWrapper->Get_P4();
 
-            if (dPiMinusWrapper->Get_ThrownIndex() >= 0)
-            {
-                dThrownWrapper->Set_ArrayIndex(dPiMinusWrapper->Get_ThrownIndex());
-                locThrownTopology += to_string(dThrownWrapper->Get_PID()) + "_";
-            }
-            else
-            {
-                locThrownTopology += "-1_";
-            }
-            if (dProtonWrapper->Get_ThrownIndex() >= 0)
-            {
-                dThrownWrapper->Set_ArrayIndex(dProtonWrapper->Get_ThrownIndex());
-                locThrownTopology += to_string(dThrownWrapper->Get_PID()) + "_";
-            }
-            else
-            {
-                locThrownTopology += "-1_";
-            }
+            // if (dPiMinusWrapper->Get_ThrownIndex() >= 0)
+            // {
+            //     dThrownWrapper->Set_ArrayIndex(dPiMinusWrapper->Get_ThrownIndex());
+            //     locThrownTopology += to_string(dThrownWrapper->Get_PID()) + "_";
+            // }
+            // else
+            // {
+            //     locThrownTopology += "-1_";
+            // }
+            // if (dProtonWrapper->Get_ThrownIndex() >= 0)
+            // {
+            //     dThrownWrapper->Set_ArrayIndex(dProtonWrapper->Get_ThrownIndex());
+            //     locThrownTopology += to_string(dThrownWrapper->Get_PID()) + "_";
+            // }
+            // else
+            // {
+            //     locThrownTopology += "-1_";
+            // }
             locThrownTopology += Get_ThrownTopologyString();
         }
 
@@ -273,7 +273,7 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
         dHist_ProtonPIDFOM_Before     ->Fill(dProtonWrapper->Get_PIDFOM());
         dHist_MissingMomentum_Before  ->Fill((locPiMinusP4 + locProtonP4 - locBeamP4).P());
         dHist_MissingPMinus_Before    ->Fill((locPiMinusP4 + locProtonP4 - locBeamP4).Minus());
-        dHist_ThrownTopology_Before   ->Fill(locThrownTopology.Data());
+        dHist_ThrownTopology_Before   ->Fill(locThrownTopology.Data(), 1);
 
         // PERFORM CUTS
         if(dComboWrapper->Get_NumUnusedTracks()             > 0)                                                                dComboWrapper->Set_IsComboCut(true);
@@ -300,7 +300,7 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
         dHist_ProtonPIDFOM_After     ->Fill(dProtonWrapper->Get_PIDFOM());
         dHist_MissingMomentum_After  ->Fill((locPiMinusP4 + locProtonP4 - locBeamP4).P());
         dHist_MissingPMinus_After    ->Fill((locPiMinusP4 + locProtonP4 - locBeamP4).Minus());
-        dHist_ThrownTopology_After   ->Fill(locThrownTopology.Data());
+        dHist_ThrownTopology_After   ->Fill(locThrownTopology.Data(), 1);
 
 		// GET THE ACCIDENTAL WEIGHT FACTOR
 		TLorentzVector locBeamX4                       = dComboBeamWrapper->Get_X4_Measured();
