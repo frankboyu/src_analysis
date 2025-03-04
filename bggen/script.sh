@@ -126,6 +126,10 @@ Save_Histograms()
 
 		# save it
 		local OUTPUT_FILE=${OUTDIR_THIS}/hd_root_${RUN_NUMBER}_${FILE_NUMBER}.root
+        if [ "${FILE_NUMBER}" != "-1" ] ; then
+            local OUTDIR_THIS=${OUTDIR_LARGE}/hists
+            local OUTPUT_FILE=${OUTDIR_THIS}/hd_root_${RUN_NUMBER}.root
+        fi
 		echo "Adding hd_root.root to swif2 output: $OUTPUT_FILE"
 		swif2 output hd_root.root $OUTPUT_FILE
 
@@ -233,6 +237,10 @@ Save_ROOTFiles()
 
 		# save it
 		local OUTPUT_FILE=${OUTDIR_THIS}/${BASE_NAME}_${RUN_NUMBER}_${FILE_NUMBER}.root
+        if [ "${FILE_NUMBER}" != "-1" ] ; then
+            local OUTDIR_THIS=${OUTDIR_LARGE}/${BASE_NAME}
+            local OUTPUT_FILE=${OUTDIR_THIS}/${BASE_NAME}_${RUN_NUMBER}.root
+        fi
 		echo "Adding $ROOT_FILE to swif2 output: $OUTPUT_FILE"
 		swif2 output $ROOT_FILE $OUTPUT_FILE
 
