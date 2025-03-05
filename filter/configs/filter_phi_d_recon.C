@@ -266,17 +266,17 @@ void filter_phi_d_recon(string reaction_name, string input_mode, string output_m
             hist_kp_dEdx_tof_kin.Write();
             TH2D hist_kp_dEdx_st_kin                = *rdf.Histo2D({("kp_dEdx_st_kin_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 500, 0.0, 10.0, 400, 0.0, 40},"kp_momentum_kin","kp_dedx_st_keV_per_cm","accidweight");
             hist_kp_dEdx_st_kin.Write();
-            TH1D hist_kp_DeltaT_kin                 = *rdf.Histo1D({("kp_DeltaT_kin_"+ label).c_str(), ";#Delta t_{#pi^{-}} (ns);Counts", 400, -20.0, 20.0},"kp_DeltaT_kin","accidweight");
+            TH1D hist_kp_DeltaT_kin                 = *rdf.Histo1D({("kp_DeltaT_kin_"+ label).c_str(), ";#Delta t_{K^{+}} (ns);Counts", 400, -20.0, 20.0},"kp_DeltaT_kin","accidweight");
             hist_kp_DeltaT_kin.Write();
-            TH2D hist_kp_kinematics_kin             = *rdf.Histo2D({("kp_kinematics_kin_"+ label).c_str(), ";P_{#pi^{-}} (GeV/c);#theta_{#pi^{-}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"kp_momentum_kin","kp_theta_kin","accidweight");
+            TH2D hist_kp_kinematics_kin             = *rdf.Histo2D({("kp_kinematics_kin_"+ label).c_str(), ";P_{K^{+}} (GeV/c);#theta_{K^{+}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"kp_momentum_kin","kp_theta_kin","accidweight");
             hist_kp_kinematics_kin.Write();
-            TH2D hist_kp_kinematics_fdc_kin         = *rdf.Histo2D({("kp_kinematics_fdc_kin_"+ label).c_str(), ";P_{#pi^{-}} (GeV/c);#theta_{#pi^{-}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"kp_momentum_kin","kp_theta_kin","kp_in_fdc");
+            TH2D hist_kp_kinematics_fdc_kin         = *rdf.Histo2D({("kp_kinematics_fdc_kin_"+ label).c_str(), ";P_{K^{+}} (GeV/c);#theta_{K^{+}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"kp_momentum_kin","kp_theta_kin","kp_in_fdc");
             hist_kp_kinematics_fdc_kin.Write();
-            TH2D hist_kp_kinematics_fdc_cdc_kin     = *rdf.Histo2D({("kp_kinematics_fdc_cdc_kin_"+ label).c_str(), ";P_{#pi^{-}} (GeV/c);#theta_{#pi^{-}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"kp_momentum_kin","kp_theta_kin","kp_in_fdc_cdc");
+            TH2D hist_kp_kinematics_fdc_cdc_kin     = *rdf.Histo2D({("kp_kinematics_fdc_cdc_kin_"+ label).c_str(), ";P_{K^{+}} (GeV/c);#theta_{K^{+}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"kp_momentum_kin","kp_theta_kin","kp_in_fdc_cdc");
             hist_kp_kinematics_fdc_cdc_kin.Write();
-            TH2D hist_kp_kinematics_cdc_kin         = *rdf.Histo2D({("kp_kinematics_cdc_kin_"+ label).c_str(), ";P_{#pi^{-}} (GeV/c);#theta_{#pi^{-}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"kp_momentum_kin","kp_theta_kin","kp_in_cdc");
+            TH2D hist_kp_kinematics_cdc_kin         = *rdf.Histo2D({("kp_kinematics_cdc_kin_"+ label).c_str(), ";P_{K^{+}} (GeV/c);#theta_{K^{+}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"kp_momentum_kin","kp_theta_kin","kp_in_cdc");
             hist_kp_kinematics_cdc_kin.Write();
-            TH2D hist_kp_kinematics_neither_kin     = *rdf.Histo2D({("kp_kinematics_neither_kin_"+ label).c_str(), ";P_{#pi^{-}} (GeV/c);#theta_{#pi^{-}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"kp_momentum_kin","kp_theta_kin","kp_in_neither");
+            TH2D hist_kp_kinematics_neither_kin     = *rdf.Histo2D({("kp_kinematics_neither_kin_"+ label).c_str(), ";P_{K^{+}} (GeV/c);#theta_{K^{+}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"kp_momentum_kin","kp_theta_kin","kp_in_neither");
             hist_kp_kinematics_neither_kin.Write();
 
             TH1D hist_km_pidfom                     = *rdf.Histo1D({("km_pidfom_"+ label).c_str(), ";km_pidfom;Counts", 100, 0.0, 1.0},"km_pidfom","accidweight");
@@ -289,17 +289,17 @@ void filter_phi_d_recon(string reaction_name, string input_mode, string output_m
             hist_km_dEdx_tof_kin.Write();
             TH2D hist_km_dEdx_st_kin                = *rdf.Histo2D({("km_dEdx_st_kin_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 500, 0.0, 10.0, 400, 0.0, 40},"km_momentum_kin","km_dedx_st_keV_per_cm","accidweight");
             hist_km_dEdx_st_kin.Write();
-            TH1D hist_km_DeltaT_kin                 = *rdf.Histo1D({("km_DeltaT_kin_"+ label).c_str(), ";#Delta t_{#pi^{-}} (ns);Counts", 400, -20.0, 20.0},"km_DeltaT_kin","accidweight");
+            TH1D hist_km_DeltaT_kin                 = *rdf.Histo1D({("km_DeltaT_kin_"+ label).c_str(), ";#Delta t_{K^{-}} (ns);Counts", 400, -20.0, 20.0},"km_DeltaT_kin","accidweight");
             hist_km_DeltaT_kin.Write();
-            TH2D hist_km_kinematics_kin             = *rdf.Histo2D({("km_kinematics_kin_"+ label).c_str(), ";P_{#pi^{-}} (GeV/c);#theta_{#pi^{-}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"km_momentum_kin","km_theta_kin","accidweight");
+            TH2D hist_km_kinematics_kin             = *rdf.Histo2D({("km_kinematics_kin_"+ label).c_str(), ";P_{K^{-}} (GeV/c);#theta_{K^{-}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"km_momentum_kin","km_theta_kin","accidweight");
             hist_km_kinematics_kin.Write();
-            TH2D hist_km_kinematics_fdc_kin         = *rdf.Histo2D({("km_kinematics_fdc_kin_"+ label).c_str(), ";P_{#pi^{-}} (GeV/c);#theta_{#pi^{-}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"km_momentum_kin","km_theta_kin","km_in_fdc");
+            TH2D hist_km_kinematics_fdc_kin         = *rdf.Histo2D({("km_kinematics_fdc_kin_"+ label).c_str(), ";P_{K^{-}} (GeV/c);#theta_{K^{-}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"km_momentum_kin","km_theta_kin","km_in_fdc");
             hist_km_kinematics_fdc_kin.Write();
-            TH2D hist_km_kinematics_fdc_cdc_kin     = *rdf.Histo2D({("km_kinematics_fdc_cdc_kin_"+ label).c_str(), ";P_{#pi^{-}} (GeV/c);#theta_{#pi^{-}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"km_momentum_kin","km_theta_kin","km_in_fdc_cdc");
+            TH2D hist_km_kinematics_fdc_cdc_kin     = *rdf.Histo2D({("km_kinematics_fdc_cdc_kin_"+ label).c_str(), ";P_{K^{-}} (GeV/c);#theta_{K^{-}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"km_momentum_kin","km_theta_kin","km_in_fdc_cdc");
             hist_km_kinematics_fdc_cdc_kin.Write();
-            TH2D hist_km_kinematics_cdc_kin         = *rdf.Histo2D({("km_kinematics_cdc_kin_"+ label).c_str(), ";P_{#pi^{-}} (GeV/c);#theta_{#pi^{-}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"km_momentum_kin","km_theta_kin","km_in_cdc");
+            TH2D hist_km_kinematics_cdc_kin         = *rdf.Histo2D({("km_kinematics_cdc_kin_"+ label).c_str(), ";P_{K^{-}} (GeV/c);#theta_{K^{-}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"km_momentum_kin","km_theta_kin","km_in_cdc");
             hist_km_kinematics_cdc_kin.Write();
-            TH2D hist_km_kinematics_neither_kin     = *rdf.Histo2D({("km_kinematics_neither_kin_"+ label).c_str(), ";P_{#pi^{-}} (GeV/c);#theta_{#pi^{-}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"km_momentum_kin","km_theta_kin","km_in_neither");
+            TH2D hist_km_kinematics_neither_kin     = *rdf.Histo2D({("km_kinematics_neither_kin_"+ label).c_str(), ";P_{K^{-}} (GeV/c);#theta_{K^{-}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"km_momentum_kin","km_theta_kin","km_in_neither");
             hist_km_kinematics_neither_kin.Write();
 
             TH2D hist_d_dEdx_cdc_meas               = *rdf.Histo2D({("d_dEdx_cdc_meas_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 500, 0.0, 10.0, 400, 0.0, 40},"d_momentum_meas","d_dedx_cdc_keV_per_cm","accidweight");
@@ -310,9 +310,9 @@ void filter_phi_d_recon(string reaction_name, string input_mode, string output_m
             hist_d_dEdx_tof_kin.Write();
             TH2D hist_d_dEdx_st_kin                 = *rdf.Histo2D({("d_dEdx_st_kin_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 500, 0.0, 10.0, 400, 0.0, 40},"d_momentum_kin","d_dedx_st_keV_per_cm","accidweight");
             hist_d_dEdx_st_kin.Write();
-            TH1D hist_d_DeltaT_kin                  = *rdf.Histo1D({("d_DeltaT_kin_"+ label).c_str(), ";#Delta t_{#pi^{-}} (ns);Counts", 400, -20.0, 20.0},"d_DeltaT_kin","accidweight");
+            TH1D hist_d_DeltaT_kin                  = *rdf.Histo1D({("d_DeltaT_kin_"+ label).c_str(), ";#Delta t_{D} (ns);Counts", 400, -20.0, 20.0},"d_DeltaT_kin","accidweight");
             hist_d_DeltaT_kin.Write();
-            TH2D hist_d_kinematics_kin              = *rdf.Histo2D({("d_kinematics_kin_"+ label).c_str(), ";P_{#pi^{-}} (GeV/c);#theta_{#pi^{-}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"d_momentum_kin","d_theta_kin","accidweight");
+            TH2D hist_d_kinematics_kin              = *rdf.Histo2D({("d_kinematics_kin_"+ label).c_str(), ";P_{D} (GeV/c);#theta_{D} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"d_momentum_kin","d_theta_kin","accidweight");
             hist_d_kinematics_kin.Write();
 
             TH1D hist_phi_mass_kin                  = *rdf.Histo1D({("phi_mass_kin_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);Counts", 400, 0.9, 1.3},"phi_mass_kin","accidweight");
