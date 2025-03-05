@@ -1,4 +1,4 @@
-## src_analysis_skim
+## src_analysis_data
 
 Run ReactionFilter plugin of hd_root to skim the reconstructed data
 
@@ -22,4 +22,4 @@ Run ReactionFilter plugin of hd_root to skim the reconstructed data
 
 3.  To run through the entire dataset (not recommended, submit to the analysis launch instead)
 
-    ```sh run_skim.sh <REACTION>```
+    ```sh run_data.sh <REACTION>```
