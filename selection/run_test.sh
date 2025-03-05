@@ -2,8 +2,8 @@
 
 start=`date +%s`
 
-INPUTFILE=/work/halld2/home/boyu/src_analysis/bggen/output/4He_p_3736/tree_ghe_pimprotinc__B4_F4_T1_S4/*.root
-TREENAME=ghe_pimprotinc__B4_F4_T1_S4_Tree
+INPUTFILE=/work/halld2/home/boyu/src_analysis/bggen/output/4He_p_3736/tree_ghe_pimprotmisshe3__B4_F4_T1_S4/*.root
+TREENAME=ghe_pimprotmisshe3__B4_F4_T1_S4_Tree
 SELECTOR=piminus_p_recon
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
