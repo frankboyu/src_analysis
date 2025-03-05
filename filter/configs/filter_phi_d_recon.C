@@ -216,15 +216,16 @@ void filter_phi_d_recon(string reaction_name, string input_mode, string output_m
 
     // Filter events and save to new tree
     cout << "Filtering events...\n";
-    auto rdf_NoCut              = rdf_input;
-    auto rdf_dEdxCut            = rdf_NoCut.Filter("(d_momentum_meas > 0.35) && (d_momentum_meas < 1.30) && (d_dedx_cdc_keV_per_cm > (TMath::Exp(-29.68353898*d_momentum_meas+13.50623694)+17.88279645*d_momentum_meas*d_momentum_meas-42.15473796*d_momentum_meas+28.83200736))");
-    auto rdf_KinFitFOMCut       = rdf_dEdxCut.Filter("kinfit_fom > 0.01");
-    auto rdf_PIDFOMCut          = rdf_KinFitFOMCut.Filter("(kp_pidfom > 0.01) && (km_pidfom > 0.01)");
-    auto rdf_PhiMassCut         = rdf_PIDFOMCut.Filter("(phi_mass_kin > 1.01) && (phi_mass_kin < 1.03)");
-    auto rdf_output             = rdf_PhiMassCut;
+    auto rdf_NoCut          = rdf_input;
+    auto rdf_dEdxCut        = rdf_NoCut.Filter("(d_momentum_meas > 0.35) && (d_momentum_meas < 1.30) && (d_dedx_cdc_keV_per_cm > (TMath::Exp(-29.68353898*d_momentum_meas+13.50623694)+17.88279645*d_momentum_meas*d_momentum_meas-42.15473796*d_momentum_meas+28.83200736))");
+    auto rdf_KinFitFOMCut   = rdf_dEdxCut.Filter("kinfit_fom > 0.01");
+    auto rdf_PIDFOMCut      = rdf_KinFitFOMCut.Filter("(kp_pidfom > 0.01) && (km_pidfom > 0.01)");
+    auto rdf_MissPCut       = rdf_PIDFOMCut.Filter("(abs(struck_energy_balance_kin) < 1.0)");
+    auto rdf_PhiMassCut     = rdf_MissPCut.Filter("(phi_mass_kin > 0.98) && (phi_mass_kin < 1.06)");
+    auto rdf_output         = rdf_PhiMassCut;
 
-    RNode rdfs []       = {rdf_NoCut,   rdf_dEdxCut,    rdf_KinFitFOMCut,   rdf_PIDFOMCut,  rdf_PhiMassCut};
-    string labels []    = {"NoCut",     "dEdxCut",      "KinFitFOMCut",     "PIDFOMCut",    "PhiMassCut"};
+    RNode rdfs []       = {rdf_NoCut,   rdf_dEdxCut,    rdf_KinFitFOMCut,   rdf_PIDFOMCut,  rdf_MissPCut,   rdf_PhiMassCut};
+    string labels []    = {"NoCut",     "dEdxCut",      "KinFitFOMCut",     "PIDFOMCut",    "MissPCut",     "PhiMassCut"};
     int N_filters = sizeof(labels) / sizeof(labels[0]);
 
     // Save tree
