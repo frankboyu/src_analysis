@@ -169,7 +169,7 @@ class Hist2D:
 def exponential(x, a, b, c, d, e):
     return np.exp(a*x+b)+c*x*x+d*x+e
 
-points = np.loadtxt('points.txt', delimiter=',', skiprows=1)
+points = np.loadtxt('points_high.txt', delimiter=',', skiprows=1)
 
 popt, pcov = curve_fit(exponential, points[:,0], points[:,1])
 print(popt)
@@ -186,11 +186,15 @@ hist_data.plotHeatmap(label="Data")
 # hist_sim.plotHeatmap(label="Sim")
 # plt.legend()
 p_points = np.arange(0.25, 3, 0.01)
-# dE_points = np.exp(-30*p_points+15)+15*p_points*p_points-40*p_points+25
+
 dE_points = exponential(p_points, *popt)
-plt.plot(p_points, dE_points, label="dE/dx = exp(-4.5*p + 5) + 2")
-plt.plot(np.ones(400)*0.35, np.linspace(0, 40, 400))
-plt.plot(np.ones(400)*1.30, np.linspace(0, 40, 400))
+plt.plot(p_points, dE_points)
+
+dE_points = np.exp(-29.68353898*p_points+13.50623694)+17.88279645*p_points*p_points-42.15473796*p_points+28.83200736
+plt.plot(p_points, dE_points)
+
+# plt.plot(np.ones(400)*0.35, np.linspace(0, 40, 400))
+# plt.plot(np.ones(400)*1.30, np.linspace(0, 40, 400))
 # plt.plot(points[:,0], points[:,1], 'r.', label="Data points")
 plt.ylim(0,40)
 

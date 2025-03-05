@@ -217,7 +217,7 @@ void filter_phi_d_recon(string reaction_name, string input_mode, string output_m
     // Filter events and save to new tree
     cout << "Filtering events...\n";
     auto rdf_NoCut          = rdf_input;
-    auto rdf_dEdxCut        = rdf_NoCut.Filter("(d_momentum_meas > 0.35) && (d_momentum_meas < 1.30) && (d_dedx_cdc_keV_per_cm > (TMath::Exp(-29.68353898*d_momentum_meas+13.50623694)+17.88279645*d_momentum_meas*d_momentum_meas-42.15473796*d_momentum_meas+28.83200736))");
+    auto rdf_dEdxCut        = rdf_NoCut.Filter("(d_dedx_cdc_keV_per_cm > (TMath::Exp(-29.68353898*d_momentum_meas+13.50623694)+17.88279645*d_momentum_meas*d_momentum_meas-42.15473796*d_momentum_meas+28.83200736)) && (d_dedx_cdc_keV_per_cm < (TMath::Exp(-26.69276323*d_momentum_meas+15.92466317)+17.1164272*d_momentum_meas*d_momentum_meas-48.7542903*d_momentum_meas+40.25692313))");
     auto rdf_KinFitFOMCut   = rdf_dEdxCut.Filter("kinfit_fom > 0.01");
     auto rdf_PIDFOMCut      = rdf_KinFitFOMCut.Filter("(kp_pidfom > 0.01) && (km_pidfom > 0.01)");
     auto rdf_MissPCut       = rdf_PIDFOMCut.Filter("(abs(struck_energy_balance_kin) < 1.0)");
