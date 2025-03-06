@@ -221,11 +221,10 @@ void filter_phi_d_recon(string reaction_name, string input_mode, string output_m
     auto rdf_KinFitFOMCut   = rdf_dEdxCut.Filter("kinfit_fom > 0.01");
     auto rdf_PIDFOMCut      = rdf_KinFitFOMCut.Filter("(kp_pidfom > 0.01) && (km_pidfom > 0.01)");
     auto rdf_MissPCut       = rdf_PIDFOMCut.Filter("(abs(struck_energy_balance_kin) < 1.0)");
-    auto rdf_PhiMassCut     = rdf_MissPCut.Filter("(phi_mass_kin > 0.98) && (phi_mass_kin < 1.06)");
-    auto rdf_output         = rdf_PhiMassCut;
+    auto rdf_output         = rdf_MissPCut;
 
-    RNode rdfs []       = {rdf_NoCut,   rdf_dEdxCut,    rdf_KinFitFOMCut,   rdf_PIDFOMCut,  rdf_MissPCut,   rdf_PhiMassCut};
-    string labels []    = {"NoCut",     "dEdxCut",      "KinFitFOMCut",     "PIDFOMCut",    "MissPCut",     "PhiMassCut"};
+    RNode rdfs []       = {rdf_NoCut,   rdf_dEdxCut,    rdf_KinFitFOMCut,   rdf_PIDFOMCut,  rdf_MissPCut};
+    string labels []    = {"NoCut",     "dEdxCut",      "KinFitFOMCut",     "PIDFOMCut",    "MissPCut"};
     int N_filters = sizeof(labels) / sizeof(labels[0]);
 
     // Save tree
