@@ -188,14 +188,17 @@ hist_data.plotHeatmap(label="Data")
 p_points = np.arange(0.25, 3, 0.01)
 
 dE_points = exponential(p_points, *popt)
-plt.plot(p_points, dE_points)
+plt.plot(p_points, dE_points, label="Upper limit")
 
 dE_points = np.exp(-29.68353898*p_points+13.50623694)+17.88279645*p_points*p_points-42.15473796*p_points+28.83200736
-plt.plot(p_points, dE_points)
+plt.plot(p_points, dE_points, label="Lower limit")
 
 # plt.plot(np.ones(400)*0.35, np.linspace(0, 40, 400))
 # plt.plot(np.ones(400)*1.30, np.linspace(0, 40, 400))
 # plt.plot(points[:,0], points[:,1], 'r.', label="Data points")
 plt.ylim(0,40)
+plt.xlabel(r'$p$ (GeV/c)')
+plt.ylabel(r'$dE/dx$ (keV/cm)')
+plt.legend(loc='upper right')
 
 plt.savefig("fit.png")
