@@ -126,7 +126,7 @@ Save_Histograms()
 
 		# save it
 		local OUTPUT_FILE=${OUTDIR_THIS}/hd_root_${RUN_NUMBER}_${FILE_NUMBER}.root
-        if [ "${FILE_NUMBER}" != "-1" ] ; then
+        if [ "${FILE_NUMBER}" == "-1" ] ; then
             local OUTDIR_THIS=${OUTDIR_LARGE}/hists
             local OUTPUT_FILE=${OUTDIR_THIS}/hd_root_${RUN_NUMBER}.root
         fi
@@ -237,7 +237,7 @@ Save_ROOTFiles()
 
 		# save it
 		local OUTPUT_FILE=${OUTDIR_THIS}/${BASE_NAME}_${RUN_NUMBER}_${FILE_NUMBER}.root
-        if [ "${FILE_NUMBER}" != "-1" ] ; then
+        if [ "${FILE_NUMBER}" == "-1" ] ; then
             local OUTDIR_THIS=${OUTDIR_LARGE}/${BASE_NAME}
             local OUTPUT_FILE=${OUTDIR_THIS}/${BASE_NAME}_${RUN_NUMBER}.root
         fi
