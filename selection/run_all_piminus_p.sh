@@ -100,18 +100,14 @@ mv output/selectedtree_piminus_p_recon_sim_12C_missb11.root output/selectedtree_
 # mv output/selectedtree_piminus_p_thrown.root output/selectedtree_piminus_p_thrown_tagged_12C_flat.root
 
 ## bggen
-# sh run_local.sh '/cache/halld/gluex_simulations/REQUESTED_MC/bggen_upd-2021-11-nucleus-Helium-target-proton_3736/trees/tree_ghe_pimprotinc__B4_F4_T1_S4_bggen_upd/*.root' 'ghe_pimprotinc__B4_F4_T1_S4_Tree' 'piminus_p_recon'
-# mv output/selectedhist_piminus_p_recon_sim_4He_inc.root output/selectedhist_piminus_p_recon_bggen_4He_inc_proton.root
-# mv output/selectedtree_piminus_p_recon_sim_4He_inc.root output/selectedtree_piminus_p_recon_bggen_4He_inc_proton.root
-# sh run_local.sh '/cache/halld/gluex_simulations/REQUESTED_MC/bggen_upd-2021-11-nucleus-Helium-target-neutron_3739/trees/tree_ghe_pimprotinc__B4_F4_T1_S4_bggen_upd/*.root' 'ghe_pimprotinc__B4_F4_T1_S4_Tree' 'piminus_p_recon'
-# mv output/selectedhist_piminus_p_recon_sim_4He_inc.root output/selectedhist_piminus_p_recon_bggen_4He_inc_neutron.root
-# mv output/selectedtree_piminus_p_recon_sim_4He_inc.root output/selectedtree_piminus_p_recon_bggen_4He_inc_neutron.root
-# sh run_local.sh '/cache/halld/gluex_simulations/REQUESTED_MC/bggen_upd-2021-11-nucleus-Carbon-target-proton_3738/trees/tree_gc12_pimprotinc__B4_F4_T2_S5_bggen_upd/*.root' 'gc12_pimprotinc__B4_F4_T2_S5_Tree' 'piminus_p_recon'
-# mv output/selectedhist_piminus_p_recon_sim_12C_inc.root output/selectedhist_piminus_p_recon_bggen_12C_inc_proton.root
-# mv output/selectedtree_piminus_p_recon_sim_12C_inc.root output/selectedtree_piminus_p_recon_bggen_12C_inc_proton.root
-# sh run_local.sh '/cache/halld/gluex_simulations/REQUESTED_MC/bggen_upd-2021-11-nucleus-Carbon-target-neutron_3742/trees/tree_gc12_pimprotinc__B4_F4_T2_S5_bggen_upd/*.root' 'gc12_pimprotinc__B4_F4_T2_S5_Tree' 'piminus_p_recon'
-# mv output/selectedhist_piminus_p_recon_sim_12C_inc.root output/selectedhist_piminus_p_recon_bggen_12C_inc_neutron.root
-# mv output/selectedtree_piminus_p_recon_sim_12C_inc.root output/selectedtree_piminus_p_recon_bggen_12C_inc_neutron.root
+# sh run_batch.sh piminus_p_recon_bggen_4He_n_inc
+# sh run_batch.sh piminus_p_recon_bggen_4He_n_misshe3
+# sh run_batch.sh piminus_p_recon_bggen_4He_p_inc
+# sh run_batch.sh piminus_p_recon_bggen_4He_p_misshe3
+# sh run_batch.sh piminus_p_recon_bggen_12C_n_inc
+# sh run_batch.sh piminus_p_recon_bggen_12C_n_missb11
+# sh run_batch.sh piminus_p_recon_bggen_12C_p_inc
+# sh run_batch.sh piminus_p_recon_bggen_12C_p_missb11
 
 end=`date +%s`
 echo "Time taken: $(echo "scale=2; ($end - $start) / 60" | bc -l) minutes"
