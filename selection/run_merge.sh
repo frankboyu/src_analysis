@@ -25,6 +25,9 @@ elif [[ $REACTION == *"sim"* ]]; then
     elif [[ $REACTION == *"12C"* ]]; then
         hadd -f output/selectedtree_${REACTION}_one.root output/selectedtree_${REACTION}/090291/*.root
     fi
+elif [[ $REACTION == *"bggen"* ]]; then
+    hadd -f output/selectedhist_${REACTION}_all.root output/selectedhist_${REACTION}/*.root
+    hadd -f output/selectedtree_${REACTION}_all.root output/selectedtree_${REACTION}/*.root
 fi
 
 rm -r output/selectedhist_${REACTION}/
