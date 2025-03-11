@@ -52,7 +52,7 @@ int get_yield(string Reaction)
     gStyle->SetOptStat(1);
     gStyle->SetOptFit(1);
 
-    ifstream matrix_file("input/bin_edges.txt");
+    ifstream matrix_file("output/bin_edges.txt");
     vector<vector<double>> matrix;
     string line;
     while (getline(matrix_file, line))
