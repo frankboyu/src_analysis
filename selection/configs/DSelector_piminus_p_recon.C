@@ -172,6 +172,7 @@ void DSelector_piminus_p_recon::Init(TTree *locTree)
     dHist_ThrownTopology_Weighted   = new TH1F("ThrownTopology_Weighted",   ";Thrown Topology             ;Events/1",                20,  0.5,  20.5);
 
     // CUSTOM OUTPUT BRACHES: FLAT TREE
+    dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("thrown_topology");
     dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("accidweight");
 	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("pim_pidfom");  // the PIDFOM in the default flat branches pim_pid_fom is corrupted and always 0
 	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("p_pidfom");    // the PIDFOM in the default flat branches p_pid_fom is corrupted and always 0
@@ -230,6 +231,7 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
         TLorentzVector locBeamX4_Thrown, locPiMinusX4_Thrown, locProtonX4_Thrown;
         TLorentzVector locBeamP4_Thrown, locPiMinusP4_Thrown, locProtonP4_Thrown;
         TString locThrownTopology;
+        Int_t locThrownTopologyFlag = -1;
         if (dIsMC)
         {
             locBeamX4_Thrown = dThrownBeam->Get_X4();
@@ -241,25 +243,38 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
             locProtonX4_Thrown = dThrownWrapper->Get_X4();
             locProtonP4_Thrown = dThrownWrapper->Get_P4();
 
-            // if (dPiMinusWrapper->Get_ThrownIndex() >= 0)
-            // {
-            //     dThrownWrapper->Set_ArrayIndex(dPiMinusWrapper->Get_ThrownIndex());
-            //     locThrownTopology += to_string(dThrownWrapper->Get_PID()) + "_";
-            // }
-            // else
-            // {
-            //     locThrownTopology += "-1_";
-            // }
-            // if (dProtonWrapper->Get_ThrownIndex() >= 0)
-            // {
-            //     dThrownWrapper->Set_ArrayIndex(dProtonWrapper->Get_ThrownIndex());
-            //     locThrownTopology += to_string(dThrownWrapper->Get_PID()) + "_";
-            // }
-            // else
-            // {
-            //     locThrownTopology += "-1_";
-            // }
+            if (dPiMinusWrapper->Get_ThrownIndex() >= 0)
+            {
+                dThrownWrapper->Set_ArrayIndex(dPiMinusWrapper->Get_ThrownIndex());
+                locThrownTopology += to_string(dThrownWrapper->Get_PID()) + "_";
+            }
+            else
+            {
+                locThrownTopology += "-1_";
+            }
+            if (dProtonWrapper->Get_ThrownIndex() >= 0)
+            {
+                dThrownWrapper->Set_ArrayIndex(dProtonWrapper->Get_ThrownIndex());
+                locThrownTopology += to_string(dThrownWrapper->Get_PID()) + "_";
+            }
+            else
+            {
+                locThrownTopology += "-1_";
+            }
             locThrownTopology += Get_ThrownTopologyString();
+
+            if      (locThrownTopology == "9_14_#pi^{#minus}p")
+                locThrownTopologyFlag = 0;
+            else if (locThrownTopology == "9_14_#pi^{#plus}#pi^{#minus}p")
+                locThrownTopologyFlag = 1;
+            else if (locThrownTopology == "9_8_#pi^{#plus}#pi^{#minus}p")
+                locThrownTopologyFlag = 2;
+            else if (locThrownTopology == "9_14_2#gamma#pi^{#minus}p[#pi^{0}]")
+                locThrownTopologyFlag = 3;
+            else if (locThrownTopology == "9_8_#pi^{#plus}#pi^{#minus}n")
+                locThrownTopologyFlag = 4;
+            else
+                locThrownTopologyFlag = 999;
         }
 
         // FILL HISTOGRAMS BEFORE CUTS
@@ -340,6 +355,7 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
 			continue;
 
         // FILL FLAT TREE
+        dFlatTreeInterface->Fill_Fundamental<Int_t>("thrown_topology", locThrownTopologyFlag);
         dFlatTreeInterface->Fill_Fundamental<Double_t>("accidweight", locHistAccidWeightFactor);
 		dFlatTreeInterface->Fill_Fundamental<Double_t>("pim_pidfom", dPiMinusWrapper->Get_PIDFOM());
 		dFlatTreeInterface->Fill_Fundamental<Double_t>("p_pidfom", dProtonWrapper->Get_PIDFOM());
@@ -361,14 +377,8 @@ void DSelector_piminus_p_recon::Finalize(void)
 {
 	// CALL THIS LAST
     dHist_ThrownTopology_Before->GetXaxis()->LabelsOption(">");
-    dHist_ThrownTopology_Before->GetXaxis()->SetRangeUser(1, 10);
-    dHist_ThrownTopology_Before->Scale(1/dHist_ThrownTopology_Before->Integral());
     dHist_ThrownTopology_After->GetXaxis()->LabelsOption(">");
-    dHist_ThrownTopology_After->GetXaxis()->SetRangeUser(1, 10);
-    dHist_ThrownTopology_After->Scale(1/dHist_ThrownTopology_After->Integral());
     dHist_ThrownTopology_Weighted->GetXaxis()->LabelsOption(">");
-    dHist_ThrownTopology_Weighted->GetXaxis()->SetRangeUser(1, 10);
-    dHist_ThrownTopology_Weighted->Scale(1/dHist_ThrownTopology_Weighted->Integral());
 	DSelector::Finalize(); // saves results to the output file
 }
 // END OF FINALIZATION
