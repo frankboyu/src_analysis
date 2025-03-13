@@ -1,9 +1,9 @@
 #!/bin/bash
 
-REACTION=phi_d_2H
+REACTION=phi_d_4He
 XML_VERSION=dev
-RUN=90213
-EVENTS=10000
+RUN=90061
+EVENTS=1000000
 OPTIONS='cleangenerate=0 cleangeant=0 cleanmcsmear=0'
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
