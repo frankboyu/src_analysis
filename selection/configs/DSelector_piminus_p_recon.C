@@ -243,36 +243,34 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
             locProtonX4_Thrown = dThrownWrapper->Get_X4();
             locProtonP4_Thrown = dThrownWrapper->Get_P4();
 
-            if (dPiMinusWrapper->Get_ThrownIndex() >= 0)
-            {
-                dThrownWrapper->Set_ArrayIndex(dPiMinusWrapper->Get_ThrownIndex());
-                locThrownTopology += to_string(dThrownWrapper->Get_PID()) + "_";
-            }
-            else
-            {
-                locThrownTopology += "-1_";
-            }
-            if (dProtonWrapper->Get_ThrownIndex() >= 0)
-            {
-                dThrownWrapper->Set_ArrayIndex(dProtonWrapper->Get_ThrownIndex());
-                locThrownTopology += to_string(dThrownWrapper->Get_PID()) + "_";
-            }
-            else
-            {
-                locThrownTopology += "-1_";
-            }
+            // if (dPiMinusWrapper->Get_ThrownIndex() >= 0)
+            // {
+            //     dThrownWrapper->Set_ArrayIndex(dPiMinusWrapper->Get_ThrownIndex());
+            //     locThrownTopology += to_string(dThrownWrapper->Get_PID()) + "_";
+            // }
+            // else
+            // {
+            //     locThrownTopology += "-1_";
+            // }
+            // if (dProtonWrapper->Get_ThrownIndex() >= 0)
+            // {
+            //     dThrownWrapper->Set_ArrayIndex(dProtonWrapper->Get_ThrownIndex());
+            //     locThrownTopology += to_string(dThrownWrapper->Get_PID()) + "_";
+            // }
+            // else
+            // {
+            //     locThrownTopology += "-1_";
+            // }
             locThrownTopology += Get_ThrownTopologyString();
 
-            if      (locThrownTopology == "9_14_#pi^{#minus}p")
+            if      (locThrownTopology == "#pi^{#minus}p")
                 locThrownTopologyFlag = 0;
-            else if (locThrownTopology == "9_14_#pi^{#plus}#pi^{#minus}p")
+            else if (locThrownTopology == "#pi^{#plus}#pi^{#minus}p")
                 locThrownTopologyFlag = 1;
-            else if (locThrownTopology == "9_8_#pi^{#plus}#pi^{#minus}p")
+            else if (locThrownTopology == "#pi^{#plus}#pi^{#minus}n")
                 locThrownTopologyFlag = 2;
-            else if (locThrownTopology == "9_14_2#gamma#pi^{#minus}p[#pi^{0}]")
+            else if (locThrownTopology == "2#gamma#pi^{#minus}p[#pi^{0}]")
                 locThrownTopologyFlag = 3;
-            else if (locThrownTopology == "9_8_#pi^{#plus}#pi^{#minus}n")
-                locThrownTopologyFlag = 4;
             else
                 locThrownTopologyFlag = 999;
         }
