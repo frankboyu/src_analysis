@@ -218,50 +218,21 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
         //GET THROWN P4 AND TOPOLOGY
         TLorentzVector locBeamX4_Thrown, locKPlusX4_Thrown, locKMinusX4_Thrown, locDeuteronX4_Thrown;
         TLorentzVector locBeamP4_Thrown, locKPlusP4_Thrown, locKMinusP4_Thrown, locDeuteronP4_Thrown;
-        TString locThrownTopology;
-        // if (dIsMC)
-        // {
-        //     locBeamX4_Thrown = dThrownBeam->Get_X4();
-        //     locBeamP4_Thrown = dThrownBeam->Get_P4();
-        //     dThrownWrapper->Set_ArrayIndex(0);
-        //     locKPlusX4_Thrown = dThrownWrapper->Get_X4();
-        //     locKPlusP4_Thrown = dThrownWrapper->Get_P4();
-        //     dThrownWrapper->Set_ArrayIndex(1);
-        //     locKMinusX4_Thrown = dThrownWrapper->Get_X4();
-        //     locKMinusP4_Thrown = dThrownWrapper->Get_P4();
-        //     dThrownWrapper->Set_ArrayIndex(2);
-        //     locDeuteronX4_Thrown = dThrownWrapper->Get_X4();
-        //     locDeuteronP4_Thrown = dThrownWrapper->Get_P4();
-
-        //     if (dKPlusWrapper->Get_ThrownIndex() >= 0)
-        //     {
-        //         dThrownWrapper->Set_ArrayIndex(dKPlusWrapper->Get_ThrownIndex());
-        //         locThrownTopology += to_string(dThrownWrapper->Get_PID()) + "_";
-        //     }
-        //     else
-        //     {
-        //         locThrownTopology += "-1_";
-        //     }
-        //     if (dKMinusWrapper->Get_ThrownIndex() >= 0)
-        //     {
-        //         dThrownWrapper->Set_ArrayIndex(dKMinusWrapper->Get_ThrownIndex());
-        //         locThrownTopology += to_string(dThrownWrapper->Get_PID()) + "_";
-        //     }
-        //     else
-        //     {
-        //         locThrownTopology += "-1_";
-        //     }
-        //     if (dDeuteronWrapper->Get_ThrownIndex() >= 0)
-        //     {
-        //         dThrownWrapper->Set_ArrayIndex(dDeuteronWrapper->Get_ThrownIndex());
-        //         locThrownTopology += to_string(dThrownWrapper->Get_PID()) + "_";
-        //     }
-        //     else
-        //     {
-        //         locThrownTopology += "-1_";
-        //     }
-        //     locThrownTopology += Get_ThrownTopologyString();
-        // }
+        TString locThrownTopology = Get_ThrownTopologyString();
+        if (dIsMC)
+        {
+            locBeamX4_Thrown = dThrownBeam->Get_X4();
+            locBeamP4_Thrown = dThrownBeam->Get_P4();
+            dThrownWrapper->Set_ArrayIndex(0);
+            locKPlusX4_Thrown = dThrownWrapper->Get_X4();
+            locKPlusP4_Thrown = dThrownWrapper->Get_P4();
+            dThrownWrapper->Set_ArrayIndex(1);
+            locKMinusX4_Thrown = dThrownWrapper->Get_X4();
+            locKMinusP4_Thrown = dThrownWrapper->Get_P4();
+            // dThrownWrapper->Set_ArrayIndex(2);
+            // locDeuteronX4_Thrown = dThrownWrapper->Get_X4();
+            // locDeuteronP4_Thrown = dThrownWrapper->Get_P4();
+        }
 
         // FILL HISTOGRAMS BEFORE CUTS
         dHist_NumUnusedTracks_Before    ->Fill(dComboWrapper->Get_NumUnusedTracks());
