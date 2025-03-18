@@ -2,8 +2,8 @@
 
 start=`date +%s`
 
-INPUTFILE=/work/halld2/home/boyu/src_analysis/sim/output/phi_d_2H_test/root/trees/tree_gd_kpkmd__B4_F4_gen_coherent_090213_000.root
-TREENAME=gd_kpkmd__B4_F4_Tree
+INPUTFILE=/work/halld2/home/boyu/src_analysis/sim/output/phi_d_4He_test/root/trees/*.root
+TREENAME=ghe_kpkmdinc__B4_F4_Tree
 SELECTOR=phi_d_recon
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh

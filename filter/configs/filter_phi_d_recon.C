@@ -21,7 +21,8 @@ TLorentzVector boost_lorentz_vector(TLorentzVector p4, TVector3 boost_vector)
 
 void filter_phi_d_recon(string reaction_name, string input_mode, string output_mode)
 {
-    string input_name   = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_phi_d_recon_%s_%s.root",reaction_name.c_str(), input_mode.c_str());
+    // string input_name   = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_phi_d_recon_%s_%s.root",reaction_name.c_str(), input_mode.c_str());
+    string input_name   = Form("/work/halld2/home/boyu/src_analysis/selection/output/test/selectedtree_phi_d_recon_sim_4He.root");
     string hist_name    = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_recon_%s_%s.root",reaction_name.c_str(), input_mode.c_str());
     string tree_name    = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_phi_d_recon_%s_%s.root",reaction_name.c_str(), input_mode.c_str());
 
@@ -348,6 +349,12 @@ void filter_phi_d_recon(string reaction_name, string input_mode, string output_m
             hist_struck_energy_balance_kin.Write();
             TH2D hist_struck_momentum_pminus_kin    = *rdf.Histo2D({("struck_momentum_pminus_kin_"+ label).c_str(), ";P_{struck} (GeV/c);P_{struck}^{-} (GeV/c)", 100, 0.0, 1.0, 200, 1.0, 3.0},"struck_momentum_kin","struck_pminus_kin","accidweight");
             hist_struck_momentum_pminus_kin.Write();
+
+            if (reaction_name.find("sim") != string::npos)
+            {
+                TH2D hist_struck_momentum_energy_truth    = *rdf.Histo2D({("struck_momentum_energy_truth_"+ label).c_str(), ";P_{struck} (GeV/c);E_{struck} (GeV)", 100, 0.0, 1.0, 100, 0.0, 1.0},"struck_momentum_truth","struck_energy_truth","accidweight");
+                hist_struck_momentum_energy_truth.Write();
+            }
         }
         hist_file->Close();
     }
