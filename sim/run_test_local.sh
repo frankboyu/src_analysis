@@ -1,8 +1,8 @@
 #!/bin/bash
 
-REACTION=phi_d_4He
+REACTION=piminus_p_2H
 XML_VERSION=dev
-RUN=90061
+RUN=90213
 EVENTS=10000
 OPTIONS='cleangenerate=0 cleangeant=0 cleanmcsmear=0'
 
