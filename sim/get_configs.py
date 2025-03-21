@@ -4,11 +4,11 @@ import numpy as np
 reaction = sys.argv[1]
 
 if (reaction[-2:] == '2H'):
-    run_list = np.loadtxt("../flux/output/deuterium/flux_total_deuterium.txt")[:,0]
+    run_list = np.loadtxt("../flux/output/2H/flux_total_2H.txt")[:,0]
 elif (reaction[-3:] == '4He'):
-    run_list = np.loadtxt("../flux/output/helium/flux_total_helium.txt")[:,0]
+    run_list = np.loadtxt("../flux/output/4He/flux_total_4He.txt")[:,0]
 elif (reaction[-3:] == '12C'):
-    run_list = np.loadtxt("../flux/output/carbon/flux_total_carbon.txt")[:,0]
+    run_list = np.loadtxt("../flux/output/12C/flux_total_12C.txt")[:,0]
 
 config_file = open("configs/wrapper_"+reaction+".cfg", "r")
 config_lines = config_file.readlines()
