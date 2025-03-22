@@ -3,7 +3,7 @@
 REACTION=piminus_p_2H
 XML_VERSION=dev
 RUN=90213
-EVENTS=10000
+EVENTS=100000
 OPTIONS='cleangenerate=0 cleangeant=0 cleanmcsmear=0'
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
