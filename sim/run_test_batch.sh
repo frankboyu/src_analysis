@@ -1,7 +1,7 @@
 #!/bin/bash
 
 REACTION=phi_d_2H
-WRAPPER_VERSION=gluex_MCwrapper_srcct-v2.10.1
+WRAPPER_VERSION=gluex_MCwrapper_srcct-v2.10.1.1
 RUN=90213
 EVENTS=10000
 

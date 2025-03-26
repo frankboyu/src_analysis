@@ -2,7 +2,7 @@
 
 REACTION=$1
 EVENTS=$2
-WRAPPER_VERSION=gluex_MCwrapper_srcct-v2.10.1
+WRAPPER_VERSION=gluex_MCwrapper_srcct-v2.10.1.1
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
 gxenv $HALLD_VERSIONS/version.xml
@@ -15,12 +15,12 @@ python get_number.py ${REACTION} ${EVENTS}    # Generate a text file of the numb
 while read -r run number;
 do
     echo ${run} ${number}
-    gluex_MC.py configs/wrapper_${REACTION}_${run}.cfg ${run} ${number} per_file=1000000 batch=1 logdir=/farm_out/boyu/src_analysis/sim
+    gluex_MC.py configs/wrapper_${REACTION}_${run}.cfg ${run} ${number} per_file=1000000 batch=1 logdir=/farm_out/boyu/src_analysis/sim/${REACTION}
 done < list.txt
 
-swif2 run -workflow src_analysis_sim_deuterium
-swif2 run -workflow src_analysis_sim_helium
-swif2 run -workflow src_analysis_sim_carbon
+swif2 run -workflow src_analysis_sim_2H
+swif2 run -workflow src_analysis_sim_4He
+swif2 run -workflow src_analysis_sim_12C
 
 rm list.txt
 rm configs/wrapper_${REACTION}_*.cfg
