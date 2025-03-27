@@ -24,6 +24,9 @@ private:
     bool    dIsPolarizedFlag;
     bool    dIsPARAFlag;
 
+    // FLAGS
+    bool dIsMC;
+
     ClassDef(DSelector_phi_d_thrown, 0);
 };
 
@@ -69,20 +72,28 @@ Bool_t DSelector_phi_d_thrown::Process(Long64_t locEntry)
 		dPreviousRunNumber = locRunNumber;
 	}
 
-        //GET THROWN P4
+    // MC INFORMATION
+	dIsMC = (dTreeInterface->Get_Branch("MCWeight") != NULL);
+
+        //GET THROWN P4 AND TOPOLOGY
         TLorentzVector locBeamX4_Thrown, locKPlusX4_Thrown, locKMinusX4_Thrown, locDeuteronX4_Thrown;
         TLorentzVector locBeamP4_Thrown, locKPlusP4_Thrown, locKMinusP4_Thrown, locDeuteronP4_Thrown;
-        locBeamX4_Thrown = dThrownBeam->Get_X4();
-        locBeamP4_Thrown = dThrownBeam->Get_P4();
-        dThrownWrapper->Set_ArrayIndex(0);
-        locKPlusX4_Thrown = dThrownWrapper->Get_X4();
-        locKPlusP4_Thrown = dThrownWrapper->Get_P4();
-        dThrownWrapper->Set_ArrayIndex(1);
-        locKMinusX4_Thrown = dThrownWrapper->Get_X4();
-        locKMinusP4_Thrown = dThrownWrapper->Get_P4();
-        dThrownWrapper->Set_ArrayIndex(2);
-        locDeuteronX4_Thrown = dThrownWrapper->Get_X4();
-        locDeuteronP4_Thrown = dThrownWrapper->Get_P4();
+        TString locThrownTopology = Get_ThrownTopologyString();
+        Int_t locThrownTopologyFlag = -1;
+        if (dIsMC)
+        {
+            locBeamX4_Thrown = dThrownBeam->Get_X4();
+            locBeamP4_Thrown = dThrownBeam->Get_P4();
+            dThrownWrapper->Set_ArrayIndex(0);
+            locKPlusX4_Thrown = dThrownWrapper->Get_X4();
+            locKPlusP4_Thrown = dThrownWrapper->Get_P4();
+            dThrownWrapper->Set_ArrayIndex(1);
+            locKMinusX4_Thrown = dThrownWrapper->Get_X4();
+            locKMinusP4_Thrown = dThrownWrapper->Get_P4();
+            dThrownWrapper->Set_ArrayIndex(2);
+            locDeuteronX4_Thrown = dThrownWrapper->Get_X4();
+            locDeuteronP4_Thrown = dThrownWrapper->Get_P4();
+        }
 
         // FILL FLAT TREE
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_x4_truth", locBeamX4_Thrown);
