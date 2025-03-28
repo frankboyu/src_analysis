@@ -19,12 +19,11 @@ TLorentzVector boost_lorentz_vector(TLorentzVector p4, TVector3 boost_vector)
     return p4_boosted;
 }
 
-void filter_phi_d_recon(string reaction_name, string input_mode, string output_mode)
+void filter_phi_d_recon(string reaction_name, string output_mode)
 {
-    // string input_name   = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_phi_d_recon_%s_%s.root",reaction_name.c_str(), input_mode.c_str());
-    string input_name   = Form("/work/halld2/home/boyu/src_analysis/selection/output/test/selectedtree_phi_d_recon_sim_4He.root");
-    string hist_name    = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_recon_%s_%s.root",reaction_name.c_str(), input_mode.c_str());
-    string tree_name    = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_phi_d_recon_%s_%s.root",reaction_name.c_str(), input_mode.c_str());
+    string input_name   = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_phi_d_recon_%s.root",reaction_name.c_str());
+    string hist_name    = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_recon_%s.root",reaction_name.c_str());
+    string tree_name    = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_phi_d_recon_%s.root",reaction_name.c_str());
 
     // Determine reaction specific parameters
     if (reaction_name.find("2H") != string::npos)
@@ -142,9 +141,9 @@ void filter_phi_d_recon(string reaction_name, string input_mode, string output_m
     .Define("phi_theta_kin",                "phi_p4_kin.Theta()*RadToDeg")
     .Define("phi_theta_truth",              "phi_p4_truth.Theta()*RadToDeg")
 
-    .Define("struck_p4_meas",               "kp_p4_meas + km_p4_meas + d_p4_meas - beam_p4_meas")
-    .Define("struck_p4_kin",                "kp_p4_kin + km_p4_kin + d_p4_kin - beam_p4_kin")
-    .Define("struck_p4_truth",              "kp_p4_truth + km_p4_truth + d_p4_truth - beam_p4_truth")
+    .Define("struck_p4_meas",               "phi_p4_meas + d_p4_meas - beam_p4_meas")
+    .Define("struck_p4_kin",                "phi_p4_kin + d_p4_kin - beam_p4_kin")
+    .Define("struck_p4_truth",              "phi_p4_truth + d_p4_truth - beam_p4_truth")
     .Define("struck_energy_meas",           "struck_p4_meas.E()")
     .Define("struck_energy_kin",            "struck_p4_kin.E()")
     .Define("struck_energy_truth",          "struck_p4_truth.E()")
@@ -255,6 +254,8 @@ void filter_phi_d_recon(string reaction_name, string input_mode, string output_m
 
             TH1D hist_beam_DeltaT_kin               = *rdf.Histo1D({("beam_DeltaT_"+ label).c_str(), ";#Delta t_{beam} (ns);Counts", 400, -20.0, 20.0},"beam_DeltaT_kin");
             hist_beam_DeltaT_kin.Write();
+            TH1D hist_beam_energy_kin               = *rdf.Histo1D({("beam_energy_"+ label).c_str(), ";E_{beam} (GeV);Counts", 60, 5.0, 11.0},"beam_energy_kin");
+            hist_beam_energy_kin.Write();
 
             TH1D hist_kp_pidfom                     = *rdf.Histo1D({("kp_pidfom_"+ label).c_str(), ";kp_pidfom;Counts", 100, 0.0, 1.0},"kp_pidfom","accidweight");
             hist_kp_pidfom.Write();
@@ -317,14 +318,16 @@ void filter_phi_d_recon(string reaction_name, string input_mode, string output_m
 
             TH1D hist_phi_mass_kin                  = *rdf.Histo1D({("phi_mass_kin_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);Counts", 400, 0.9, 1.3},"phi_mass_kin","accidweight");
             hist_phi_mass_kin.Write();
+            TH1D hist_phi_mass_meas                 = *rdf.Histo1D({("phi_mass_meas_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);Counts", 400, 0.9, 1.3},"phi_mass_meas","accidweight");
+            hist_phi_mass_meas.Write();
             TH2D hist_phi_kinematics_kin            = *rdf.Histo2D({("phi_kinematics_kin_"+ label).c_str(), ";p (GeV/c);#theta (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"phi_momentum_kin","phi_theta_kin","accidweight");
             hist_phi_kinematics_kin.Write();
 
             TH1D hist_sqrts_kin                     = *rdf.Histo1D({("sqrts_kin_"+ label).c_str(), ";#sqrt{s} (GeV);Counts", 100, 0.0, 10.0},"sqrts_kin","accidweight");
             hist_sqrts_kin.Write();
-            TH1D hist_minust_kin                    = *rdf.Histo1D({("minust_kin_"+ label).c_str(), ";-t (GeV^{2}/c^{2});Counts", 200, 0.0, 20.0},"minust_kin","accidweight");
+            TH1D hist_minust_kin                    = *rdf.Histo1D({("minust_kin_"+ label).c_str(), ";-t (GeV^{2}/c^{2});Counts", 30, 0.0, 3.0},"minust_kin","accidweight");
             hist_minust_kin.Write();
-            TH1D hist_minusu_kin                    = *rdf.Histo1D({("minusu_kin_"+ label).c_str(), ";-u (GeV^{2}/c^{2});Counts", 300, 0.0, 30.0},"minusu_kin","accidweight");
+            TH1D hist_minusu_kin                    = *rdf.Histo1D({("minusu_kin_"+ label).c_str(), ";-u (GeV^{2}/c^{2});Counts", 300, 15.0, 45.0},"minusu_kin","accidweight");
             hist_minusu_kin.Write();
             TH1D hist_coplanarity_kin               = *rdf.Histo1D({("coplanarity_kin_"+ label).c_str(), ";Coplanarity (deg);Counts", 360, 0.0, 360.0},"coplanarity_kin","accidweight");
             hist_coplanarity_kin.Write();
@@ -332,6 +335,8 @@ void filter_phi_d_recon(string reaction_name, string input_mode, string output_m
             hist_thetaCM_kin.Write();
             TH2D hist_minust_thetaCM_kin            = *rdf.Histo2D({("minust_thetaCM_kin_"+ label).c_str(), ";-t (GeV^{2}/c^{2});#theta_{CM} (deg)", 200, 0.0, 20.0, 180, 0.0, 180.0},"minust_kin","thetaCM_kin","accidweight");
             hist_minust_thetaCM_kin.Write();
+            TH2D hist_beam_energy_minust_kin        = *rdf.Histo2D({("beam_energy_minust_kin_"+ label).c_str(), ";E_{beam} (GeV);-t (GeV^{2}/c^{2})", 60, 5.0, 11.0, 30, 0.0, 3.0},"beam_energy_kin","minust_kin","accidweight");
+            hist_beam_energy_minust_kin.Write();
             TH1D hist_rho_mass_kin                  = *rdf.Histo1D({("rho_mass_kin_"+ label).c_str(), ";m_{#pi^{+}#pi^{-}} (GeV/c^{2});Counts", 400, 0.0, 4.0},"rho_mass_kin","accidweight");
             hist_rho_mass_kin.Write();
             TH1D hist_yphi_kin                      = *rdf.Histo1D({("yphi_kin_"+ label).c_str(), ";y_{#phi};Counts", 200, 0.0, 2.0},"y_phi_kin","accidweight");
@@ -339,22 +344,32 @@ void filter_phi_d_recon(string reaction_name, string input_mode, string output_m
 
             TH1D hist_struck_mass_kin               = *rdf.Histo1D({("struck_mass_kin_"+ label).c_str(), ";m_{struck} (GeV/c^{2});Counts", 400, -4.0, 4.0},"struck_mass_kin","accidweight");
             hist_struck_mass_kin.Write();
-            TH1D hist_struck_masssquared_kin        = *rdf.Histo1D({("struck_masssquared_kin_"+ label).c_str(), ";m_{struck}^{2} (GeV^{2}/c^{4});Counts", 400, 0.0, 4.0},"struck_masssquared_kin","accidweight");
+            TH1D hist_struck_mass_meas              = *rdf.Histo1D({("struck_mass_meas_"+ label).c_str(), ";m_{struck} (GeV/c^{2});Counts", 400, -4.0, 4.0},"struck_mass_meas","accidweight");
+            hist_struck_mass_meas.Write();
+            TH1D hist_struck_masssquared_kin        = *rdf.Histo1D({("struck_masssquared_kin_"+ label).c_str(), ";m_{struck}^{2} (GeV^{2}/c^{4});Counts", 100, 0.0, 10.0},"struck_masssquared_kin","accidweight");
             hist_struck_masssquared_kin.Write();
-            TH1D hist_struck_momentum_kin           = *rdf.Histo1D({("struck_momentum_kin_"+ label).c_str(), ";P_{struck} (GeV/c);Counts", 100, 0.0, 1.0},"struck_momentum_kin","accidweight");
+            TH1D hist_struck_masssquared_meas       = *rdf.Histo1D({("struck_masssquared_meas_"+ label).c_str(), ";m_{struck}^{2} (GeV^{2}/c^{4});Counts", 100, 0.0, 10.0},"struck_masssquared_meas","accidweight");
+            hist_struck_masssquared_meas.Write();
+            TH1D hist_struck_momentum_kin           = *rdf.Histo1D({("struck_momentum_kin_"+ label).c_str(), ";P_{struck} (GeV/c);Counts", 200, 0.0, 2.0},"struck_momentum_kin","accidweight");
             hist_struck_momentum_kin.Write();
+            TH1D hist_struck_momentum_meas          = *rdf.Histo1D({("struck_momentum_meas_"+ label).c_str(), ";P_{struck} (GeV/c);Counts", 200, 0.0, 2.0},"struck_momentum_meas","accidweight");
+            hist_struck_momentum_meas.Write();
             TH1D hist_struck_pminus_kin             = *rdf.Histo1D({("struck_pminus_kin_"+ label).c_str(), ";P_{struck}^{-} (GeV/c);Counts", 200, 1.0, 3.0},"struck_pminus_kin","accidweight");
             hist_struck_pminus_kin.Write();
+            TH1D hist_struck_pminus_meas            = *rdf.Histo1D({("struck_pminus_meas_"+ label).c_str(), ";P_{struck}^{-} (GeV/c);Counts", 200, 1.0, 3.0},"struck_pminus_meas","accidweight");
+            hist_struck_pminus_meas.Write();
             TH1D hist_struck_energy_balance_kin     = *rdf.Histo1D({("struck_energy_balance_kin_"+ label).c_str(), ";E_{struck} - m_{2H} (GeV);Counts", 400, -4.0, 4.0},"struck_energy_balance_kin","accidweight");
             hist_struck_energy_balance_kin.Write();
-            TH2D hist_struck_momentum_pminus_kin    = *rdf.Histo2D({("struck_momentum_pminus_kin_"+ label).c_str(), ";P_{struck} (GeV/c);P_{struck}^{-} (GeV/c)", 100, 0.0, 1.0, 200, 1.0, 3.0},"struck_momentum_kin","struck_pminus_kin","accidweight");
+            TH1D hist_struck_energy_balance_meas    = *rdf.Histo1D({("struck_energy_balance_meas_"+ label).c_str(), ";E_{struck} - m_{2H} (GeV);Counts", 400, -4.0, 4.0},"struck_energy_balance_meas","accidweight");
+            hist_struck_energy_balance_meas.Write();
+            TH2D hist_struck_momentum_pminus_kin    = *rdf.Histo2D({("struck_momentum_pminus_kin_"+ label).c_str(), ";P_{struck} (GeV/c);P_{struck}^{-} (GeV/c)", 200, 0.0, 2.0, 200, 1.0, 3.0},"struck_momentum_kin","struck_pminus_kin","accidweight");
             hist_struck_momentum_pminus_kin.Write();
-
-            if (reaction_name.find("sim") != string::npos)
-            {
-                TH2D hist_struck_momentum_energy_truth    = *rdf.Histo2D({("struck_momentum_energy_truth_"+ label).c_str(), ";P_{struck} (GeV/c);E_{struck} (GeV)", 100, 0.0, 1.0, 100, 0.0, 1.0},"struck_momentum_truth","struck_energy_truth","accidweight");
-                hist_struck_momentum_energy_truth.Write();
-            }
+            TH2D hist_struck_momentum_pminus_meas   = *rdf.Histo2D({("struck_momentum_pminus_meas_"+ label).c_str(), ";P_{struck} (GeV/c);P_{struck}^{-} (GeV/c)", 200, 0.0, 2.0, 200, 1.0, 3.0},"struck_momentum_meas","struck_pminus_meas","accidweight");
+            hist_struck_momentum_pminus_meas.Write();
+            TH2D hist_struck_momentum_energy_kin    = *rdf.Histo2D({("struck_momentum_energy_kin_"+ label).c_str(), ";P_{struck} (GeV/c);E_{struck} (GeV)", 200, 0.0, 2.0, 250, 0.5, 3.0},"struck_momentum_kin","struck_energy_kin","accidweight");
+            hist_struck_momentum_energy_kin.Write();
+            TH2D hist_struck_momentum_energy_meas   = *rdf.Histo2D({("struck_momentum_energy_meas_"+ label).c_str(), ";P_{struck} (GeV/c);E_{struck} (GeV)", 200, 0.0, 2.0, 250, 0.5, 3.0},"struck_momentum_meas","struck_energy_meas","accidweight");
+            hist_struck_momentum_energy_meas.Write();
         }
         hist_file->Close();
     }
