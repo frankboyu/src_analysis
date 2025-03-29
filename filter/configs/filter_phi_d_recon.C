@@ -46,6 +46,9 @@ void filter_phi_d_recon(string reaction_name, string output_mode)
     .Define("kinfit_fom",                   "TMath::Prob(kin_chisq,kin_ndf)")
     .Define("target_p4",                    "TLorentzVector(0, 0, 0, mass_target)")
     .Define("N2_p4",                        "TLorentzVector(0, 0, 0, mass_2H)")
+    .Define("total_p4_meas",                "pip_p4_meas + pim_p4_meas + d_p4_meas")
+    .Define("total_p4_kin",                 "pip_p4_kin + pim_p4_kin + d_p4_kin")
+    .Define("total_p4_truth",               "pip_p4_truth + pim_p4_truth + d_p4_truth")
 
     .Define("beam_p4com_meas",              "boost_lorentz_vector(beam_p4_meas, -(kp_p4_meas + km_p4_meas + d_p4_meas).BoostVector())")
     .Define("beam_p4com_kin",               "boost_lorentz_vector(beam_p4_kin, -(kp_p4_kin + km_p4_kin + d_p4_kin).BoostVector())")
@@ -137,6 +140,9 @@ void filter_phi_d_recon(string reaction_name, string output_mode)
     .Define("phi_mass_meas",                "phi_p4_meas.M()")
     .Define("phi_mass_kin",                 "phi_p4_kin.M()")
     .Define("phi_mass_truth",               "phi_p4_truth.M()")
+    .Define("phi_proxymass_meas",           "TMath::Sqrt((kp_p4_meas.Minus() + km_p4_meas.Minus())*(2*beam_p4_meas.E() + mass_4He - d_p4_meas.Plus() - (mass_2H*mass_2H + total_p4_meas.Perp()*total_p4_meas.Perp())/(mass_4He - total_p4_meas.Minus())) - (kp_p4_meas.Px() + km_p4_meas.Px())*(kp_p4_meas.Px() + km_p4_meas.Px()) - (kp_p4_meas.Py() + km_p4_meas.Py())*(kp_p4_meas.Py() + km_p4_meas.Py()))")
+    .Define("rho_proxymass_kin",            "TMath::Sqrt((kp_p4_kin.Minus() + km_p4_kin.Minus())*(2*beam_p4_kin.E() + mass_4He - d_p4_kin.Plus() - (mass_2H*mass_2H + total_p4_kin.Perp()*total_p4_kin.Perp())/(mass_4He - total_p4_kin.Minus())) - (kp_p4_kin.Px() + km_p4_kin.Px())*(kp_p4_kin.Px() + km_p4_kin.Px()) - (kp_p4_kin.Py() + km_p4_kin.Py())*(kp_p4_kin.Py() + km_p4_kin.Py()))")
+    .Define("rho_proxymass_truth",          "TMath::Sqrt((kp_p4_truth.Minus() + km_p4_truth.Minus())*(2*beam_p4_truth.E() + mass_4He - d_p4_truth.Plus() - (mass_2H*mass_2H + total_p4_truth.Perp()*total_p4_truth.Perp())/(mass_4He - total_p4_truth.Minus())) - (kp_p4_truth.Px() + km_p4_truth.Px())*(kp_p4_truth.Px() + km_p4_truth.Px()) - (kp_p4_truth.Py() + km_p4_truth.Py())*(kp_p4_truth.Py() + km_p4_truth.Py()))")
     .Define("phi_theta_meas",               "phi_p4_meas.Theta()*RadToDeg")
     .Define("phi_theta_kin",                "phi_p4_kin.Theta()*RadToDeg")
     .Define("phi_theta_truth",              "phi_p4_truth.Theta()*RadToDeg")
@@ -320,6 +326,10 @@ void filter_phi_d_recon(string reaction_name, string output_mode)
             hist_phi_mass_kin.Write();
             TH1D hist_phi_mass_meas                 = *rdf.Histo1D({("phi_mass_meas_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);Counts", 400, 0.9, 1.3},"phi_mass_meas","accidweight");
             hist_phi_mass_meas.Write();
+            TH1D hist_phi_proxymass_kin             = *rdf.Histo1D({("phi_proxymass_kin_"+ label).c_str(), ";m_{K^{+}K^{-}X} (GeV/c^{2});Counts", 400, 0.0, 4.0},"phi_proxymass_kin","accidweight");
+            hist_phi_proxymass_kin.Write();
+            TH1D hist_phi_proxymass_meas            = *rdf.Histo1D({("phi_proxymass_meas_"+ label).c_str(), ";m_{K^{+}K^{-}X} (GeV/c^{2});Counts", 400, 0.0, 4.0},"phi_proxymass_meas","accidweight");
+            hist_phi_proxymass_meas.Write();
             TH2D hist_phi_kinematics_kin            = *rdf.Histo2D({("phi_kinematics_kin_"+ label).c_str(), ";p (GeV/c);#theta (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"phi_momentum_kin","phi_theta_kin","accidweight");
             hist_phi_kinematics_kin.Write();
 
