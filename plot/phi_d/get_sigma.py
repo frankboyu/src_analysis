@@ -52,16 +52,37 @@ leps_t_high = np.array([0.4, 0.38, 0.36, 0.34, 0.32, 0.30, 0.28, 0.26, 0.24, 0.2
 leps_cs = np.array([0.0005, 0.004, 0.0087, 0.0068, 0.0238, 0.0317, 0.0567, 0.0722, 0.092, 0.1186, 0.1749, 0.2033, 0.2544, 0.3101, 0.3396])*1000
 leps_stat = np.array([0.0005, 0.002, 0.0035, 0.0028, 0.007, 0.0076, 0.0102, 0.0118, 0.0142, 0.0137, 0.0159, 0.0148, 0.0166, 0.0152, 0.0143])*1000
 
-plt.plot((minust_low+minust_high)/2, acceptance_2H, 'o')
-plt.savefig('output/plot_acceptance_2H.png')
+plt.errorbar((minust_low+minust_high)/2, data_2H, xerr=(minust_high-minust_low)/2, yerr=np.sqrt(data_2H), fmt='o')
+plt.title(r"Yield of $d(\gamma, \phi d')$")
+plt.xlabel(r'$-t[GeV^2/c]$')
+plt.ylabel('Yield')
+plt.savefig('output/fig_yield_2H.png')
 plt.close()
 
-plt.errorbar((minust_low+minust_high)/2, dsdt_2H, yerr=err_2H, fmt='.', label='This work')
+plt.errorbar((minust_low+minust_high)/2, acceptance_2H, xerr=(minust_high-minust_low)/2, fmt='o')
+plt.title(r"Acceptance of $d(\gamma, \phi d')$")
+plt.xlabel(r'$-t[GeV^2/c]$')
+plt.ylabel('Acceptance')
+plt.savefig('output/fig_acceptance_2H.png')
+plt.close()
+
+plt.errorbar((minust_low+minust_high)/2, dsdt_2H, yerr=err_2H, fmt='.', label='SRC-CT, 8.2 GeV')
+plt.legend()
+plt.title(r"Differential cross section of $d(\gamma, \phi d')$")
+plt.xlabel(r'$-t\:[GeV^2/c]$')
+plt.ylabel(r'$d\sigma/dt\:[nb/(GeV^2/c)]$')
+plt.yscale('log')
+plt.savefig('output/fig_dsdt_2H_bare.png')
+plt.close()
+
+plt.errorbar((minust_low+minust_high)/2, dsdt_2H, yerr=err_2H, fmt='.', label='This work, SRC-CT, 8.2 GeV')
 plt.errorbar((clas_t_low+clas_t_high)/2, clas_cs_16, yerr=clas_stat_16, fmt='.', label='CLAS 1.6-2.6 GeV')
 plt.errorbar((clas_t_low+clas_t_high)/2, clas_cs_26, yerr=clas_stat_26, fmt='.', label='CLAS 2.6-3.6 GeV')
 plt.errorbar((leps_t_low+leps_t_high)/2, leps_cs, yerr=leps_stat, fmt='.', label='LEPS 1.57-2.37 GeV')
-
 plt.legend()
+plt.title(r"Differential cross section of $d(\gamma, \phi d')$")
+plt.xlabel(r'$-t\:[GeV^2/c]$')
+plt.ylabel(r'$d\sigma/dt\:[nb/(GeV^2/c)]$')
 plt.yscale('log')
-plt.savefig('output/plot_dsdt_2H.png')
+plt.savefig('output/fig_dsdt_2H_compare.png')
 plt.close()
