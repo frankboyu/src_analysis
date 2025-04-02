@@ -210,9 +210,9 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
         }
 
 		// GET PARTICLE INDICES
-		Int_t locBeamID         = dComboBeamWrapper->Get_BeamID();
-        Int_t locKPlusTrackID   = dKPlusWrapper->Get_TrackID();
-		Int_t locKMinusTrackID  = dKMinusWrapper->Get_TrackID();
+		Int_t locBeamID          = dComboBeamWrapper->Get_BeamID();
+        Int_t locKPlusTrackID    = dKPlusWrapper->Get_TrackID();
+		Int_t locKMinusTrackID   = dKMinusWrapper->Get_TrackID();
 		Int_t locDeuteronTrackID = dDeuteronWrapper->Get_TrackID();
 
 		// GET RECONSTRUCTED P4
