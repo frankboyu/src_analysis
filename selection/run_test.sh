@@ -2,7 +2,7 @@
 
 start=`date +%s`
 
-INPUTFILE=/work/halld2/home/boyu/src_analysis/bggen/output/4He_p_ver02/tree_ghe_pimprotmisshe3__B4_F4_T1_S4_bggen/*90090.root
+INPUTFILE=/work/halld2/home/boyu/src_analysis/bggen/output/4He_n_ver02/tree_ghe_pimprotmisshe3__B4_F4_T1_S4_bggen/*90090.root
 TREENAME=ghe_pimprotmisshe3__B4_F4_T1_S4_bggen_Tree
 SELECTOR=piminus_p_recon
 

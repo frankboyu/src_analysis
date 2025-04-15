@@ -250,35 +250,51 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
         {
             locBeamX4_Thrown = dThrownBeam->Get_X4();
             locBeamP4_Thrown = dThrownBeam->Get_P4();
-            dThrownWrapper->Set_ArrayIndex(1);
-            locPiMinusX4_Thrown = dThrownWrapper->Get_X4();
-            locPiMinusP4_Thrown = dThrownWrapper->Get_P4();
-            dThrownWrapper->Set_ArrayIndex(2);
-            locProtonX4_Thrown = dThrownWrapper->Get_X4();
-            locProtonP4_Thrown = dThrownWrapper->Get_P4();
 
             if      (locThrownTopology == "#pi^{#minus}p")
             {
                 locThrownTopologyFlag = 0;
-                dThrownWrapper->Set_ArrayIndex(0);
-                locPiMinusX4_Thrown = dThrownWrapper->Get_X4();
-                locPiMinusP4_Thrown = dThrownWrapper->Get_P4();
-                dThrownWrapper->Set_ArrayIndex(1);
-                locProtonX4_Thrown = dThrownWrapper->Get_X4();
-                locProtonP4_Thrown = dThrownWrapper->Get_P4();
+                for(UInt_t loc_i = 0; loc_i < Get_NumThrown(); ++loc_i)
+                {
+                    dThrownWrapper->Set_ArrayIndex(loc_i);
+                    if (dThrownWrapper->Get_PID() == PiMinus)
+                    {
+                        locPiMinusX4_Thrown = dThrownWrapper->Get_X4();
+                        locPiMinusP4_Thrown = dThrownWrapper->Get_P4();
+                    }
+                    else if (dThrownWrapper->Get_PID() == Proton)
+                    {
+                        locProtonX4_Thrown = dThrownWrapper->Get_X4();
+                        locProtonP4_Thrown = dThrownWrapper->Get_P4();
+                    }
+                    else
+                        cout << "Unexpected PID: " << dThrownWrapper->Get_PID() << endl;
+                }
             }
             else if (locThrownTopology == "#pi^{#plus}#pi^{#minus}p")
             {
                 locThrownTopologyFlag = 1;
-                dThrownWrapper->Set_ArrayIndex(0);
-                locExtraPionX4_Thrown = dThrownWrapper->Get_X4();
-                locExtraPionP4_Thrown = dThrownWrapper->Get_P4();
-                dThrownWrapper->Set_ArrayIndex(1);
-                locPiMinusX4_Thrown = dThrownWrapper->Get_X4();
-                locPiMinusP4_Thrown = dThrownWrapper->Get_P4();
-                dThrownWrapper->Set_ArrayIndex(2);
-                locProtonX4_Thrown = dThrownWrapper->Get_X4();
-                locProtonP4_Thrown = dThrownWrapper->Get_P4();
+                for(UInt_t loc_i = 0; loc_i < Get_NumThrown(); ++loc_i)
+                {
+                    dThrownWrapper->Set_ArrayIndex(loc_i);
+                    if (dThrownWrapper->Get_PID() == PiMinus)
+                    {
+                        locPiMinusX4_Thrown = dThrownWrapper->Get_X4();
+                        locPiMinusP4_Thrown = dThrownWrapper->Get_P4();
+                    }
+                    else if (dThrownWrapper->Get_PID() == Proton)
+                    {
+                        locProtonX4_Thrown = dThrownWrapper->Get_X4();
+                        locProtonP4_Thrown = dThrownWrapper->Get_P4();
+                    }
+                    else if (dThrownWrapper->Get_PID() == PiPlus)
+                    {
+                        locExtraPionX4_Thrown = dThrownWrapper->Get_X4();
+                        locExtraPionP4_Thrown = dThrownWrapper->Get_P4();
+                    }
+                    else
+                        cout << "Unexpected PID: " << dThrownWrapper->Get_PID() << endl;
+                }
             }
             else if (locThrownTopology == "#pi^{#plus}#pi^{#minus}n")
             {
@@ -287,17 +303,31 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
             else if (locThrownTopology == "2#gamma#pi^{#minus}p[#pi^{0}]")
             {
                 locThrownTopologyFlag = 3;
-                dThrownWrapper->Set_ArrayIndex(0);
-                locExtraPionX4_Thrown = dThrownWrapper->Get_X4();
-                locExtraPionP4_Thrown += dThrownWrapper->Get_P4();
-                dThrownWrapper->Set_ArrayIndex(1);
-                locExtraPionP4_Thrown += dThrownWrapper->Get_P4();
-                dThrownWrapper->Set_ArrayIndex(2);
-                locPiMinusX4_Thrown = dThrownWrapper->Get_X4();
-                locPiMinusP4_Thrown = dThrownWrapper->Get_P4();
-                dThrownWrapper->Set_ArrayIndex(3);
-                locProtonX4_Thrown = dThrownWrapper->Get_X4();
-                locProtonP4_Thrown = dThrownWrapper->Get_P4();
+                for(UInt_t loc_i = 0; loc_i < Get_NumThrown(); ++loc_i)
+                {
+                    dThrownWrapper->Set_ArrayIndex(loc_i);
+                    if (dThrownWrapper->Get_PID() == PiMinus)
+                    {
+                        locPiMinusX4_Thrown = dThrownWrapper->Get_X4();
+                        locPiMinusP4_Thrown = dThrownWrapper->Get_P4();
+                    }
+                    else if (dThrownWrapper->Get_PID() == Proton)
+                    {
+                        locProtonX4_Thrown = dThrownWrapper->Get_X4();
+                        locProtonP4_Thrown = dThrownWrapper->Get_P4();
+                    }
+                    else if (dThrownWrapper->Get_PID() == Pi0)
+                    {
+                        locExtraPionX4_Thrown = dThrownWrapper->Get_X4();
+                        locExtraPionP4_Thrown = dThrownWrapper->Get_P4();
+                    }
+                    else if (dThrownWrapper->Get_PID() == Gamma)
+                    {
+                        continue;
+                    }
+                    else
+                        cout << "Unexpected PID: " << dThrownWrapper->Get_PID() << endl;
+                }
             }
             else
                 locThrownTopologyFlag = 9;
