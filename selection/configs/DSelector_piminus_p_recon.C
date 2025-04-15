@@ -25,7 +25,7 @@ private:
     bool    dIsPolarizedFlag;
     bool    dIsPARAFlag;
 
-    // MONTE CARLO INFORMATION
+    // FLAGS
     bool dIsMC;
     string dTag;
 
@@ -89,30 +89,42 @@ void DSelector_piminus_p_recon::Get_ComboWrappers(void)
 void DSelector_piminus_p_recon::Init(TTree *locTree)
 {
     // DETERMINE THE TAG NAME
-    if      (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gd_pimprotmissprot",   strlen("gd_pimprotmissprot")))
+    if      (locTree->GetBranch("MCWeight") == NULL && strstr(locTree->GetName(), "bggen") == NULL && !strncmp(locTree->GetName(), "gd_pimprotmissprot",   strlen("gd_pimprotmissprot")))
         dTag = "data_2H_missprot";
-    else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gd_pimprotinc",        strlen("gd_pimprotinc")))
+    else if (locTree->GetBranch("MCWeight") == NULL && strstr(locTree->GetName(), "bggen") == NULL && !strncmp(locTree->GetName(), "gd_pimprotinc",        strlen("gd_pimprotinc")))
         dTag = "data_2H_inc";
-    else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "ghe_pimprotmisshe3",   strlen("ghe_pimprotmisshe3")))
+    else if (locTree->GetBranch("MCWeight") == NULL && strstr(locTree->GetName(), "bggen") == NULL && !strncmp(locTree->GetName(), "ghe_pimprotmisshe3",   strlen("ghe_pimprotmisshe3")))
         dTag = "data_4He_misshe3";
-    else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "ghe_pimprotinc",       strlen("ghe_pimprotinc")))
+    else if (locTree->GetBranch("MCWeight") == NULL && strstr(locTree->GetName(), "bggen") == NULL && !strncmp(locTree->GetName(), "ghe_pimprotinc",       strlen("ghe_pimprotinc")))
         dTag = "data_4He_inc";
-    else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gc12_pimprotmissb11",  strlen("gc12_pimprotmissb11")))
+    else if (locTree->GetBranch("MCWeight") == NULL && strstr(locTree->GetName(), "bggen") == NULL && !strncmp(locTree->GetName(), "gc12_pimprotmissb11",  strlen("gc12_pimprotmissb11")))
         dTag = "data_12C_missb11";
-    else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gc12_pimprotinc",      strlen("gc12_pimprotinc")))
+    else if (locTree->GetBranch("MCWeight") == NULL && strstr(locTree->GetName(), "bggen") == NULL && !strncmp(locTree->GetName(), "gc12_pimprotinc",      strlen("gc12_pimprotinc")))
         dTag = "data_12C_inc";
-    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gd_pimprotmissprot",   strlen("gd_pimprotmissprot")))
+    else if (locTree->GetBranch("MCWeight") != NULL && strstr(locTree->GetName(), "bggen") == NULL && !strncmp(locTree->GetName(), "gd_pimprotmissprot",   strlen("gd_pimprotmissprot")))
         dTag = "sim_2H_missprot";
-    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gd_pimprotinc",        strlen("gd_pimprotinc")))
+    else if (locTree->GetBranch("MCWeight") != NULL && strstr(locTree->GetName(), "bggen") == NULL && !strncmp(locTree->GetName(), "gd_pimprotinc",        strlen("gd_pimprotinc")))
         dTag = "sim_2H_inc";
-    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "ghe_pimprotmisshe3",   strlen("ghe_pimprotmisshe3")))
+    else if (locTree->GetBranch("MCWeight") != NULL && strstr(locTree->GetName(), "bggen") == NULL && !strncmp(locTree->GetName(), "ghe_pimprotmisshe3",   strlen("ghe_pimprotmisshe3")))
         dTag = "sim_4He_misshe3";
-    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "ghe_pimprotinc",       strlen("ghe_pimprotinc")))
+    else if (locTree->GetBranch("MCWeight") != NULL && strstr(locTree->GetName(), "bggen") == NULL && !strncmp(locTree->GetName(), "ghe_pimprotinc",       strlen("ghe_pimprotinc")))
         dTag = "sim_4He_inc";
-    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gc12_pimprotmissb11",  strlen("gc12_pimprotmissb11")))
+    else if (locTree->GetBranch("MCWeight") != NULL && strstr(locTree->GetName(), "bggen") == NULL && !strncmp(locTree->GetName(), "gc12_pimprotmissb11",  strlen("gc12_pimprotmissb11")))
         dTag = "sim_12C_missb11";
-    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gc12_pimprotinc",      strlen("gc12_pimprotinc")))
+    else if (locTree->GetBranch("MCWeight") != NULL && strstr(locTree->GetName(), "bggen") == NULL && !strncmp(locTree->GetName(), "gc12_pimprotinc",      strlen("gc12_pimprotinc")))
         dTag = "sim_12C_inc";
+    else if (locTree->GetBranch("MCWeight") != NULL && strstr(locTree->GetName(), "bggen") != NULL && !strncmp(locTree->GetName(), "gd_pimprotmissprot",   strlen("gd_pimprotmissprot")))
+        dTag = "bggen_2H_missprot";
+    else if (locTree->GetBranch("MCWeight") != NULL && strstr(locTree->GetName(), "bggen") != NULL && !strncmp(locTree->GetName(), "gd_pimprotinc",        strlen("gd_pimprotinc")))
+        dTag = "bggen_2H_inc";
+    else if (locTree->GetBranch("MCWeight") != NULL && strstr(locTree->GetName(), "bggen") != NULL && !strncmp(locTree->GetName(), "ghe_pimprotmisshe3",   strlen("ghe_pimprotmisshe3")))
+        dTag = "bggen_4He_misshe3";
+    else if (locTree->GetBranch("MCWeight") != NULL && strstr(locTree->GetName(), "bggen") != NULL && !strncmp(locTree->GetName(), "ghe_pimprotinc",       strlen("ghe_pimprotinc")))
+        dTag = "bggen_4He_inc";
+    else if (locTree->GetBranch("MCWeight") != NULL && strstr(locTree->GetName(), "bggen") != NULL && !strncmp(locTree->GetName(), "gc12_pimprotmissb11",  strlen("gc12_pimprotmissb11")))
+        dTag = "bggen_12C_missb11";
+    else if (locTree->GetBranch("MCWeight") != NULL && strstr(locTree->GetName(), "bggen") != NULL && !strncmp(locTree->GetName(), "gc12_pimprotinc",      strlen("gc12_pimprotinc")))
+        dTag = "bggen_12C_inc";
 
     // SET OUTPUT FILE NAME
     dOutputFileName          = Form("selectedhist_piminus_p_recon_%s.root", dTag.c_str());
@@ -179,9 +191,11 @@ void DSelector_piminus_p_recon::Init(TTree *locTree)
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("beam_x4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("pim_x4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("p_x4_truth");
+    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("extra_pion_x4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("beam_p4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("pim_p4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("p_p4_truth");
+    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("extra_pion_p4_truth");
 }
 // END OF INITIALIZATION
 
@@ -228,51 +242,65 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
 		TLorentzVector locProtonP4  = dProtonWrapper->Get_P4();
 
         //GET THROWN P4 AND TOPOLOGY
-        TLorentzVector locBeamX4_Thrown, locPiMinusX4_Thrown, locProtonX4_Thrown;
-        TLorentzVector locBeamP4_Thrown, locPiMinusP4_Thrown, locProtonP4_Thrown;
-        TString locThrownTopology;
+        TLorentzVector locBeamX4_Thrown, locPiMinusX4_Thrown, locProtonX4_Thrown, locExtraPionX4_Thrown;
+        TLorentzVector locBeamP4_Thrown, locPiMinusP4_Thrown, locProtonP4_Thrown, locExtraPionP4_Thrown;
+        TString locThrownTopology = Get_ThrownTopologyString();
         Int_t locThrownTopologyFlag = -1;
         if (dIsMC)
         {
             locBeamX4_Thrown = dThrownBeam->Get_X4();
             locBeamP4_Thrown = dThrownBeam->Get_P4();
-            dThrownWrapper->Set_ArrayIndex(0);
+            dThrownWrapper->Set_ArrayIndex(1);
             locPiMinusX4_Thrown = dThrownWrapper->Get_X4();
             locPiMinusP4_Thrown = dThrownWrapper->Get_P4();
-            dThrownWrapper->Set_ArrayIndex(1);
+            dThrownWrapper->Set_ArrayIndex(2);
             locProtonX4_Thrown = dThrownWrapper->Get_X4();
             locProtonP4_Thrown = dThrownWrapper->Get_P4();
 
-            // if (dPiMinusWrapper->Get_ThrownIndex() >= 0)
-            // {
-            //     dThrownWrapper->Set_ArrayIndex(dPiMinusWrapper->Get_ThrownIndex());
-            //     locThrownTopology += to_string(dThrownWrapper->Get_PID()) + "_";
-            // }
-            // else
-            // {
-            //     locThrownTopology += "-1_";
-            // }
-            // if (dProtonWrapper->Get_ThrownIndex() >= 0)
-            // {
-            //     dThrownWrapper->Set_ArrayIndex(dProtonWrapper->Get_ThrownIndex());
-            //     locThrownTopology += to_string(dThrownWrapper->Get_PID()) + "_";
-            // }
-            // else
-            // {
-            //     locThrownTopology += "-1_";
-            // }
-            locThrownTopology += Get_ThrownTopologyString();
-
             if      (locThrownTopology == "#pi^{#minus}p")
+            {
                 locThrownTopologyFlag = 0;
+                dThrownWrapper->Set_ArrayIndex(0);
+                locPiMinusX4_Thrown = dThrownWrapper->Get_X4();
+                locPiMinusP4_Thrown = dThrownWrapper->Get_P4();
+                dThrownWrapper->Set_ArrayIndex(1);
+                locProtonX4_Thrown = dThrownWrapper->Get_X4();
+                locProtonP4_Thrown = dThrownWrapper->Get_P4();
+            }
             else if (locThrownTopology == "#pi^{#plus}#pi^{#minus}p")
+            {
                 locThrownTopologyFlag = 1;
+                dThrownWrapper->Set_ArrayIndex(0);
+                locExtraPionX4_Thrown = dThrownWrapper->Get_X4();
+                locExtraPionP4_Thrown = dThrownWrapper->Get_P4();
+                dThrownWrapper->Set_ArrayIndex(1);
+                locPiMinusX4_Thrown = dThrownWrapper->Get_X4();
+                locPiMinusP4_Thrown = dThrownWrapper->Get_P4();
+                dThrownWrapper->Set_ArrayIndex(2);
+                locProtonX4_Thrown = dThrownWrapper->Get_X4();
+                locProtonP4_Thrown = dThrownWrapper->Get_P4();
+            }
             else if (locThrownTopology == "#pi^{#plus}#pi^{#minus}n")
+            {
                 locThrownTopologyFlag = 2;
+            }
             else if (locThrownTopology == "2#gamma#pi^{#minus}p[#pi^{0}]")
+            {
                 locThrownTopologyFlag = 3;
+                dThrownWrapper->Set_ArrayIndex(0);
+                locExtraPionX4_Thrown = dThrownWrapper->Get_X4();
+                locExtraPionP4_Thrown += dThrownWrapper->Get_P4();
+                dThrownWrapper->Set_ArrayIndex(1);
+                locExtraPionP4_Thrown += dThrownWrapper->Get_P4();
+                dThrownWrapper->Set_ArrayIndex(2);
+                locPiMinusX4_Thrown = dThrownWrapper->Get_X4();
+                locPiMinusP4_Thrown = dThrownWrapper->Get_P4();
+                dThrownWrapper->Set_ArrayIndex(3);
+                locProtonX4_Thrown = dThrownWrapper->Get_X4();
+                locProtonP4_Thrown = dThrownWrapper->Get_P4();
+            }
             else
-                locThrownTopologyFlag = 999;
+                locThrownTopologyFlag = 9;
         }
 
         // FILL HISTOGRAMS BEFORE CUTS
@@ -360,9 +388,11 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_x4_truth", locBeamX4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("pim_x4_truth", locPiMinusX4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("p_x4_truth", locProtonX4_Thrown);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("extra_pion_x4_truth", locExtraPionX4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_p4_truth", locBeamP4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("pim_p4_truth", locPiMinusP4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("p_p4_truth", locProtonP4_Thrown);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("extra_pion_p4_truth", locExtraPionP4_Thrown);
         Fill_FlatTree();
 	}
     // END OF COMBO LOOP
@@ -374,9 +404,6 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
 void DSelector_piminus_p_recon::Finalize(void)
 {
 	// CALL THIS LAST
-    dHist_ThrownTopology_Before->GetXaxis()->LabelsOption(">");
-    dHist_ThrownTopology_After->GetXaxis()->LabelsOption(">");
-    dHist_ThrownTopology_Weighted->GetXaxis()->LabelsOption(">");
 	DSelector::Finalize(); // saves results to the output file
 }
 // END OF FINALIZATION
