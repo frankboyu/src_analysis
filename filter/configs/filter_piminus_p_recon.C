@@ -186,6 +186,16 @@ void filter_piminus_p_recon(string reaction_name, string output_mode)
     .Define("rho_mass_meas",                "(pim_p4_meas + p_p4pion_meas).M()")
     .Define("rho_mass_kin",                 "(pim_p4_kin + p_p4pion_kin).M()")
     .Define("rho_mass_truth",               "(pim_p4_truth + p_p4pion_truth).M()")
+
+    .Define("topology_pimprot",             "accidweight*(thrown_topology == 0)")
+    .Define("topology_pippimprot",          "accidweight*(thrown_topology == 1)")
+    .Define("topology_pippimn",             "accidweight*(thrown_topology == 2)")
+    .Define("topology_pi0pimprot",          "accidweight*(thrown_topology == 3)")
+    .Define("topology_others",              "accidweight*(thrown_topology == 9)")
+    .Define("extrapion_momentum_truth",     "extra_pion_p4_truth.P()")
+    .Define("extrapion_theta_truth",        "extra_pion_p4_truth.Theta()*RadToDeg")
+    .Define("rho_misspion_p4_truth",        "extra_pion_p4_truth + pim_p4_truth")
+    .Define("rho_misspion_mass_truth",      "rho_misspion_p4_truth.M()")
     ;
 
     // Filter events and save to new tree
@@ -401,6 +411,26 @@ void filter_piminus_p_recon(string reaction_name, string output_mode)
                 hist_beam_energy_kin_truth.Write();
                 TH2D hist_thetaCM_kin_truth             = *rdf.Histo2D({("thetaCM_kin_truth_"+ label).c_str(), ";#theta_{CM}^{kin} (deg);#theta_{CM}^{truth} (deg)", 36, 0.0, 180.0, 36, 0.0, 180.0},"thetaCM_kin","thetaCM_truth","accidweight");
                 hist_thetaCM_kin_truth.Write();
+            }
+
+            if (reaction_name.find("bggen") != string::npos)
+            {
+                TH1D hist_thrown_topology                           = *rdf.Histo1D({("thrown_topology_"+ label).c_str(), ";Thrown Topology;Counts", 10, -0.5, 9.5},"thrown_topology","accidweight");
+                hist_thrown_topology.Write();
+                TH1D hist_n_pminus_kin_pippimprot                   = *rdf.Histo1D({("n_pminus_kin_pippimprot_"+ label).c_str(), ";P_{n}^{-} (GeV/c);Counts", 120, 0.3, 1.5},"n_pminus_kin","topology_pippimprot");
+                hist_n_pminus_kin_pippimprot.Write();
+                TH2D hist_extrapion_kinematics_truth_pippimprot     = *rdf.Histo2D({("extrapion_kinematics_truth_pippimprot_"+ label).c_str(), ";P_{#pi^{+}} (GeV/c);#theta_{#pi^{+}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"extrapion_momentum_truth","extrapion_theta_truth","topology_pippimprot");
+                hist_extrapion_kinematics_truth_pippimprot.Write();
+                TH1D hist_rho_misspion_mass_truth_pippimprot        = *rdf.Histo1D({("rho_misspion_mass_truth_pippimprot_"+ label).c_str(), ";m_{#pi^{+}#pi^{-}} (GeV/c^{2});Counts", 400, 0.0, 4.0},"rho_misspion_mass_truth","topology_pippimprot");
+                hist_rho_misspion_mass_truth_pippimprot.Write();
+                TH1D hist_n_pminus_kin_pi0pimprot                   = *rdf.Histo1D({("n_pminus_kin_pi0pimprot_"+ label).c_str(), ";P_{n}^{-} (GeV/c);Counts", 120, 0.3, 1.5},"n_pminus_kin","topology_pi0pimprot");
+                hist_n_pminus_kin_pi0pimprot.Write();
+                TH2D hist_extrapion_kinematics_truth_pi0pimprot     = *rdf.Histo2D({("extrapion_kinematics_truth_pi0pimprot_"+ label).c_str(), ";P_{#pi^{+}} (GeV/c);#theta_{#pi^{+}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"extrapion_momentum_truth","extrapion_theta_truth","topology_pi0pimprot");
+                hist_extrapion_kinematics_truth_pi0pimprot.Write();
+                TH1D hist_rho_misspion_mass_truth_pi0pimprot        = *rdf.Histo1D({("rho_misspion_mass_truth_pi0pimprot_"+ label).c_str(), ";m_{#pi^{+}#pi^{-}} (GeV/c^{2});Counts", 400, 0.0, 4.0},"rho_misspion_mass_truth","topology_pi0pimprot");
+                hist_rho_misspion_mass_truth_pi0pimprot.Write();
+                TH1D hist_n_pminus_kin_others                       = *rdf.Histo1D({("n_pminus_kin_others_"+ label).c_str(), ";P_{n}^{-} (GeV/c);Counts", 120, 0.3, 1.5},"n_pminus_kin","topology_others");
+                hist_n_pminus_kin_others.Write();
             }
         }
         hist_file->Close();
