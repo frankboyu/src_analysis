@@ -1,7 +1,6 @@
 #!/bin/bash
 RUNMODE=$1
-INPUTMODE=$2
-OUTPUTMODE=$3
+OUTPUTMODE=$2
 
 start=`date +%s`
 
@@ -20,21 +19,21 @@ THROWN_LIST=()
 if [ "$RUNMODE" == "local" ]; then
     for REACTION in "${RECON_LIST[@]}"
     do
-        sh /work/halld2/home/boyu/src_analysis/filter/run_filter.sh piminus_p_recon $REACTION $INPUTMODE $OUTPUTMODE
+        sh /work/halld2/home/boyu/src_analysis/filter/run_filter.sh piminus_p_recon $REACTION $OUTPUTMODE
     done
 
     for REACTION in "${THROWN_LIST[@]}"
     do
-        sh /work/halld2/home/boyu/src_analysis/filter/run_filter.sh piminus_p_thrown $REACTION $INPUTMODE $OUTPUTMODE
+        sh /work/halld2/home/boyu/src_analysis/filter/run_filter.sh piminus_p_thrown $REACTION $OUTPUTMODE
     done
 elif [ "$RUNMODE" == "batch" ]; then
     for REACTION in "${RECON_LIST[@]}"
     do
         JOB_WORKFLOW="-workflow src_analysis_filter"
-        JOB_NAME="-name piminus_p_recon_${REACTION}_${INPUTMODE}_${OUTPUTMODE}_$(date '+%Y-%m-%d-%H-%M')"
+        JOB_NAME="-name piminus_p_recon_${REACTION}_${OUTPUTMODE}_$(date '+%Y-%m-%d-%H-%M')"
         JOB_RESOURCES="-account halld -partition production -os el9 -cores 1 -ram 4GB -disk 8GB -time 24hrs"
-        JOB_OUT="-stdout /farm_out/boyu/src_analysis/filter/piminus_p_recon_${REACTION}_${INPUTMODE}_${OUTPUTMODE}_$(date '+%Y-%m-%d').out"
-        JOB_ERR="-stderr /farm_out/boyu/src_analysis/filter/piminus_p_recon_${REACTION}_${INPUTMODE}_${OUTPUTMODE}_$(date '+%Y-%m-%d').err"
+        JOB_OUT="-stdout /farm_out/boyu/src_analysis/filter/piminus_p_recon_${REACTION}_${OUTPUTMODE}_$(date '+%Y-%m-%d').out"
+        JOB_ERR="-stderr /farm_out/boyu/src_analysis/filter/piminus_p_recon_${REACTION}_${OUTPUTMODE}_$(date '+%Y-%m-%d').err"
         JOB_COMMAND="sh /work/halld2/home/boyu/src_analysis/filter/run_filter.sh piminus_p_recon $REACTION $INPUTMODE $OUTPUTMODE"
         swif2 add-job $JOB_WORKFLOW $JOB_NAME $JOB_RESOURCES $JOB_OUT $JOB_ERR $JOB_COMMAND
     done
@@ -43,10 +42,10 @@ elif [ "$RUNMODE" == "batch" ]; then
     for REACTION in "${THROWN_LIST[@]}"
     do
         JOB_WORKFLOW="-workflow src_analysis_filter"
-        JOB_NAME="-name piminus_p_thrown_${REACTION}_${INPUTMODE}_${OUTPUTMODE}_$(date '+%Y-%m-%d-%H-%M')"
+        JOB_NAME="-name piminus_p_thrown_${REACTION}_${OUTPUTMODE}_$(date '+%Y-%m-%d-%H-%M')"
         JOB_RESOURCES="-account halld -partition production -os el9 -cores 1 -ram 4GB -disk 8GB -time 24hrs"
-        JOB_OUT="-stdout /farm_out/boyu/src_analysis/filter/piminus_p_thrown_${REACTION}_${INPUTMODE}_${OUTPUTMODE}_$(date '+%Y-%m-%d').out"
-        JOB_ERR="-stderr /farm_out/boyu/src_analysis/filter/piminus_p_thrown_${REACTION}_${INPUTMODE}_${OUTPUTMODE}_$(date '+%Y-%m-%d').err"
+        JOB_OUT="-stdout /farm_out/boyu/src_analysis/filter/piminus_p_thrown_${REACTION}_${OUTPUTMODE}_$(date '+%Y-%m-%d').out"
+        JOB_ERR="-stderr /farm_out/boyu/src_analysis/filter/piminus_p_thrown_${REACTION}_${OUTPUTMODE}_$(date '+%Y-%m-%d').err"
         JOB_COMMAND="sh /work/halld2/home/boyu/src_analysis/filter/run_filter.sh piminus_p_thrown $REACTION $INPUTMODE $OUTPUTMODE"
         swif2 add-job $JOB_WORKFLOW $JOB_NAME $JOB_RESOURCES $JOB_OUT $JOB_ERR $JOB_COMMAND
     done
