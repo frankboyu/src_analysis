@@ -19,11 +19,11 @@ TLorentzVector boost_lorentz_vector(TLorentzVector p4, TVector3 boost_vector)
     return p4_boosted;
 }
 
-void filter_piminus_p_recon(string reaction_name, string input_mode, string output_mode)
+void filter_piminus_p_recon(string reaction_name, string output_mode)
 {
-    string input_name   = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_piminus_p_recon_%s_%s.root",reaction_name.c_str(), input_mode.c_str());
-    string hist_name    = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_piminus_p_recon_%s_%s.root",reaction_name.c_str(), input_mode.c_str());
-    string tree_name    = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_piminus_p_recon_%s_%s.root",reaction_name.c_str(), input_mode.c_str());
+    string input_name   = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_piminus_p_recon_%s.root",reaction_name.c_str());
+    string hist_name    = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_piminus_p_recon_%s.root",reaction_name.c_str());
+    string tree_name    = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_piminus_p_recon_%s.root",reaction_name.c_str());
 
     // Determine reaction specific parameters
     if (reaction_name.find("2H") != string::npos)
@@ -316,6 +316,18 @@ void filter_piminus_p_recon(string reaction_name, string input_mode, string outp
             hist_n_energy_balance_kin.Write();
             TH2D hist_n_momentum_pminus_kin         = *rdf.Histo2D({("n_momentum_pminus_kin_"+ label).c_str(), ";P_{n} (GeV/c);P_{n}^{-} (GeV/c)", 100, 0.0, 1.0, 100, 0.4, 1.4},"n_momentum_kin","n_pminus_kin","accidweight");
             hist_n_momentum_pminus_kin.Write();
+            TH1D hist_n_mass_meas                   = *rdf.Histo1D({("n_mass_meas_"+ label).c_str(), ";m_{n} (GeV/c^{2});Counts", 400, -4.0, 4.0},"n_mass_meas","accidweight");
+            hist_n_mass_meas.Write();
+            TH1D hist_n_masssquared_meas            = *rdf.Histo1D({("n_masssquared_meas_"+ label).c_str(), ";m_{n}^{2} (GeV^{2}/c^{4});Counts", 400, 0.0, 4.0},"n_masssquared_meas","accidweight");
+            hist_n_masssquared_meas.Write();
+            TH1D hist_n_momentum_meas               = *rdf.Histo1D({("n_momentum_meas_"+ label).c_str(), ";P_{n} (GeV/c);Counts", 100, 0.0, 1.0},"n_momentum_meas","accidweight");
+            hist_n_momentum_meas.Write();
+            TH1D hist_n_pminus_meas                 = *rdf.Histo1D({("n_pminus_meas_"+ label).c_str(), ";P_{n}^{-} (GeV/c);Counts", 120, 0.3, 1.5},"n_pminus_meas","accidweight");
+            hist_n_pminus_meas.Write();
+            TH1D hist_n_energy_balance_meas         = *rdf.Histo1D({("n_energy_balance_meas_"+ label).c_str(), ";E_{n} - m_{n} (GeV);Counts", 400, -4.0, 4.0},"n_energy_balance_meas","accidweight");
+            hist_n_energy_balance_meas.Write();
+            TH2D hist_n_momentum_pminus_meas        = *rdf.Histo2D({("n_momentum_pminus_meas_"+ label).c_str(), ";P_{n} (GeV/c);P_{n}^{-} (GeV/c)", 100, 0.0, 1.0, 100, 0.4, 1.4},"n_momentum_meas","n_pminus_meas","accidweight");
+            hist_n_momentum_pminus_meas.Write();
 
             TH1D hist_N2miss_mass_kin               = *rdf.Histo1D({("N2miss_mass_kin_"+ label).c_str(), ";m_{N2miss} (GeV/c^{2});Counts", 400, -4.0, 4.0},"N2miss_mass_kin","accidweight");
             hist_N2miss_mass_kin.Write();
