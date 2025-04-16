@@ -191,11 +191,11 @@ void DSelector_piminus_p_recon::Init(TTree *locTree)
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("beam_x4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("pim_x4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("p_x4_truth");
-    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("extra_pion_x4_truth");
+    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("extrapion_x4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("beam_p4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("pim_p4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("p_p4_truth");
-    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("extra_pion_p4_truth");
+    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("extrapion_p4_truth");
 }
 // END OF INITIALIZATION
 
@@ -418,11 +418,11 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_x4_truth", locBeamX4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("pim_x4_truth", locPiMinusX4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("p_x4_truth", locProtonX4_Thrown);
-        dFlatTreeInterface->Fill_TObject<TLorentzVector>("extra_pion_x4_truth", locExtraPionX4_Thrown);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("extrapion_x4_truth", locExtraPionX4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_p4_truth", locBeamP4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("pim_p4_truth", locPiMinusP4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("p_p4_truth", locProtonP4_Thrown);
-        dFlatTreeInterface->Fill_TObject<TLorentzVector>("extra_pion_p4_truth", locExtraPionP4_Thrown);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("extrapion_p4_truth", locExtraPionP4_Thrown);
         Fill_FlatTree();
 	}
     // END OF COMBO LOOP
