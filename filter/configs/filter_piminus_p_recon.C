@@ -183,9 +183,12 @@ void filter_piminus_p_recon(string reaction_name, string output_mode)
     .Define("thetaCM_meas",                 "beam_p4com_meas.Vect().Angle(pim_p4com_meas.Vect())*RadToDeg")
     .Define("thetaCM_kin",                  "beam_p4com_kin.Vect().Angle(pim_p4com_kin.Vect())*RadToDeg")
     .Define("thetaCM_truth",                "beam_p4com_truth.Vect().Angle(pim_p4com_truth.Vect())*RadToDeg")
-    .Define("rho_mass_meas",                "(pim_p4_meas + p_p4pion_meas).M()")
-    .Define("rho_mass_kin",                 "(pim_p4_kin + p_p4pion_kin).M()")
-    .Define("rho_mass_truth",               "(pim_p4_truth + p_p4pion_truth).M()")
+    .Define("rho_misid_mass_meas",          "(pim_p4_meas + p_p4pion_meas).M()")
+    .Define("rho_misid_mass_kin",           "(pim_p4_kin + p_p4pion_kin).M()")
+    .Define("rho_misid_mass_truth",         "(pim_p4_truth + p_p4pion_truth).M()")
+    .Define("rho_misspion_mass_meas",       "(pim_p4_meas + TLorentzVector(0, 0, 0, mass_piplus)).M()")
+    .Define("rho_misspion_mass_kin",        "(pim_p4_kin + TLorentzVector(0, 0, 0, mass_piplus)).M()")
+    .Define("rho_misspion_mass_truth",      "(pim_p4_truth + TLorentzVector(0, 0, 0, mass_piplus)).M()")
 
     .Define("topology_pimprot",             "accidweight*(thrown_topology == 0)")
     .Define("topology_pippimprot",          "accidweight*(thrown_topology == 1)")
@@ -194,8 +197,8 @@ void filter_piminus_p_recon(string reaction_name, string output_mode)
     .Define("topology_others",              "accidweight*(thrown_topology == 9)")
     .Define("extrapion_momentum_truth",     "extra_pion_p4_truth.P()")
     .Define("extrapion_theta_truth",        "extra_pion_p4_truth.Theta()*RadToDeg")
-    .Define("rho_misspion_p4_truth",        "extra_pion_p4_truth + pim_p4_truth")
-    .Define("rho_misspion_mass_truth",      "rho_misspion_p4_truth.M()")
+    .Define("rho_thrown_p4_truth",          "extra_pion_p4_truth + pim_p4_truth")
+    .Define("rho_thrown_mass_truth",        "rho_thrown_p4_truth.M()")
     ;
 
     // Filter events and save to new tree
@@ -311,8 +314,8 @@ void filter_piminus_p_recon(string reaction_name, string output_mode)
             hist_thetaCM_kin.Write();
             TH2D hist_minust_thetaCM_kin            = *rdf.Histo2D({("minust_thetaCM_kin_"+ label).c_str(), ";-t (GeV^{2}/c^{2});#theta_{CM} (deg)", 200, 0.0, 20.0, 180, 0.0, 180.0},"minust_kin","thetaCM_kin","accidweight");
             hist_minust_thetaCM_kin.Write();
-            TH1D hist_rho_mass_kin                  = *rdf.Histo1D({("rho_mass_kin_"+ label).c_str(), ";m_{#pi^{+}#pi^{-}} (GeV/c^{2});Counts", 400, 0.0, 4.0},"rho_mass_kin","accidweight");
-            hist_rho_mass_kin.Write();
+            TH1D hist_rho_misid_mass_kin            = *rdf.Histo1D({("rho_misid_mass_kin_"+ label).c_str(), ";m_{#pi^{+}#pi^{-}} (GeV/c^{2});Counts", 400, 0.0, 4.0},"rho_misid_mass_kin","accidweight");
+            hist_rho_misid_mass_kin.Write();
 
             TH1D hist_n_mass_kin                    = *rdf.Histo1D({("n_mass_kin_"+ label).c_str(), ";m_{n} (GeV/c^{2});Counts", 400, -4.0, 4.0},"n_mass_kin","accidweight");
             hist_n_mass_kin.Write();
@@ -386,8 +389,8 @@ void filter_piminus_p_recon(string reaction_name, string output_mode)
                 hist_thetaCM_truth.Write();
                 TH2D hist_minust_thetaCM                = *rdf.Histo2D({("minust_thetaCM_"+ label).c_str(), ";-t (GeV^{2}/c^{2});#theta_{CM} (deg)", 200, 0.0, 20.0, 180, 0.0, 180.0},"minust_truth","thetaCM_truth");
                 hist_minust_thetaCM.Write();
-                TH1D hist_rho_mass_truth                = *rdf.Histo1D({("rho_mass_truth_"+ label).c_str(), ";m_{#pi^{+}#pi^{-}} (GeV/c^{2});Counts", 400, 0.0, 4.0},"rho_mass_truth");
-                hist_rho_mass_truth.Write();
+                TH1D hist_rho_misid_mass_truth          = *rdf.Histo1D({("rho_misid_mass_truth_"+ label).c_str(), ";m_{#pi^{+}#pi^{-}} (GeV/c^{2});Counts", 400, 0.0, 4.0},"rho_misid_mass_truth");
+                hist_rho_misid_mass_truth.Write();
 
                 TH1D hist_n_mass_truth                  = *rdf.Histo1D({("n_mass_truth_"+ label).c_str(), ";m_{n} (GeV/c^{2});Counts", 100, 0.0, 4.0},"n_mass_truth");
                 hist_n_mass_truth.Write();
@@ -417,20 +420,30 @@ void filter_piminus_p_recon(string reaction_name, string output_mode)
             {
                 TH1D hist_thrown_topology                           = *rdf.Histo1D({("thrown_topology_"+ label).c_str(), ";Thrown Topology;Counts", 10, -0.5, 9.5},"thrown_topology","accidweight");
                 hist_thrown_topology.Write();
+                TH1D hist_n_pminus_kin_pimprot                      = *rdf.Histo1D({("n_pminus_kin_pimprot_"+ label).c_str(), ";P_{n}^{-} (GeV/c);Counts", 120, 0.3, 1.5},"n_pminus_kin","topology_pimprot");
+                hist_n_pminus_kin_pimprot.Write();
+                TH1D hist_rho_misspion_mass_kin_pimprot             = *rdf.Histo1D({("rho_misspion_mass_kin_pimprot_"+ label).c_str(), ";m_{#pi^{+}#pi^{-}} (GeV/c^{2});Counts", 400, 0.0, 4.0},"rho_misspion_mass_kin","topology_pimprot");
+                hist_rho_misspion_mass_kin_pimprot.Write();
                 TH1D hist_n_pminus_kin_pippimprot                   = *rdf.Histo1D({("n_pminus_kin_pippimprot_"+ label).c_str(), ";P_{n}^{-} (GeV/c);Counts", 120, 0.3, 1.5},"n_pminus_kin","topology_pippimprot");
                 hist_n_pminus_kin_pippimprot.Write();
+                TH1D hist_rho_misspion_mass_kin_pippimprot          = *rdf.Histo1D({("rho_misspion_mass_kin_pippimprot_"+ label).c_str(), ";m_{#pi^{+}#pi^{-}} (GeV/c^{2});Counts", 400, 0.0, 4.0},"rho_misspion_mass_kin","topology_pippimprot");
+                hist_rho_misspion_mass_kin_pippimprot.Write();
                 TH2D hist_extrapion_kinematics_truth_pippimprot     = *rdf.Histo2D({("extrapion_kinematics_truth_pippimprot_"+ label).c_str(), ";P_{#pi^{+}} (GeV/c);#theta_{#pi^{+}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"extrapion_momentum_truth","extrapion_theta_truth","topology_pippimprot");
                 hist_extrapion_kinematics_truth_pippimprot.Write();
-                TH1D hist_rho_misspion_mass_truth_pippimprot        = *rdf.Histo1D({("rho_misspion_mass_truth_pippimprot_"+ label).c_str(), ";m_{#pi^{+}#pi^{-}} (GeV/c^{2});Counts", 400, 0.0, 4.0},"rho_misspion_mass_truth","topology_pippimprot");
-                hist_rho_misspion_mass_truth_pippimprot.Write();
+                TH1D hist_rho_thrown_mass_truth_pippimprot          = *rdf.Histo1D({("rho_thrown_mass_truth_pippimprot_"+ label).c_str(), ";m_{#pi^{+}#pi^{-}} (GeV/c^{2});Counts", 400, 0.0, 4.0},"rho_thrown_mass_truth","topology_pippimprot");
+                hist_rho_thrown_mass_truth_pippimprot.Write();
                 TH1D hist_n_pminus_kin_pi0pimprot                   = *rdf.Histo1D({("n_pminus_kin_pi0pimprot_"+ label).c_str(), ";P_{n}^{-} (GeV/c);Counts", 120, 0.3, 1.5},"n_pminus_kin","topology_pi0pimprot");
                 hist_n_pminus_kin_pi0pimprot.Write();
+                TH1D hist_rho_misspion_mass_kin_pi0pimprot          = *rdf.Histo1D({("rho_misspion_mass_kin_pi0pimprot_"+ label).c_str(), ";m_{#pi^{+}#pi^{-}} (GeV/c^{2});Counts", 400, 0.0, 4.0},"rho_misspion_mass_kin","topology_pi0pimprot");
+                hist_rho_misspion_mass_kin_pi0pimprot.Write();
                 TH2D hist_extrapion_kinematics_truth_pi0pimprot     = *rdf.Histo2D({("extrapion_kinematics_truth_pi0pimprot_"+ label).c_str(), ";P_{#pi^{+}} (GeV/c);#theta_{#pi^{+}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"extrapion_momentum_truth","extrapion_theta_truth","topology_pi0pimprot");
                 hist_extrapion_kinematics_truth_pi0pimprot.Write();
-                TH1D hist_rho_misspion_mass_truth_pi0pimprot        = *rdf.Histo1D({("rho_misspion_mass_truth_pi0pimprot_"+ label).c_str(), ";m_{#pi^{+}#pi^{-}} (GeV/c^{2});Counts", 400, 0.0, 4.0},"rho_misspion_mass_truth","topology_pi0pimprot");
-                hist_rho_misspion_mass_truth_pi0pimprot.Write();
+                TH1D hist_rho_thrown_mass_truth_pi0pimprot          = *rdf.Histo1D({("rho_thrown_mass_truth_pi0pimprot_"+ label).c_str(), ";m_{#pi^{+}#pi^{-}} (GeV/c^{2});Counts", 400, 0.0, 4.0},"rho_thrown_mass_truth","topology_pi0pimprot");
+                hist_rho_thrown_mass_truth_pi0pimprot.Write();
                 TH1D hist_n_pminus_kin_others                       = *rdf.Histo1D({("n_pminus_kin_others_"+ label).c_str(), ";P_{n}^{-} (GeV/c);Counts", 120, 0.3, 1.5},"n_pminus_kin","topology_others");
                 hist_n_pminus_kin_others.Write();
+                TH1D hist_rho_misspion_mass_kin_others              = *rdf.Histo1D({("rho_misspion_mass_kin_others_"+ label).c_str(), ";m_{#pi^{+}#pi^{-}} (GeV/c^{2});Counts", 400, 0.0, 4.0},"rho_misspion_mass_kin","topology_others");
+                hist_rho_misspion_mass_kin_others.Write();
             }
         }
         hist_file->Close();
