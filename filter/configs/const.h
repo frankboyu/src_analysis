@@ -1,10 +1,10 @@
 double mass_piplus      = 0.13957039;
 double mass_piminus     = 0.13957039;
-double mass_pizero      = 0.1349768;
+double mass_pi0         = 0.1349768;
 double mass_kplus       = 0.493677;
 double mass_kminus      = 0.493677;
 double mass_phi         = 1.019461;
-double mass_rhozero     = 0.77526;
+double mass_rho0        = 0.77526;
 
 double mass_neutron     = 0.93956542052;
 double mass_proton      = 0.93827208943;
