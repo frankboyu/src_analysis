@@ -1,7 +1,7 @@
 #!/bin/bash
 
-XML_VERSION=recon_srcct-2021_11-ver01_4.6
-SIM_VERSION=halld_sim_srcct-4.52.0.6^rec211111
+XML_VERSION=analysis-2021_11-dev-CentOS7
+SIM_VERSION=halld_recon_srcct^CentOS7
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
 gxenv /work/halld2/home/boyu/src_software_builds/halld_versions_srcct/${XML_VERSION}.xml
