@@ -1,6 +1,6 @@
 #!/bin/bash
 
-REACTION=rho_d_2H
+REACTION=phi_d_2H
 XML_VERSION=dev
 RUN=90213
 EVENTS=10000
