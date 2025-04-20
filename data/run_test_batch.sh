@@ -1,8 +1,8 @@
 #!/bin/bash
 
-REACTION=phi_d_2H
-RUNMIN=90212
-RUNMAX=90215
+REACTION=phi_d_4He
+RUNMIN=90101
+RUNMAX=90105
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
 gxenv $HALLD_VERSIONS/version.xml
