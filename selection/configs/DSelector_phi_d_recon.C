@@ -91,18 +91,30 @@ void DSelector_phi_d_recon::Get_ComboWrappers(void)
 void DSelector_phi_d_recon::Init(TTree *locTree)
 {
     // DETERMINE THE TAG NAME
-    if      (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gd_kpkmd",         strlen("gd_kpkmd")))
-        dTag = "data_2H";
+    if      (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gd_kpkmdexc",      strlen("gd_kpkmdexc")))
+        dTag = "data_2H_exc";
+    else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "ghe_kpkmdexc",     strlen("ghe_kpkmdexc")))
+        dTag = "data_4He_exc";
+    else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gc12_kpkmdexc",    strlen("gc12_kpkmdexc")))
+        dTag = "data_12C_exc";
+    else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gd_kpkmdinc",      strlen("gd_kpkmdinc")))
+        dTag = "data_2H_inc";
     else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "ghe_kpkmdinc",     strlen("ghe_kpkmdinc")))
-        dTag = "data_4He";
+        dTag = "data_4He_inc";
     else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gc12_kpkmdinc",    strlen("gc12_kpkmdinc")))
-        dTag = "data_12C";
-    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gd_kpkmd",         strlen("gd_kpkmd")))
-        dTag = "sim_2H";
+        dTag = "data_12C_inc";
+    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gd_kpkmdexc",      strlen("gd_kpkmdexc")))
+        dTag = "sim_2H_exc";
+    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "ghe_kpkmdexc",     strlen("ghe_kpkmdexc")))
+        dTag = "sim_4He_exc";
+    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gc12_kpkmdexc",    strlen("gc12_kpkmdexc")))
+        dTag = "sim_12C_exc";
+    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gd_kpkmdinc",      strlen("gd_kpkmdinc")))
+        dTag = "sim_2H_inc";
     else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "ghe_kpkmdinc",     strlen("ghe_kpkmdinc")))
-        dTag = "sim_4He";
+        dTag = "sim_4He_inc";
     else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gc12_kpkmdinc",    strlen("gc12_kpkmdinc")))
-        dTag = "sim_12C";
+        dTag = "sim_12C_inc";
 
     // SET OUTPUT FILE NAME
     dOutputFileName          = Form("selectedhist_phi_d_recon_%s.root", dTag.c_str());
