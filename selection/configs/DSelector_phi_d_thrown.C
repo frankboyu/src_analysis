@@ -84,15 +84,27 @@ Bool_t DSelector_phi_d_thrown::Process(Long64_t locEntry)
         {
             locBeamX4_Thrown = dThrownBeam->Get_X4();
             locBeamP4_Thrown = dThrownBeam->Get_P4();
-            dThrownWrapper->Set_ArrayIndex(0);
-            locKPlusX4_Thrown = dThrownWrapper->Get_X4();
-            locKPlusP4_Thrown = dThrownWrapper->Get_P4();
-            dThrownWrapper->Set_ArrayIndex(1);
-            locKMinusX4_Thrown = dThrownWrapper->Get_X4();
-            locKMinusP4_Thrown = dThrownWrapper->Get_P4();
-            dThrownWrapper->Set_ArrayIndex(2);
-            locDeuteronX4_Thrown = dThrownWrapper->Get_X4();
-            locDeuteronP4_Thrown = dThrownWrapper->Get_P4();
+            for(UInt_t loc_j = 0; loc_j < Get_NumThrown(); ++loc_j)
+            {
+                dThrownWrapper->Set_ArrayIndex(loc_j);
+                if (dThrownWrapper->Get_PID() == KPlus)
+                {
+                    locKPlusX4_Thrown = dThrownWrapper->Get_X4();
+                    locKPlusP4_Thrown = dThrownWrapper->Get_P4();
+                }
+                else if (dThrownWrapper->Get_PID() == PiMinus)
+                {
+                    locKMinusX4_Thrown = dThrownWrapper->Get_X4();
+                    locKMinusP4_Thrown = dThrownWrapper->Get_P4();
+                }
+                else if (dThrownWrapper->Get_PID() == Deuteron)
+                {
+                    locDeuteronX4_Thrown = dThrownWrapper->Get_X4();
+                    locDeuteronP4_Thrown = dThrownWrapper->Get_P4();
+                }
+                else
+                    cout << "Unexpected PID: " << dThrownWrapper->Get_PID() << endl;
+            }
         }
 
         // FILL FLAT TREE

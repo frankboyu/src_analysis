@@ -242,15 +242,27 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
         {
             locBeamX4_Thrown = dThrownBeam->Get_X4();
             locBeamP4_Thrown = dThrownBeam->Get_P4();
-            dThrownWrapper->Set_ArrayIndex(0);
-            locKPlusX4_Thrown = dThrownWrapper->Get_X4();
-            locKPlusP4_Thrown = dThrownWrapper->Get_P4();
-            dThrownWrapper->Set_ArrayIndex(1);
-            locKMinusX4_Thrown = dThrownWrapper->Get_X4();
-            locKMinusP4_Thrown = dThrownWrapper->Get_P4();
-            // dThrownWrapper->Set_ArrayIndex(2);
-            // locDeuteronX4_Thrown = dThrownWrapper->Get_X4();
-            // locDeuteronP4_Thrown = dThrownWrapper->Get_P4();
+            for(UInt_t loc_j = 0; loc_j < Get_NumThrown(); ++loc_j)
+            {
+                dThrownWrapper->Set_ArrayIndex(loc_j);
+                if (dThrownWrapper->Get_PID() == KPlus)
+                {
+                    locKPlusX4_Thrown = dThrownWrapper->Get_X4();
+                    locKPlusP4_Thrown = dThrownWrapper->Get_P4();
+                }
+                else if (dThrownWrapper->Get_PID() == PiMinus)
+                {
+                    locKMinusX4_Thrown = dThrownWrapper->Get_X4();
+                    locKMinusP4_Thrown = dThrownWrapper->Get_P4();
+                }
+                else if (dThrownWrapper->Get_PID() == Deuteron)
+                {
+                    locDeuteronX4_Thrown = dThrownWrapper->Get_X4();
+                    locDeuteronP4_Thrown = dThrownWrapper->Get_P4();
+                }
+                else
+                    cout << "Unexpected PID: " << dThrownWrapper->Get_PID() << endl;
+            }
         }
 
         // FILL HISTOGRAMS BEFORE CUTS
@@ -264,14 +276,14 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
         dHist_KMinusPIDFOM_Before       ->Fill(dKMinusWrapper->Get_PIDFOM());
         dHist_DeuterondEdxCDC_Before    ->Fill(dDeuteronWrapper->Get_dEdx_CDC()*1e6);
         dHist_InvariantMassPhi_Before   ->Fill((locKPlusP4+locKMinusP4).M());
-        dHist_ThrownTopology_Before   ->Fill(locThrownTopology.Data(), 1);
+        dHist_ThrownTopology_Before     ->Fill(locThrownTopology.Data(), 1);
 
         // PERFORM CUTS
         if(dComboWrapper->Get_NumUnusedTracks()        > 0)                                                 dComboWrapper->Set_IsComboCut(true);
         if(dComboWrapper->Get_NumUnusedShowers()       > 0)                                                 dComboWrapper->Set_IsComboCut(true);
         if(locBeamP4.E()                               < 5.8  || locBeamP4.E()                   > 10.7)    dComboWrapper->Set_IsComboCut(true);
         if(dComboBeamWrapper->Get_X4().Z()             < 51.0 || dComboBeamWrapper->Get_X4().Z() > 79.0)    dComboWrapper->Set_IsComboCut(true);
-        if(sqrt(pow(dComboBeamWrapper->Get_X4().X(),2) + pow(dComboBeamWrapper->Get_X4().Y(),2)) > 1.0)     dComboWrapper->Set_IsComboCut(true);
+        if(dComboBeamWrapper->Get_X4().Perp()          > 1.0)                                               dComboWrapper->Set_IsComboCut(true);
         if(dComboWrapper->Get_ConfidenceLevel_KinFit() < 1e-4)                                              dComboWrapper->Set_IsComboCut(true);
         if(dKPlusWrapper->Get_PIDFOM()                 < 1e-4)                                              dComboWrapper->Set_IsComboCut(true);
         if(dKMinusWrapper->Get_PIDFOM()                < 1e-4)                                              dComboWrapper->Set_IsComboCut(true);

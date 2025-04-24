@@ -24,6 +24,8 @@ private:
     bool    dIsPolarizedFlag;
     bool    dIsPARAFlag;
 
+    // FLAGS
+    bool dIsMC;
     ClassDef(DSelector_rho_d_thrown, 0);
 };
 
@@ -69,20 +71,39 @@ Bool_t DSelector_rho_d_thrown::Process(Long64_t locEntry)
 		dPreviousRunNumber = locRunNumber;
 	}
 
-        //GET THROWN P4
+    // MC INFORMATION
+	dIsMC = (dTreeInterface->Get_Branch("MCWeight") != NULL);
+        //GET THROWN P4 AND TOPOLOGY
         TLorentzVector locBeamX4_Thrown, locPiPlusX4_Thrown, locPiMinusX4_Thrown, locDeuteronX4_Thrown;
         TLorentzVector locBeamP4_Thrown, locPiPlusP4_Thrown, locPiMinusP4_Thrown, locDeuteronP4_Thrown;
-        locBeamX4_Thrown = dThrownBeam->Get_X4();
-        locBeamP4_Thrown = dThrownBeam->Get_P4();
-        dThrownWrapper->Set_ArrayIndex(0);
-        locPiPlusX4_Thrown = dThrownWrapper->Get_X4();
-        locPiPlusP4_Thrown = dThrownWrapper->Get_P4();
-        dThrownWrapper->Set_ArrayIndex(1);
-        locPiMinusX4_Thrown = dThrownWrapper->Get_X4();
-        locPiMinusP4_Thrown = dThrownWrapper->Get_P4();
-        dThrownWrapper->Set_ArrayIndex(2);
-        locDeuteronX4_Thrown = dThrownWrapper->Get_X4();
-        locDeuteronP4_Thrown = dThrownWrapper->Get_P4();
+        TString locThrownTopology = Get_ThrownTopologyString();
+        Int_t locThrownTopologyFlag = -1;
+        if (dIsMC)
+        {
+            locBeamX4_Thrown = dThrownBeam->Get_X4();
+            locBeamP4_Thrown = dThrownBeam->Get_P4();
+            for(UInt_t loc_j = 0; loc_j < Get_NumThrown(); ++loc_j)
+            {
+                dThrownWrapper->Set_ArrayIndex(loc_j);
+                if (dThrownWrapper->Get_PID() == PiPlus)
+                {
+                    locPiPlusX4_Thrown = dThrownWrapper->Get_X4();
+                    locPiPlusP4_Thrown = dThrownWrapper->Get_P4();
+                }
+                else if (dThrownWrapper->Get_PID() == PiMinus)
+                {
+                    locPiMinusX4_Thrown = dThrownWrapper->Get_X4();
+                    locPiMinusP4_Thrown = dThrownWrapper->Get_P4();
+                }
+                else if (dThrownWrapper->Get_PID() == Deuteron)
+                {
+                    locDeuteronX4_Thrown = dThrownWrapper->Get_X4();
+                    locDeuteronP4_Thrown = dThrownWrapper->Get_P4();
+                }
+                else
+                    cout << "Unexpected PID: " << dThrownWrapper->Get_PID() << endl;
+            }
+        }
 
         // FILL FLAT TREE
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_x4_truth", locBeamX4_Thrown);
