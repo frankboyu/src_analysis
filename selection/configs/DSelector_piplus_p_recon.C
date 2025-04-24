@@ -306,10 +306,10 @@ Bool_t DSelector_piplus_p_recon::Process(Long64_t locEntry)
                 for(UInt_t loc_i = 0; loc_i < Get_NumThrown(); ++loc_i)
                 {
                     dThrownWrapper->Set_ArrayIndex(loc_i);
-                    if (dThrownWrapper->Get_PID() == PiPlus)
+                    if (dThrownWrapper->Get_PID() == PiMinus)
                     {
-                        locPiPlusX4_Thrown = dThrownWrapper->Get_X4();
-                        locPiPlusP4_Thrown = dThrownWrapper->Get_P4();
+                        locExtraPionX4_Thrown = dThrownWrapper->Get_X4();
+                        locExtraPionP4_Thrown = dThrownWrapper->Get_P4();
                     }
                     else if (dThrownWrapper->Get_PID() == Proton)
                     {
@@ -318,8 +318,7 @@ Bool_t DSelector_piplus_p_recon::Process(Long64_t locEntry)
                     }
                     else if (dThrownWrapper->Get_PID() == Pi0)
                     {
-                        locExtraPionX4_Thrown = dThrownWrapper->Get_X4();
-                        locExtraPionP4_Thrown = dThrownWrapper->Get_P4();
+                        continue;
                     }
                     else if (dThrownWrapper->Get_PID() == Gamma)
                     {
@@ -340,7 +339,7 @@ Bool_t DSelector_piplus_p_recon::Process(Long64_t locEntry)
         dHist_VertexZ_Before          ->Fill(dComboBeamWrapper->Get_X4().Z());
         dHist_VertexXY_Before         ->Fill(dComboBeamWrapper->Get_X4().X(), dComboBeamWrapper->Get_X4().Y());
         dHist_ConfidenceLevel_Before  ->Fill(dComboWrapper->Get_ConfidenceLevel_KinFit());
-        dHist_PiPlusPIDFOM_Before    ->Fill(dPiPlusWrapper->Get_PIDFOM());
+        dHist_PiPlusPIDFOM_Before     ->Fill(dPiPlusWrapper->Get_PIDFOM());
         dHist_ProtonPIDFOM_Before     ->Fill(dProtonWrapper->Get_PIDFOM());
         dHist_MissingMomentum_Before  ->Fill((locPiPlusP4 + locProtonP4 - locBeamP4).P());
         dHist_MissingPMinus_Before    ->Fill((locPiPlusP4 + locProtonP4 - locBeamP4).Minus());
@@ -353,10 +352,10 @@ Bool_t DSelector_piplus_p_recon::Process(Long64_t locEntry)
         if(dComboBeamWrapper->Get_X4().Z()                  < 52.0 || dComboBeamWrapper->Get_X4().Z() > 78.0)                   dComboWrapper->Set_IsComboCut(true);
         if(sqrt(pow(dComboBeamWrapper->Get_X4().X(),2)      + pow(dComboBeamWrapper->Get_X4().Y(),2)) > 1.0)                    dComboWrapper->Set_IsComboCut(true);
         if(dComboWrapper->Get_ConfidenceLevel_KinFit()      < 1e-4)                                                             dComboWrapper->Set_IsComboCut(true);
-        if(dPiPlusWrapper->Get_PIDFOM()                    < 1e-4)                                                             dComboWrapper->Set_IsComboCut(true);
+        if(dPiPlusWrapper->Get_PIDFOM()                     < 1e-4)                                                             dComboWrapper->Set_IsComboCut(true);
         if(dProtonWrapper->Get_PIDFOM()                     < 1e-4)                                                             dComboWrapper->Set_IsComboCut(true);
-        if((locPiPlusP4 + locProtonP4 - locBeamP4).P()     > 1.0)                                                              dComboWrapper->Set_IsComboCut(true);
-        if((locPiPlusP4 + locProtonP4 - locBeamP4).Minus() < 0.4  || (locPiPlusP4 + locProtonP4 - locBeamP4).Minus() > 1.4)   dComboWrapper->Set_IsComboCut(true);
+        if((locPiPlusP4 + locProtonP4 - locBeamP4).P()      > 1.0)                                                              dComboWrapper->Set_IsComboCut(true);
+        if((locPiPlusP4 + locProtonP4 - locBeamP4).Minus()  < 0.4  || (locPiPlusP4 + locProtonP4 - locBeamP4).Minus() > 1.4)    dComboWrapper->Set_IsComboCut(true);
 
         if(dComboWrapper->Get_IsComboCut())  continue;
 
@@ -367,7 +366,7 @@ Bool_t DSelector_piplus_p_recon::Process(Long64_t locEntry)
         dHist_VertexZ_After          ->Fill(dComboBeamWrapper->Get_X4().Z());
         dHist_VertexXY_After         ->Fill(dComboBeamWrapper->Get_X4().X(), dComboBeamWrapper->Get_X4().Y());
         dHist_ConfidenceLevel_After  ->Fill(dComboWrapper->Get_ConfidenceLevel_KinFit());
-        dHist_PiPlusPIDFOM_After    ->Fill(dPiPlusWrapper->Get_PIDFOM());
+        dHist_PiPlusPIDFOM_After     ->Fill(dPiPlusWrapper->Get_PIDFOM());
         dHist_ProtonPIDFOM_After     ->Fill(dProtonWrapper->Get_PIDFOM());
         dHist_MissingMomentum_After  ->Fill((locPiPlusP4 + locProtonP4 - locBeamP4).P());
         dHist_MissingPMinus_After    ->Fill((locPiPlusP4 + locProtonP4 - locBeamP4).Minus());
@@ -400,7 +399,7 @@ Bool_t DSelector_piplus_p_recon::Process(Long64_t locEntry)
         dHist_VertexZ_Weighted          ->Fill(dComboBeamWrapper->Get_X4().Z(), locHistAccidWeightFactor);
         dHist_VertexXY_Weighted         ->Fill(dComboBeamWrapper->Get_X4().X(), dComboBeamWrapper->Get_X4().Y(), locHistAccidWeightFactor);
         dHist_ConfidenceLevel_Weighted  ->Fill(dComboWrapper->Get_ConfidenceLevel_KinFit(), locHistAccidWeightFactor);
-        dHist_PiPlusPIDFOM_Weighted    ->Fill(dPiPlusWrapper->Get_PIDFOM(), locHistAccidWeightFactor);
+        dHist_PiPlusPIDFOM_Weighted     ->Fill(dPiPlusWrapper->Get_PIDFOM(), locHistAccidWeightFactor);
         dHist_ProtonPIDFOM_Weighted     ->Fill(dProtonWrapper->Get_PIDFOM(), locHistAccidWeightFactor);
         dHist_MissingMomentum_Weighted  ->Fill((locPiPlusP4 + locProtonP4 - locBeamP4).P(), locHistAccidWeightFactor);
         dHist_MissingPMinus_Weighted    ->Fill((locPiPlusP4 + locProtonP4 - locBeamP4).Minus(), locHistAccidWeightFactor);
