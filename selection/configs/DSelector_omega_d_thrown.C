@@ -5,12 +5,12 @@
 #include "DSelector/DHistogramActions.h"
 #include "DSelector/DCutActions.h"
 
-class DSelector_rho_d_thrown : public DSelector
+class DSelector_omega_d_thrown : public DSelector
 {
 public:
 
-    DSelector_rho_d_thrown(TTree* locTree = NULL) : DSelector(locTree){}
-    virtual ~DSelector_rho_d_thrown(){}
+    DSelector_omega_d_thrown(TTree* locTree = NULL) : DSelector(locTree){}
+    virtual ~DSelector_omega_d_thrown(){}
 
     void    Init(TTree *tree);
     Bool_t  Process(Long64_t entry);
@@ -26,16 +26,16 @@ private:
 
     // FLAGS
     bool dIsMC;
-    ClassDef(DSelector_rho_d_thrown, 0);
+    ClassDef(DSelector_omega_d_thrown, 0);
 };
 
-void DSelector_rho_d_thrown::Init(TTree *locTree)
+void DSelector_omega_d_thrown::Init(TTree *locTree)
 {
     // SET OUTPUT FILE NAME
     dOutputFileName          = "";
     dOutputTreeFileName      = "";
-    dFlatTreeFileName        = "selectedtree_rho_d_thrown.root";
-    dFlatTreeName            = "selectedtree_rho_d_thrown";
+    dFlatTreeFileName        = "selectedtree_omega_d_thrown.root";
+    dFlatTreeName            = "selectedtree_omega_d_thrown";
     dSaveDefaultFlatBranches = true;
     dSkipNoTriggerEvents     = false;
 
@@ -48,17 +48,19 @@ void DSelector_rho_d_thrown::Init(TTree *locTree)
 
     // CUSTOM OUTPUT BRACHES: FLAT TREE
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("beam_x4_truth");
+    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("pi0_x4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("pip_x4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("pim_x4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("d_x4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("beam_p4_truth");
+    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("pi0_p4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("pip_p4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("pim_p4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("d_p4_truth");
 }
 // END OF INITIALIZATION
 
-Bool_t DSelector_rho_d_thrown::Process(Long64_t locEntry)
+Bool_t DSelector_omega_d_thrown::Process(Long64_t locEntry)
 {
 	// CALL THIS FIRST
 	DSelector::Process(locEntry); // gets the data from the tree for the entry
@@ -75,8 +77,8 @@ Bool_t DSelector_rho_d_thrown::Process(Long64_t locEntry)
 	dIsMC = (dTreeInterface->Get_Branch("MCWeight") != NULL);
 
         //GET THROWN P4 AND TOPOLOGY
-        TLorentzVector locBeamX4_Thrown, locPiPlusX4_Thrown, locPiMinusX4_Thrown, locDeuteronX4_Thrown;
-        TLorentzVector locBeamP4_Thrown, locPiPlusP4_Thrown, locPiMinusP4_Thrown, locDeuteronP4_Thrown;
+        TLorentzVector locBeamX4_Thrown, locDecayingPi0X4_Thrown, locPiPlusX4_Thrown, locPiMinusX4_Thrown, locDeuteronX4_Thrown;
+        TLorentzVector locBeamP4_Thrown, locDecayingPi0P4_Thrown, locPiPlusP4_Thrown, locPiMinusP4_Thrown, locDeuteronP4_Thrown;
         TString locThrownTopology = Get_ThrownTopologyString();
         Int_t locThrownTopologyFlag = -1;
         if (dIsMC)
@@ -86,7 +88,12 @@ Bool_t DSelector_rho_d_thrown::Process(Long64_t locEntry)
             for(UInt_t loc_j = 0; loc_j < Get_NumThrown(); ++loc_j)
             {
                 dThrownWrapper->Set_ArrayIndex(loc_j);
-                if (dThrownWrapper->Get_PID() == PiPlus)
+                if (dThrownWrapper->Get_PID() == Pi0)
+                {
+                    locDecayingPi0X4_Thrown = dThrownWrapper->Get_X4();
+                    locDecayingPi0P4_Thrown = dThrownWrapper->Get_P4();
+                }
+                else if (dThrownWrapper->Get_PID() == PiPlus)
                 {
                     locPiPlusX4_Thrown = dThrownWrapper->Get_X4();
                     locPiPlusP4_Thrown = dThrownWrapper->Get_P4();
@@ -101,6 +108,10 @@ Bool_t DSelector_rho_d_thrown::Process(Long64_t locEntry)
                     locDeuteronX4_Thrown = dThrownWrapper->Get_X4();
                     locDeuteronP4_Thrown = dThrownWrapper->Get_P4();
                 }
+                else if (dThrownWrapper->Get_PID() == Gamma)
+                {
+                    continue;
+                }
                 else
                     cout << "Unexpected PID: " << dThrownWrapper->Get_PID() << endl;
             }
@@ -108,10 +119,12 @@ Bool_t DSelector_rho_d_thrown::Process(Long64_t locEntry)
 
         // FILL FLAT TREE
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_x4_truth", locBeamX4_Thrown);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("pi0_x4_truth", locDecayingPi0X4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("pip_x4_truth", locPiPlusX4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("pim_x4_truth", locPiMinusX4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("d_x4_truth", locDeuteronX4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_p4_truth", locBeamP4_Thrown);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("pi0_p4_truth", locDecayingPi0P4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("pip_p4_truth", locPiPlusP4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("pim_p4_truth", locPiMinusP4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("d_p4_truth", locDeuteronP4_Thrown);
@@ -121,7 +134,7 @@ Bool_t DSelector_rho_d_thrown::Process(Long64_t locEntry)
 }
 // END OF PROCESSING
 
-void DSelector_rho_d_thrown::Finalize(void)
+void DSelector_omega_d_thrown::Finalize(void)
 {
 	// CALL THIS LAST
 	DSelector::Finalize(); // saves results to the output file
