@@ -24,6 +24,8 @@ private:
     bool    dIsPolarizedFlag;
     bool    dIsPARAFlag;
 
+    // FLAGS
+    bool dIsMC;
     ClassDef(DSelector_piminus_p_thrown, 0);
 };
 
@@ -48,9 +50,11 @@ void DSelector_piminus_p_thrown::Init(TTree *locTree)
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("beam_x4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("pim_x4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("p_x4_truth");
+    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("extrapion_x4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("beam_p4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("pim_p4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("p_p4_truth");
+    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("extrapion_p4_truth");
 }
 // END OF INITIALIZATION
 
@@ -67,25 +71,110 @@ Bool_t DSelector_piminus_p_thrown::Process(Long64_t locEntry)
 		dPreviousRunNumber = locRunNumber;
 	}
 
-        //GET THROWN P4
-        TLorentzVector locBeamX4_Thrown, locPiMinusX4_Thrown, locProtonX4_Thrown;
-        TLorentzVector locBeamP4_Thrown, locPiMinusP4_Thrown, locProtonP4_Thrown;
-        locBeamX4_Thrown = dThrownBeam->Get_X4();
-        locBeamP4_Thrown = dThrownBeam->Get_P4();
-        dThrownWrapper->Set_ArrayIndex(0);
-        locPiMinusX4_Thrown = dThrownWrapper->Get_X4();
-        locPiMinusP4_Thrown = dThrownWrapper->Get_P4();
-        dThrownWrapper->Set_ArrayIndex(1);
-        locProtonX4_Thrown = dThrownWrapper->Get_X4();
-        locProtonP4_Thrown = dThrownWrapper->Get_P4();
+    // MC INFORMATION
+	dIsMC = (dTreeInterface->Get_Branch("MCWeight") != NULL);
+
+        //GET THROWN P4 AND TOPOLOGY
+        TLorentzVector locBeamX4_Thrown, locPiMinusX4_Thrown, locProtonX4_Thrown, locExtraPionX4_Thrown;
+        TLorentzVector locBeamP4_Thrown, locPiMinusP4_Thrown, locProtonP4_Thrown, locExtraPionP4_Thrown;
+        TString locThrownTopology = Get_ThrownTopologyString();
+        Int_t locThrownTopologyFlag = -1;
+        if (dIsMC)
+        {
+            locBeamX4_Thrown = dThrownBeam->Get_X4();
+            locBeamP4_Thrown = dThrownBeam->Get_P4();
+
+            if      (locThrownTopology == "#pi^{#minus}p")
+            {
+                locThrownTopologyFlag = 0;
+                for(UInt_t loc_i = 0; loc_i < Get_NumThrown(); ++loc_i)
+                {
+                    dThrownWrapper->Set_ArrayIndex(loc_i);
+                    if (dThrownWrapper->Get_PID() == PiMinus)
+                    {
+                        locPiMinusX4_Thrown = dThrownWrapper->Get_X4();
+                        locPiMinusP4_Thrown = dThrownWrapper->Get_P4();
+                    }
+                    else if (dThrownWrapper->Get_PID() == Proton)
+                    {
+                        locProtonX4_Thrown = dThrownWrapper->Get_X4();
+                        locProtonP4_Thrown = dThrownWrapper->Get_P4();
+                    }
+                    else
+                        cout << "Unexpected PID: " << dThrownWrapper->Get_PID() << endl;
+                }
+            }
+            else if (locThrownTopology == "#pi^{#plus}#pi^{#minus}p")
+            {
+                locThrownTopologyFlag = 1;
+                for(UInt_t loc_i = 0; loc_i < Get_NumThrown(); ++loc_i)
+                {
+                    dThrownWrapper->Set_ArrayIndex(loc_i);
+                    if (dThrownWrapper->Get_PID() == PiMinus)
+                    {
+                        locPiMinusX4_Thrown = dThrownWrapper->Get_X4();
+                        locPiMinusP4_Thrown = dThrownWrapper->Get_P4();
+                    }
+                    else if (dThrownWrapper->Get_PID() == Proton)
+                    {
+                        locProtonX4_Thrown = dThrownWrapper->Get_X4();
+                        locProtonP4_Thrown = dThrownWrapper->Get_P4();
+                    }
+                    else if (dThrownWrapper->Get_PID() == PiPlus)
+                    {
+                        locExtraPionX4_Thrown = dThrownWrapper->Get_X4();
+                        locExtraPionP4_Thrown = dThrownWrapper->Get_P4();
+                    }
+                    else
+                        cout << "Unexpected PID: " << dThrownWrapper->Get_PID() << endl;
+                }
+            }
+            else if (locThrownTopology == "#pi^{#plus}#pi^{#minus}n")
+            {
+                locThrownTopologyFlag = 2;
+            }
+            else if (locThrownTopology == "2#gamma#pi^{#minus}p[#pi^{0}]")
+            {
+                locThrownTopologyFlag = 3;
+                for(UInt_t loc_i = 0; loc_i < Get_NumThrown(); ++loc_i)
+                {
+                    dThrownWrapper->Set_ArrayIndex(loc_i);
+                    if (dThrownWrapper->Get_PID() == PiMinus)
+                    {
+                        locPiMinusX4_Thrown = dThrownWrapper->Get_X4();
+                        locPiMinusP4_Thrown = dThrownWrapper->Get_P4();
+                    }
+                    else if (dThrownWrapper->Get_PID() == Proton)
+                    {
+                        locProtonX4_Thrown = dThrownWrapper->Get_X4();
+                        locProtonP4_Thrown = dThrownWrapper->Get_P4();
+                    }
+                    else if (dThrownWrapper->Get_PID() == Pi0)
+                    {
+                        locExtraPionX4_Thrown = dThrownWrapper->Get_X4();
+                        locExtraPionP4_Thrown = dThrownWrapper->Get_P4();
+                    }
+                    else if (dThrownWrapper->Get_PID() == Gamma)
+                    {
+                        continue;
+                    }
+                    else
+                        cout << "Unexpected PID: " << dThrownWrapper->Get_PID() << endl;
+                }
+            }
+            else
+                locThrownTopologyFlag = 9;
+        }
 
         // FILL FLAT TREE
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_x4_truth", locBeamX4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("pim_x4_truth", locPiMinusX4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("p_x4_truth", locProtonX4_Thrown);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("extrapion_x4_truth", locExtraPionX4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_p4_truth", locBeamP4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("pim_p4_truth", locPiMinusP4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("p_p4_truth", locProtonP4_Thrown);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("extrapion_p4_truth", locExtraPionP4_Thrown);
         Fill_FlatTree();
 
 	return kTRUE;
