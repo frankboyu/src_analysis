@@ -254,9 +254,9 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
             if      (locThrownTopology == "#pi^{#minus}p")
             {
                 locThrownTopologyFlag = 0;
-                for(UInt_t loc_i = 0; loc_i < Get_NumThrown(); ++loc_i)
+                for(UInt_t loc_j = 0; loc_j < Get_NumThrown(); ++loc_j)
                 {
-                    dThrownWrapper->Set_ArrayIndex(loc_i);
+                    dThrownWrapper->Set_ArrayIndex(loc_j);
                     if (dThrownWrapper->Get_PID() == PiMinus)
                     {
                         locPiMinusX4_Thrown = dThrownWrapper->Get_X4();
@@ -274,9 +274,9 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
             else if (locThrownTopology == "#pi^{#plus}#pi^{#minus}p")
             {
                 locThrownTopologyFlag = 1;
-                for(UInt_t loc_i = 0; loc_i < Get_NumThrown(); ++loc_i)
+                for(UInt_t loc_j = 0; loc_j < Get_NumThrown(); ++loc_j)
                 {
-                    dThrownWrapper->Set_ArrayIndex(loc_i);
+                    dThrownWrapper->Set_ArrayIndex(loc_j);
                     if (dThrownWrapper->Get_PID() == PiMinus)
                     {
                         locPiMinusX4_Thrown = dThrownWrapper->Get_X4();
@@ -303,9 +303,9 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
             else if (locThrownTopology == "2#gamma#pi^{#minus}p[#pi^{0}]")
             {
                 locThrownTopologyFlag = 3;
-                for(UInt_t loc_i = 0; loc_i < Get_NumThrown(); ++loc_i)
+                for(UInt_t loc_j = 0; loc_j < Get_NumThrown(); ++loc_j)
                 {
-                    dThrownWrapper->Set_ArrayIndex(loc_i);
+                    dThrownWrapper->Set_ArrayIndex(loc_j);
                     if (dThrownWrapper->Get_PID() == PiMinus)
                     {
                         locPiMinusX4_Thrown = dThrownWrapper->Get_X4();
@@ -351,7 +351,7 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
         if(dComboWrapper->Get_NumUnusedShowers()            > 0)                                                                dComboWrapper->Set_IsComboCut(true);
         if(locBeamP4.E()                                    < 5.8  || locBeamP4.E()                   > 10.7)                   dComboWrapper->Set_IsComboCut(true);
         if(dComboBeamWrapper->Get_X4().Z()                  < 52.0 || dComboBeamWrapper->Get_X4().Z() > 78.0)                   dComboWrapper->Set_IsComboCut(true);
-        if(sqrt(pow(dComboBeamWrapper->Get_X4().X(),2)      + pow(dComboBeamWrapper->Get_X4().Y(),2)) > 1.0)                    dComboWrapper->Set_IsComboCut(true);
+        if(dComboBeamWrapper->Get_X4().Perp()               > 1.0)                                                              dComboWrapper->Set_IsComboCut(true);
         if(dComboWrapper->Get_ConfidenceLevel_KinFit()      < 1e-4)                                                             dComboWrapper->Set_IsComboCut(true);
         if(dPiMinusWrapper->Get_PIDFOM()                    < 1e-4)                                                             dComboWrapper->Set_IsComboCut(true);
         if(dProtonWrapper->Get_PIDFOM()                     < 1e-4)                                                             dComboWrapper->Set_IsComboCut(true);
