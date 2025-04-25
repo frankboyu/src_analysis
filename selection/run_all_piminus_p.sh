@@ -3,15 +3,49 @@
 # start
 start=`date +%s`
 
-# data
-# sh run_batch.sh piminus_p_recon_data_2H_inc
-# sh run_batch.sh piminus_p_recon_data_2H_missprot
-# sh run_batch.sh piminus_p_recon_data_4He_inc
-# sh run_batch.sh piminus_p_recon_data_4He_misshe3
-# sh run_batch.sh piminus_p_recon_data_12C_inc
-# sh run_batch.sh piminus_p_recon_data_12C_missb11
+# data, batch
+sh run_batch.sh piminus_p_recon_data_2H_inc
+sh run_batch.sh piminus_p_recon_data_2H_missprot
+sh run_batch.sh piminus_p_recon_data_4He_inc
+sh run_batch.sh piminus_p_recon_data_4He_misshe3
+sh run_batch.sh piminus_p_recon_data_12C_inc
+sh run_batch.sh piminus_p_recon_data_12C_missb11
 
-# sim
+sh run_merge.sh piminus_p_recon_data_2H_inc
+sh run_merge.sh piminus_p_recon_data_2H_missprot
+sh run_merge.sh piminus_p_recon_data_4He_inc
+sh run_merge.sh piminus_p_recon_data_4He_misshe3
+sh run_merge.sh piminus_p_recon_data_12C_inc
+sh run_merge.sh piminus_p_recon_data_12C_missb11
+
+# sim, batch
+# sh run_batch.sh piminus_p_recon_sim_2H_inc_flat
+# sh run_batch.sh piminus_p_recon_sim_2H_inc_model
+# sh run_batch.sh piminus_p_recon_sim_2H_missprot_flat
+# sh run_batch.sh piminus_p_recon_sim_2H_missprot_model
+# sh run_batch.sh piminus_p_recon_sim_4He_inc_flat
+# sh run_batch.sh piminus_p_recon_sim_4He_inc_model
+# sh run_batch.sh piminus_p_recon_sim_4He_misshe3_flat
+# sh run_batch.sh piminus_p_recon_sim_4He_misshe3_model
+# sh run_batch.sh piminus_p_recon_sim_12C_inc_flat
+# sh run_batch.sh piminus_p_recon_sim_12C_inc_model
+# sh run_batch.sh piminus_p_recon_sim_12C_missb11_flat
+# sh run_batch.sh piminus_p_recon_sim_12C_missb11_model
+
+# sh run_merge.sh piminus_p_recon_sim_2H_inc_flat
+# sh run_merge.sh piminus_p_recon_sim_2H_inc_model
+# sh run_merge.sh piminus_p_recon_sim_2H_missprot_flat
+# sh run_merge.sh piminus_p_recon_sim_2H_missprot_model
+# sh run_merge.sh piminus_p_recon_sim_4He_inc_flat
+# sh run_merge.sh piminus_p_recon_sim_4He_inc_model
+# sh run_merge.sh piminus_p_recon_sim_4He_misshe3_flat
+# sh run_merge.sh piminus_p_recon_sim_4He_misshe3_model
+# sh run_merge.sh piminus_p_recon_sim_12C_inc_flat
+# sh run_merge.sh piminus_p_recon_sim_12C_inc_model
+# sh run_merge.sh piminus_p_recon_sim_12C_missb11_flat
+# sh run_merge.sh piminus_p_recon_sim_12C_missb11_model
+
+# sim, local
 # sh run_local.sh '/work/halld2/home/boyu/src_analysis/sim/output/piminus_p_2H_ver03/root/tree_gd_pimprotinc__B4_F4_T1_S4_gen_MF/*.root' 'gd_pimprotinc__B4_F4_T1_S4_Tree' 'piminus_p_recon'
 # mv output/selectedhist_piminus_p_recon_sim_2H_inc.root output/selectedhist_piminus_p_recon_sim_2H_inc_model.root
 # mv output/selectedtree_piminus_p_recon_sim_2H_inc.root output/selectedtree_piminus_p_recon_sim_2H_inc_model.root
@@ -49,7 +83,22 @@ start=`date +%s`
 # mv output/selectedhist_piminus_p_recon_sim_12C_missb11.root output/selectedhist_piminus_p_recon_sim_12C_missb11_flat.root
 # mv output/selectedtree_piminus_p_recon_sim_12C_missb11.root output/selectedtree_piminus_p_recon_sim_12C_missb11_flat.root
 
-# # thrown
+# thrown, batch
+# sh run_batch.sh piminus_p_thrown_tagged_2H_flat
+# sh run_batch.sh piminus_p_thrown_tagged_2H_model
+# sh run_batch.sh piminus_p_thrown_tagged_4He_flat
+# sh run_batch.sh piminus_p_thrown_tagged_4He_model
+# sh run_batch.sh piminus_p_thrown_tagged_12C_flat
+# sh run_batch.sh piminus_p_thrown_tagged_12C_model
+
+# sh run_merge.sh piminus_p_thrown_tagged_2H_flat
+# sh run_merge.sh piminus_p_thrown_tagged_2H_model
+# sh run_merge.sh piminus_p_thrown_tagged_4He_flat
+# sh run_merge.sh piminus_p_thrown_tagged_4He_model
+# sh run_merge.sh piminus_p_thrown_tagged_12C_flat
+# sh run_merge.sh piminus_p_thrown_tagged_12C_model
+
+# thrown, local
 # sh run_local.sh '/work/halld2/home/boyu/src_analysis/sim/output/piminus_p_2H_ver03/root/thrown/*.root' 'Thrown_Tree' 'piminus_p_thrown'
 # mv output/selectedtree_piminus_p_thrown.root output/selectedtree_piminus_p_thrown_tagged_2H_model.root
 # sh run_local.sh '/work/halld2/home/boyu/src_analysis/sim/output/piminus_p_2H_ver04/root/thrown/*.root' 'Thrown_Tree' 'piminus_p_thrown'
@@ -63,7 +112,26 @@ start=`date +%s`
 # sh run_local.sh '/work/halld2/home/boyu/src_analysis/sim/output/piminus_p_12C_ver04/root/thrown/*.root' 'Thrown_Tree' 'piminus_p_thrown'
 # mv output/selectedtree_piminus_p_thrown.root output/selectedtree_piminus_p_thrown_tagged_12C_flat.root
 
-# bggen
+# bggen, batch
+# sh run_batch.sh piminus_p_recon_bggen_4He_n_inc
+# sh run_batch.sh piminus_p_recon_bggen_4He_n_misshe3
+# sh run_batch.sh piminus_p_recon_bggen_4He_p_inc
+# sh run_batch.sh piminus_p_recon_bggen_4He_p_misshe3
+# sh run_batch.sh piminus_p_recon_bggen_12C_n_inc
+# sh run_batch.sh piminus_p_recon_bggen_12C_n_missb11
+# sh run_batch.sh piminus_p_recon_bggen_12C_p_inc
+# sh run_batch.sh piminus_p_recon_bggen_12C_p_missb11
+
+# sh run_merge.sh piminus_p_recon_bggen_4He_n_inc
+# sh run_merge.sh piminus_p_recon_bggen_4He_n_misshe3
+# sh run_merge.sh piminus_p_recon_bggen_4He_p_inc
+# sh run_merge.sh piminus_p_recon_bggen_4He_p_misshe3
+# sh run_merge.sh piminus_p_recon_bggen_12C_n_inc
+# sh run_merge.sh piminus_p_recon_bggen_12C_n_missb11
+# sh run_merge.sh piminus_p_recon_bggen_12C_p_inc
+# sh run_merge.sh piminus_p_recon_bggen_12C_p_missb11
+
+# bggen, local
 sh run_local.sh '/work/halld2/home/boyu/src_analysis/bggen/output/4He_n_ver02/tree_ghe_pimprotinc__B4_F4_T1_S4_bggen/*.root' 'ghe_pimprotinc__B4_F4_T1_S4_bggen_Tree' 'piminus_p_recon'
 mv output/selectedhist_piminus_p_recon_bggen_4He_inc.root output/selectedhist_piminus_p_recon_bggen_4He_inc_n.root
 mv output/selectedtree_piminus_p_recon_bggen_4He_inc.root output/selectedtree_piminus_p_recon_bggen_4He_inc_n.root
