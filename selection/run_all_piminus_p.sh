@@ -76,20 +76,20 @@ sh run_rename.sh 'piminus_p_recon' 'bggen_12C_missb11'  'n'
 sh run_local.sh  'piminus_p_recon' '/work/halld2/home/boyu/src_analysis/bggen/output/12C_p_ver02/tree_gc12_pimprotmissb11__B4_F4_T1_S4_bggen/*.root'    'gc12_pimprotmissb11__B4_F4_T1_S4_bggen_Tree'
 sh run_rename.sh 'piminus_p_recon' 'bggen_12C_missb11'  'p'
 
-hadd output/selectedhist_piminus_p_recon_bggen_4He_inc.root output/selectedhist_piminus_p_recon_bggen_4He_inc_*.root
-hadd output/selectedtree_piminus_p_recon_bggen_4He_inc.root output/selectedtree_piminus_p_recon_bggen_4He_inc_*.root
-rm output/selectedhist_piminus_p_recon_bggen_4He_inc_*.root
-rm output/selectedtree_piminus_p_recon_bggen_4He_inc_*.root
+hadd output/selectedhist_piminus_p_recon_bggen_4He_inc.root     output/selectedhist_piminus_p_recon_bggen_4He_inc_*.root
+hadd output/selectedtree_piminus_p_recon_bggen_4He_inc.root     output/selectedtree_piminus_p_recon_bggen_4He_inc_*.root
 hadd output/selectedhist_piminus_p_recon_bggen_4He_misshe3.root output/selectedhist_piminus_p_recon_bggen_4He_misshe3_*.root
 hadd output/selectedtree_piminus_p_recon_bggen_4He_misshe3.root output/selectedtree_piminus_p_recon_bggen_4He_misshe3_*.root
-rm output/selectedhist_piminus_p_recon_bggen_4He_misshe3_*.root
-rm output/selectedtree_piminus_p_recon_bggen_4He_misshe3_*.root
-hadd output/selectedhist_piminus_p_recon_bggen_12C_inc.root output/selectedhist_piminus_p_recon_bggen_12C_inc_*.root
-hadd output/selectedtree_piminus_p_recon_bggen_12C_inc.root output/selectedtree_piminus_p_recon_bggen_12C_inc_*.root
-rm output/selectedhist_piminus_p_recon_bggen_12C_inc_*.root
-rm output/selectedtree_piminus_p_recon_bggen_12C_inc_*.root
+hadd output/selectedhist_piminus_p_recon_bggen_12C_inc.root     output/selectedhist_piminus_p_recon_bggen_12C_inc_*.root
+hadd output/selectedtree_piminus_p_recon_bggen_12C_inc.root     output/selectedtree_piminus_p_recon_bggen_12C_inc_*.root
 hadd output/selectedhist_piminus_p_recon_bggen_12C_missb11.root output/selectedhist_piminus_p_recon_bggen_12C_missb11_*.root
 hadd output/selectedtree_piminus_p_recon_bggen_12C_missb11.root output/selectedtree_piminus_p_recon_bggen_12C_missb11_*.root
+rm output/selectedhist_piminus_p_recon_bggen_4He_inc_*.root
+rm output/selectedtree_piminus_p_recon_bggen_4He_inc_*.root
+rm output/selectedhist_piminus_p_recon_bggen_4He_misshe3_*.root
+rm output/selectedtree_piminus_p_recon_bggen_4He_misshe3_*.root
+rm output/selectedhist_piminus_p_recon_bggen_12C_inc_*.root
+rm output/selectedtree_piminus_p_recon_bggen_12C_inc_*.root
 rm output/selectedhist_piminus_p_recon_bggen_12C_missb11_*.root
 rm output/selectedtree_piminus_p_recon_bggen_12C_missb11_*.root
 
