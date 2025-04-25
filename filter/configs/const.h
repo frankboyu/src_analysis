@@ -1,3 +1,17 @@
+#ifndef FILTER_CONFIGS_CONST_H
+#define FILTER_CONFIGS_CONST_H
+
+#include <iostream>
+#include <string>
+#include <cstring>
+#include <cmath>
+
+using namespace std;
+using namespace ROOT;
+using namespace RooFit;
+using namespace ROOT::RDF;
+using namespace ROOT::Detail::RDF;
+
 double mass_piplus      = 0.13957039;
 double mass_piminus     = 0.13957039;
 double mass_pi0         = 0.1349768;
@@ -17,3 +31,12 @@ double mass_11C         = 10.25708;
 double mass_12C         = 11.17793;
 
 double RadToDeg         = 180.0 / 3.14159265;
+
+TLorentzVector boost_lorentz_vector(TLorentzVector p4, TVector3 boost_vector)
+{
+    TLorentzVector p4_boosted(p4);
+    p4_boosted.Boost(boost_vector);
+    return p4_boosted;
+}
+
+#endif // FILTER_CONFIGS_CONST_H
