@@ -46,6 +46,9 @@ void filter_phi_d_recon(string reaction_name, string output_mode)
     .Define("kp_p4pion_meas",               "TLorentzVector(kp_p4_meas.Vect(), TMath::Sqrt(kp_p4_meas.P()*kp_p4_meas.P() + mass_piplus*mass_piplus))")
     .Define("kp_p4pion_kin",                "TLorentzVector(kp_p4_kin.Vect(), TMath::Sqrt(kp_p4_kin.P()*kp_p4_kin.P() + mass_piplus*mass_piplus))")
     .Define("kp_p4pion_truth",              "TLorentzVector(kp_p4_truth.Vect(), TMath::Sqrt(kp_p4_truth.P()*kp_p4_truth.P() + mass_piplus*mass_piplus))")
+    .Define("kp_p4helicity_meas",           "boost_lorentz_vector(kp_p4_meas, -(kp_p4_meas + km_p4_meas).BoostVector())")
+    .Define("kp_p4helicity_kin",            "boost_lorentz_vector(kp_p4_kin, -(kp_p4_kin + km_p4_kin).BoostVector())")
+    .Define("kp_p4helicity_truth",          "boost_lorentz_vector(kp_p4_truth, -(kp_p4_truth + km_p4_truth).BoostVector())")
     .Define("kp_energy_meas",               "kp_p4_meas.E()")
     .Define("kp_energy_kin",                "kp_p4_kin.E()")
     .Define("kp_energy_truth",              "kp_p4_truth.E()")
@@ -201,6 +204,24 @@ void filter_phi_d_recon(string reaction_name, string output_mode)
     .Define("rho_mass_meas",                "(kp_p4pion_meas + km_p4pion_meas).M()")
     .Define("rho_mass_kin",                 "(kp_p4pion_kin + km_p4pion_kin).M()")
     .Define("rho_mass_truth",               "(kp_p4pion_truth + km_p4pion_truth).M()")
+    .Define("pi_helicity_meas",             "kp_p4helicity_meas.Vect().Unit()")
+    .Define("pi_helicity_kin",              "kp_p4helicity_kin.Vect().Unit()")
+    .Define("pi_helicity_truth",            "kp_p4helicity_truth.Vect().Unit()")
+    .Define("z_helicity_meas",              "phi_p4com_meas.Vect().Unit()")
+    .Define("z_helicity_kin",               "phi_p4com_kin.Vect().Unit()")
+    .Define("z_helicity_truth",             "phi_p4com_truth.Vect().Unit()")
+    .Define("y_helicity_meas",              "beam_p4com_meas.Vect().Cross(phi_p4com_meas.Vect()).Unit()")
+    .Define("y_helicity_kin",               "beam_p4com_kin.Vect().Cross(phi_p4com_kin.Vect()).Unit()")
+    .Define("y_helicity_truth",             "beam_p4com_truth.Vect().Cross(phi_p4com_truth.Vect()).Unit()")
+    .Define("x_helicity_meas",              "y_helicity_meas.Cross(z_helicity_meas).Unit()")
+    .Define("x_helicity_kin",               "y_helicity_kin.Cross(z_helicity_kin).Unit()")
+    .Define("x_helicity_truth",             "y_helicity_truth.Cross(z_helicity_truth).Unit()")
+    .Define("costheta_helicity_meas",       "pi_helicity_meas.Dot(z_helicity_meas)")
+    .Define("costheta_helicity_kin",        "pi_helicity_kin.Dot(z_helicity_kin)")
+    .Define("costheta_helicity_truth",      "pi_helicity_truth.Dot(z_helicity_truth)")
+    .Define("phi_helicity_meas",            "TMath::ATan2(-x_helicity_meas.Dot(pi_helicity_meas.Cross(z_helicity_meas)), y_helicity_meas.Dot(pi_helicity_meas.Cross(z_helicity_meas)))*RadToDeg")
+    .Define("phi_helicity_kin",             "TMath::ATan2(-x_helicity_kin.Dot(pi_helicity_kin.Cross(z_helicity_kin)), y_helicity_kin.Dot(pi_helicity_kin.Cross(z_helicity_kin)))*RadToDeg")
+    .Define("phi_helicity_truth",           "TMath::ATan2(-x_helicity_truth.Dot(pi_helicity_truth.Cross(z_helicity_truth)), y_helicity_truth.Dot(pi_helicity_truth.Cross(z_helicity_truth)))*RadToDeg")
     ;
 
     // Filter events and save to new tree
@@ -334,6 +355,10 @@ void filter_phi_d_recon(string reaction_name, string output_mode)
             hist_rho_mass_kin.Write();
             TH1D hist_yphi_kin                      = *rdf.Histo1D({("yphi_kin_"+ label).c_str(), ";y_{#phi};Counts", 200, 0.0, 2.0},"y_phi_kin","accidweight");
             hist_yphi_kin.Write();
+            TH1D hist_costheta_helicity_kin         = *rdf.Histo1D({("costheta_helicity_kin_"+ label).c_str(), ";cos(#theta_{helicity});Counts", 10, -1.0, 1.0},"costheta_helicity_kin","accidweight");
+            hist_costheta_helicity_kin.Write();
+            TH1D hist_phi_helicity_kin              = *rdf.Histo1D({("phi_helicity_kin_"+ label).c_str(), ";#phi_{helicity} (deg);Counts", 9, -180.0, 180.0},"phi_helicity_kin","accidweight");
+            hist_phi_helicity_kin.Write();
 
             TH1D hist_struck_mass_kin               = *rdf.Histo1D({("struck_mass_kin_"+ label).c_str(), ";m_{struck} (GeV/c^{2});Counts", 400, -4.0, 4.0},"struck_mass_kin","accidweight");
             hist_struck_mass_kin.Write();
