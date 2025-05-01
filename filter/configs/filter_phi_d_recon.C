@@ -309,9 +309,9 @@ void filter_phi_d_recon(string reaction_name, string output_mode)
             hist_phi_mass_kin.Write();
             TH1D hist_phi_mass_meas                 = *rdf.Histo1D({("phi_mass_meas_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);Counts", 400, 0.9, 1.3},"phi_mass_meas","accidweight");
             hist_phi_mass_meas.Write();
-            TH1D hist_phi_proxymass_kin             = *rdf.Histo1D({("phi_proxymass_kin_"+ label).c_str(), ";m_{K^{+}K^{-}X} (GeV/c^{2});Counts", 400, 0.0, 4.0},"phi_proxymass_kin","accidweight");
+            TH1D hist_phi_proxymass_kin             = *rdf.Histo1D({("phi_proxymass_kin_"+ label).c_str(), ";m_{K^{+}K^{-}X} (GeV/c^{2});Counts", 400, 0.9, 1.3},"phi_proxymass_kin","accidweight");
             hist_phi_proxymass_kin.Write();
-            TH1D hist_phi_proxymass_meas            = *rdf.Histo1D({("phi_proxymass_meas_"+ label).c_str(), ";m_{K^{+}K^{-}X} (GeV/c^{2});Counts", 400, 0.0, 4.0},"phi_proxymass_meas","accidweight");
+            TH1D hist_phi_proxymass_meas            = *rdf.Histo1D({("phi_proxymass_meas_"+ label).c_str(), ";m_{K^{+}K^{-}X} (GeV/c^{2});Counts", 400, 0.9, 1.3},"phi_proxymass_meas","accidweight");
             hist_phi_proxymass_meas.Write();
             TH2D hist_phi_kinematics_kin            = *rdf.Histo2D({("phi_kinematics_kin_"+ label).c_str(), ";p (GeV/c);#theta (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"phi_momentum_kin","phi_theta_kin","accidweight");
             hist_phi_kinematics_kin.Write();
