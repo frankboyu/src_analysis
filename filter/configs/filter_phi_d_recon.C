@@ -1,23 +1,6 @@
-#include <iostream>
-#include <string>
-#include <cstring>
-#include <cmath>
 #include </work/halld2/home/boyu/src_analysis/filter/configs/const.h>
 
-using namespace std;
-using namespace ROOT;
-using namespace RooFit;
-using namespace ROOT::RDF;
-using namespace ROOT::Detail::RDF;
-
 double mass_target = 0.0;
-
-TLorentzVector boost_lorentz_vector(TLorentzVector p4, TVector3 boost_vector)
-{
-    TLorentzVector p4_boosted(p4);
-    p4_boosted.Boost(boost_vector);
-    return p4_boosted;
-}
 
 void filter_phi_d_recon(string reaction_name, string output_mode)
 {
