@@ -34,7 +34,7 @@ for i in range(len(minust_low)):
     if (sim_2H[i] == 0) or (tagged_2H[i] == 0):
         continue
     acceptance_2H[i] = sim_2H[i]/tagged_2H[i]
-    dsdt_2H[i] = data_2H[i]/acceptance_2H[i]/lumi(energy_low[i], energy_high[i], '2H')/(minust_high[i]-minust_low[i])/1000
+    dsdt_2H[i] = data_2H[i]/acceptance_2H[i]/lumi(energy_low[i], energy_high[i], '2H')/(minust_high[i]-minust_low[i])/0.489/1000
 
 err_2H = dsdt_2H*err_2H
 
@@ -75,12 +75,13 @@ plt.yscale('log')
 plt.savefig('output/fig_dsdt_2H_bare.png', dpi=300)
 plt.close()
 
-plt.errorbar((minust_low+minust_high)/2, dsdt_2H, yerr=err_2H, fmt='r*', label='This work, SRC-CT, 8.2 GeV')
-plt.errorbar((clas_t_low+clas_t_high)/2, clas_cs_16, yerr=clas_stat_16, fmt='.', label='CLAS 1.6-2.6 GeV')
-plt.errorbar((clas_t_low+clas_t_high)/2, clas_cs_26, yerr=clas_stat_26, fmt='.', label='CLAS 2.6-3.6 GeV')
-plt.errorbar((leps_t_low+leps_t_high)/2, leps_cs, yerr=leps_stat, fmt='.', label='LEPS 1.57-2.37 GeV')
+plt.errorbar((minust_low+minust_high)/2, dsdt_2H, yerr=err_2H, fmt='k.', label='This work, SRC-CT, 8.2 GeV')
+plt.errorbar((clas_t_low+clas_t_high)/2, clas_cs_16, yerr=clas_stat_16, fmt='s', markersize=4, fillstyle='none', label='CLAS 1.6-2.6 GeV')
+plt.errorbar((clas_t_low+clas_t_high)/2, clas_cs_26, yerr=clas_stat_26, fmt='s', markersize=4, fillstyle='none', label='CLAS 2.6-3.6 GeV')
+plt.errorbar((leps_t_low+leps_t_high)/2, leps_cs, yerr=leps_stat, fmt='s', markersize=4, fillstyle='none', label='LEPS 1.57-2.37 GeV')
 plt.legend()
 plt.title(r"Differential cross section of $d(\gamma, \phi d')$")
+plt.text(0.3, 0.15, 'preliminary', fontsize=15, color='r', style='italic', ha='center', va='center')
 plt.xlabel(r'$-t\:[GeV^2/c]$')
 plt.ylabel(r'$d\sigma/dt\:[nb/(GeV^2/c)]$')
 plt.yscale('log')
