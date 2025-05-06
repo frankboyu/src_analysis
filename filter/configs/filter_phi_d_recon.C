@@ -403,19 +403,19 @@ void filter_phi_d_recon(string reaction_name, string output_mode)
                 TH2D hist_phi_d_momentum_truth              = *rdf.Histo2D({("phi_d_momentum_truth_"+ label).c_str(), ";P_{d} (GeV/c);P_{#phi} (GeV/c)", 100, 0.0, 10.0, 100, 0.0, 10.0},"d_momentum_truth","phi_momentum_truth");
                 hist_phi_d_momentum_truth.Write();
 
-                TH1D hist_miss_mass_truth                   = *rdf.Histo1D({("miss_mass_truth_"+ label).c_str(), ";m_{miss} (GeV/c^{2});Counts", 400, -4.0, 4.0},"miss_mass_truth","accidweight");
+                TH1D hist_miss_mass_truth                   = *rdf.Histo1D({("miss_mass_truth_"+ label).c_str(), ";m_{miss} (GeV/c^{2});Counts", 400, -4.0, 4.0},"miss_mass_truth");
                 hist_miss_mass_truth.Write();
-                TH1D hist_miss_masssquared_truth            = *rdf.Histo1D({("miss_masssquared_truth_"+ label).c_str(), ";m_{miss}^{2} (GeV^{2}/c^{4});Counts", 100, 0.0, 10.0},"miss_masssquared_truth","accidweight");
+                TH1D hist_miss_masssquared_truth            = *rdf.Histo1D({("miss_masssquared_truth_"+ label).c_str(), ";m_{miss}^{2} (GeV^{2}/c^{4});Counts", 100, 0.0, 10.0},"miss_masssquared_truth");
                 hist_miss_masssquared_truth.Write();
-                TH1D hist_miss_momentum_truth               = *rdf.Histo1D({("miss_momentum_truth_"+ label).c_str(), ";P_{miss} (GeV/c);Counts", 200, 0.0, 2.0},"miss_momentum_truth","accidweight");
+                TH1D hist_miss_momentum_truth               = *rdf.Histo1D({("miss_momentum_truth_"+ label).c_str(), ";P_{miss} (GeV/c);Counts", 200, 0.0, 2.0},"miss_momentum_truth");
                 hist_miss_momentum_truth.Write();
-                TH1D hist_miss_pminus_truth                 = *rdf.Histo1D({("miss_pminus_truth_"+ label).c_str(), ";P_{miss}^{-} (GeV/c);Counts", 200, 1.0, 3.0},"miss_pminus_truth","accidweight");
+                TH1D hist_miss_pminus_truth                 = *rdf.Histo1D({("miss_pminus_truth_"+ label).c_str(), ";P_{miss}^{-} (GeV/c);Counts", 200, 1.0, 3.0},"miss_pminus_truth");
                 hist_miss_pminus_truth.Write();
-                TH1D hist_miss_energy_balance_truth         = *rdf.Histo1D({("miss_energy_balance_truth_"+ label).c_str(), ";E_{miss} - m_{2H} (GeV);Counts", 400, -4.0, 4.0},"miss_energy_balance_truth","accidweight");
+                TH1D hist_miss_energy_balance_truth         = *rdf.Histo1D({("miss_energy_balance_truth_"+ label).c_str(), ";E_{miss} - m_{2H} (GeV);Counts", 400, -4.0, 4.0},"miss_energy_balance_truth");
                 hist_miss_energy_balance_truth.Write();
-                TH2D hist_miss_momentum_pminus_truth        = *rdf.Histo2D({("miss_momentum_pminus_truth_"+ label).c_str(), ";P_{miss} (GeV/c);P_{miss}^{-} (GeV/c)", 200, 0.0, 2.0, 200, 1.0, 3.0},"miss_momentum_truth","miss_pminus_truth","accidweight");
+                TH2D hist_miss_momentum_pminus_truth        = *rdf.Histo2D({("miss_momentum_pminus_truth_"+ label).c_str(), ";P_{miss} (GeV/c);P_{miss}^{-} (GeV/c)", 200, 0.0, 2.0, 200, 1.0, 3.0},"miss_momentum_truth","miss_pminus_truth");
                 hist_miss_momentum_pminus_truth.Write();
-                TH2D hist_miss_momentum_energy_truth        = *rdf.Histo2D({("miss_momentum_energy_truth_"+ label).c_str(), ";P_{miss} (GeV/c);E_{miss} (GeV)", 200, 0.0, 2.0, 250, 0.5, 3.0},"miss_momentum_truth","miss_energy_truth","accidweight");
+                TH2D hist_miss_momentum_energy_truth        = *rdf.Histo2D({("miss_momentum_energy_truth_"+ label).c_str(), ";P_{miss} (GeV/c);E_{miss} (GeV)", 200, 0.0, 2.0, 250, 0.5, 3.0},"miss_momentum_truth","miss_energy_truth");
                 hist_miss_momentum_energy_truth.Write();
 
                 TH1D hist_sqrts_truth                       = *rdf.Histo1D({("sqrts_truth_"+ label).c_str(), ";#sqrt{s} (GeV);Counts", 100, 0.0, 10.0},"sqrts_truth");
@@ -436,9 +436,9 @@ void filter_phi_d_recon(string reaction_name, string output_mode)
                 hist_rho_mass_truth.Write();
                 TH1D hist_yphi_truth                        = *rdf.Histo1D({("yphi_truth_"+ label).c_str(), ";y_{#phi};Counts", 200, 0.0, 2.0},"y_phi_truth");
                 hist_yphi_truth.Write();
-                TH1D hist_costheta_helicity_truth           = *rdf.Histo1D({("costheta_helicity_truth_"+ label).c_str(), ";cos(#theta_{helicity});Counts", 10, -1.0, 1.0},"costheta_helicity_truth","accidweight");
+                TH1D hist_costheta_helicity_truth           = *rdf.Histo1D({("costheta_helicity_truth_"+ label).c_str(), ";cos(#theta_{helicity});Counts", 10, -1.0, 1.0},"costheta_helicity_truth");
                 hist_costheta_helicity_truth.Write();
-                TH1D hist_phi_helicity_truth                = *rdf.Histo1D({("phi_helicity_truth_"+ label).c_str(), ";#phi_{helicity} (deg);Counts", 9, -180.0, 180.0},"phi_helicity_truth","accidweight");
+                TH1D hist_phi_helicity_truth                = *rdf.Histo1D({("phi_helicity_truth_"+ label).c_str(), ";#phi_{helicity} (deg);Counts", 9, -180.0, 180.0},"phi_helicity_truth");
                 hist_phi_helicity_truth.Write();
 
                 TH2D hist_beam_energy_kin_truth             = *rdf.Histo2D({("beam_energy_kin_truth_"+ label).c_str(), ";E_{beam} (GeV);E_{beam} (GeV)", 60, 5.0, 11.0, 60, 5.0, 11.0},"beam_energy_kin","beam_energy_truth");

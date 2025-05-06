@@ -143,19 +143,19 @@ void filter_phi_d_thrown(string reaction_name, string output_mode)
                 TH2D hist_phi_d_momentum_truth              = *rdf.Histo2D({("phi_d_momentum_truth_"+ label).c_str(), ";P_{d} (GeV/c);P_{#phi} (GeV/c)", 100, 0.0, 10.0, 100, 0.0, 10.0},"d_momentum_truth","phi_momentum_truth");
                 hist_phi_d_momentum_truth.Write();
 
-                TH1D hist_struck_mass_truth                 = *rdf.Histo1D({("struck_mass_truth_"+ label).c_str(), ";m_{struck} (GeV/c^{2});Counts", 400, -4.0, 4.0},"struck_mass_truth","accidweight");
+                TH1D hist_struck_mass_truth                 = *rdf.Histo1D({("struck_mass_truth_"+ label).c_str(), ";m_{struck} (GeV/c^{2});Counts", 400, -4.0, 4.0},"struck_mass_truth");
                 hist_struck_mass_truth.Write();
-                TH1D hist_struck_masssquared_truth          = *rdf.Histo1D({("struck_masssquared_truth_"+ label).c_str(), ";m_{struck}^{2} (GeV^{2}/c^{4});Counts", 100, 0.0, 10.0},"struck_masssquared_truth","accidweight");
+                TH1D hist_struck_masssquared_truth          = *rdf.Histo1D({("struck_masssquared_truth_"+ label).c_str(), ";m_{struck}^{2} (GeV^{2}/c^{4});Counts", 100, 0.0, 10.0},"struck_masssquared_truth");
                 hist_struck_masssquared_truth.Write();
-                TH1D hist_struck_momentum_truth             = *rdf.Histo1D({("struck_momentum_truth_"+ label).c_str(), ";P_{struck} (GeV/c);Counts", 200, 0.0, 2.0},"struck_momentum_truth","accidweight");
+                TH1D hist_struck_momentum_truth             = *rdf.Histo1D({("struck_momentum_truth_"+ label).c_str(), ";P_{struck} (GeV/c);Counts", 200, 0.0, 2.0},"struck_momentum_truth");
                 hist_struck_momentum_truth.Write();
-                TH1D hist_struck_pminus_truth               = *rdf.Histo1D({("struck_pminus_truth_"+ label).c_str(), ";P_{struck}^{-} (GeV/c);Counts", 200, 1.0, 3.0},"struck_pminus_truth","accidweight");
+                TH1D hist_struck_pminus_truth               = *rdf.Histo1D({("struck_pminus_truth_"+ label).c_str(), ";P_{struck}^{-} (GeV/c);Counts", 200, 1.0, 3.0},"struck_pminus_truth");
                 hist_struck_pminus_truth.Write();
-                TH1D hist_struck_energy_balance_truth       = *rdf.Histo1D({("struck_energy_balance_truth_"+ label).c_str(), ";E_{struck} - m_{2H} (GeV);Counts", 400, -4.0, 4.0},"struck_energy_balance_truth","accidweight");
+                TH1D hist_struck_energy_balance_truth       = *rdf.Histo1D({("struck_energy_balance_truth_"+ label).c_str(), ";E_{struck} - m_{2H} (GeV);Counts", 400, -4.0, 4.0},"struck_energy_balance_truth");
                 hist_struck_energy_balance_truth.Write();
-                TH2D hist_struck_momentum_pminus_truth      = *rdf.Histo2D({("struck_momentum_pminus_truth_"+ label).c_str(), ";P_{struck} (GeV/c);P_{struck}^{-} (GeV/c)", 200, 0.0, 2.0, 200, 1.0, 3.0},"struck_momentum_truth","struck_pminus_truth","accidweight");
+                TH2D hist_struck_momentum_pminus_truth      = *rdf.Histo2D({("struck_momentum_pminus_truth_"+ label).c_str(), ";P_{struck} (GeV/c);P_{struck}^{-} (GeV/c)", 200, 0.0, 2.0, 200, 1.0, 3.0},"struck_momentum_truth","struck_pminus_truth");
                 hist_struck_momentum_pminus_truth.Write();
-                TH2D hist_struck_momentum_energy_truth      = *rdf.Histo2D({("struck_momentum_energy_truth_"+ label).c_str(), ";P_{struck} (GeV/c);E_{struck} (GeV)", 200, 0.0, 2.0, 250, 0.5, 3.0},"struck_momentum_truth","struck_energy_truth","accidweight");
+                TH2D hist_struck_momentum_energy_truth      = *rdf.Histo2D({("struck_momentum_energy_truth_"+ label).c_str(), ";P_{struck} (GeV/c);E_{struck} (GeV)", 200, 0.0, 2.0, 250, 0.5, 3.0},"struck_momentum_truth","struck_energy_truth");
                 hist_struck_momentum_energy_truth.Write();
 
                 TH1D hist_sqrts_truth                       = *rdf.Histo1D({("sqrts_truth_"+ label).c_str(), ";#sqrt{s} (GeV);Counts", 100, 0.0, 10.0},"sqrts_truth");
@@ -176,9 +176,9 @@ void filter_phi_d_thrown(string reaction_name, string output_mode)
                 hist_rho_mass_truth.Write();
                 TH1D hist_yphi_truth                        = *rdf.Histo1D({("yphi_truth_"+ label).c_str(), ";y_{#phi};Counts", 200, 0.0, 2.0},"y_phi_truth");
                 hist_yphi_truth.Write();
-                TH1D hist_costheta_helicity_truth           = *rdf.Histo1D({("costheta_helicity_truth_"+ label).c_str(), ";cos(#theta_{helicity});Counts", 10, -1.0, 1.0},"costheta_helicity_truth","accidweight");
+                TH1D hist_costheta_helicity_truth           = *rdf.Histo1D({("costheta_helicity_truth_"+ label).c_str(), ";cos(#theta_{helicity});Counts", 10, -1.0, 1.0},"costheta_helicity_truth");
                 hist_costheta_helicity_truth.Write();
-                TH1D hist_phi_helicity_truth                = *rdf.Histo1D({("phi_helicity_truth_"+ label).c_str(), ";#phi_{helicity} (deg);Counts", 9, -180.0, 180.0},"phi_helicity_truth","accidweight");
+                TH1D hist_phi_helicity_truth                = *rdf.Histo1D({("phi_helicity_truth_"+ label).c_str(), ";#phi_{helicity} (deg);Counts", 9, -180.0, 180.0},"phi_helicity_truth");
                 hist_phi_helicity_truth.Write();
         }
         hist_file->Close();
