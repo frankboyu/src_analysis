@@ -207,7 +207,7 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
 	dIsMC = (dTreeInterface->Get_Branch("MCWeight") != NULL);
 
 	// LOOP OVER COMBOS
-	for(UInt_t loc_i = 0; loc_i < Get_NumCombos(); ++loc_i)
+    for(UInt_t loc_i = 0; loc_i < Get_NumCombos(); ++loc_i)
 	{
 		// INITIALIZE THE COMBO
 		dComboWrapper->Set_ComboIndex(loc_i);  // set branch array indices
@@ -250,7 +250,7 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
                     locKPlusX4_Thrown = dThrownWrapper->Get_X4();
                     locKPlusP4_Thrown = dThrownWrapper->Get_P4();
                 }
-                else if (dThrownWrapper->Get_PID() == PiMinus)
+                else if (dThrownWrapper->Get_PID() == KMinus)
                 {
                     locKMinusX4_Thrown = dThrownWrapper->Get_X4();
                     locKMinusP4_Thrown = dThrownWrapper->Get_P4();
