@@ -2,25 +2,25 @@
 
 double mass_target = 0.0;
 
-void filter_phi_d_thrown(string reaction_name, string output_mode)
+void filter_phi_d_thrown(string reaction, string output_mode)
 {
     // Define input and output names
     string input_tree;
-    if (reaction_name.find("tagged") != string::npos)
+    if (reaction.find("tagged") != string::npos)
         input_tree = "selectedtree_phi_d_thrown";
     else
         input_tree = "genT";
     string output_tree      = "filteredtree_phi_d_thrown";
-    string input_tree_file  = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_phi_d_thrown_%s.root",reaction_name.c_str());
-    string output_hist_file = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_thrown_%s.root",reaction_name.c_str());
-    string output_tree_file = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_phi_d_thrown_%s.root",reaction_name.c_str());
+    string input_tree_file  = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_phi_d_thrown_%s.root",reaction.c_str());
+    string output_hist_file = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_thrown_%s.root",reaction.c_str());
+    string output_tree_file = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_phi_d_thrown_%s.root",reaction.c_str());
 
     // Determine reaction specific parameters
-    if      (reaction_name.find("2H")   != string::npos)
+    if      (reaction.find("2H")   != string::npos)
         mass_target = mass_2H;
-    else if (reaction_name.find("4He")  != string::npos)
+    else if (reaction.find("4He")  != string::npos)
         mass_target = mass_4He;
-    else if (reaction_name.find("12C")  != string::npos)
+    else if (reaction.find("12C")  != string::npos)
         mass_target = mass_12C;
 
     // Read input files
@@ -32,7 +32,7 @@ void filter_phi_d_thrown(string reaction_name, string output_mode)
     cout << "Defining data frame...\n";
     RDataFrame rdf_raw(chain);
     auto rdf_def = RNode(rdf_raw);
-    if (reaction_name.find("gen") != string::npos)
+    if (reaction.find("gen") != string::npos)
     {
         rdf_def = rdf_def
         .Define("beam_p4_truth",            "pBeam")

@@ -2,21 +2,21 @@
 
 double mass_target = 0.0;
 
-void filter_phi_d_recon(string reaction_name, string output_mode)
+void filter_phi_d_recon(string reaction, string output_mode)
 {
     // Define input and output names
     string input_tree       = "selectedtree_phi_d_recon";
     string output_tree      = "filteredtree_phi_d_recon";
-    string input_tree_file  = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_phi_d_recon_%s.root",reaction_name.c_str());
-    string output_hist_file = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_recon_%s.root",reaction_name.c_str());
-    string output_tree_file = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_phi_d_recon_%s.root",reaction_name.c_str());
+    string input_tree_file  = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_phi_d_recon_%s.root",reaction.c_str());
+    string output_hist_file = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_recon_%s.root",reaction.c_str());
+    string output_tree_file = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_phi_d_recon_%s.root",reaction.c_str());
 
     // Determine reaction specific parameters
-    if      (reaction_name.find("2H")   != string::npos)
+    if      (reaction.find("2H")   != string::npos)
         mass_target = mass_2H;
-    else if (reaction_name.find("4He")  != string::npos)
+    else if (reaction.find("4He")  != string::npos)
         mass_target = mass_4He;
-    else if (reaction_name.find("12C")  != string::npos)
+    else if (reaction.find("12C")  != string::npos)
         mass_target = mass_12C;
 
     // Read input files
@@ -384,7 +384,7 @@ void filter_phi_d_recon(string reaction_name, string output_mode)
             TH1D hist_kinfit_fom_kin                = *rdf.Histo1D({("kinfit_fom_kin_"+ label).c_str(), ";KinFit FOM;Counts", 100, 0.0, 1.0},"kinfit_fom_kin","accidweight");
             hist_kinfit_fom_kin.Write();
 
-            if (reaction_name.find("sim") != string::npos)
+            if (reaction.find("sim") != string::npos)
             {
                 TH1D hist_beam_energy_truth                 = *rdf.Histo1D({("beam_energy_truth_"+ label).c_str(), ";E_{beam} (GeV);Counts", 60, 5.0, 11.0},"beam_energy_truth");
                 hist_beam_energy_truth.Write();
