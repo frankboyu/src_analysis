@@ -20,7 +20,14 @@ int get_yield(string channel, string reaction, string observable)
     TTree *input_tree = (TTree*) input_root->Get(input_tree_name.c_str());
 
     // Read bin edges from input text file
-    string input_txt_name = Form("output/bins_%s_%s.txt", channel.c_str(), observable.c_str());
+    string target;
+    if (reaction.find("2H") != string::npos)
+        target = "2H";
+    else if (reaction.find("4He") != string::npos)
+        target = "4He";
+    else if (reaction.find("12C") != string::npos)
+        target = "12C";
+    string input_txt_name = Form("output/bins_%s_%s_%s.txt", channel.c_str(), target.c_str(), observable.c_str());
     cout << "Input bin file: " << input_txt_name << endl;
     ifstream input_txt(input_txt_name.c_str());
     vector<vector<double>> bins;
