@@ -1,291 +1,130 @@
-using namespace std;
-using namespace RooFit;
-
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <math.h>
 #include <string>
+using namespace std;
 
-#include <TFile.h>
-#include <TTree.h>
-#include <TH1.h>
-#include <TH2.h>
-#include <TCanvas.h>
-#include <TF1.h>
-#include <TSystem.h>
-#include <TLatex.h>
-#include <TGraphErrors.h>
-#include <TStyle.h>
-#include <TLine.h>
-#include <TMath.h>
-#include <TFitResult.h>
-
-double pi = TMath::Pi();
-
-double yield_count(double energy_low, double energy_high, double minust_low, double minust_high, TTree *input_tree);
-double yield_single_gaus_no_bkg(double energy_low, double energy_high, double minust_low, double minust_high, TTree *input_tree);
-double yield_single_gaus_const_bkg(double energy_low, double energy_high, double minust_low, double minust_high, TTree *input_tree);
-double yield_single_gaus_linear_bkg(double energy_low, double energy_high, double minust_low, double minust_high, TTree *input_tree);
-double yield_single_gaus_quadratic_bkg(double energy_low, double energy_high, double minust_low, double minust_high, TTree *input_tree);
-double yield_double_gaus_no_bkg(double energy_low, double energy_high, double minust_low, double minust_high, TTree *input_tree);
-double yield_double_gaus_const_bkg(double energy_low, double energy_high, double minust_low, double minust_high, TTree *input_tree);
-double yield_double_gaus_linear_bkg(double energy_low, double energy_high, double minust_low, double minust_high, TTree *input_tree);
-double yield_double_gaus_quadratic_bkg(double energy_low, double energy_high, double minust_low, double minust_high, TTree *input_tree);
-
-TCanvas *canvas = new TCanvas("c1", "c1", 800, 600);
-
-int get_yield(string Reaction)
+int get_yield(string channel, string reaction, string observable)
 {
-    string input_name  = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_phi_d_%s.root",Reaction.c_str());
-    string txt_name = Form("output/yield_phi_d_%s.txt",Reaction.c_str());
-    string pdf_name = Form("output/plot_phi_d_%s.pdf",Reaction.c_str());
-
-    TFile *input_file = new TFile(input_name.c_str(), "read");
+    // Read tree from input root file
+    string input_root_name  = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_%s_%s.root", channel.c_str(), reaction.c_str());
+    TFile *input_root = new TFile(input_root_name.c_str(), "read");
     string input_tree_name;
-    if (Reaction.find("recon") != string::npos)
-        input_tree_name = "filteredtree_phi_d_recon";
-    else if (Reaction.find("thrown") != string::npos)
-        input_tree_name = "filteredtree_phi_d_thrown";
-    TTree *input_tree = (TTree*) input_file->Get(input_tree_name.c_str());
-    FILE *txt_file = fopen(txt_name.c_str(),"w");
+    if (reaction.find("recon") != string::npos)
+        input_tree_name = Form("filteredtree_%s_recon", channel.c_str());
+    else if (reaction.find("thrown") != string::npos)
+        input_tree_name = Form("filteredtree_%s_thrown", channel.c_str());
+    TTree *input_tree = (TTree*) input_root->Get(input_tree_name.c_str());
+
+    // Read bin edges from input text file
+    string input_txt_name = Form("output/bins_%s_%s.txt", channel.c_str(), observable.c_str());
+    ifstream input_txt(input_txt_name.c_str());
+    vector<vector<double>> bins;
+    string this_line;
+    while (getline(input_txt, this_line))
+    {
+        istringstream iss(this_line);
+        vector<double> this_row;
+        double this_value;
+        while (iss >> this_value)
+            this_row.push_back(this_value);
+        bins.push_back(this_row);
+    }
+    input_txt.close();
+
+    // Prepare output files
+    string output_txt_name = Form("output/yield_%s_%s_%s.txt", channel.c_str(), reaction.c_str(), observable.c_str());
+    string output_pdf_name = Form("output/plot_%s_%s_%s.pdf", channel.c_str(), reaction.c_str(), observable.c_str());
+    FILE *txt_file = fopen(output_txt_name.c_str(),"w");
+
+    // Declare variables used for the yield calculation
+    string yield_observable;
+    int hist_bins;
+    double hist_min, hist_max;
+    if (channel.find("phi") != string::npos)
+    {
+        yield_observable = "phi_mass";
+        hist_bins = 60;
+        hist_min = 0.9;
+        hist_max = 1.2;
+    }
+    else if (channel.find("rho") != string::npos)
+    {
+        yield_observable = "rho_mass";
+        hist_bins = 60;
+        hist_min = 0.4;
+        hist_max = 0.8;
+    }
+    else if (channel.find("omega") != string::npos)
+    {
+        yield_observable = "omega_mass";
+        hist_bins = 60;
+        hist_min = 0.6;
+        hist_max = 1.2;
+    }
+    if (reaction.find("recon") != string::npos)
+        yield_observable += "_kin";
+    else if (reaction.find("thrown") != string::npos)
+        yield_observable += "_truth";
+    TCanvas *canvas = new TCanvas("c1", "c1", 800, 600);
     gStyle->SetOptStat(1);
     gStyle->SetOptFit(1);
 
-    ifstream matrix_file("output/bin_edges.txt");
-    vector<vector<double>> matrix;
-    string line;
-    while (getline(matrix_file, line))
-    {
-        istringstream iss(line);
-        vector<double> row;
-        double value;
-        while (iss >> value)
-        {
-            row.push_back(value);
-        }
-        matrix.push_back(row);
-    }
-    matrix_file.close();
-
+    // Loop over bins and calculate yield
     double this_yield;
-    for (int i = 0; i < matrix.size(); i++)
+    TH1F *this_hist;
+    string this_hist_name, this_hist_cut;
+    for (int i = 0; i < bins.size(); i++)
     {
-        cout << "Minus t: " << matrix[i][0] << " GeV^2" << endl;
-        cout << "Photon energy: " << matrix[i][2] << " GeV" << endl;
-        this_yield = yield_count(matrix[i][2], matrix[i][3], matrix[i][0], matrix[i][1], input_tree);
-        fprintf(txt_file, "%3.1f\t%6.1f\t%6.1f\t%6.1f\t%f\n", matrix[i][2], matrix[i][3], matrix[i][0], matrix[i][1], this_yield);
+        if (observable == "ds_dt")
+        {
+            cout << "Photon energy: " << bins[i][0] << "-" << bins[i][1] << " GeV" << ", ";
+            cout << "-t: " << bins[i][2] << "-" << bins[i][3] << " GeV^2" << endl;
+            this_hist_name = Form("hist_%.1f_%.1f_%.1f_%.1f", bins[i][0], bins[i][1], bins[i][2], bins[i][3]);
+            if (reaction.find("recon") != string::npos)
+                this_hist_cut = Form("accidweight*(beam_energy_kin>%f && beam_energy_kin<%f && minust_kin>%f && minust_kin<%f)", bins[i][0], bins[i][1], bins[i][2], bins[i][3]);
+            else if (reaction.find("thrown") != string::npos)
+                this_hist_cut = Form("beam_energy_truth>%f && beam_energy_truth<%f && minust_truth>%f && minust_truth<%f", bins[i][0], bins[i][1], bins[i][2], bins[i][3]);
+        }
+        else if (observable == "W_costheta")
+        {
+            cout << "Photon energy: " << bins[i][0] << "-" << bins[i][1] << " GeV" << ", ";
+            cout << "-t: " << bins[i][2] << "-" << bins[i][3] << " GeV^2" << ", ";
+            cout << "cos(theta_H): " << bins[i][4] << "-" << bins[i][5] << endl;
+            this_hist_name = Form("hist_%.1f_%.1f_%.1f_%.1f_%.1f_%.1f", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
+            if (reaction.find("recon") != string::npos)
+                this_hist_cut = Form("accidweight*(beam_energy_kin>%f && beam_energy_kin<%f && minust_kin>%f && minust_kin<%f && costheta_helicity_kin>%f && costheta_helicity_kin<%f)", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
+            else if (reaction.find("thrown") != string::npos)
+                this_hist_cut = Form("beam_energy_truth>%f && beam_energy_truth<%f && minust_truth>%f && minust_truth<%f && costheta_helicity_truth>%f && costheta_helicity_truth<%f", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
+        }
+        else if (observable == "W_phi")
+        {
+            cout << "Photon energy: " << bins[i][0] << "-" << bins[i][1] << " GeV" << ", ";
+            cout << "-t: " << bins[i][2] << "-" << bins[i][3] << " GeV^2" << ", ";
+            cout << "phi: " << bins[i][4] << "-" << bins[i][5] << endl;
+            this_hist_name = Form("hist_%.1f_%.1f_%.1f_%.1f_%.1f_%.1f", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
+            if (reaction.find("recon") != string::npos)
+                this_hist_cut = Form("accidweight*(beam_energy_kin>%f && beam_energy_kin<%f && minust_kin>%f && minust_kin<%f && phi_helicity_kin>%f && phi_helicity_kin<%f)", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
+            else if (reaction.find("thrown") != string::npos)
+                this_hist_cut = Form("beam_energy_truth>%f && beam_energy_truth<%f && minust_truth>%f && minust_truth<%f && phi_helicity_truth>%f && phi_helicity_truth<%f", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
+        }
+
+        this_hist = new TH1F(this_hist_name.c_str(), this_hist_name.c_str(), 60, 0.9, 1.2);
+        input_tree->Draw(Form("%s>>%s", yield_observable.c_str(), this_hist_name.c_str()), this_hist_cut.c_str());  // draw the yield observable into the histogram with the cut
+        this_yield = this_hist->Integral();
+        if (reaction.find("recon") != string::npos)
+            fprintf(txt_file, "%6.1f\t%6.1f\t%6.1f\t%6.1f\t%f\n", bins[i][0], bins[i][1], bins[i][2], bins[i][3], this_yield);
+        else if (reaction.find("thrown") != string::npos)
+            fprintf(txt_file, "%6.1f\t%6.1f\t%6.1f\t%6.1f\t%6.1f\t%6.1f\t%f\n", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5], this_yield);
+        this_hist->Draw();
         canvas->Update();
-        canvas->Print((pdf_name+"(").c_str());
+        canvas->Print((output_pdf_name+"(").c_str());
         canvas->Clear();
+        delete this_hist;
     }
-    canvas->Print((pdf_name+")").c_str());
+    canvas->Print((output_pdf_name+")").c_str());  // close the pdf file
 
     return 0;
 
-}
-
-double yield_count(double energy_low, double energy_high, double minust_low, double minust_high, TTree *input_tree)
-{
-    TH1F *hist = new TH1F(Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), 60, 0.9, 1.2);
-    if (!strncmp(input_tree->GetName(), "filteredtree_phi_d_recon",   strlen("filteredtree_phi_d_recon")))
-        input_tree->Draw(Form("phi_mass_kin>>hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), Form("accidweight*(beam_energy_kin>%f && beam_energy_kin<%f && minust_kin>%f && minust_kin<%f)", energy_low, energy_high, minust_low, minust_high));
-    else if (!strncmp(input_tree->GetName(), "filteredtree_phi_d_thrown",   strlen("filteredtree_phi_d_thrown")))
-        input_tree->Draw(Form("phi_mass_truth>>hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), Form("beam_energy_truth>%f && beam_energy_truth<%f && minust_truth>%f && minust_truth<%f", energy_low, energy_high, minust_low, minust_high));
-    hist->Draw();
-
-    return hist->Integral();
-}
-
-double yield_single_gaus_no_bkg(double energy_low, double energy_high, double minust_low, double minust_high, TTree *input_tree)
-{
-    TH1F *hist = new TH1F(Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), 60, 0.9, 1.2);
-    if (!strncmp(input_tree->GetName(), "filteredtree_phi_d_recon",   strlen("filteredtree_phi_d_recon")))
-        input_tree->Draw(Form("phi_mass_kin>>hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), Form("accidweight*(beam_energy_kin>%f && beam_energy_kin<%f && minust_kin>%f && minust_kin<%f)", energy_low, energy_high, minust_low, minust_high));
-    else if (!strncmp(input_tree->GetName(), "filteredtree_phi_d_thrown",   strlen("filteredtree_phi_d_thrown")))
-        input_tree->Draw(Form("phi_mass_truth>>hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), Form("beam_energy_truth>%f && beam_energy_truth<%f && minust_truth>%f && minust_truth<%f", energy_low, energy_high, minust_low, minust_high));
-    hist->Draw();
-
-    if (hist->Integral() < 50)
-        return 0;
-
-    TF1 *model = new TF1("model", "[0]/sqrt(2*TMath::Pi()*[2]*[2])*exp(-0.5*((x-[1])/[2])**2)", 0.9, 1.2);
-    model->SetParameters(hist->GetMaximum()*0.9*hist->GetBinWidth(1), 1.0, 0.01);
-    model->SetParLimits(0, 0.1*hist->Integral()*hist->GetBinWidth(1), hist->Integral()*hist->GetBinWidth(1));
-    model->SetParLimits(1, 1.01, 1.03);
-    model->SetParLimits(2, 0.001, 0.01);
-    hist->Fit(model, "R");
-    model->Draw("csame");
-
-    return model->GetParameter(0)/hist->GetBinWidth(1);
-}
-
-double yield_single_gaus_const_bkg(double energy_low, double energy_high, double minust_low, double minust_high, TTree *input_tree)
-{
-    TH1F *hist = new TH1F(Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), 60, 0.9, 1.2);
-    if (!strncmp(input_tree->GetName(), "filteredtree_phi_d_recon",   strlen("filteredtree_phi_d_recon")))
-        input_tree->Draw(Form("phi_mass_kin>>hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), Form("accidweight*(beam_energy_kin>%f && beam_energy_kin<%f && minust_kin>%f && minust_kin<%f)", energy_low, energy_high, minust_low, minust_high));
-    else if (!strncmp(input_tree->GetName(), "filteredtree_phi_d_thrown",   strlen("filteredtree_phi_d_thrown")))
-        input_tree->Draw(Form("phi_mass_truth>>hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), Form("beam_energy_truth>%f && beam_energy_truth<%f && minust_truth>%f && minust_truth<%f", energy_low, energy_high, minust_low, minust_high));
-    hist->Draw();
-
-    if (hist->Integral() < 50)
-        return 0;
-
-    TF1 *model = new TF1("model", "[0]/sqrt(2*TMath::Pi()*[2]*[2])*exp(-0.5*((x-[1])/[2])**2) + [3]", 0.9, 1.2);
-    model->SetParameters(hist->GetMaximum()*0.9*hist->GetBinWidth(1), 1.0, 0.01, 0);
-    model->SetParLimits(0, 0.1*hist->Integral()*hist->GetBinWidth(1), hist->Integral()*hist->GetBinWidth(1));
-    model->SetParLimits(1, 1.01, 1.03);
-    model->SetParLimits(2, 0.001, 0.01);
-    hist->Fit(model, "R");
-    model->SetNpx(1000);
-    model->Draw("csame");
-
-    return model->GetParameter(0)/hist->GetBinWidth(1);
-}
-
-double yield_single_gaus_linear_bkg(double energy_low, double energy_high, double minust_low, double minust_high, TTree *input_tree)
-{
-    TH1F *hist = new TH1F(Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), 60, 0.9, 1.2);
-    if (!strncmp(input_tree->GetName(), "filteredtree_phi_d_recon",   strlen("filteredtree_phi_d_recon")))
-        input_tree->Draw(Form("phi_mass_kin>>hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), Form("accidweight*(beam_energy_kin>%f && beam_energy_kin<%f && minust_kin>%f && minust_kin<%f)", energy_low, energy_high, minust_low, minust_high));
-    else if (!strncmp(input_tree->GetName(), "filteredtree_phi_d_thrown",   strlen("filteredtree_phi_d_thrown")))
-        input_tree->Draw(Form("phi_mass_truth>>hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), Form("beam_energy_truth>%f && beam_energy_truth<%f && minust_truth>%f && minust_truth<%f", energy_low, energy_high, minust_low, minust_high));
-    hist->Draw();
-
-    if (hist->Integral() < 50)
-        return 0;
-
-    TF1 *model = new TF1("model", "[0]/sqrt(2*TMath::Pi()*[2]*[2])*exp(-0.5*((x-[1])/[2])**2) + [3]*x + [4]", 0.9, 1.2);
-    model->SetParameters(hist->GetMaximum()*0.9*hist->GetBinWidth(1), 1.0, 0.01, 0, 0);
-    model->SetParLimits(0, 0.1*hist->Integral()*hist->GetBinWidth(1), hist->Integral()*hist->GetBinWidth(1));
-    model->SetParLimits(1, 1.01, 1.03);
-    model->SetParLimits(2, 0.001, 0.01);
-    hist->Fit(model, "R");
-    model->Draw("csame");
-
-    return model->GetParameter(0)/hist->GetBinWidth(1);
-}
-
-double yield_single_gaus_quadratic_bkg(double energy_low, double energy_high, double minust_low, double minust_high, TTree *input_tree)
-{
-    TH1F *hist = new TH1F(Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), 60, 0.9, 1.2);
-    if (!strncmp(input_tree->GetName(), "filteredtree_phi_d_recon",   strlen("filteredtree_phi_d_recon")))
-        input_tree->Draw(Form("phi_mass_kin>>hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), Form("accidweight*(beam_energy_kin>%f && beam_energy_kin<%f && minust_kin>%f && minust_kin<%f)", energy_low, energy_high, minust_low, minust_high));
-    else if (!strncmp(input_tree->GetName(), "filteredtree_phi_d_thrown",   strlen("filteredtree_phi_d_thrown")))
-        input_tree->Draw(Form("phi_mass_truth>>hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), Form("beam_energy_truth>%f && beam_energy_truth<%f && minust_truth>%f && minust_truth<%f", energy_low, energy_high, minust_low, minust_high));
-    hist->Draw();
-
-    if (hist->Integral() < 50)
-        return 0;
-
-    TF1 *model = new TF1("model", "[0]/sqrt(2*TMath::Pi()*[2]*[2])*exp(-0.5*((x-[1])/[2])**2) + [3]*x*x + [4]*x + [5]", 0.9, 1.2);
-    model->SetParameters(hist->GetMaximum()*0.9*hist->GetBinWidth(1), 1.0, 0.01, 0, 0, 0);
-    model->SetParLimits(0, 0.1*hist->Integral()*hist->GetBinWidth(1), hist->Integral()*hist->GetBinWidth(1));
-    model->SetParLimits(1, 1.01, 1.03);
-    model->SetParLimits(2, 0.001, 0.01);
-    hist->Fit(model, "R");
-    model->Draw("csame");
-
-    return model->GetParameter(0)/hist->GetBinWidth(1);
-}
-
-double yield_double_gaus_no_bkg(double energy_low, double energy_high, double minust_low, double minust_high, TTree *input_tree)
-{
-    TH1F *hist = new TH1F(Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), 60, 0.9, 1.2);
-    if (!strncmp(input_tree->GetName(), "filteredtree_phi_d_recon",   strlen("filteredtree_phi_d_recon")))
-        input_tree->Draw(Form("phi_mass_kin>>hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), Form("accidweight*(beam_energy_kin>%f && beam_energy_kin<%f && minust_kin>%f && minust_kin<%f)", energy_low, energy_high, minust_low, minust_high));
-    else if (!strncmp(input_tree->GetName(), "filteredtree_phi_d_thrown",   strlen("filteredtree_phi_d_thrown")))
-        input_tree->Draw(Form("phi_mass_truth>>hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), Form("beam_energy_truth>%f && beam_energy_truth<%f && minust_truth>%f && minust_truth<%f", energy_low, energy_high, minust_low, minust_high));
-    hist->Draw();
-
-    if (hist->Integral() < 50)
-        return 0;
-
-    TF1 *model = new TF1("model", "[0]/sqrt(2*TMath::Pi()*[2]*[2])*exp(-0.5*((x-[1])/[2])**2) + [3]/sqrt(2*TMath::Pi()*[4]*[4])*exp(-0.5*((x-[1])/[4])**2)", 0.5, 1.3);
-    model->SetParameters(hist->GetMaximum()*0.9*hist->GetBinWidth(1), 0.9, 0.05, hist->GetMaximum()*0.9*hist->GetBinWidth(1), 0.05);
-    model->SetParLimits(0, 0, hist->GetMaximum());
-    model->SetParLimits(1, 0.7, 1.1);
-    model->SetParLimits(2, 0.01, 0.20);
-    model->SetParLimits(3, 0, hist->GetMaximum());
-    model->SetParLimits(4, 0.01, 0.20);
-    hist->Fit(model, "R");
-    model->Draw("csame");
-
-    return (model->GetParameter(0)+model->GetParameter(3))/hist->GetBinWidth(1);
-}
-
-double yield_double_gaus_const_bkg(double energy_low, double energy_high, double minust_low, double minust_high, TTree *input_tree)
-{
-    TH1F *hist = new TH1F(Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), 60, 0.9, 1.2);
-    if (!strncmp(input_tree->GetName(), "filteredtree_phi_d_recon",   strlen("filteredtree_phi_d_recon")))
-        input_tree->Draw(Form("phi_mass_kin>>hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), Form("accidweight*(beam_energy_kin>%f && beam_energy_kin<%f && minust_kin>%f && minust_kin<%f)", energy_low, energy_high, minust_low, minust_high));
-    else if (!strncmp(input_tree->GetName(), "filteredtree_phi_d_thrown",   strlen("filteredtree_phi_d_thrown")))
-        input_tree->Draw(Form("phi_mass_truth>>hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), Form("beam_energy_truth>%f && beam_energy_truth<%f && minust_truth>%f && minust_truth<%f", energy_low, energy_high, minust_low, minust_high));
-    hist->Draw();
-
-    if (hist->Integral() < 50)
-        return 0;
-
-    TF1 *model = new TF1("model", "[0]/sqrt(2*TMath::Pi()*[2]*[2])*exp(-0.5*((x-[1])/[2])**2) + [3]/sqrt(2*TMath::Pi()*[4]*[4])*exp(-0.5*((x-[1])/[4])**2) + [5]", 0.5, 1.3);
-    model->SetParameters(hist->GetMaximum()*0.9*hist->GetBinWidth(1), 0.9, 0.05, hist->GetMaximum()*0.9*hist->GetBinWidth(1), 0.05, 0.0);
-    model->SetParLimits(0, 0, hist->GetMaximum());
-    model->SetParLimits(1, 0.7, 1.1);
-    model->SetParLimits(2, 0.01, 0.20);
-    model->SetParLimits(3, 0, hist->GetMaximum());
-    model->SetParLimits(4, 0.01, 0.20);
-    hist->Fit(model, "R");
-    model->Draw("csame");
-
-    return (model->GetParameter(0)+model->GetParameter(3))/hist->GetBinWidth(1);
-}
-
-double yield_double_gaus_linear_bkg(double energy_low, double energy_high, double minust_low, double minust_high, TTree *input_tree)
-{
-    TH1F *hist = new TH1F(Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), 60, 0.9, 1.2);
-    if (!strncmp(input_tree->GetName(), "filteredtree_phi_d_recon",   strlen("filteredtree_phi_d_recon")))
-        input_tree->Draw(Form("phi_mass_kin>>hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), Form("accidweight*(beam_energy_kin>%f && beam_energy_kin<%f && minust_kin>%f && minust_kin<%f)", energy_low, energy_high, minust_low, minust_high));
-    else if (!strncmp(input_tree->GetName(), "filteredtree_phi_d_thrown",   strlen("filteredtree_phi_d_thrown")))
-        input_tree->Draw(Form("phi_mass_truth>>hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), Form("beam_energy_truth>%f && beam_energy_truth<%f && minust_truth>%f && minust_truth<%f", energy_low, energy_high, minust_low, minust_high));
-    hist->Draw();
-
-    if (hist->Integral() < 50)
-        return 0;
-
-    TF1 *model = new TF1("model", "[0]/sqrt(2*TMath::Pi()*[2]*[2])*exp(-0.5*((x-[1])/[2])**2) + [3]/sqrt(2*TMath::Pi()*[4]*[4])*exp(-0.5*((x-[1])/[4])**2) + [5]*x + [6]", 0.5, 1.3);
-    model->SetParameters(hist->GetMaximum()*0.9*hist->GetBinWidth(1), 0.9, 0.05, hist->GetMaximum()*0.9*hist->GetBinWidth(1), 0.05, 0.0, 0.0);
-    model->SetParLimits(0, 0, hist->GetMaximum());
-    model->SetParLimits(1, 0.7, 1.1);
-    model->SetParLimits(2, 0.01, 0.20);
-    model->SetParLimits(3, 0, hist->GetMaximum());
-    model->SetParLimits(4, 0.01, 0.20);
-    hist->Fit(model, "R");
-    model->Draw("csame");
-
-    return (model->GetParameter(0)+model->GetParameter(3))/hist->GetBinWidth(1);
-}
-
-double yield_double_gaus_quadratic_bkg(double energy_low, double energy_high, double minust_low, double minust_high, TTree *input_tree)
-{
-    TH1F *hist = new TH1F(Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), Form("hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), 60, 0.9, 1.2);
-    if (!strncmp(input_tree->GetName(), "filteredtree_phi_d_recon",   strlen("filteredtree_phi_d_recon")))
-        input_tree->Draw(Form("phi_mass_kin>>hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), Form("accidweight*(beam_energy_kin>%f && beam_energy_kin<%f && minust_kin>%f && minust_kin<%f)", energy_low, energy_high, minust_low, minust_high));
-    else if (!strncmp(input_tree->GetName(), "filteredtree_phi_d_thrown",   strlen("filteredtree_phi_d_thrown")))
-        input_tree->Draw(Form("phi_mass_truth>>hist_%.1f_%.1f_%.1f_%.1f", energy_low, energy_high, minust_low, minust_high), Form("beam_energy_truth>%f && beam_energy_truth<%f && minust_truth>%f && minust_truth<%f", energy_low, energy_high, minust_low, minust_high));
-    hist->Draw();
-
-    if (hist->Integral() < 50)
-        return 0;
-
-    TF1 *model = new TF1("model", "[0]/sqrt(2*TMath::Pi()*[2]*[2])*exp(-0.5*((x-[1])/[2])**2) + [3]/sqrt(2*TMath::Pi()*[4]*[4])*exp(-0.5*((x-[1])/[4])**2) + [5]*x*x + [6]*x + [7]", 0.5, 1.3);
-    model->SetParameters(hist->GetMaximum()*0.9*hist->GetBinWidth(1), 0.9, 0.05, hist->GetMaximum()*0.9*hist->GetBinWidth(1), 0.05, 0.0, 0.0, 0.0);
-    model->SetParLimits(0, 0, hist->GetMaximum());
-    model->SetParLimits(1, 0.7, 1.1);
-    model->SetParLimits(2, 0.01, 0.20);
-    model->SetParLimits(3, 0, hist->GetMaximum());
-    model->SetParLimits(4, 0.01, 0.20);
-    hist->Fit(model, "R");
-    model->Draw("csame");
-
-    return (model->GetParameter(0)+model->GetParameter(3))/hist->GetBinWidth(1);
 }
