@@ -143,20 +143,20 @@ void filter_phi_d_thrown(string reaction, string output_mode)
                 TH2D hist_phi_d_momentum_truth              = *rdf.Histo2D({("phi_d_momentum_truth_"+ label).c_str(), ";P_{d} (GeV/c);P_{#phi} (GeV/c)", 100, 0.0, 10.0, 100, 0.0, 10.0},"d_momentum_truth","phi_momentum_truth");
                 hist_phi_d_momentum_truth.Write();
 
-                TH1D hist_struck_mass_truth                 = *rdf.Histo1D({("struck_mass_truth_"+ label).c_str(), ";m_{struck} (GeV/c^{2});Counts", 400, -4.0, 4.0},"struck_mass_truth");
-                hist_struck_mass_truth.Write();
-                TH1D hist_struck_masssquared_truth          = *rdf.Histo1D({("struck_masssquared_truth_"+ label).c_str(), ";m_{struck}^{2} (GeV^{2}/c^{4});Counts", 100, 0.0, 10.0},"struck_masssquared_truth");
-                hist_struck_masssquared_truth.Write();
-                TH1D hist_struck_momentum_truth             = *rdf.Histo1D({("struck_momentum_truth_"+ label).c_str(), ";P_{struck} (GeV/c);Counts", 200, 0.0, 2.0},"struck_momentum_truth");
-                hist_struck_momentum_truth.Write();
-                TH1D hist_struck_pminus_truth               = *rdf.Histo1D({("struck_pminus_truth_"+ label).c_str(), ";P_{struck}^{-} (GeV/c);Counts", 200, 1.0, 3.0},"struck_pminus_truth");
-                hist_struck_pminus_truth.Write();
-                TH1D hist_struck_energy_balance_truth       = *rdf.Histo1D({("struck_energy_balance_truth_"+ label).c_str(), ";E_{struck} - m_{2H} (GeV);Counts", 400, -4.0, 4.0},"struck_energy_balance_truth");
-                hist_struck_energy_balance_truth.Write();
-                TH2D hist_struck_momentum_pminus_truth      = *rdf.Histo2D({("struck_momentum_pminus_truth_"+ label).c_str(), ";P_{struck} (GeV/c);P_{struck}^{-} (GeV/c)", 200, 0.0, 2.0, 200, 1.0, 3.0},"struck_momentum_truth","struck_pminus_truth");
-                hist_struck_momentum_pminus_truth.Write();
-                TH2D hist_struck_momentum_energy_truth      = *rdf.Histo2D({("struck_momentum_energy_truth_"+ label).c_str(), ";P_{struck} (GeV/c);E_{struck} (GeV)", 200, 0.0, 2.0, 250, 0.5, 3.0},"struck_momentum_truth","struck_energy_truth");
-                hist_struck_momentum_energy_truth.Write();
+                TH1D hist_miss_mass_truth                   = *rdf.Histo1D({("miss_mass_truth_"+ label).c_str(), ";m_{miss} (GeV/c^{2});Counts", 400, -4.0, 4.0},"miss_mass_truth");
+                hist_miss_mass_truth.Write();
+                TH1D hist_miss_masssquared_truth            = *rdf.Histo1D({("miss_masssquared_truth_"+ label).c_str(), ";m_{miss}^{2} (GeV^{2}/c^{4});Counts", 100, 0.0, 10.0},"miss_masssquared_truth");
+                hist_miss_masssquared_truth.Write();
+                TH1D hist_miss_momentum_truth               = *rdf.Histo1D({("miss_momentum_truth_"+ label).c_str(), ";P_{miss} (GeV/c);Counts", 200, 0.0, 2.0},"miss_momentum_truth");
+                hist_miss_momentum_truth.Write();
+                TH1D hist_miss_pminus_truth                 = *rdf.Histo1D({("miss_pminus_truth_"+ label).c_str(), ";P_{miss}^{-} (GeV/c);Counts", 200, 1.0, 3.0},"miss_pminus_truth");
+                hist_miss_pminus_truth.Write();
+                TH1D hist_miss_energy_balance_truth         = *rdf.Histo1D({("miss_energy_balance_truth_"+ label).c_str(), ";E_{miss} - m_{2H} (GeV);Counts", 400, -4.0, 4.0},"miss_energy_balance_truth");
+                hist_miss_energy_balance_truth.Write();
+                TH2D hist_miss_momentum_pminus_truth        = *rdf.Histo2D({("miss_momentum_pminus_truth_"+ label).c_str(), ";P_{miss} (GeV/c);P_{miss}^{-} (GeV/c)", 200, 0.0, 2.0, 200, 1.0, 3.0},"miss_momentum_truth","miss_pminus_truth");
+                hist_miss_momentum_pminus_truth.Write();
+                TH2D hist_miss_momentum_energy_truth        = *rdf.Histo2D({("miss_momentum_energy_truth_"+ label).c_str(), ";P_{miss} (GeV/c);E_{miss} (GeV)", 200, 0.0, 2.0, 250, 0.5, 3.0},"miss_momentum_truth","miss_energy_truth");
+                hist_miss_momentum_energy_truth.Write();
 
                 TH1D hist_sqrts_truth                       = *rdf.Histo1D({("sqrts_truth_"+ label).c_str(), ";#sqrt{s} (GeV);Counts", 100, 0.0, 10.0},"sqrts_truth");
                 hist_sqrts_truth.Write();
