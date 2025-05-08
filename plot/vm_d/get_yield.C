@@ -89,7 +89,7 @@ int get_yield(string channel, string reaction, string observable)
     string this_hist_name, this_hist_cut;
     for (int i = 0; i < bins.size(); i++)
     {
-        if (observable == "ds_dt")
+        if (observable == "dsdt")
         {
             cout << "Photon energy: " << bins[i][0] << "-" << bins[i][1] << " GeV" << ", ";
             cout << "-t: " << bins[i][2] << "-" << bins[i][3] << " GeV^2" << endl;
@@ -99,7 +99,7 @@ int get_yield(string channel, string reaction, string observable)
             else if (reaction.find("thrown") != string::npos)
                 this_hist_cut = Form("beam_energy_truth>%f && beam_energy_truth<%f && minust_truth>%f && minust_truth<%f", bins[i][0], bins[i][1], bins[i][2], bins[i][3]);
         }
-        else if (observable == "W_costheta")
+        else if (observable == "Wcostheta")
         {
             cout << "Photon energy: " << bins[i][0] << "-" << bins[i][1] << " GeV" << ", ";
             cout << "-t: " << bins[i][2] << "-" << bins[i][3] << " GeV^2" << ", ";
@@ -110,7 +110,7 @@ int get_yield(string channel, string reaction, string observable)
             else if (reaction.find("thrown") != string::npos)
                 this_hist_cut = Form("beam_energy_truth>%f && beam_energy_truth<%f && minust_truth>%f && minust_truth<%f && costheta_helicity_truth>%f && costheta_helicity_truth<%f", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
         }
-        else if (observable == "W_phi")
+        else if (observable == "Wphi")
         {
             cout << "Photon energy: " << bins[i][0] << "-" << bins[i][1] << " GeV" << ", ";
             cout << "-t: " << bins[i][2] << "-" << bins[i][3] << " GeV^2" << ", ";
@@ -125,9 +125,9 @@ int get_yield(string channel, string reaction, string observable)
         this_hist = new TH1F(this_hist_name.c_str(), this_hist_name.c_str(), hist_bins, hist_min, hist_max);
         input_tree->Draw(Form("%s>>%s", yield_observable.c_str(), this_hist_name.c_str()), this_hist_cut.c_str());  // draw the yield observable into the histogram with the cut
         this_yield = this_hist->Integral();
-        if (observable == "ds_dt")
+        if (observable == "dsdt")
             fprintf(txt_file, "%6.1f\t%6.1f\t%6.1f\t%6.1f\t%f\n", bins[i][0], bins[i][1], bins[i][2], bins[i][3], this_yield);
-        else if (observable == "W_costheta" || observable == "W_phi")
+        else if (observable == "Wcostheta" || observable == "Wphi")
             fprintf(txt_file, "%6.1f\t%6.1f\t%6.1f\t%6.1f\t%6.1f\t%6.1f\t%f\n", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5], this_yield);
         this_hist->Draw();
         canvas->Update();
