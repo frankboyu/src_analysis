@@ -4,14 +4,14 @@ double mass_target = 0.0;
 
 void filter_phi_d_recon(string reaction, string output_mode)
 {
-    // Define input and output names
-    string input_tree       = "selectedtree_phi_d_recon";
-    string output_tree      = "filteredtree_phi_d_recon";
-    string input_tree_file  = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_phi_d_recon_%s.root",reaction.c_str());
-    string output_hist_file = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_recon_%s.root",reaction.c_str());
-    string output_tree_file = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_phi_d_recon_%s.root",reaction.c_str());
+    // Read input files
+    cout << "Reading input files...\n";
+    string input_root_name  = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_phi_d_recon_%s.root",reaction.c_str());
+    TChain chain("selectedtree_phi_d_recon");
+    chain.Add(input_root_name.c_str());
 
-    // Determine reaction specific parameters
+    // Define data frame
+    cout << "Defining data frame...\n";
     if      (reaction.find("2H")   != string::npos)
         mass_target = mass_2H;
     else if (reaction.find("4He")  != string::npos)
@@ -19,16 +19,8 @@ void filter_phi_d_recon(string reaction, string output_mode)
     else if (reaction.find("12C")  != string::npos)
         mass_target = mass_12C;
 
-    // Read input files
-    cout << "Reading input files...\n";
-    TChain chain(input_tree.c_str());
-    chain.Add(input_tree_file.c_str());
-
-    // Define data frame
-    cout << "Defining data frame...\n";
     RDataFrame rdf_raw(chain);
     auto rdf_def = RNode(rdf_raw);
-
     auto rdf_input = rdf_def
     .Define("beam_p4com_meas",              "boost_lorentz_vector(beam_p4_meas, -(kp_p4_meas + km_p4_meas + d_p4_meas).BoostVector())")
     .Define("beam_p4com_kin",               "boost_lorentz_vector(beam_p4_kin, -(kp_p4_kin + km_p4_kin + d_p4_kin).BoostVector())")
@@ -237,22 +229,24 @@ void filter_phi_d_recon(string reaction, string output_mode)
     if (output_mode == "tree" || output_mode == "both")
     {
         cout << "Saving to new tree...\n";
-        rdf_output.Snapshot(output_tree.c_str(),output_tree_file.c_str());
+        string output_tree_file = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_phi_d_recon_%s.root",reaction.c_str());
+        rdf_output.Snapshot("filteredtree_phi_d_recon",output_tree_file.c_str());
     }
 
     // Save histograms
     if (output_mode == "hist" || output_mode == "both")
     {
         cout << "Plotting histograms...\n";
-        TFile * hist_file = new TFile(output_hist_file.c_str(), "RECREATE");
-        hist_file->cd();
+        string output_hist_name = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_recon_%s.root",reaction.c_str());
+        TFile * output_hist_file = new TFile(output_hist_name.c_str(), "RECREATE");
+        output_hist_file->cd();
 
         for (int i = 0; i < N_filters; i++)
         {
             auto rdf = rdfs[i];
             string label = labels[i];
             cout << "Processing " << label << "...\n";
-            TDirectory * dir = hist_file->mkdir(label.c_str());
+            TDirectory * dir = output_hist_file->mkdir(label.c_str());
             dir->cd();
 
             TH1D hist_beam_energy_kin               = *rdf.Histo1D({("beam_energy_"+ label).c_str(), ";E_{beam} (GeV);Counts", 60, 5.0, 11.0},"beam_energy_kin");
@@ -447,7 +441,7 @@ void filter_phi_d_recon(string reaction, string output_mode)
                 hist_minust_kin_truth.Write();
             }
         }
-        hist_file->Close();
+        output_hist_file->Close();
     }
     cout << "Done!\n";
 }
