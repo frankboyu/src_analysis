@@ -24,6 +24,7 @@ private:
     UInt_t  dPreviousRunNumber;
     bool    dIsPolarizedFlag;
     bool    dIsPARAFlag;
+    int     dPolarizationAngle;
 
     // FLAGS
     bool dIsMC;
@@ -169,6 +170,7 @@ void DSelector_rho_d_recon::Init(TTree *locTree)
 
     // CUSTOM OUTPUT BRACHES: FLAT TREE
     dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("thrown_topology");
+    dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("polarization_angle");
     dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("accidweight");
 	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("pip_pidfom");  // the PIDFOM in the default flat branches pip_pid_fom is corrupted and always 0
 	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("pim_pidfom");  // the PIDFOM in the default flat branches pim_pid_fom is corrupted and always 0
@@ -194,6 +196,7 @@ Bool_t DSelector_rho_d_recon::Process(Long64_t locEntry)
 	if(locRunNumber != dPreviousRunNumber)
 	{
 		dIsPolarizedFlag   = dAnalysisUtilities.Get_IsPolarizedBeam(locRunNumber, dIsPARAFlag);
+        dAnalysisUtilities.Get_PolarizationAngle(locRunNumber, dPolarizationAngle);
 		dPreviousRunNumber = locRunNumber;
 	}
 
@@ -297,7 +300,7 @@ Bool_t DSelector_rho_d_recon::Process(Long64_t locEntry)
         dHist_PiMinusPIDFOM_After   ->Fill(dPiMinusWrapper->Get_PIDFOM());
         dHist_DeuterondEdxCDC_After ->Fill(dDeuteronWrapper->Get_dEdx_CDC()*1e6);
         dHist_InvariantMassRho_After->Fill((locPiPlusP4+locPiMinusP4).M());
-        dHist_ThrownTopology_After   ->Fill(locThrownTopology.Data(), 1);
+        dHist_ThrownTopology_After  ->Fill(locThrownTopology.Data(), 1);
 
 		// GET THE ACCIDENTAL WEIGHT FACTOR
 		TLorentzVector locBeamX4                       = dComboBeamWrapper->Get_X4_Measured();
@@ -338,6 +341,7 @@ Bool_t DSelector_rho_d_recon::Process(Long64_t locEntry)
 
         // FILL FLAT TREE
         dFlatTreeInterface->Fill_Fundamental<Int_t>("thrown_topology", locThrownTopologyFlag);
+        dFlatTreeInterface->Fill_Fundamental<Int_t>("polarization_angle", dPolarizationAngle);
         dFlatTreeInterface->Fill_Fundamental<Double_t>("accidweight", locHistAccidWeightFactor);
 		dFlatTreeInterface->Fill_Fundamental<Double_t>("pip_pidfom", dPiPlusWrapper->Get_PIDFOM());
 		dFlatTreeInterface->Fill_Fundamental<Double_t>("pim_pidfom", dPiMinusWrapper->Get_PIDFOM());

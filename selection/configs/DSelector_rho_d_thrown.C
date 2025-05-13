@@ -23,6 +23,7 @@ private:
     UInt_t  dPreviousRunNumber;
     bool    dIsPolarizedFlag;
     bool    dIsPARAFlag;
+    int     dPolarizationAngle;
 
     // FLAGS
     bool dIsMC;
@@ -47,6 +48,8 @@ void DSelector_rho_d_thrown::Init(TTree *locTree)
 	dPreviousRunNumber = 0;
 
     // CUSTOM OUTPUT BRACHES: FLAT TREE
+    dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("thrown_topology");
+    dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("polarization_angle");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("beam_x4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("pip_x4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("pim_x4_truth");
@@ -68,6 +71,7 @@ Bool_t DSelector_rho_d_thrown::Process(Long64_t locEntry)
 	if(locRunNumber != dPreviousRunNumber)
 	{
 		dIsPolarizedFlag   = dAnalysisUtilities.Get_IsPolarizedBeam(locRunNumber, dIsPARAFlag);
+        dAnalysisUtilities.Get_PolarizationAngle(locRunNumber, dPolarizationAngle);
 		dPreviousRunNumber = locRunNumber;
 	}
 
@@ -107,6 +111,8 @@ Bool_t DSelector_rho_d_thrown::Process(Long64_t locEntry)
         }
 
         // FILL FLAT TREE
+        dFlatTreeInterface->Fill_Fundamental<Int_t>("thrown_topology", locThrownTopologyFlag);
+        dFlatTreeInterface->Fill_Fundamental<Int_t>("polarization_angle", dPolarizationAngle);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_x4_truth", locBeamX4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("pip_x4_truth", locPiPlusX4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("pim_x4_truth", locPiMinusX4_Thrown);
