@@ -96,7 +96,7 @@ Bool_t DSelector_phi_d_thrown::Process(Long64_t locEntry)
                     locKPlusX4_Thrown = dThrownWrapper->Get_X4();
                     locKPlusP4_Thrown = dThrownWrapper->Get_P4();
                 }
-                else if (dThrownWrapper->Get_PID() == PiMinus)
+                else if (dThrownWrapper->Get_PID() == KMinus)
                 {
                     locKMinusX4_Thrown = dThrownWrapper->Get_X4();
                     locKMinusP4_Thrown = dThrownWrapper->Get_P4();
