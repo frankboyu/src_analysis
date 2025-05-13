@@ -91,18 +91,24 @@ void DSelector_rho_d_recon::Get_ComboWrappers(void)
 void DSelector_rho_d_recon::Init(TTree *locTree)
 {
     // DETERMINE THE TAG NAME
-    if      (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gd_pippimd",         strlen("gd_pippimd")))
-        dTag = "data_2H";
-    else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "ghe_pippimdinc",     strlen("ghe_pippimdinc")))
-        dTag = "data_4He";
-    else if (locTree->GetBranch("MCWeight") == NULL && !strncmp(locTree->GetName(), "gc12_pippimdinc",    strlen("gc12_pippimdinc")))
-        dTag = "data_12C";
-    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gd_pippimd",         strlen("gd_pippimd")))
-        dTag = "sim_2H";
-    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "ghe_pippimdinc",     strlen("ghe_pippimdinc")))
-        dTag = "sim_4He";
-    else if (locTree->GetBranch("MCWeight") != NULL && !strncmp(locTree->GetName(), "gc12_pippimdinc",    strlen("gc12_pippimdinc")))
-        dTag = "sim_12C";
+    if (locTree->GetBranch("MCWeight") == NULL)
+        dTag += "data";
+    else
+        dTag += "sim";
+
+    if      (string(locTree->GetName()).find("gd") != string::npos)
+        dTag += "_2H";
+    else if (string(locTree->GetName()).find("ghe") != string::npos)
+        dTag += "_4He";
+    else if (string(locTree->GetName()).find("gc12") != string::npos)
+        dTag += "_12C";
+
+    if      (string(locTree->GetName()).find("pippimd_") != string::npos)
+        dTag += "_exc";
+    else if (string(locTree->GetName()).find("pippimdmiss") != string::npos)
+        dTag += "_IA";
+    else if (string(locTree->GetName()).find("pippimdinc_") != string::npos)
+        dTag += "_inc";
 
     // SET OUTPUT FILE NAME
     dOutputFileName          = Form("selectedhist_rho_d_recon_%s.root", dTag.c_str());
