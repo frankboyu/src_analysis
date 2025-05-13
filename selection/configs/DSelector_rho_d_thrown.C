@@ -27,6 +27,7 @@ private:
 
     // FLAGS
     bool dIsMC;
+
     ClassDef(DSelector_rho_d_thrown, 0);
 };
 

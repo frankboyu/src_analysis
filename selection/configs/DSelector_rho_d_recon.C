@@ -204,7 +204,7 @@ Bool_t DSelector_rho_d_recon::Process(Long64_t locEntry)
 	dIsMC = (dTreeInterface->Get_Branch("MCWeight") != NULL);
 
 	// LOOP OVER COMBOS
-	for(UInt_t loc_i = 0; loc_i < Get_NumCombos(); ++loc_i)
+    for(UInt_t loc_i = 0; loc_i < Get_NumCombos(); ++loc_i)
 	{
 		// INITIALIZE THE COMBO
 		dComboWrapper->Set_ComboIndex(loc_i);  // set branch array indices

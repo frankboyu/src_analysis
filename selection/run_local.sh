@@ -9,7 +9,7 @@ TREENAME=$3
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
 if [[ $REACTION == *"recon"* ]]; then
     gxenv $HALLD_VERSIONS/version_5.21.0.xml
-else if [[ $REACTION == *"thrown"* ]]; then
+elif [[ $REACTION == *"thrown"* ]]; then
     gxenv $HALLD_VERSIONS/version.xml
 fi
 
