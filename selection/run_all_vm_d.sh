@@ -51,6 +51,9 @@ if [ "$MODE" == "run" ]; then
     hadd output/selectedtree_phi_d_thrown_gen_2H.root   /work/halld2/home/boyu/src_analysis/sim/output/phi_d_2H_ver01/root/generator/*.root
     # hadd output/selectedtree_phi_d_thrown_gen_4He.root  /work/halld2/home/boyu/src_analysis/sim/output/phi_d_4He_ver01/root/generator/*.root
     # hadd output/selectedtree_phi_d_thrown_gen_12C.root  /work/halld2/home/boyu/src_analysis/sim/output/phi_d_12C_ver01/root/generator/*.root
+    # hadd output/selectedtree_rho_d_thrown_gen_2H.root   /work/halld2/home/boyu/src_analysis/sim/output/rho_d_2H_ver01/root/generator/*.root
+    # hadd output/selectedtree_rho_d_thrown_gen_4He.root  /work/halld2/home/boyu/src_analysis/sim/output/rho_d_4He_ver01/root/generator/*.root
+    # hadd output/selectedtree_rho_d_thrown_gen_12C.root  /work/halld2/home/boyu/src_analysis/sim/output/rho_d_12C_ver01/root/generator/*.root
 else if [ "$MODE" == "merge" ]; then
     # data, batch
     sh run_merge.sh 'phi_d_recon_data_2H_exc'
