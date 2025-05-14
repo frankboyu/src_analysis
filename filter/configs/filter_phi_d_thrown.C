@@ -1,48 +1,51 @@
 #include </work/halld2/home/boyu/src_analysis/filter/configs/const.h>
 
 double mass_target = 0.0;
+double mass_missing = 0.0;
 
 void filter_phi_d_thrown(string reaction, string output_mode)
 {
-    // Define input and output names
-    string input_tree;
-    if (reaction.find("tagged") != string::npos)
-        input_tree = "selectedtree_phi_d_thrown";
-    else
-        input_tree = "genT";
-    string output_tree      = "filteredtree_phi_d_thrown";
-    string input_tree_file  = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_phi_d_thrown_%s.root",reaction.c_str());
-    string output_hist_file = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_thrown_%s.root",reaction.c_str());
-    string output_tree_file = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_phi_d_thrown_%s.root",reaction.c_str());
-
-    // Determine reaction specific parameters
-    if      (reaction.find("2H")   != string::npos)
-        mass_target = mass_2H;
-    else if (reaction.find("4He")  != string::npos)
-        mass_target = mass_4He;
-    else if (reaction.find("12C")  != string::npos)
-        mass_target = mass_12C;
-
     // Read input files
     cout << "Reading input files...\n";
-    TChain chain(input_tree.c_str());
-    chain.Add(input_tree_file.c_str());
+    string input_treefile_name  = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_phi_d_thrown_%s.root",reaction.c_str());
+    string input_tree_name  = "selectedtree_phi_d_thrown";
+    if (reaction.find("gen") != string::npos)
+        input_tree_name = "genT";
+    TChain chain(input_tree_name.c_str());
+    chain.Add(input_treefile_name.c_str());
 
     // Define data frame
     cout << "Defining data frame...\n";
+    if      (reaction.find("2H")   != string::npos)
+    {
+        mass_target = mass_2H;
+        mass_missing = 0.0;
+    }
+    else if (reaction.find("4He")  != string::npos)
+    {
+        mass_target = mass_4He;
+        mass_missing = mass_2H;
+    }
+    else if (reaction.find("12C")  != string::npos)
+    {
+        mass_target = mass_12C;
+        mass_missing = mass_10B;
+    }
+
     RDataFrame rdf_raw(chain);
     auto rdf_def = RNode(rdf_raw);
     if (reaction.find("gen") != string::npos)
     {
         rdf_def = rdf_def
         .Define("beam_p4_truth",            "pBeam")
-        .Define("kp_p4_truth",              "TLorentzVector(0, 0, 0, 0)")
-        .Define("km_p4_truth",              "TLorentzVector(0, 0, 0, 0)")
+        .Define("kp_p4_truth",              "pDecay1")
+        .Define("km_p4_truth",              "pDecay2")
         .Define("d_p4_truth",               "pBaryon")
         ;
     }
-
     auto rdf_input = rdf_def
+    .Define("target_p4",                    "TLorentzVector(0, 0, 0, mass_target)")
+    .Define("polarization_p3",              "0.4*TVector3(-TMath::Cos(2*polarization_angle/RadToDeg), -TMath::Sin(2*polarization_angle/RadToDeg), 0)")
     .Define("beam_p4com_truth",             "boost_lorentz_vector(beam_p4_truth, -(kp_p4_truth + km_p4_truth + d_p4_truth).BoostVector())")
     .Define("beam_energy_truth",            "beam_p4_truth.E()")
     .Define("kp_p4pion_truth",              "TLorentzVector(kp_p4_truth.Vect(), TMath::Sqrt(kp_p4_truth.P()*kp_p4_truth.P() + mass_piplus*mass_piplus))")
@@ -63,7 +66,7 @@ void filter_phi_d_thrown(string reaction, string output_mode)
     .Define("phi_energy_truth",             "phi_p4_truth.E()")
     .Define("phi_momentum_truth",           "phi_p4_truth.P()")
     .Define("phi_mass_truth",               "phi_p4_truth.M()")
-    .Define("phi_proxymass_truth",          "TMath::Sqrt((kp_p4_truth.Minus() + km_p4_truth.Minus())*(2*beam_p4_truth.E() + mass_4He - d_p4_truth.Plus() - (mass_2H*mass_2H + (phi_p4_truth + d_p4_truth).Perp2())/(mass_4He - (phi_p4_truth + d_p4_truth).Minus())) - (kp_p4_truth.Px() + km_p4_truth.Px())*(kp_p4_truth.Px() + km_p4_truth.Px()) - (kp_p4_truth.Py() + km_p4_truth.Py())*(kp_p4_truth.Py() + km_p4_truth.Py()))")
+    .Define("phi_proxymass_truth",          "TMath::Sqrt(phi_p4_truth.Minus()*(2*beam_energy_truth + mass_target - d_p4_truth.Plus() - (TMath::Sq(mass_missing) + (phi_p4_truth + d_p4_truth).Perp2())/(mass_target - (phi_p4_truth + d_p4_truth).Minus())) - phi_p4_truth.Perp2())")
     .Define("phi_theta_truth",              "phi_p4_truth.Theta()*RadToDeg")
     .Define("struck_p4_truth",              "phi_p4_truth + d_p4_truth - beam_p4_truth")
     .Define("struck_energy_truth",          "struck_p4_truth.E()")
@@ -73,7 +76,7 @@ void filter_phi_d_thrown(string reaction, string output_mode)
     .Define("struck_pminus_truth",          "struck_p4_truth.Minus()")
     .Define("struck_theta_truth",           "struck_p4_truth.Theta()*RadToDeg")
     .Define("struck_energy_balance_truth",  "struck_energy_truth - mass_2H")
-    .Define("miss_p4_truth",                "beam_p4_truth + TLorentzVector(0, 0, 0, mass_target) - phi_p4_truth - d_p4_truth")
+    .Define("miss_p4_truth",                "beam_p4_truth + target_p4 - phi_p4_truth - d_p4_truth")
     .Define("miss_energy_truth",            "miss_p4_truth.E()")
     .Define("miss_mass_truth",              "miss_p4_truth.M()")
     .Define("miss_masssquared_truth",       "miss_p4_truth.M2()")
@@ -81,7 +84,8 @@ void filter_phi_d_thrown(string reaction, string output_mode)
     .Define("miss_pminus_truth",            "miss_p4_truth.Minus()")
     .Define("miss_theta_truth",             "miss_p4_truth.Theta()*RadToDeg")
     .Define("miss_energy_balance_truth",    "miss_energy_truth - (mass_target - mass_2H)")
-    .Define("sqrts_truth",                  "(phi_p4_truth + d_p4_truth).Mag()")
+    .Define("total_p4_truth",               "kp_p4_truth + km_p4_truth + d_p4_truth")
+    .Define("sqrts_truth",                  "total_p4_truth.Mag()")
     .Define("minust_truth",                 "-(beam_p4_truth - phi_p4_truth).Mag2()")
     .Define("minusu_truth",                 "-(beam_p4_truth - d_p4_truth).Mag2()")
     .Define("coplanarity_truth",            "abs(phi_p4_truth.Phi() - d_p4_truth.Phi())*RadToDeg")
@@ -94,6 +98,7 @@ void filter_phi_d_thrown(string reaction, string output_mode)
     .Define("x_helicity_truth",             "y_helicity_truth.Cross(z_helicity_truth).Unit()")
     .Define("costheta_helicity_truth",      "pi_helicity_truth.Dot(z_helicity_truth)")
     .Define("phi_helicity_truth",           "TMath::ATan2(-x_helicity_truth.Dot(pi_helicity_truth.Cross(z_helicity_truth)), y_helicity_truth.Dot(pi_helicity_truth.Cross(z_helicity_truth)))*RadToDeg")
+    .Define("psi_helicity_truth",           "polarization_angle-phi_helicity_truth")
     ;
 
     // Filter events and save to new tree
@@ -108,22 +113,25 @@ void filter_phi_d_thrown(string reaction, string output_mode)
     if (output_mode == "tree" || output_mode == "both")
     {
         cout << "Saving to new tree...\n";
-        rdf_output.Snapshot(output_tree.c_str(),output_tree_file.c_str());
+        string output_treefile_name = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_phi_d_thrown_%s.root",reaction.c_str());
+        string output_tree_name = "filteredtree_phi_d_thrown";
+        rdf_output.Snapshot(output_tree_name.c_str(), output_treefile_name.c_str());
     }
 
     // Save histograms
     if (output_mode == "hist" || output_mode == "both")
     {
         cout << "Plotting histograms...\n";
-        TFile * hist_file = new TFile(output_hist_file.c_str(), "RECREATE");
-        hist_file->cd();
+        string output_histfile_name = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_thrown_%s.root",reaction.c_str());
+        TFile * output_histfile = new TFile(output_histfile_name.c_str(), "RECREATE");
+        output_histfile->cd();
 
         for (int i = 0; i < N_filters; i++)
         {
             auto rdf = rdfs[i];
             string label = labels[i];
             cout << "Processing " << label << "...\n";
-            TDirectory * dir = hist_file->mkdir(label.c_str());
+            TDirectory * dir = output_histfile->mkdir(label.c_str());
             dir->cd();
 
                 TH1D hist_beam_energy_truth                 = *rdf.Histo1D({("beam_energy_truth_"+ label).c_str(), ";E_{beam} (GeV);Counts", 60, 5.0, 11.0},"beam_energy_truth");
@@ -180,8 +188,10 @@ void filter_phi_d_thrown(string reaction, string output_mode)
                 hist_costheta_helicity_truth.Write();
                 TH1D hist_phi_helicity_truth                = *rdf.Histo1D({("phi_helicity_truth_"+ label).c_str(), ";#phi_{helicity} (deg);Counts", 9, -180.0, 180.0},"phi_helicity_truth");
                 hist_phi_helicity_truth.Write();
+                TH1D hist_psi_helicity_truth                = *rdf.Histo1D({("psi_helicity_truth_"+ label).c_str(), ";#psi_{helicity} (deg);Counts", 9, -180.0, 180.0},"psi_helicity_truth");
+                hist_psi_helicity_truth.Write();
         }
-        hist_file->Close();
+        output_histfile->Close();
     }
     cout << "Done!\n";
 }

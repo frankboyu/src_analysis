@@ -26,6 +26,7 @@ const double mass_2H          = 1.875612859;
 const double mass_3H          = 2.808921004;
 const double mass_3He         = 2.809413498;
 const double mass_4He         = 3.727379238;
+const double mass_10B         = 9.32699;
 const double mass_11B         = 10.25510;
 const double mass_11C         = 10.25708;
 const double mass_12C         = 11.17793;

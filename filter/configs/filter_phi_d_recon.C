@@ -1,27 +1,41 @@
 #include </work/halld2/home/boyu/src_analysis/filter/configs/const.h>
 
 double mass_target = 0.0;
+double mass_missing = 0.0;
 
 void filter_phi_d_recon(string reaction, string output_mode)
 {
     // Read input files
     cout << "Reading input files...\n";
-    string input_root_name  = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_phi_d_recon_%s.root",reaction.c_str());
-    TChain chain("selectedtree_phi_d_recon");
-    chain.Add(input_root_name.c_str());
+    string input_treefile_name  = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_phi_d_recon_%s.root",reaction.c_str());
+    string input_tree_name  = "selectedtree_phi_d_recon";
+    TChain chain(input_tree_name.c_str());
+    chain.Add(input_treefile_name.c_str());
 
     // Define data frame
     cout << "Defining data frame...\n";
     if      (reaction.find("2H")   != string::npos)
+    {
         mass_target = mass_2H;
+        mass_missing = 0.0;
+    }
     else if (reaction.find("4He")  != string::npos)
+    {
         mass_target = mass_4He;
+        mass_missing = mass_2H;
+    }
     else if (reaction.find("12C")  != string::npos)
+    {
         mass_target = mass_12C;
+        mass_missing = mass_10B;
+    }
 
     RDataFrame rdf_raw(chain);
     auto rdf_def = RNode(rdf_raw);
     auto rdf_input = rdf_def
+    .Define("target_p4",                    "TLorentzVector(0, 0, 0, mass_target)")
+    .Define("polarization_p3",              "0.4*TVector3(-TMath::Cos(2*polarization_angle/RadToDeg), -TMath::Sin(2*polarization_angle/RadToDeg), 0)")
+
     .Define("beam_p4com_meas",              "boost_lorentz_vector(beam_p4_meas, -(kp_p4_meas + km_p4_meas + d_p4_meas).BoostVector())")
     .Define("beam_p4com_kin",               "boost_lorentz_vector(beam_p4_kin, -(kp_p4_kin + km_p4_kin + d_p4_kin).BoostVector())")
     .Define("beam_p4com_truth",             "boost_lorentz_vector(beam_p4_truth, -(kp_p4_truth + km_p4_truth + d_p4_truth).BoostVector())")
@@ -48,14 +62,14 @@ void filter_phi_d_recon(string reaction, string output_mode)
     .Define("kp_theta_truth",               "kp_p4_truth.Theta()*RadToDeg")
     .Define("kp_DeltaT_meas",               "rftime + (kp_x4_meas.Z()-65.0)/29.9792458 - kp_x4_meas.T()")
     .Define("kp_DeltaT_kin",                "rftime + (kp_x4_kin.Z()-65.0)/29.9792458 - kp_x4_kin.T()")
-    .Define("kp_in_fdc",                    "accidweight*(kp_dedx_fdc > 0.0 && kp_dedx_cdc == 0.0)")
-    .Define("kp_in_cdc",                    "accidweight*(kp_dedx_cdc > 0.0 && kp_dedx_fdc == 0.0)")
-    .Define("kp_in_fdc_cdc",                "accidweight*(kp_dedx_fdc > 0.0 && kp_dedx_cdc > 0.0)")
-    .Define("kp_in_neither",                "accidweight*(kp_dedx_fdc == 0.0 && kp_dedx_cdc == 0.0)")
-    .Define("kp_dedx_fdc_keV_per_cm",       "kp_dedx_fdc*1e6")
-    .Define("kp_dedx_cdc_keV_per_cm",       "kp_dedx_cdc*1e6")
-    .Define("kp_dedx_st_keV_per_cm",        "kp_dedx_st*1e6")
-    .Define("kp_dedx_tof_keV_per_cm",       "kp_dedx_tof*1e6")
+    .Define("kp_in_fdc_meas",               "accidweight*(kp_dedx_fdc > 0.0 && kp_dedx_cdc == 0.0)")
+    .Define("kp_in_cdc_meas",               "accidweight*(kp_dedx_cdc > 0.0 && kp_dedx_fdc == 0.0)")
+    .Define("kp_in_fdc_cdc_meas",           "accidweight*(kp_dedx_fdc > 0.0 && kp_dedx_cdc > 0.0)")
+    .Define("kp_in_neither_meas",           "accidweight*(kp_dedx_fdc == 0.0 && kp_dedx_cdc == 0.0)")
+    .Define("kp_dedx_fdc_keV_per_cm_meas",  "kp_dedx_fdc*1e6")
+    .Define("kp_dedx_cdc_keV_per_cm_meas",  "kp_dedx_cdc*1e6")
+    .Define("kp_dedx_st_keV_per_cm_meas",   "kp_dedx_st*1e6")
+    .Define("kp_dedx_tof_keV_per_cm_meas",  "kp_dedx_tof*1e6")
 
     .Define("km_p4pion_meas",               "TLorentzVector(km_p4_meas.Vect(), TMath::Sqrt(km_p4_meas.P()*km_p4_meas.P() + mass_piminus*mass_piminus))")
     .Define("km_p4pion_kin",                "TLorentzVector(km_p4_kin.Vect(), TMath::Sqrt(km_p4_kin.P()*km_p4_kin.P() + mass_piminus*mass_piminus))")
@@ -74,14 +88,14 @@ void filter_phi_d_recon(string reaction, string output_mode)
     .Define("km_theta_truth",               "km_p4_truth.Theta()*RadToDeg")
     .Define("km_DeltaT_meas",               "rftime + (km_x4_meas.Z()-65.0)/29.9792458 - km_x4_meas.T()")
     .Define("km_DeltaT_kin",                "rftime + (km_x4_kin.Z()-65.0)/29.9792458 - km_x4_kin.T()")
-    .Define("km_in_fdc",                    "accidweight*(km_dedx_fdc > 0.0 && km_dedx_cdc == 0.0)")
-    .Define("km_in_cdc",                    "accidweight*(km_dedx_cdc > 0.0 && km_dedx_fdc == 0.0)")
-    .Define("km_in_fdc_cdc",                "accidweight*(km_dedx_fdc > 0.0 && km_dedx_cdc > 0.0)")
-    .Define("km_in_neither",                "accidweight*(km_dedx_fdc == 0.0 && km_dedx_cdc == 0.0)")
-    .Define("km_dedx_fdc_keV_per_cm",       "km_dedx_fdc*1e6")
-    .Define("km_dedx_cdc_keV_per_cm",       "km_dedx_cdc*1e6")
-    .Define("km_dedx_st_keV_per_cm",        "km_dedx_st*1e6")
-    .Define("km_dedx_tof_keV_per_cm",       "km_dedx_tof*1e6")
+    .Define("km_in_fdc_meas",               "accidweight*(km_dedx_fdc > 0.0 && km_dedx_cdc == 0.0)")
+    .Define("km_in_cdc_meas",               "accidweight*(km_dedx_cdc > 0.0 && km_dedx_fdc == 0.0)")
+    .Define("km_in_fdc_cdc_meas",           "accidweight*(km_dedx_fdc > 0.0 && km_dedx_cdc > 0.0)")
+    .Define("km_in_neither_meas",           "accidweight*(km_dedx_fdc == 0.0 && km_dedx_cdc == 0.0)")
+    .Define("km_dedx_fdc_keV_per_cm_meas",  "km_dedx_fdc*1e6")
+    .Define("km_dedx_cdc_keV_per_cm_meas",  "km_dedx_cdc*1e6")
+    .Define("km_dedx_st_keV_per_cm_meas",   "km_dedx_st*1e6")
+    .Define("km_dedx_tof_keV_per_cm_meas",  "km_dedx_tof*1e6")
 
     .Define("d_energy_meas",                "d_p4_meas.E()")
     .Define("d_energy_kin",                 "d_p4_kin.E()")
@@ -94,10 +108,10 @@ void filter_phi_d_recon(string reaction, string output_mode)
     .Define("d_theta_truth",                "d_p4_truth.Theta()*RadToDeg")
     .Define("d_DeltaT_meas",                "rftime + (d_x4_meas.Z()-65.0)/29.9792458 - d_x4_meas.T()")
     .Define("d_DeltaT_kin",                 "rftime + (d_x4_meas.Z()-65.0)/29.9792458 - d_x4_kin.T()")
-    .Define("d_dedx_fdc_keV_per_cm",        "d_dedx_fdc*1e6")
-    .Define("d_dedx_cdc_keV_per_cm",        "d_dedx_cdc*1e6")
-    .Define("d_dedx_st_keV_per_cm",         "d_dedx_st*1e6")
-    .Define("d_dedx_tof_keV_per_cm",        "d_dedx_tof*1e6")
+    .Define("d_dedx_fdc_keV_per_cm_meas",   "d_dedx_fdc*1e6")
+    .Define("d_dedx_cdc_keV_per_cm_meas",   "d_dedx_cdc*1e6")
+    .Define("d_dedx_st_keV_per_cm_meas",    "d_dedx_st*1e6")
+    .Define("d_dedx_tof_keV_per_cm_meas",   "d_dedx_tof*1e6")
 
     .Define("phi_p4_meas",                  "kp_p4_meas + km_p4_meas")
     .Define("phi_p4_kin",                   "kp_p4_kin + km_p4_kin")
@@ -114,9 +128,9 @@ void filter_phi_d_recon(string reaction, string output_mode)
     .Define("phi_mass_meas",                "phi_p4_meas.M()")
     .Define("phi_mass_kin",                 "phi_p4_kin.M()")
     .Define("phi_mass_truth",               "phi_p4_truth.M()")
-    .Define("phi_proxymass_meas",           "TMath::Sqrt((kp_p4_meas.Minus() + km_p4_meas.Minus())*(2*beam_p4_meas.E() + mass_4He - d_p4_meas.Plus() - (mass_2H*mass_2H + (phi_p4_meas + d_p4_meas).Perp2())/(mass_4He - (phi_p4_meas + d_p4_meas).Minus())) - (kp_p4_meas.Px() + km_p4_meas.Px())*(kp_p4_meas.Px() + km_p4_meas.Px()) - (kp_p4_meas.Py() + km_p4_meas.Py())*(kp_p4_meas.Py() + km_p4_meas.Py()))")
-    .Define("phi_proxymass_kin",            "TMath::Sqrt((kp_p4_kin.Minus() + km_p4_kin.Minus())*(2*beam_p4_kin.E() + mass_4He - d_p4_kin.Plus() - (mass_2H*mass_2H + (phi_p4_kin + d_p4_kin).Perp2())/(mass_4He - (phi_p4_kin + d_p4_kin).Minus())) - (kp_p4_kin.Px() + km_p4_kin.Px())*(kp_p4_kin.Px() + km_p4_kin.Px()) - (kp_p4_kin.Py() + km_p4_kin.Py())*(kp_p4_kin.Py() + km_p4_kin.Py()))")
-    .Define("phi_proxymass_truth",          "TMath::Sqrt((kp_p4_truth.Minus() + km_p4_truth.Minus())*(2*beam_p4_truth.E() + mass_4He - d_p4_truth.Plus() - (mass_2H*mass_2H + (phi_p4_truth + d_p4_truth).Perp2())/(mass_4He - (phi_p4_truth + d_p4_truth).Minus())) - (kp_p4_truth.Px() + km_p4_truth.Px())*(kp_p4_truth.Px() + km_p4_truth.Px()) - (kp_p4_truth.Py() + km_p4_truth.Py())*(kp_p4_truth.Py() + km_p4_truth.Py()))")
+    .Define("phi_proxymass_meas",           "TMath::Sqrt(phi_p4_meas.Minus()*(2*beam_energy_meas + mass_target - d_p4_meas.Plus() - (TMath::Sq(mass_missing) + (phi_p4_meas + d_p4_meas).Perp2())/(mass_target - (phi_p4_meas + d_p4_meas).Minus())) - phi_p4_meas.Perp2())")
+    .Define("phi_proxymass_kin",            "TMath::Sqrt(phi_p4_kin.Minus()*(2*beam_energy_kin + mass_target - d_p4_kin.Plus() - (TMath::Sq(mass_missing) + (phi_p4_kin + d_p4_kin).Perp2())/(mass_target - (phi_p4_kin + d_p4_kin).Minus())) - phi_p4_kin.Perp2())")
+    .Define("phi_proxymass_truth",          "TMath::Sqrt(phi_p4_truth.Minus()*(2*beam_energy_truth + mass_target - d_p4_truth.Plus() - (TMath::Sq(mass_missing) + (phi_p4_truth + d_p4_truth).Perp2())/(mass_target - (phi_p4_truth + d_p4_truth).Minus())) - phi_p4_truth.Perp2())")
     .Define("phi_theta_meas",               "phi_p4_meas.Theta()*RadToDeg")
     .Define("phi_theta_kin",                "phi_p4_kin.Theta()*RadToDeg")
     .Define("phi_theta_truth",              "phi_p4_truth.Theta()*RadToDeg")
@@ -146,9 +160,9 @@ void filter_phi_d_recon(string reaction, string output_mode)
     .Define("struck_energy_balance_kin",    "struck_energy_kin - mass_2H")
     .Define("struck_energy_balance_truth",  "struck_energy_truth - mass_2H")
 
-    .Define("miss_p4_meas",                 "beam_p4_meas + TLorentzVector(0, 0, 0, mass_target) - phi_p4_meas - d_p4_meas")
-    .Define("miss_p4_kin",                  "beam_p4_kin + TLorentzVector(0, 0, 0, mass_target) - phi_p4_kin - d_p4_kin")
-    .Define("miss_p4_truth",                "beam_p4_truth + TLorentzVector(0, 0, 0, mass_target) - phi_p4_truth - d_p4_truth")
+    .Define("miss_p4_meas",                 "beam_p4_meas + target_p4 - phi_p4_meas - d_p4_meas")
+    .Define("miss_p4_kin",                  "beam_p4_kin + target_p4 - phi_p4_kin - d_p4_kin")
+    .Define("miss_p4_truth",                "beam_p4_truth + target_p4 - phi_p4_truth - d_p4_truth")
     .Define("miss_energy_meas",             "miss_p4_meas.E()")
     .Define("miss_energy_kin",              "miss_p4_kin.E()")
     .Define("miss_energy_truth",            "miss_p4_truth.E()")
@@ -171,9 +185,12 @@ void filter_phi_d_recon(string reaction, string output_mode)
     .Define("miss_energy_balance_kin",      "miss_energy_kin - (mass_target - mass_2H)")
     .Define("miss_energy_balance_truth",    "miss_energy_truth - (mass_target - mass_2H)")
 
-    .Define("sqrts_meas",                   "(phi_p4_meas + d_p4_meas).Mag()")
-    .Define("sqrts_kin",                    "(phi_p4_kin + d_p4_kin).Mag()")
-    .Define("sqrts_truth",                  "(phi_p4_truth + d_p4_truth).Mag()")
+    .Define("total_p4_meas",                "kp_p4_meas + km_p4_meas + d_p4_meas")
+    .Define("total_p4_kin",                 "kp_p4_kin + km_p4_kin + d_p4_kin")
+    .Define("total_p4_truth",               "kp_p4_truth + km_p4_truth + d_p4_truth")
+    .Define("sqrts_meas",                   "total_p4_meas.Mag()")
+    .Define("sqrts_kin",                    "total_p4_kin.Mag()")
+    .Define("sqrts_truth",                  "total_p4_truth.Mag()")
     .Define("minust_meas",                  "-(beam_p4_meas - phi_p4_meas).Mag2()")
     .Define("minust_kin",                   "-(beam_p4_kin - phi_p4_kin).Mag2()")
     .Define("minust_truth",                 "-(beam_p4_truth - phi_p4_truth).Mag2()")
@@ -210,13 +227,16 @@ void filter_phi_d_recon(string reaction, string output_mode)
     .Define("phi_helicity_meas",            "TMath::ATan2(-x_helicity_meas.Dot(pi_helicity_meas.Cross(z_helicity_meas)), y_helicity_meas.Dot(pi_helicity_meas.Cross(z_helicity_meas)))*RadToDeg")
     .Define("phi_helicity_kin",             "TMath::ATan2(-x_helicity_kin.Dot(pi_helicity_kin.Cross(z_helicity_kin)), y_helicity_kin.Dot(pi_helicity_kin.Cross(z_helicity_kin)))*RadToDeg")
     .Define("phi_helicity_truth",           "TMath::ATan2(-x_helicity_truth.Dot(pi_helicity_truth.Cross(z_helicity_truth)), y_helicity_truth.Dot(pi_helicity_truth.Cross(z_helicity_truth)))*RadToDeg")
+    .Define("psi_helicity_meas",            "polarization_angle-phi_helicity_meas")
+    .Define("psi_helicity_kin",             "polarization_angle-phi_helicity_kin")
+    .Define("psi_helicity_truth",           "polarization_angle-phi_helicity_truth")
     .Define("kinfit_fom_kin",               "TMath::Prob(kin_chisq,kin_ndf)")
     ;
 
     // Filter events and save to new tree
     cout << "Filtering events...\n";
     auto rdf_NoCut          = rdf_input;
-    auto rdf_dEdxCut        = rdf_NoCut.Filter("(d_dedx_cdc_keV_per_cm > (TMath::Exp(-29.68353898*d_momentum_meas+13.50623694)+17.88279645*d_momentum_meas*d_momentum_meas-42.15473796*d_momentum_meas+28.83200736)) && (d_dedx_cdc_keV_per_cm < (TMath::Exp(-26.69276323*d_momentum_meas+15.92466317)+17.1164272*d_momentum_meas*d_momentum_meas-48.7542903*d_momentum_meas+40.25692313))");
+    auto rdf_dEdxCut        = rdf_NoCut.Filter("(d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-29.68353898*d_momentum_meas+13.50623694)+17.88279645*d_momentum_meas*d_momentum_meas-42.15473796*d_momentum_meas+28.83200736)) && (d_dedx_cdc_keV_per_cm_meas < (TMath::Exp(-26.69276323*d_momentum_meas+15.92466317)+17.1164272*d_momentum_meas*d_momentum_meas-48.7542903*d_momentum_meas+40.25692313))");
     auto rdf_KinFitFOMCut   = rdf_dEdxCut.Filter("kinfit_fom_kin > 0.01");
     auto rdf_PIDFOMCut      = rdf_KinFitFOMCut.Filter("(kp_pidfom > 0.01) && (km_pidfom > 0.01)");
     auto rdf_MissPCut       = rdf_PIDFOMCut.Filter("(abs(struck_energy_balance_kin) < 1.0)");
@@ -229,24 +249,25 @@ void filter_phi_d_recon(string reaction, string output_mode)
     if (output_mode == "tree" || output_mode == "both")
     {
         cout << "Saving to new tree...\n";
-        string output_tree_file = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_phi_d_recon_%s.root",reaction.c_str());
-        rdf_output.Snapshot("filteredtree_phi_d_recon",output_tree_file.c_str());
+        string output_treefile_name = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_phi_d_recon_%s.root",reaction.c_str());
+        string output_tree_name = "filteredtree_phi_d_recon";
+        rdf_output.Snapshot(output_tree_name.c_str(), output_treefile_name.c_str());
     }
 
     // Save histograms
     if (output_mode == "hist" || output_mode == "both")
     {
         cout << "Plotting histograms...\n";
-        string output_hist_name = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_recon_%s.root",reaction.c_str());
-        TFile * output_hist_file = new TFile(output_hist_name.c_str(), "RECREATE");
-        output_hist_file->cd();
+        string output_histfile_name = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_recon_%s.root",reaction.c_str());
+        TFile * output_histfile = new TFile(output_histfile_name.c_str(), "RECREATE");
+        output_histfile->cd();
 
         for (int i = 0; i < N_filters; i++)
         {
             auto rdf = rdfs[i];
             string label = labels[i];
             cout << "Processing " << label << "...\n";
-            TDirectory * dir = output_hist_file->mkdir(label.c_str());
+            TDirectory * dir = output_histfile->mkdir(label.c_str());
             dir->cd();
 
             TH1D hist_beam_energy_kin               = *rdf.Histo1D({("beam_energy_"+ label).c_str(), ";E_{beam} (GeV);Counts", 60, 5.0, 11.0},"beam_energy_kin");
@@ -256,59 +277,59 @@ void filter_phi_d_recon(string reaction, string output_mode)
 
             TH2D hist_kp_kinematics_kin             = *rdf.Histo2D({("kp_kinematics_kin_"+ label).c_str(), ";P_{K^{+}} (GeV/c);#theta_{K^{+}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"kp_momentum_kin","kp_theta_kin","accidweight");
             hist_kp_kinematics_kin.Write();
-            TH2D hist_kp_kinematics_fdc_kin         = *rdf.Histo2D({("kp_kinematics_fdc_kin_"+ label).c_str(), ";P_{K^{+}} (GeV/c);#theta_{K^{+}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"kp_momentum_kin","kp_theta_kin","kp_in_fdc");
+            TH2D hist_kp_kinematics_fdc_kin         = *rdf.Histo2D({("kp_kinematics_fdc_kin_"+ label).c_str(), ";P_{K^{+}} (GeV/c);#theta_{K^{+}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"kp_momentum_kin","kp_theta_kin","kp_in_fdc_meas");
             hist_kp_kinematics_fdc_kin.Write();
-            TH2D hist_kp_kinematics_fdc_cdc_kin     = *rdf.Histo2D({("kp_kinematics_fdc_cdc_kin_"+ label).c_str(), ";P_{K^{+}} (GeV/c);#theta_{K^{+}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"kp_momentum_kin","kp_theta_kin","kp_in_fdc_cdc");
+            TH2D hist_kp_kinematics_fdc_cdc_kin     = *rdf.Histo2D({("kp_kinematics_fdc_cdc_kin_"+ label).c_str(), ";P_{K^{+}} (GeV/c);#theta_{K^{+}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"kp_momentum_kin","kp_theta_kin","kp_in_fdc_cdc_meas");
             hist_kp_kinematics_fdc_cdc_kin.Write();
-            TH2D hist_kp_kinematics_cdc_kin         = *rdf.Histo2D({("kp_kinematics_cdc_kin_"+ label).c_str(), ";P_{K^{+}} (GeV/c);#theta_{K^{+}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"kp_momentum_kin","kp_theta_kin","kp_in_cdc");
+            TH2D hist_kp_kinematics_cdc_kin         = *rdf.Histo2D({("kp_kinematics_cdc_kin_"+ label).c_str(), ";P_{K^{+}} (GeV/c);#theta_{K^{+}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"kp_momentum_kin","kp_theta_kin","kp_in_cdc_meas");
             hist_kp_kinematics_cdc_kin.Write();
-            TH2D hist_kp_kinematics_neither_kin     = *rdf.Histo2D({("kp_kinematics_neither_kin_"+ label).c_str(), ";P_{K^{+}} (GeV/c);#theta_{K^{+}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"kp_momentum_kin","kp_theta_kin","kp_in_neither");
+            TH2D hist_kp_kinematics_neither_kin     = *rdf.Histo2D({("kp_kinematics_neither_kin_"+ label).c_str(), ";P_{K^{+}} (GeV/c);#theta_{K^{+}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"kp_momentum_kin","kp_theta_kin","kp_in_neither_meas");
             hist_kp_kinematics_neither_kin.Write();
             TH1D hist_kp_pidfom                     = *rdf.Histo1D({("kp_pidfom_"+ label).c_str(), ";kp_pidfom;Counts", 100, 0.0, 1.0},"kp_pidfom","accidweight");
             hist_kp_pidfom.Write();
-            TH2D hist_kp_dEdx_cdc_kin               = *rdf.Histo2D({("kp_dEdx_cdc_kin_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 500, 0.0, 10.0, 400, 0.0, 40},"kp_momentum_kin","kp_dedx_cdc_keV_per_cm","accidweight");
+            TH2D hist_kp_dEdx_cdc_kin               = *rdf.Histo2D({("kp_dEdx_cdc_kin_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 500, 0.0, 10.0, 400, 0.0, 40},"kp_momentum_kin","kp_dedx_cdc_keV_per_cm_meas","accidweight");
             hist_kp_dEdx_cdc_kin.Write();
-            TH2D hist_kp_dEdx_fdc_kin               = *rdf.Histo2D({("kp_dEdx_fdc_kin_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 500, 0.0, 10.0, 400, 0.0, 40},"kp_momentum_kin","kp_dedx_fdc_keV_per_cm","accidweight");
+            TH2D hist_kp_dEdx_fdc_kin               = *rdf.Histo2D({("kp_dEdx_fdc_kin_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 500, 0.0, 10.0, 400, 0.0, 40},"kp_momentum_kin","kp_dedx_fdc_keV_per_cm_meas","accidweight");
             hist_kp_dEdx_fdc_kin.Write();
-            TH2D hist_kp_dEdx_tof_kin               = *rdf.Histo2D({("kp_dEdx_tof_kin_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 500, 0.0, 10.0, 400, 0.0, 40},"kp_momentum_kin","kp_dedx_tof_keV_per_cm","accidweight");
+            TH2D hist_kp_dEdx_tof_kin               = *rdf.Histo2D({("kp_dEdx_tof_kin_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 500, 0.0, 10.0, 400, 0.0, 40},"kp_momentum_kin","kp_dedx_tof_keV_per_cm_meas","accidweight");
             hist_kp_dEdx_tof_kin.Write();
-            TH2D hist_kp_dEdx_st_kin                = *rdf.Histo2D({("kp_dEdx_st_kin_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 500, 0.0, 10.0, 400, 0.0, 40},"kp_momentum_kin","kp_dedx_st_keV_per_cm","accidweight");
+            TH2D hist_kp_dEdx_st_kin                = *rdf.Histo2D({("kp_dEdx_st_kin_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 500, 0.0, 10.0, 400, 0.0, 40},"kp_momentum_kin","kp_dedx_st_keV_per_cm_meas","accidweight");
             hist_kp_dEdx_st_kin.Write();
             TH1D hist_kp_DeltaT_kin                 = *rdf.Histo1D({("kp_DeltaT_kin_"+ label).c_str(), ";#Delta t_{K^{+}} (ns);Counts", 400, -20.0, 20.0},"kp_DeltaT_kin","accidweight");
             hist_kp_DeltaT_kin.Write();
 
             TH2D hist_km_kinematics_kin             = *rdf.Histo2D({("km_kinematics_kin_"+ label).c_str(), ";P_{K^{-}} (GeV/c);#theta_{K^{-}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"km_momentum_kin","km_theta_kin","accidweight");
             hist_km_kinematics_kin.Write();
-            TH2D hist_km_kinematics_fdc_kin         = *rdf.Histo2D({("km_kinematics_fdc_kin_"+ label).c_str(), ";P_{K^{-}} (GeV/c);#theta_{K^{-}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"km_momentum_kin","km_theta_kin","km_in_fdc");
+            TH2D hist_km_kinematics_fdc_kin         = *rdf.Histo2D({("km_kinematics_fdc_kin_"+ label).c_str(), ";P_{K^{-}} (GeV/c);#theta_{K^{-}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"km_momentum_kin","km_theta_kin","km_in_fdc_meas");
             hist_km_kinematics_fdc_kin.Write();
-            TH2D hist_km_kinematics_fdc_cdc_kin     = *rdf.Histo2D({("km_kinematics_fdc_cdc_kin_"+ label).c_str(), ";P_{K^{-}} (GeV/c);#theta_{K^{-}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"km_momentum_kin","km_theta_kin","km_in_fdc_cdc");
+            TH2D hist_km_kinematics_fdc_cdc_kin     = *rdf.Histo2D({("km_kinematics_fdc_cdc_kin_"+ label).c_str(), ";P_{K^{-}} (GeV/c);#theta_{K^{-}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"km_momentum_kin","km_theta_kin","km_in_fdc_cdc_meas");
             hist_km_kinematics_fdc_cdc_kin.Write();
-            TH2D hist_km_kinematics_cdc_kin         = *rdf.Histo2D({("km_kinematics_cdc_kin_"+ label).c_str(), ";P_{K^{-}} (GeV/c);#theta_{K^{-}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"km_momentum_kin","km_theta_kin","km_in_cdc");
+            TH2D hist_km_kinematics_cdc_kin         = *rdf.Histo2D({("km_kinematics_cdc_kin_"+ label).c_str(), ";P_{K^{-}} (GeV/c);#theta_{K^{-}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"km_momentum_kin","km_theta_kin","km_in_cdc_meas");
             hist_km_kinematics_cdc_kin.Write();
-            TH2D hist_km_kinematics_neither_kin     = *rdf.Histo2D({("km_kinematics_neither_kin_"+ label).c_str(), ";P_{K^{-}} (GeV/c);#theta_{K^{-}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"km_momentum_kin","km_theta_kin","km_in_neither");
+            TH2D hist_km_kinematics_neither_kin     = *rdf.Histo2D({("km_kinematics_neither_kin_"+ label).c_str(), ";P_{K^{-}} (GeV/c);#theta_{K^{-}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"km_momentum_kin","km_theta_kin","km_in_neither_meas");
             hist_km_kinematics_neither_kin.Write();
             TH1D hist_km_pidfom                     = *rdf.Histo1D({("km_pidfom_"+ label).c_str(), ";km_pidfom;Counts", 100, 0.0, 1.0},"km_pidfom","accidweight");
             hist_km_pidfom.Write();
-            TH2D hist_km_dEdx_cdc_kin               = *rdf.Histo2D({("km_dEdx_cdc_kin_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 500, 0.0, 10.0, 400, 0.0, 40},"km_momentum_kin","km_dedx_cdc_keV_per_cm","accidweight");
+            TH2D hist_km_dEdx_cdc_kin               = *rdf.Histo2D({("km_dEdx_cdc_kin_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 500, 0.0, 10.0, 400, 0.0, 40},"km_momentum_kin","km_dedx_cdc_keV_per_cm_meas","accidweight");
             hist_km_dEdx_cdc_kin.Write();
-            TH2D hist_km_dEdx_fdc_kin               = *rdf.Histo2D({("km_dEdx_fdc_kin_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 500, 0.0, 10.0, 400, 0.0, 40},"km_momentum_kin","km_dedx_fdc_keV_per_cm","accidweight");
+            TH2D hist_km_dEdx_fdc_kin               = *rdf.Histo2D({("km_dEdx_fdc_kin_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 500, 0.0, 10.0, 400, 0.0, 40},"km_momentum_kin","km_dedx_fdc_keV_per_cm_meas","accidweight");
             hist_km_dEdx_fdc_kin.Write();
-            TH2D hist_km_dEdx_tof_kin               = *rdf.Histo2D({("km_dEdx_tof_kin_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 500, 0.0, 10.0, 400, 0.0, 40},"km_momentum_kin","km_dedx_tof_keV_per_cm","accidweight");
+            TH2D hist_km_dEdx_tof_kin               = *rdf.Histo2D({("km_dEdx_tof_kin_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 500, 0.0, 10.0, 400, 0.0, 40},"km_momentum_kin","km_dedx_tof_keV_per_cm_meas","accidweight");
             hist_km_dEdx_tof_kin.Write();
-            TH2D hist_km_dEdx_st_kin                = *rdf.Histo2D({("km_dEdx_st_kin_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 500, 0.0, 10.0, 400, 0.0, 40},"km_momentum_kin","km_dedx_st_keV_per_cm","accidweight");
+            TH2D hist_km_dEdx_st_kin                = *rdf.Histo2D({("km_dEdx_st_kin_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 500, 0.0, 10.0, 400, 0.0, 40},"km_momentum_kin","km_dedx_st_keV_per_cm_meas","accidweight");
             hist_km_dEdx_st_kin.Write();
             TH1D hist_km_DeltaT_kin                 = *rdf.Histo1D({("km_DeltaT_kin_"+ label).c_str(), ";#Delta t_{K^{-}} (ns);Counts", 400, -20.0, 20.0},"km_DeltaT_kin","accidweight");
             hist_km_DeltaT_kin.Write();
 
             TH2D hist_d_kinematics_kin              = *rdf.Histo2D({("d_kinematics_kin_"+ label).c_str(), ";P_{d} (GeV/c);#theta_{d} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"d_momentum_kin","d_theta_kin","accidweight");
             hist_d_kinematics_kin.Write();
-            TH2D hist_d_dEdx_cdc_meas               = *rdf.Histo2D({("d_dEdx_cdc_meas_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 500, 0.0, 10.0, 400, 0.0, 40},"d_momentum_meas","d_dedx_cdc_keV_per_cm","accidweight");
+            TH2D hist_d_dEdx_cdc_meas               = *rdf.Histo2D({("d_dEdx_cdc_meas_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 500, 0.0, 10.0, 400, 0.0, 40},"d_momentum_meas","d_dedx_cdc_keV_per_cm_meas","accidweight");
             hist_d_dEdx_cdc_meas.Write();
-            TH2D hist_d_dEdx_cdc_kin                = *rdf.Histo2D({("d_dEdx_cdc_kin_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 500, 0.0, 10.0, 400, 0.0, 40},"d_momentum_kin","d_dedx_cdc_keV_per_cm","accidweight");
+            TH2D hist_d_dEdx_cdc_kin                = *rdf.Histo2D({("d_dEdx_cdc_kin_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 500, 0.0, 10.0, 400, 0.0, 40},"d_momentum_kin","d_dedx_cdc_keV_per_cm_meas","accidweight");
             hist_d_dEdx_cdc_kin.Write();
-            TH2D hist_d_dEdx_tof_kin                = *rdf.Histo2D({("d_dEdx_tof_kin_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 500, 0.0, 10.0, 400, 0.0, 40},"d_momentum_kin","d_dedx_tof_keV_per_cm","accidweight");
+            TH2D hist_d_dEdx_tof_kin                = *rdf.Histo2D({("d_dEdx_tof_kin_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 500, 0.0, 10.0, 400, 0.0, 40},"d_momentum_kin","d_dedx_tof_keV_per_cm_meas","accidweight");
             hist_d_dEdx_tof_kin.Write();
-            TH2D hist_d_dEdx_st_kin                 = *rdf.Histo2D({("d_dEdx_st_kin_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 500, 0.0, 10.0, 400, 0.0, 40},"d_momentum_kin","d_dedx_st_keV_per_cm","accidweight");
+            TH2D hist_d_dEdx_st_kin                 = *rdf.Histo2D({("d_dEdx_st_kin_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 500, 0.0, 10.0, 400, 0.0, 40},"d_momentum_kin","d_dedx_st_keV_per_cm_meas","accidweight");
             hist_d_dEdx_st_kin.Write();
             TH1D hist_d_DeltaT_kin                  = *rdf.Histo1D({("d_DeltaT_kin_"+ label).c_str(), ";#Delta t_{d} (ns);Counts", 400, -20.0, 20.0},"d_DeltaT_kin","accidweight");
             hist_d_DeltaT_kin.Write();
@@ -375,6 +396,8 @@ void filter_phi_d_recon(string reaction, string output_mode)
             hist_costheta_helicity_kin.Write();
             TH1D hist_phi_helicity_kin              = *rdf.Histo1D({("phi_helicity_kin_"+ label).c_str(), ";#phi_{helicity} (deg);Counts", 9, -180.0, 180.0},"phi_helicity_kin","accidweight");
             hist_phi_helicity_kin.Write();
+            TH1D hist_psi_helicity_kin              = *rdf.Histo1D({("psi_helicity_kin_"+ label).c_str(), ";#psi_{helicity} (deg);Counts", 9, -180.0, 180.0},"psi_helicity_kin","accidweight");
+            hist_psi_helicity_kin.Write();
             TH1D hist_kinfit_fom_kin                = *rdf.Histo1D({("kinfit_fom_kin_"+ label).c_str(), ";KinFit FOM;Counts", 100, 0.0, 1.0},"kinfit_fom_kin","accidweight");
             hist_kinfit_fom_kin.Write();
 
@@ -434,6 +457,8 @@ void filter_phi_d_recon(string reaction, string output_mode)
                 hist_costheta_helicity_truth.Write();
                 TH1D hist_phi_helicity_truth                = *rdf.Histo1D({("phi_helicity_truth_"+ label).c_str(), ";#phi_{helicity} (deg);Counts", 9, -180.0, 180.0},"phi_helicity_truth");
                 hist_phi_helicity_truth.Write();
+                TH1D hist_psi_helicity_truth                = *rdf.Histo1D({("psi_helicity_truth_"+ label).c_str(), ";#psi_{helicity} (deg);Counts", 9, -180.0, 180.0},"psi_helicity_truth");
+                hist_psi_helicity_truth.Write();
 
                 TH2D hist_beam_energy_kin_truth             = *rdf.Histo2D({("beam_energy_kin_truth_"+ label).c_str(), ";E_{beam} (GeV);E_{beam} (GeV)", 60, 5.0, 11.0, 60, 5.0, 11.0},"beam_energy_kin","beam_energy_truth");
                 hist_beam_energy_kin_truth.Write();
@@ -441,7 +466,7 @@ void filter_phi_d_recon(string reaction, string output_mode)
                 hist_minust_kin_truth.Write();
             }
         }
-        output_hist_file->Close();
+        output_histfile->Close();
     }
     cout << "Done!\n";
 }
