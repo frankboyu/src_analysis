@@ -100,7 +100,8 @@ void filter_phi_d_thrown(string reaction, string output_mode)
     .Define("x_helicity_truth",             "y_helicity_truth.Cross(z_helicity_truth).Unit()")
     .Define("costheta_helicity_truth",      "pi_helicity_truth.Dot(z_helicity_truth)")
     .Define("phi_helicity_truth",           "TMath::ATan2(-x_helicity_truth.Dot(pi_helicity_truth.Cross(z_helicity_truth)), y_helicity_truth.Dot(pi_helicity_truth.Cross(z_helicity_truth)))*RadToDeg")
-    .Define("psi_helicity_truth",           "polarization_angle-phi_helicity_truth")
+    .Define("Phi_helicity_truth",           "90-polarization_p3.Angle(y_helicity_truth)*RadToDeg")
+    .Define("psi_helicity_truth",           "Phi_helicity_truth-phi_helicity_truth")
     ;
 
     // Filter events and save to new tree
@@ -190,7 +191,9 @@ void filter_phi_d_thrown(string reaction, string output_mode)
                 hist_costheta_helicity_truth.Write();
                 TH1D hist_phi_helicity_truth                = *rdf.Histo1D({("phi_helicity_truth_"+ label).c_str(), ";#phi_{helicity} (deg);Counts", 9, -180.0, 180.0},"phi_helicity_truth");
                 hist_phi_helicity_truth.Write();
-                TH1D hist_psi_helicity_truth                = *rdf.Histo1D({("psi_helicity_truth_"+ label).c_str(), ";#psi_{helicity} (deg);Counts", 9, -180.0, 180.0},"psi_helicity_truth");
+                TH1D hist_Phi_helicity_truth                = *rdf.Histo1D({("Phi_helicity_truth_"+ label).c_str(), ";#Phi_{helicity} (deg);Counts", 9, -90.0, 90.0},"Phi_helicity_truth");
+                hist_Phi_helicity_truth.Write();
+                TH1D hist_psi_helicity_truth                = *rdf.Histo1D({("psi_helicity_truth_"+ label).c_str(), ";#psi_{helicity} (deg);Counts", 9, -270.0, 270.0},"psi_helicity_truth");
                 hist_psi_helicity_truth.Write();
         }
         output_histfile->Close();

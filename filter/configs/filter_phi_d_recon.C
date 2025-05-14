@@ -227,9 +227,12 @@ void filter_phi_d_recon(string reaction, string output_mode)
     .Define("phi_helicity_meas",            "TMath::ATan2(-x_helicity_meas.Dot(pi_helicity_meas.Cross(z_helicity_meas)), y_helicity_meas.Dot(pi_helicity_meas.Cross(z_helicity_meas)))*RadToDeg")
     .Define("phi_helicity_kin",             "TMath::ATan2(-x_helicity_kin.Dot(pi_helicity_kin.Cross(z_helicity_kin)), y_helicity_kin.Dot(pi_helicity_kin.Cross(z_helicity_kin)))*RadToDeg")
     .Define("phi_helicity_truth",           "TMath::ATan2(-x_helicity_truth.Dot(pi_helicity_truth.Cross(z_helicity_truth)), y_helicity_truth.Dot(pi_helicity_truth.Cross(z_helicity_truth)))*RadToDeg")
-    .Define("psi_helicity_meas",            "polarization_angle-phi_helicity_meas")
-    .Define("psi_helicity_kin",             "polarization_angle-phi_helicity_kin")
-    .Define("psi_helicity_truth",           "polarization_angle-phi_helicity_truth")
+    .Define("Phi_helicity_meas",            "90-polarization_p3.Angle(y_helicity_meas)*RadToDeg")
+    .Define("Phi_helicity_kin",             "90-polarization_p3.Angle(y_helicity_kin)*RadToDeg")
+    .Define("Phi_helicity_truth",           "90-polarization_p3.Angle(y_helicity_truth)*RadToDeg")
+    .Define("psi_helicity_meas",            "Phi_helicity_meas-phi_helicity_meas")
+    .Define("psi_helicity_kin",             "Phi_helicity_kin-phi_helicity_kin")
+    .Define("psi_helicity_truth",           "Phi_helicity_truth-phi_helicity_truth")
     .Define("kinfit_fom_kin",               "TMath::Prob(kin_chisq,kin_ndf)")
     ;
 
@@ -397,7 +400,9 @@ void filter_phi_d_recon(string reaction, string output_mode)
             hist_costheta_helicity_kin.Write();
             TH1D hist_phi_helicity_kin                  = *rdf.Histo1D({("phi_helicity_kin_"+ label).c_str(), ";#phi_{helicity} (deg);Counts", 9, -180.0, 180.0},"phi_helicity_kin","accidweight");
             hist_phi_helicity_kin.Write();
-            TH1D hist_psi_helicity_kin                  = *rdf.Histo1D({("psi_helicity_kin_"+ label).c_str(), ";#psi_{helicity} (deg);Counts", 9, -180.0, 180.0},"psi_helicity_kin","accidweight");
+            TH1D hist_Phi_helicity_kin                  = *rdf.Histo1D({("Phi_helicity_kin_"+ label).c_str(), ";#Phi_{helicity} (deg);Counts", 9, -90.0, 90.0},"Phi_helicity_kin","accidweight");
+            hist_Phi_helicity_kin.Write();
+            TH1D hist_psi_helicity_kin                  = *rdf.Histo1D({("psi_helicity_kin_"+ label).c_str(), ";#psi_{helicity} (deg);Counts", 9, -270.0, 270.0},"psi_helicity_kin","accidweight");
             hist_psi_helicity_kin.Write();
             TH1D hist_kinfit_fom_kin                    = *rdf.Histo1D({("kinfit_fom_kin_"+ label).c_str(), ";KinFit FOM;Counts", 100, 0.0, 1.0},"kinfit_fom_kin","accidweight");
             hist_kinfit_fom_kin.Write();
@@ -458,7 +463,9 @@ void filter_phi_d_recon(string reaction, string output_mode)
                 hist_costheta_helicity_truth.Write();
                 TH1D hist_phi_helicity_truth                = *rdf.Histo1D({("phi_helicity_truth_"+ label).c_str(), ";#phi_{helicity} (deg);Counts", 9, -180.0, 180.0},"phi_helicity_truth");
                 hist_phi_helicity_truth.Write();
-                TH1D hist_psi_helicity_truth                = *rdf.Histo1D({("psi_helicity_truth_"+ label).c_str(), ";#psi_{helicity} (deg);Counts", 9, -180.0, 180.0},"psi_helicity_truth");
+                TH1D hist_Phi_helicity_truth                = *rdf.Histo1D({("Phi_helicity_truth_"+ label).c_str(), ";#Phi_{helicity} (deg);Counts", 9, -90.0, 90.0},"Phi_helicity_truth");
+                hist_Phi_helicity_truth.Write();
+                TH1D hist_psi_helicity_truth                = *rdf.Histo1D({("psi_helicity_truth_"+ label).c_str(), ";#psi_{helicity} (deg);Counts", 9, -270.0, 270.0},"psi_helicity_truth");
                 hist_psi_helicity_truth.Write();
 
                 TH2D hist_beam_energy_kin_truth             = *rdf.Histo2D({("beam_energy_kin_truth_"+ label).c_str(), ";E_{beam} (GeV);E_{beam} (GeV)", 60, 5.0, 11.0, 60, 5.0, 11.0},"beam_energy_kin","beam_energy_truth");
