@@ -285,7 +285,7 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
         if(dKPlusWrapper->Get_PIDFOM()                 < 1e-4)                                              dComboWrapper->Set_IsComboCut(true);
         if(dKMinusWrapper->Get_PIDFOM()                < 1e-4)                                              dComboWrapper->Set_IsComboCut(true);
         if(dDeuteronWrapper->Get_dEdx_CDC()            == 0.0)                                              dComboWrapper->Set_IsComboCut(true);
-        if((locKPlusP4+locKMinusP4).M()                > 1.10)                                              dComboWrapper->Set_IsComboCut(true);
+        if((locKPlusP4+locKMinusP4).M()                > 0.0)                                               dComboWrapper->Set_IsComboCut(true);
 
         if(dComboWrapper->Get_IsComboCut())  continue;
 

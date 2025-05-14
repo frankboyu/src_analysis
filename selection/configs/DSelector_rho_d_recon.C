@@ -285,7 +285,7 @@ Bool_t DSelector_rho_d_recon::Process(Long64_t locEntry)
         if(dPiPlusWrapper->Get_PIDFOM()                < 1e-4)                                              dComboWrapper->Set_IsComboCut(true);
         if(dPiMinusWrapper->Get_PIDFOM()               < 1e-4)                                              dComboWrapper->Set_IsComboCut(true);
         if(dDeuteronWrapper->Get_dEdx_CDC()            == 0.0)                                              dComboWrapper->Set_IsComboCut(true);
-        if((locPiPlusP4+locPiMinusP4).M()              > 1.10)                                              dComboWrapper->Set_IsComboCut(true);
+        if((locPiPlusP4+locPiMinusP4).M()              > 0.0)                                               dComboWrapper->Set_IsComboCut(true);
 
         if(dComboWrapper->Get_IsComboCut())  continue;
 
