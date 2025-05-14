@@ -38,8 +38,10 @@ void filter_phi_d_thrown(string reaction, string output_mode)
     {
         rdf_def = rdf_def
         .Define("beam_p4_truth",            "pBeam")
-        .Define("kp_p4_truth",              "pDecay1")
-        .Define("km_p4_truth",              "pDecay2")
+        // .Define("kp_p4_truth",              "pDecay1")
+        .Define("kp_p4_truth",              "TLorentzVector(0, 0, 0, 0)")
+        // .Define("km_p4_truth",              "pDecay2")
+        .Define("km_p4_truth",              "TLorentzVector(0, 0, 0, 0)")
         .Define("d_p4_truth",               "pBaryon")
         ;
     }
