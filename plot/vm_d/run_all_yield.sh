@@ -6,7 +6,7 @@ CHANNEL_LIST=()
 CHANNEL_LIST+=("phi_d")
 
 REACTION_LIST=()
-REACTION_LIST+=("recon_data_2H" "recon_sim_2H" "thrown_tagged_2H")
+REACTION_LIST+=("recon_data_2H_exc" "recon_sim_2H_exc" "thrown_tagged_2H")
 
 OBSERVABLE_LIST=()
 OBSERVABLE_LIST+=("dsdt" "Wcostheta" "Wphi")
