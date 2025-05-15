@@ -43,6 +43,7 @@ void filter_phi_d_thrown(string reaction, string output_mode)
         // .Define("km_p4_truth",              "pDecay2")
         .Define("km_p4_truth",              "TLorentzVector(0, 0, 0, 0)")
         .Define("d_p4_truth",               "pBaryon")
+        .Define("polarization_angle",       "-1")
         ;
     }
     auto rdf_input = rdf_def
