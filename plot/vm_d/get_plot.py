@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+rad_to_deg = 180/np.pi
+
 def lumi(energy_min, energy_max, target):
     if target == '2H':
         lumi_table = np.loadtxt('/work/halld2/home/boyu/src_analysis/flux/output/2H/lumi_summed_2H.txt')
@@ -19,8 +21,8 @@ def lumi(energy_min, energy_max, target):
 #======================================================================PHI_D_2H_DSDT======================================================================
 
 # Load data
-phi_d_2H_dsdt_yield_data = np.loadtxt('output/yield_phi_d_recon_data_2H_dsdt.txt')[:,4]
-phi_d_2H_dsdt_yield_sim = np.loadtxt('output/yield_phi_d_recon_sim_2H_dsdt.txt')[:,4]
+phi_d_2H_dsdt_yield_data = np.loadtxt('output/yield_phi_d_recon_data_2H_exc_dsdt.txt')[:,4]
+phi_d_2H_dsdt_yield_sim = np.loadtxt('output/yield_phi_d_recon_sim_2H_exc_dsdt.txt')[:,4]
 phi_d_2H_dsdt_yield_tagged = np.loadtxt('output/yield_phi_d_thrown_tagged_2H_dsdt.txt')[:,4]
 
 phi_d_2H_dsdt_energy_low = np.loadtxt('output/bins_phi_d_2H_dsdt.txt')[:,0]
@@ -92,8 +94,8 @@ plt.close()
 
 #======================================================================PHI_D_2H_WCOSTHETA======================================================================
 
-phi_d_2H_Wcostheta_yield_data = np.loadtxt('output/yield_phi_d_recon_data_2H_Wcostheta.txt')[:,6]
-phi_d_2H_Wcostheta_yield_sim = np.loadtxt('output/yield_phi_d_recon_sim_2H_Wcostheta.txt')[:,6]
+phi_d_2H_Wcostheta_yield_data = np.loadtxt('output/yield_phi_d_recon_data_2H_exc_Wcostheta.txt')[:,6]
+phi_d_2H_Wcostheta_yield_sim = np.loadtxt('output/yield_phi_d_recon_sim_2H_exc_Wcostheta.txt')[:,6]
 phi_d_2H_Wcostheta_yield_tagged = np.loadtxt('output/yield_phi_d_thrown_tagged_2H_Wcostheta.txt')[:,6]
 
 phi_d_2H_Wcostheta_energy_low = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,0]
@@ -167,8 +169,8 @@ plt.close()
 
 #======================================================================PHI_D_2H_Wphi======================================================================
 
-phi_d_2H_Wphi_yield_data = np.loadtxt('output/yield_phi_d_recon_data_2H_Wphi.txt')[:,6]
-phi_d_2H_Wphi_yield_sim = np.loadtxt('output/yield_phi_d_recon_sim_2H_Wphi.txt')[:,6]
+phi_d_2H_Wphi_yield_data = np.loadtxt('output/yield_phi_d_recon_data_2H_exc_Wphi.txt')[:,6]
+phi_d_2H_Wphi_yield_sim = np.loadtxt('output/yield_phi_d_recon_sim_2H_exc_Wphi.txt')[:,6]
 phi_d_2H_Wphi_yield_tagged = np.loadtxt('output/yield_phi_d_thrown_tagged_2H_Wphi.txt')[:,6]
 
 phi_d_2H_Wphi_energy_low = np.loadtxt('output/bins_phi_d_2H_Wphi.txt')[:,0]
@@ -242,4 +244,162 @@ plt.ylabel(r'$2\pi W(\phi_{H})$')
 plt.title(r'$0.8<-t<2.0\ \mathrm{GeV}^2$')
 plt.legend()
 plt.savefig('output/fig_phi_d_2H_Wphi_result.png', dpi=300)
+plt.close()
+
+#======================================================================PHI_D_2H_WPhi======================================================================
+
+phi_d_2H_WPhi_yield_data = np.loadtxt('output/yield_phi_d_recon_data_2H_exc_WPhi.txt')[:,6]
+phi_d_2H_WPhi_yield_sim = np.loadtxt('output/yield_phi_d_recon_sim_2H_exc_WPhi.txt')[:,6]
+phi_d_2H_WPhi_yield_tagged = np.loadtxt('output/yield_phi_d_thrown_tagged_2H_WPhi.txt')[:,6]
+
+phi_d_2H_WPhi_energy_low = np.loadtxt('output/bins_phi_d_2H_WPhi.txt')[:,0]
+phi_d_2H_WPhi_energy_high = np.loadtxt('output/bins_phi_d_2H_WPhi.txt')[:,1]
+phi_d_2H_WPhi_minust_low = np.loadtxt('output/bins_phi_d_2H_WPhi.txt')[:,2]
+phi_d_2H_WPhi_minust_high = np.loadtxt('output/bins_phi_d_2H_WPhi.txt')[:,3]
+phi_d_2H_WPhi_phi_low = np.loadtxt('output/bins_phi_d_2H_WPhi.txt')[:,4]
+phi_d_2H_WPhi_phi_high = np.loadtxt('output/bins_phi_d_2H_WPhi.txt')[:,5]
+
+phi_d_2H_WPhi_acceptance = np.zeros(len(phi_d_2H_WPhi_minust_low))
+phi_d_2H_WPhi_result = np.zeros(len(phi_d_2H_WPhi_minust_low))
+phi_d_2H_WPhi_error_stat = 1/np.sqrt(phi_d_2H_WPhi_yield_data)
+
+for i in range(len(phi_d_2H_WPhi_minust_low)):
+    if (phi_d_2H_WPhi_yield_sim[i] == 0) or (phi_d_2H_WPhi_yield_tagged[i] == 0):
+        continue
+    phi_d_2H_WPhi_acceptance[i] = phi_d_2H_WPhi_yield_sim[i]/phi_d_2H_WPhi_yield_tagged[i]
+    phi_d_2H_WPhi_result[i] = phi_d_2H_WPhi_yield_data[i]/phi_d_2H_WPhi_acceptance[i]
+
+phi_d_2H_WPhi_result[0:9] /= np.sum(phi_d_2H_WPhi_result[0:9])
+phi_d_2H_WPhi_result[9:18] /= np.sum(phi_d_2H_WPhi_result[9:18])
+phi_d_2H_WPhi_result /= (phi_d_2H_WPhi_phi_high - phi_d_2H_WPhi_phi_low)/180*np.pi
+phi_d_2H_WPhi_error_stat = phi_d_2H_WPhi_result*phi_d_2H_WPhi_error_stat
+
+plt.figure(figsize=(15, 6))
+plt.subplot(121)
+plt.errorbar((phi_d_2H_WPhi_phi_low[0:9]+phi_d_2H_WPhi_phi_high[0:9])/2, phi_d_2H_WPhi_yield_data[0:9], yerr=np.sqrt(phi_d_2H_WPhi_yield_data[0:9]), fmt='.')
+plt.xlabel(r'$\Phi\ [\mathrm{deg}]$')
+plt.ylabel(r'$Y(\Phi\ [\mathrm{deg}])$')
+plt.title(r'$0.2<-t<0.8\ \mathrm{GeV}^2$')
+plt.subplot(122)
+plt.errorbar((phi_d_2H_WPhi_phi_low[9:18]+phi_d_2H_WPhi_phi_high[9:18])/2, phi_d_2H_WPhi_yield_data[9:18], yerr=np.sqrt(phi_d_2H_WPhi_yield_data[9:18]), fmt='.')
+plt.xlabel(r'$\Phi\ [\mathrm{deg}]$')
+plt.ylabel(r'$Y(\Phi\ [\mathrm{deg}])$')
+plt.title(r'$0.8<-t<2.0\ \mathrm{GeV}^2$')
+plt.savefig('output/fig_phi_d_2H_WPhi_yield.png', dpi=300)
+plt.close()
+
+plt.figure(figsize=(15, 6))
+plt.subplot(121)
+plt.errorbar((phi_d_2H_WPhi_phi_low[0:9]+phi_d_2H_WPhi_phi_high[0:9])/2, phi_d_2H_WPhi_acceptance[0:9], fmt='.')
+plt.xlabel(r'$\Phi\ [\mathrm{deg}]$')
+plt.ylabel(r'$\epsilon(\Phi\ [\mathrm{deg}])$')
+plt.title(r'$0.2<-t<0.8\ \mathrm{GeV}^2$')
+plt.ylim(0, 0.1)
+plt.subplot(122)
+plt.errorbar((phi_d_2H_WPhi_phi_low[9:18]+phi_d_2H_WPhi_phi_high[9:18])/2, phi_d_2H_WPhi_acceptance[9:18], fmt='.')
+plt.xlabel(r'$\Phi\ [\mathrm{deg}]$')
+plt.ylabel(r'$\epsilon(\Phi\ [\mathrm{deg}])$')
+plt.title(r'$0.8<-t<2.0\ \mathrm{GeV}^2$')
+plt.ylim(0, 0.1)
+plt.savefig('output/fig_phi_d_2H_WPhi_acceptance.png', dpi=300)
+plt.close()
+
+plt.figure(figsize=(15, 6))
+plt.subplot(121)
+plt.errorbar((phi_d_2H_WPhi_phi_low[0:9]+phi_d_2H_WPhi_phi_high[0:9])/2, 2*np.pi*phi_d_2H_WPhi_result[0:9], yerr=2*np.pi*phi_d_2H_WPhi_error_stat[0:9], fmt='.', label='SRC-CT, 8.2 GeV')
+plt.plot(np.linspace(-180, 180, 360), np.ones(360), 'r--', label='SCHC+NPE')
+plt.xlim(-180, 180)
+plt.ylim(0, 2)
+plt.xlabel(r'$\Phi\ [\mathrm{deg}]$')
+plt.ylabel(r'$2\pi W(\Phi)$')
+plt.title(r'$0.2<-t<0.8\ \mathrm{GeV}^2$')
+plt.subplot(122)
+plt.errorbar((phi_d_2H_WPhi_phi_low[9:18]+phi_d_2H_WPhi_phi_high[9:18])/2, 2*np.pi*phi_d_2H_WPhi_result[9:18], yerr=2*np.pi*phi_d_2H_WPhi_error_stat[9:18], fmt='.', label='SRC-CT, 8.2 GeV')
+plt.plot(np.linspace(-180, 180, 360), np.ones(360), 'r--', label='SCHC+NPE')
+plt.xlim(-180, 180)
+plt.ylim(0, 2)
+plt.xlabel(r'$\Phi\ [\mathrm{deg}]$')
+plt.ylabel(r'$2\pi W(\Phi)$')
+plt.title(r'$0.8<-t<2.0\ \mathrm{GeV}^2$')
+plt.legend()
+plt.savefig('output/fig_phi_d_2H_WPhi_result.png', dpi=300)
+plt.close()
+
+#======================================================================PHI_D_2H_Wpsi======================================================================
+
+phi_d_2H_Wpsi_yield_data = np.loadtxt('output/yield_phi_d_recon_data_2H_exc_Wpsi.txt')[:,6]
+phi_d_2H_Wpsi_yield_sim = np.loadtxt('output/yield_phi_d_recon_sim_2H_exc_Wpsi.txt')[:,6]
+phi_d_2H_Wpsi_yield_tagged = np.loadtxt('output/yield_phi_d_thrown_tagged_2H_Wpsi.txt')[:,6]
+
+phi_d_2H_Wpsi_energy_low = np.loadtxt('output/bins_phi_d_2H_Wpsi.txt')[:,0]
+phi_d_2H_Wpsi_energy_high = np.loadtxt('output/bins_phi_d_2H_Wpsi.txt')[:,1]
+phi_d_2H_Wpsi_minust_low = np.loadtxt('output/bins_phi_d_2H_Wpsi.txt')[:,2]
+phi_d_2H_Wpsi_minust_high = np.loadtxt('output/bins_phi_d_2H_Wpsi.txt')[:,3]
+phi_d_2H_Wpsi_phi_low = np.loadtxt('output/bins_phi_d_2H_Wpsi.txt')[:,4]
+phi_d_2H_Wpsi_phi_high = np.loadtxt('output/bins_phi_d_2H_Wpsi.txt')[:,5]
+
+phi_d_2H_Wpsi_acceptance = np.zeros(len(phi_d_2H_Wpsi_minust_low))
+phi_d_2H_Wpsi_result = np.zeros(len(phi_d_2H_Wpsi_minust_low))
+phi_d_2H_Wpsi_error_stat = 1/np.sqrt(phi_d_2H_Wpsi_yield_data)
+
+for i in range(len(phi_d_2H_Wpsi_minust_low)):
+    if (phi_d_2H_Wpsi_yield_sim[i] == 0) or (phi_d_2H_Wpsi_yield_tagged[i] == 0):
+        continue
+    phi_d_2H_Wpsi_acceptance[i] = phi_d_2H_Wpsi_yield_sim[i]/phi_d_2H_Wpsi_yield_tagged[i]
+    phi_d_2H_Wpsi_result[i] = phi_d_2H_Wpsi_yield_data[i]/phi_d_2H_Wpsi_acceptance[i]
+
+phi_d_2H_Wpsi_result[0:9] /= np.sum(phi_d_2H_Wpsi_result[0:9])
+phi_d_2H_Wpsi_result[9:18] /= np.sum(phi_d_2H_Wpsi_result[9:18])
+phi_d_2H_Wpsi_result /= (phi_d_2H_Wpsi_phi_high - phi_d_2H_Wpsi_phi_low)/180*np.pi
+phi_d_2H_Wpsi_error_stat = phi_d_2H_Wpsi_result*phi_d_2H_Wpsi_error_stat
+
+plt.figure(figsize=(15, 6))
+plt.subplot(121)
+plt.errorbar((phi_d_2H_Wpsi_phi_low[0:9]+phi_d_2H_Wpsi_phi_high[0:9])/2, phi_d_2H_Wpsi_yield_data[0:9], yerr=np.sqrt(phi_d_2H_Wpsi_yield_data[0:9]), fmt='.')
+plt.xlabel(r'$\psi_{H}\ [\mathrm{deg}]$')
+plt.ylabel(r'$Y(\psi_{H}\ [\mathrm{deg}])$')
+plt.title(r'$0.2<-t<0.8\ \mathrm{GeV}^2$')
+plt.subplot(122)
+plt.errorbar((phi_d_2H_Wpsi_phi_low[9:18]+phi_d_2H_Wpsi_phi_high[9:18])/2, phi_d_2H_Wpsi_yield_data[9:18], yerr=np.sqrt(phi_d_2H_Wpsi_yield_data[9:18]), fmt='.')
+plt.xlabel(r'$\psi_{H}\ [\mathrm{deg}]$')
+plt.ylabel(r'$Y(\psi_{H}\ [\mathrm{deg}])$')
+plt.title(r'$0.8<-t<2.0\ \mathrm{GeV}^2$')
+plt.savefig('output/fig_phi_d_2H_Wpsi_yield.png', dpi=300)
+plt.close()
+
+plt.figure(figsize=(15, 6))
+plt.subplot(121)
+plt.errorbar((phi_d_2H_Wpsi_phi_low[0:9]+phi_d_2H_Wpsi_phi_high[0:9])/2, phi_d_2H_Wpsi_acceptance[0:9], fmt='.')
+plt.xlabel(r'$\psi_{H}\ [\mathrm{deg}]$')
+plt.ylabel(r'$\epsilon(\psi_{H}\ [\mathrm{deg}])$')
+plt.title(r'$0.2<-t<0.8\ \mathrm{GeV}^2$')
+plt.ylim(0, 0.1)
+plt.subplot(122)
+plt.errorbar((phi_d_2H_Wpsi_phi_low[9:18]+phi_d_2H_Wpsi_phi_high[9:18])/2, phi_d_2H_Wpsi_acceptance[9:18], fmt='.')
+plt.xlabel(r'$\psi_{H}\ [\mathrm{deg}]$')
+plt.ylabel(r'$\epsilon(\psi_{H}\ [\mathrm{deg}])$')
+plt.title(r'$0.8<-t<2.0\ \mathrm{GeV}^2$')
+plt.ylim(0, 0.1)
+plt.savefig('output/fig_phi_d_2H_Wpsi_acceptance.png', dpi=300)
+plt.close()
+
+plt.figure(figsize=(15, 6))
+plt.subplot(121)
+plt.errorbar((phi_d_2H_Wpsi_phi_low[0:9]+phi_d_2H_Wpsi_phi_high[0:9])/2, 2*np.pi*phi_d_2H_Wpsi_result[0:9], yerr=2*np.pi*phi_d_2H_Wpsi_error_stat[0:9], fmt='.', label='SRC-CT, 8.2 GeV')
+plt.plot(np.linspace(-180, 180, 360), np.ones(360)+0.3*np.cos(2*np.linspace(-180, 180, 360)/rad_to_deg), 'r--', label='SCHC+NPE')
+plt.xlim(-180, 180)
+plt.ylim(0, 2)
+plt.xlabel(r'$\psi_{H}\ [\mathrm{deg}]$')
+plt.ylabel(r'$2\pi W(\psi_{H})$')
+plt.title(r'$0.2<-t<0.8\ \mathrm{GeV}^2$')
+plt.subplot(122)
+plt.errorbar((phi_d_2H_Wpsi_phi_low[9:18]+phi_d_2H_Wpsi_phi_high[9:18])/2, 2*np.pi*phi_d_2H_Wpsi_result[9:18], yerr=2*np.pi*phi_d_2H_Wpsi_error_stat[9:18], fmt='.', label='SRC-CT, 8.2 GeV')
+plt.plot(np.linspace(-180, 180, 360), np.ones(360)+0.3*np.cos(2*np.linspace(-180, 180, 360)/rad_to_deg), 'r--', label='SCHC+NPE')
+plt.xlim(-180, 180)
+plt.ylim(0, 2)
+plt.xlabel(r'$\psi_{H}\ [\mathrm{deg}]$')
+plt.ylabel(r'$2\pi W(\psi_{H})$')
+plt.title(r'$0.8<-t<2.0\ \mathrm{GeV}^2$')
+plt.legend()
+plt.savefig('output/fig_phi_d_2H_Wpsi_result.png', dpi=300)
 plt.close()
