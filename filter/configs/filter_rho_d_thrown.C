@@ -145,9 +145,9 @@ void filter_rho_d_thrown(string reaction, string output_mode)
                 hist_pim_kinematics_truth.Write();
                 TH2D hist_d_kinematics_truth                = *rdf.Histo2D({("d_kinematics_truth_"+ label).c_str(), ";P_{d} (GeV/c);#theta_{d} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"d_momentum_truth","d_theta_truth");
                 hist_d_kinematics_truth.Write();
-                TH1D hist_rho_mass_truth                    = *rdf.Histo1D({("rho_mass_truth_"+ label).c_str(), ";m_{#pi^{+}#pi^{-}} (GeV/c);Counts", 500, 0.0, 2.0},"rho_mass_truth");
+                TH1D hist_rho_mass_truth                    = *rdf.Histo1D({("rho_mass_truth_"+ label).c_str(), ";m_{#pi^{+}#pi^{-}} (GeV/c);Counts", 600, 0.0, 3.0},"rho_mass_truth");
                 hist_rho_mass_truth.Write();
-                TH2D hist_rho_kinematics_truth              = *rdf.Histo2D({("rho_kinematics_truth_"+ label).c_str(), ";P_{#rho} (GeV/c);#theta_{#rho} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"rho_momentum_truth","rho_theta_truth");
+                TH2D hist_rho_kinematics_truth              = *rdf.Histo2D({("rho_kinematics_truth_"+ label).c_str(), ";P_{#rho} (GeV/c);#theta_{#rho} (deg)", 100, 0.0, 11.0, 180, 0.0, 180.0},"rho_momentum_truth","rho_theta_truth");
                 hist_rho_kinematics_truth.Write();
                 TH2D hist_rho_d_theta_truth                 = *rdf.Histo2D({("rho_d_theta_truth_"+ label).c_str(), ";#theta_{d} (deg);#theta_{#rho} (deg)", 180, 0.0, 180.0, 180, 0.0, 180.0},"d_theta_truth","rho_theta_truth");
                 hist_rho_d_theta_truth.Write();
@@ -179,7 +179,7 @@ void filter_rho_d_thrown(string reaction, string output_mode)
                 hist_coplanarity_truth.Write();
                 TH1D hist_yrho_truth                        = *rdf.Histo1D({("yrho_truth_"+ label).c_str(), ";y_{#rho};Counts", 200, 0.0, 2.0},"y_rho_truth");
                 hist_yrho_truth.Write();
-                TH1D hist_phi_mass_truth                    = *rdf.Histo1D({("phi_mass_truth_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c^{2});Counts", 100, 0.9, 1.9},"phi_mass_truth");
+                TH1D hist_phi_mass_truth                    = *rdf.Histo1D({("phi_mass_truth_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c^{2});Counts", 100, 1.0, 2.0},"phi_mass_truth");
                 hist_rho_mass_truth.Write();
                 TH2D hist_beam_energy_minust_truth          = *rdf.Histo2D({("beam_energy_minust_truth_"+ label).c_str(), ";E_{beam} (GeV);-t (GeV^{2}/c^{2})", 60, 5.0, 11.0, 30, 0.0, 3.0},"beam_energy_truth","minust_truth");
                 hist_beam_energy_minust_truth.Write();

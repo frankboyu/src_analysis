@@ -348,17 +348,17 @@ void filter_rho_d_recon(string reaction, string output_mode)
             TH2D hist_d_kinematics_kin                      = *rdf.Histo2D({("d_kinematics_kin_"+ label).c_str(), ";P_{d} (GeV/c);#theta_{d} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"d_momentum_kin","d_theta_kin","accidweight");
             hist_d_kinematics_kin.Write();
 
-            TH1D hist_rho_mass_kin                          = *rdf.Histo1D({("rho_mass_kin_"+ label).c_str(), ";m_{#pi^{+}#pi^{-}} (GeV/c);Counts", 500, 0.0, 2.0},"rho_mass_kin","accidweight");
+            TH1D hist_rho_mass_kin                          = *rdf.Histo1D({("rho_mass_kin_"+ label).c_str(), ";m_{#pi^{+}#pi^{-}} (GeV/c);Counts", 600, 0.0, 3.0},"rho_mass_kin","accidweight");
             hist_rho_mass_kin.Write();
-            TH1D hist_rho_mass_meas                         = *rdf.Histo1D({("rho_mass_meas_"+ label).c_str(), ";m_{#pi^{+}#pi^{-}} (GeV/c);Counts", 500, 0.0, 2.0},"rho_mass_meas","accidweight");
+            TH1D hist_rho_mass_meas                         = *rdf.Histo1D({("rho_mass_meas_"+ label).c_str(), ";m_{#pi^{+}#pi^{-}} (GeV/c);Counts", 600, 0.0, 3.0},"rho_mass_meas","accidweight");
             hist_rho_mass_meas.Write();
-            TH1D hist_rho_proxymass_kin                     = *rdf.Histo1D({("rho_proxymass_kin_"+ label).c_str(), ";m^{proxy}_{#pi^{+}#pi^{-}} (GeV/c^{2});Counts", 500, 0.0, 2.0},"rho_proxymass_kin","accidweight");
+            TH1D hist_rho_proxymass_kin                     = *rdf.Histo1D({("rho_proxymass_kin_"+ label).c_str(), ";m^{proxy}_{#pi^{+}#pi^{-}} (GeV/c^{2});Counts", 600, 0.0, 3.0},"rho_proxymass_kin","accidweight");
             hist_rho_proxymass_kin.Write();
-            TH1D hist_rho_proxymass_meas                    = *rdf.Histo1D({("rho_proxymass_meas_"+ label).c_str(), ";m^{proxy}_{#pi^{+}#pi^{-}} (GeV/c^{2});Counts", 500, 0.0, 2.0},"rho_proxymass_meas","accidweight");
+            TH1D hist_rho_proxymass_meas                    = *rdf.Histo1D({("rho_proxymass_meas_"+ label).c_str(), ";m^{proxy}_{#pi^{+}#pi^{-}} (GeV/c^{2});Counts", 600, 0.0, 3.0},"rho_proxymass_meas","accidweight");
             hist_rho_proxymass_meas.Write();
-            TH2D hist_rho_mass_kin_meas                     = *rdf.Histo2D({("rho_mass_kin_meas_"+ label).c_str(), ";m^{kin}_{#pi^{+}#pi^{-}} (GeV/c);m^{meas}_{#pi^{+}#pi^{-}} (GeV/c^{2})", 500, 0.0, 2.0, 500, 0.0, 2.0},"rho_mass_kin","rho_mass_meas","accidweight");
+            TH2D hist_rho_mass_kin_meas                     = *rdf.Histo2D({("rho_mass_kin_meas_"+ label).c_str(), ";m^{kin}_{#pi^{+}#pi^{-}} (GeV/c);m^{meas}_{#pi^{+}#pi^{-}} (GeV/c^{2})", 600, 0.0, 3.0, 600, 0.0, 3.0},"rho_mass_kin","rho_mass_meas","accidweight");
             hist_rho_mass_kin_meas.Write();
-            TH2D hist_rho_kinematics_kin                    = *rdf.Histo2D({("rho_kinematics_kin_"+ label).c_str(), ";p (GeV/c);#theta (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"rho_momentum_kin","rho_theta_kin","accidweight");
+            TH2D hist_rho_kinematics_kin                    = *rdf.Histo2D({("rho_kinematics_kin_"+ label).c_str(), ";p (GeV/c);#theta (deg)", 110, 0.0, 11.0, 180, 0.0, 180.0},"rho_momentum_kin","rho_theta_kin","accidweight");
             hist_rho_kinematics_kin.Write();
 
             TH1D hist_miss_energy_kin                       = *rdf.Histo1D({("miss_energy_kin_"+ label).c_str(), ";E_{miss} - m_{A-2} (GeV);Counts", 300, -3.0, 3.0},"miss_energy_balance_kin","accidweight");
@@ -389,7 +389,7 @@ void filter_rho_d_recon(string reaction, string output_mode)
             hist_miss_momentum_energy_kin.Write();
             TH2D hist_miss_momentum_energy_meas             = *rdf.Histo2D({("miss_momentum_energy_meas_"+ label).c_str(), ";P_{miss} (GeV/c);E_{miss} - m_{A-2} (GeV)", 200, 0.0, 2.0, 300, -3.0, 3.0},"miss_momentum_meas","miss_energy_balance_meas","accidweight");
             hist_miss_momentum_energy_meas.Write();
-            TH2D hist_miss_energy_rho_mass_meas             = *rdf.Histo2D({("miss_energy_rho_mass_meas_"+ label).c_str(), ";E_{miss} - m_{A-2} (GeV);m_{#pi^{+}#pi^{-}} (GeV/c)", 300, -3.0, 3.0, 500, 0.0, 2.0},"miss_energy_balance_meas","rho_mass_meas","accidweight");
+            TH2D hist_miss_energy_rho_mass_meas             = *rdf.Histo2D({("miss_energy_rho_mass_meas_"+ label).c_str(), ";E_{miss} - m_{A-2} (GeV);m_{#pi^{+}#pi^{-}} (GeV/c)", 300, -3.0, 3.0, 600, 0.0, 3.0},"miss_energy_balance_meas","rho_mass_meas","accidweight");
             hist_miss_energy_rho_mass_meas.Write();
 
             TH1D hist_sqrts_kin                             = *rdf.Histo1D({("sqrts_kin_"+ label).c_str(), ";#sqrt{s} (GeV);Counts", 40, 4.0, 8.0},"sqrts_kin","accidweight");
@@ -406,7 +406,7 @@ void filter_rho_d_recon(string reaction, string output_mode)
             hist_yrho_kin.Write();
             TH1D hist_yrho_meas                             = *rdf.Histo1D({("yrho_meas_"+ label).c_str(), ";y_{#rho};Counts", 200, 0.0, 2.0},"y_rho_meas","accidweight");
             hist_yrho_meas.Write();
-            TH1D hist_phi_mass_kin                          = *rdf.Histo1D({("phi_mass_kin_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c^{2});Counts", 100, 0.0, 1.0},"phi_mass_kin","accidweight");
+            TH1D hist_phi_mass_kin                          = *rdf.Histo1D({("phi_mass_kin_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c^{2});Counts", 100, 1.0, 2.0},"phi_mass_kin","accidweight");
             hist_phi_mass_kin.Write();
             TH1D hist_kinfit_fom_kin                        = *rdf.Histo1D({("kinfit_fom_kin_"+ label).c_str(), ";KinFit FOM;Counts", 100, 0.0, 1.0},"kinfit_fom_kin","accidweight");
             hist_kinfit_fom_kin.Write();
@@ -438,9 +438,9 @@ void filter_rho_d_recon(string reaction, string output_mode)
                 hist_pim_kinematics_truth.Write();
                 TH2D hist_d_kinematics_truth                = *rdf.Histo2D({("d_kinematics_truth_"+ label).c_str(), ";P_{d} (GeV/c);#theta_{d} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"d_momentum_truth","d_theta_truth");
                 hist_d_kinematics_truth.Write();
-                TH1D hist_rho_mass_truth                    = *rdf.Histo1D({("rho_mass_truth_"+ label).c_str(), ";m_{#pi^{+}#pi^{-}} (GeV/c);Counts", 500, 0.0, 2.0},"rho_mass_truth");
+                TH1D hist_rho_mass_truth                    = *rdf.Histo1D({("rho_mass_truth_"+ label).c_str(), ";m_{#pi^{+}#pi^{-}} (GeV/c);Counts", 600, 0.0, 3.0},"rho_mass_truth");
                 hist_rho_mass_truth.Write();
-                TH2D hist_rho_kinematics_truth              = *rdf.Histo2D({("rho_kinematics_truth_"+ label).c_str(), ";P_{#rho} (GeV/c);#theta_{#rho} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"rho_momentum_truth","rho_theta_truth");
+                TH2D hist_rho_kinematics_truth              = *rdf.Histo2D({("rho_kinematics_truth_"+ label).c_str(), ";P_{#rho} (GeV/c);#theta_{#rho} (deg)", 100, 0.0, 11.0, 180, 0.0, 180.0},"rho_momentum_truth","rho_theta_truth");
                 hist_rho_kinematics_truth.Write();
                 TH2D hist_rho_d_theta_truth                 = *rdf.Histo2D({("rho_d_theta_truth_"+ label).c_str(), ";#theta_{d} (deg);#theta_{#rho} (deg)", 180, 0.0, 180.0, 180, 0.0, 180.0},"d_theta_truth","rho_theta_truth");
                 hist_rho_d_theta_truth.Write();
@@ -472,7 +472,7 @@ void filter_rho_d_recon(string reaction, string output_mode)
                 hist_coplanarity_truth.Write();
                 TH1D hist_yrho_truth                        = *rdf.Histo1D({("yrho_truth_"+ label).c_str(), ";y_{#rho};Counts", 200, 0.0, 2.0},"y_rho_truth");
                 hist_yrho_truth.Write();
-                TH1D hist_phi_mass_truth                    = *rdf.Histo1D({("phi_mass_truth_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c^{2});Counts", 100, 0.9, 1.9},"phi_mass_truth");
+                TH1D hist_phi_mass_truth                    = *rdf.Histo1D({("phi_mass_truth_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c^{2});Counts", 100, 1.0, 2.0},"phi_mass_truth");
                 hist_rho_mass_truth.Write();
                 TH2D hist_beam_energy_minust_truth          = *rdf.Histo2D({("beam_energy_minust_truth_"+ label).c_str(), ";E_{beam} (GeV);-t (GeV^{2}/c^{2})", 60, 5.0, 11.0, 30, 0.0, 3.0},"beam_energy_truth","minust_truth");
                 hist_beam_energy_minust_truth.Write();
