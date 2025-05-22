@@ -481,8 +481,8 @@ void filter_rho_d_recon(string reaction, string output_mode)
                 hist_rho_theta_com_truth.Write();
                 TH2D hist_minust_rho_theta_com_truth        = *rdf.Histo2D({("minust_rho_theta_com_truth_"+ label).c_str(), ";-t (GeV^{2}/c^{2});#theta_{CM} (deg)", 30, 0.0, 3.0, 180, 0.0, 180.0},"minust_truth","rho_theta_com_truth");
                 hist_minust_rho_theta_com_truth.Write();
-                TH1D hist_polarization_rho_com_truth        = *rdf.Histo1D({("polarization_rho_com_truth_"+ label).c_str(), ";#rho_{com} (deg);Counts", 9, -180, 180.0},"polarization_rho_com_truth");
-                hist_polarization_rho_com_truth.Write();
+                TH1D hist_polarization_phi_com_truth        = *rdf.Histo1D({("polarization_phi_com_truth_"+ label).c_str(), ";#rho_{com} (deg);Counts", 9, -180, 180.0},"polarization_phi_com_truth");
+                hist_polarization_phi_com_truth.Write();
 
                 TH1D hist_pip_costheta_helicity_truth       = *rdf.Histo1D({("pip_costheta_helicity_truth_"+ label).c_str(), ";cos(#theta_{helicity});Counts", 10, -1.0, 1.0},"pip_costheta_helicity_truth");
                 hist_pip_costheta_helicity_truth.Write();
