@@ -486,8 +486,8 @@ void filter_rho_d_recon(string reaction, string output_mode)
 
                 TH1D hist_pip_costheta_helicity_truth       = *rdf.Histo1D({("pip_costheta_helicity_truth_"+ label).c_str(), ";cos(#theta_{helicity});Counts", 10, -1.0, 1.0},"pip_costheta_helicity_truth");
                 hist_pip_costheta_helicity_truth.Write();
-                TH1D hist_pip_rho_helicity_truth            = *rdf.Histo1D({("pip_rho_helicity_truth_"+ label).c_str(), ";#rho_{helicity} (deg);Counts", 9, -180.0, 180.0},"pip_rho_helicity_truth");
-                hist_pip_rho_helicity_truth.Write();
+                TH1D hist_pip_phi_helicity_truth            = *rdf.Histo1D({("pip_phi_helicity_truth_"+ label).c_str(), ";#rho_{helicity} (deg);Counts", 9, -180.0, 180.0},"pip_phi_helicity_truth");
+                hist_pip_phi_helicity_truth.Write();
                 TH1D hist_psi_helicity_truth                = *rdf.Histo1D({("psi_helicity_truth_"+ label).c_str(), ";#psi_{helicity} (deg);Counts", 9, -270.0, 270.0},"psi_helicity_truth");
                 hist_psi_helicity_truth.Write();
 
