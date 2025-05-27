@@ -97,14 +97,14 @@ void filter_rho_d_thrown(string reaction, string output_mode)
     .Define("y_x3_com_truth",                   "beam_p4_com_truth.Vect().Cross(rho_p4_com_truth.Vect()).Unit()")
     .Define("x_x3_com_truth",                   "y_x3_com_truth.Cross(z_x3_com_truth).Unit()")
     .Define("polarization_phi_com_truth",       "TMath::ATan2(-x_x3_com_truth.Dot(epsilon_x3_com.Cross(z_x3_com_truth)), y_x3_com_truth.Dot(epsilon_x3_com.Cross(z_x3_com_truth)))*RadToDeg")
-    .Define("rho_theta_com_truth",              "rho_p4_com_truth.Vect().Angle(z_x3_com_truth)*RadToDeg")
+    .Define("scatter_theta_com_truth",          "rho_p4_com_truth.Vect().Angle(z_x3_com_truth)*RadToDeg")
     .Define("z_x3_helicity_truth",              "rho_p4_com_truth.Vect().Unit()")
     .Define("y_x3_helicity_truth",              "beam_p4_com_truth.Vect().Cross(rho_p4_com_truth.Vect()).Unit()")
     .Define("x_x3_helicity_truth",              "y_x3_helicity_truth.Cross(z_x3_helicity_truth).Unit()")
     .Define("pi_x3_helicity_truth",             "boost_lorentz_vector(pip_p4_truth, -rho_p4_truth.BoostVector()).Vect().Unit()")
-    .Define("pip_costheta_helicity_truth",      "pi_x3_helicity_truth.Dot(z_x3_helicity_truth)")
-    .Define("pip_phi_helicity_truth",           "TMath::ATan2(-x_x3_helicity_truth.Dot(pi_x3_helicity_truth.Cross(z_x3_helicity_truth)), y_x3_helicity_truth.Dot(pi_x3_helicity_truth.Cross(z_x3_helicity_truth)))*RadToDeg")
-    .Define("psi_helicity_truth",               "fmod(polarization_phi_com_truth-pip_phi_helicity_truth+360, 360.0) >= 180 ? fmod(polarization_phi_com_truth-pip_phi_helicity_truth+360, 360.0) - 360 : fmod(polarization_phi_com_truth-pip_phi_helicity_truth+360, 360.0)")
+    .Define("decay_costheta_helicity_truth",    "pi_x3_helicity_truth.Dot(z_x3_helicity_truth)")
+    .Define("decay_phi_helicity_truth",         "TMath::ATan2(-x_x3_helicity_truth.Dot(pi_x3_helicity_truth.Cross(z_x3_helicity_truth)), y_x3_helicity_truth.Dot(pi_x3_helicity_truth.Cross(z_x3_helicity_truth)))*RadToDeg")
+    .Define("psi_helicity_truth",               "fmod(polarization_phi_com_truth-decay_phi_helicity_truth+360, 360.0) >= 180 ? fmod(polarization_phi_com_truth-decay_phi_helicity_truth+360, 360.0) - 360 : fmod(polarization_phi_com_truth-decay_phi_helicity_truth+360, 360.0)")
     ;
 
     cout << "Filtering events...\n";
@@ -184,17 +184,17 @@ void filter_rho_d_thrown(string reaction, string output_mode)
                 TH2D hist_beam_energy_minust_truth          = *rdf.Histo2D({("beam_energy_minust_truth_"+ label).c_str(), ";E_{beam} (GeV);-t (GeV^{2}/c^{2})", 60, 5.0, 11.0, 30, 0.0, 3.0},"beam_energy_truth","minust_truth");
                 hist_beam_energy_minust_truth.Write();
 
-                TH1D hist_rho_theta_com_truth               = *rdf.Histo1D({("rho_theta_com_truth_"+ label).c_str(), ";#theta_{CM} (deg);Counts", 180, 0.0, 180.0},"rho_theta_com_truth");
-                hist_rho_theta_com_truth.Write();
-                TH2D hist_minust_rho_theta_com_truth        = *rdf.Histo2D({("minust_rho_theta_com_truth_"+ label).c_str(), ";-t (GeV^{2}/c^{2});#theta_{CM} (deg)", 30, 0.0, 3.0, 180, 0.0, 180.0},"minust_truth","rho_theta_com_truth");
-                hist_minust_rho_theta_com_truth.Write();
+                TH1D hist_scatter_theta_com_truth           = *rdf.Histo1D({("scatter_theta_com_truth_"+ label).c_str(), ";#theta_{CM} (deg);Counts", 180, 0.0, 180.0},"scatter_theta_com_truth");
+                hist_scatter_theta_com_truth.Write();
+                TH2D hist_minust_scatter_theta_com_truth    = *rdf.Histo2D({("minust_scatter_theta_com_truth_"+ label).c_str(), ";-t (GeV^{2}/c^{2});#theta_{CM} (deg)", 30, 0.0, 3.0, 180, 0.0, 180.0},"minust_truth","scatter_theta_com_truth");
+                hist_minust_scatter_theta_com_truth.Write();
                 TH1D hist_polarization_phi_com_truth        = *rdf.Histo1D({("polarization_phi_com_truth_"+ label).c_str(), ";#rho_{com} (deg);Counts", 9, -180, 180.0},"polarization_phi_com_truth");
                 hist_polarization_phi_com_truth.Write();
 
-                TH1D hist_pip_costheta_helicity_truth       = *rdf.Histo1D({("pip_costheta_helicity_truth_"+ label).c_str(), ";cos(#theta_{helicity});Counts", 10, -1.0, 1.0},"pip_costheta_helicity_truth");
-                hist_pip_costheta_helicity_truth.Write();
-                TH1D hist_pip_phi_helicity_truth            = *rdf.Histo1D({("pip_phi_helicity_truth_"+ label).c_str(), ";#rho_{helicity} (deg);Counts", 9, -180.0, 180.0},"pip_phi_helicity_truth");
-                hist_pip_phi_helicity_truth.Write();
+                TH1D hist_decay_costheta_helicity_truth     = *rdf.Histo1D({("decay_costheta_helicity_truth_"+ label).c_str(), ";cos(#theta_{helicity});Counts", 10, -1.0, 1.0},"decay_costheta_helicity_truth");
+                hist_decay_costheta_helicity_truth.Write();
+                TH1D hist_decay_phi_helicity_truth          = *rdf.Histo1D({("decay_phi_helicity_truth_"+ label).c_str(), ";#rho_{helicity} (deg);Counts", 9, -180.0, 180.0},"decay_phi_helicity_truth");
+                hist_decay_phi_helicity_truth.Write();
                 TH1D hist_psi_helicity_truth                = *rdf.Histo1D({("psi_helicity_truth_"+ label).c_str(), ";#psi_{helicity} (deg);Counts", 9, -270.0, 270.0},"psi_helicity_truth");
                 hist_psi_helicity_truth.Write();
         }
