@@ -2,13 +2,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 
+rad_to_deg = 180/np.pi
+
 def Wcostheta_func(costheta, c, alpha):
     return 0.75*((3*c-1)*costheta**2 + (1-c)) + alpha*costheta
 
 def Wphi_func(phi, c):
     return 1-2*c*np.cos(2*phi*np.pi/180)
-
-rad_to_deg = 180/np.pi
 
 def lumi(energy_min, energy_max, target):
     if target == '2H':
@@ -24,6 +24,18 @@ def lumi(energy_min, energy_max, target):
             integrated_lumi += lumi_table[i][5]
 
     return integrated_lumi
+
+def normalize_distribution(results, energy_bins, t_bins):
+    for i in range(len(results)):
+        if (i == 0):
+            index = 0
+        elif (i == len(results) - 1):
+            results[index:i+1] /= np.sum(results[index:i+1])
+        else:
+            if (energy_bins[i] != energy_bins[i-1]) or (t_bins[i] != t_bins[i-1]):
+                results[index:i] /= np.sum(results[index:i])
+                index = i
+    return results
 
 #======================================================================PHI_D_2H_DSDT======================================================================
 
@@ -101,43 +113,52 @@ plt.close()
 
 #======================================================================PHI_D_2H_WCOSTHETA======================================================================
 
-phi_d_2H_Wcostheta_yield_data = np.loadtxt('output/yield_phi_d_recon_data_2H_exc_Wcostheta.txt')[:,6]
-phi_d_2H_Wcostheta_yield_sim = np.loadtxt('output/yield_phi_d_recon_sim_2H_exc_Wcostheta.txt')[:,6]
-phi_d_2H_Wcostheta_yield_tagged = np.loadtxt('output/yield_phi_d_thrown_tagged_2H_Wcostheta.txt')[:,6]
+# Read the yield numbers
+phi_d_2H_Wcostheta_yield_data       = np.loadtxt('output/yield_phi_d_recon_data_2H_exc_Wcostheta.txt')[:,6]
+phi_d_2H_Wcostheta_yield_sim        = np.loadtxt('output/yield_phi_d_recon_sim_2H_exc_Wcostheta.txt')[:,6]
+phi_d_2H_Wcostheta_yield_tagged     = np.loadtxt('output/yield_phi_d_thrown_tagged_2H_Wcostheta.txt')[:,6]
 
-phi_d_2H_Wcostheta_energy_low = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,0]
-phi_d_2H_Wcostheta_energy_high = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,1]
-phi_d_2H_Wcostheta_minust_low = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,2]
-phi_d_2H_Wcostheta_minust_high = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,3]
-phi_d_2H_Wcostheta_costheta_low = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,4]
-phi_d_2H_Wcostheta_costheta_high = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,5]
+# Read the bin edges
+phi_d_2H_Wcostheta_energy_low       = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,0]
+phi_d_2H_Wcostheta_energy_high      = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,1]
+phi_d_2H_Wcostheta_minust_low       = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,2]
+phi_d_2H_Wcostheta_minust_high      = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,3]
+phi_d_2H_Wcostheta_costheta_low     = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,4]
+phi_d_2H_Wcostheta_costheta_high    = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,5]
 
-phi_d_2H_Wcostheta_acceptance = np.zeros(len(phi_d_2H_Wcostheta_minust_low))
-phi_d_2H_Wcostheta_result = np.zeros(len(phi_d_2H_Wcostheta_minust_low))
-phi_d_2H_Wcostheta_error_stat = 1/np.sqrt(phi_d_2H_Wcostheta_yield_data)
+# Calculate the accetpance
+phi_d_2H_Wcostheta_acceptance       = phi_d_2H_Wcostheta_yield_sim/phi_d_2H_Wcostheta_yield_tagged
+phi_d_2H_Wcostheta_acceptance_stats = np.sqrt(1/phi_d_2H_Wcostheta_yield_sim + 1/phi_d_2H_Wcostheta_yield_tagged) * phi_d_2H_Wcostheta_acceptance
 
-for i in range(len(phi_d_2H_Wcostheta_minust_low)):
-    if (phi_d_2H_Wcostheta_yield_sim[i] == 0) or (phi_d_2H_Wcostheta_yield_tagged[i] == 0):
-        continue
-    phi_d_2H_Wcostheta_acceptance[i] = phi_d_2H_Wcostheta_yield_sim[i]/phi_d_2H_Wcostheta_yield_tagged[i]
-    phi_d_2H_Wcostheta_result[i] = phi_d_2H_Wcostheta_yield_data[i]/phi_d_2H_Wcostheta_acceptance[i]
+# Calculate the results
+phi_d_2H_Wcostheta_results          = phi_d_2H_Wcostheta_yield_data/phi_d_2H_Wcostheta_acceptance  # raw results
+phi_d_2H_Wcostheta_results          = normalize_distribution(phi_d_2H_Wcostheta_results, phi_d_2H_Wcostheta_energy_low, phi_d_2H_Wcostheta_minust_low) # normalize to have the sum equal to 1
+phi_d_2H_Wcostheta_results          = phi_d_2H_Wcostheta_results/(phi_d_2H_Wcostheta_costheta_high - phi_d_2H_Wcostheta_costheta_low)  # normalize to have the integral equal to 1
+phi_d_2H_Wcostheta_results_stats    = phi_d_2H_Wcostheta_results/np.sqrt(phi_d_2H_Wcostheta_yield_data)
 
-phi_d_2H_Wcostheta_result[0:10] /= np.sum(phi_d_2H_Wcostheta_result[0:10])
-phi_d_2H_Wcostheta_result[10:] /= np.sum(phi_d_2H_Wcostheta_result[10:])
-phi_d_2H_Wcostheta_result /= phi_d_2H_Wcostheta_costheta_high - phi_d_2H_Wcostheta_costheta_low
-phi_d_2H_Wcostheta_error_stat = phi_d_2H_Wcostheta_result*phi_d_2H_Wcostheta_error_stat
-
-plt.figure(figsize=(15, 6))
-plt.subplot(121)
-plt.errorbar((phi_d_2H_Wcostheta_costheta_low[0:10]+phi_d_2H_Wcostheta_costheta_high[0:10])/2, phi_d_2H_Wcostheta_yield_data[0:10], yerr=np.sqrt(phi_d_2H_Wcostheta_yield_data[0:10]), fmt='.')
-plt.xlabel(r'$\cos\theta_{H}$')
-plt.ylabel(r'$Y(\cos\theta_{H})$')
-plt.title(r'$0.2<-t<0.8\ \mathrm{GeV}^2$')
-plt.subplot(122)
-plt.errorbar((phi_d_2H_Wcostheta_costheta_low[10:]+phi_d_2H_Wcostheta_costheta_high[10:])/2, phi_d_2H_Wcostheta_yield_data[10:], yerr=np.sqrt(phi_d_2H_Wcostheta_yield_data[10:]), fmt='.')
-plt.xlabel(r'$\cos\theta_{H}$')
-plt.ylabel(r'$Y(\cos\theta_{H})$')
-plt.title(r'$0.8<-t<2.0\ \mathrm{GeV}^2$')
+fig = plt.figure(figsize=(12, 6))
+gs = fig.add_gridspec(1, 2, wspace=0)
+axs = gs.subplots(sharex=True, sharey=True)
+for i in range(len(phi_d_2H_Wcostheta_results)):
+    if (i == 0):
+        index = 0
+        plot_id = 0
+    elif (i == len(phi_d_2H_Wcostheta_results) - 1):
+        i += 1
+        axs[plot_id].errorbar((phi_d_2H_Wcostheta_costheta_low[index:i]+phi_d_2H_Wcostheta_costheta_high[index:i])/2, phi_d_2H_Wcostheta_yield_data[index:i], yerr=np.sqrt(phi_d_2H_Wcostheta_yield_data[index:i]), xerr=(phi_d_2H_Wcostheta_costheta_high[index:i]-phi_d_2H_Wcostheta_costheta_low[index:i])/2, fmt='.', label='This work')
+        axs[plot_id].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wcostheta_energy_low[i-1], phi_d_2H_Wcostheta_energy_high[i-1], phi_d_2H_Wcostheta_minust_low[i-1], phi_d_2H_Wcostheta_minust_high[i-1]))
+    else:
+        if (phi_d_2H_Wcostheta_energy_low[i] != phi_d_2H_Wcostheta_energy_low[i-1]) or (phi_d_2H_Wcostheta_minust_low[i] != phi_d_2H_Wcostheta_minust_low[i-1]):
+            axs[plot_id].errorbar((phi_d_2H_Wcostheta_costheta_low[index:i]+phi_d_2H_Wcostheta_costheta_high[index:i])/2, phi_d_2H_Wcostheta_yield_data[index:i], yerr=np.sqrt(phi_d_2H_Wcostheta_yield_data[index:i]), xerr=(phi_d_2H_Wcostheta_costheta_high[index:i]-phi_d_2H_Wcostheta_costheta_low[index:i])/2, fmt='.', label='This work')
+            axs[plot_id].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wcostheta_energy_low[i-1], phi_d_2H_Wcostheta_energy_high[i-1], phi_d_2H_Wcostheta_minust_low[i-1], phi_d_2H_Wcostheta_minust_high[i-1]))
+            index = i
+            plot_id += 1
+axs[0].set_xlim(-1, 1)
+axs[0].set_ylim(0, 150)
+axs[0].set_xticks(np.arange(-0.75, 0.9, 0.25))
+fig.suptitle(r"Yield of $d(\gamma, \phi d')$ vs $\cos\vartheta$")
+fig.supxlabel(r'$\cos\vartheta$')
+fig.supylabel(r'$\mathrm{Yield}$')
 plt.savefig('output/fig_phi_d_2H_Wcostheta_yield.png', dpi=300)
 plt.close()
 
