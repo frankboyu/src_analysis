@@ -113,46 +113,52 @@ plt.close()
 
 #======================================================================PHI_D_2H_WCOSTHETA======================================================================
 
-# Read the yield numbers
-phi_d_2H_Wcostheta_yield_data       = np.loadtxt('output/yield_phi_d_recon_data_2H_exc_Wcostheta.txt')[:,6]
-phi_d_2H_Wcostheta_yield_sim        = np.loadtxt('output/yield_phi_d_recon_sim_2H_exc_Wcostheta.txt')[:,6]
-phi_d_2H_Wcostheta_yield_tagged     = np.loadtxt('output/yield_phi_d_thrown_tagged_2H_Wcostheta.txt')[:,6]
-
 # Read the bin edges
-phi_d_2H_Wcostheta_energy_low       = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,0]
-phi_d_2H_Wcostheta_energy_high      = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,1]
-phi_d_2H_Wcostheta_minust_low       = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,2]
-phi_d_2H_Wcostheta_minust_high      = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,3]
-phi_d_2H_Wcostheta_costheta_low     = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,4]
-phi_d_2H_Wcostheta_costheta_high    = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,5]
+phi_d_2H_Wcostheta_energy_low               = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,0]
+phi_d_2H_Wcostheta_energy_high              = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,1]
+phi_d_2H_Wcostheta_minust_low               = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,2]
+phi_d_2H_Wcostheta_minust_high              = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,3]
+phi_d_2H_Wcostheta_costheta_low             = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,4]
+phi_d_2H_Wcostheta_costheta_high            = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,5]
+phi_d_2H_Wcostheta_costheta_center          = (phi_d_2H_Wcostheta_costheta_high + phi_d_2H_Wcostheta_costheta_low) / 2
+phi_d_2H_Wcostheta_costheta_width           = (phi_d_2H_Wcostheta_costheta_high - phi_d_2H_Wcostheta_costheta_low) / 2
+
+# Read the yield numbers
+phi_d_2H_Wcostheta_yield_data               = np.loadtxt('output/yield_phi_d_recon_data_2H_exc_Wcostheta.txt')[:,6]
+phi_d_2H_Wcostheta_yield_sim                = np.loadtxt('output/yield_phi_d_recon_sim_2H_exc_Wcostheta.txt')[:,6]
+phi_d_2H_Wcostheta_yield_tagged             = np.loadtxt('output/yield_phi_d_thrown_tagged_2H_Wcostheta.txt')[:,6]
+phi_d_2H_Wcostheta_yield_data_statserr      = np.sqrt(phi_d_2H_Wcostheta_yield_data)
+phi_d_2H_Wcostheta_yield_sim_statserr       = np.sqrt(phi_d_2H_Wcostheta_yield_sim)
+phi_d_2H_Wcostheta_yield_tagged_statserr    = np.sqrt(phi_d_2H_Wcostheta_yield_tagged)
 
 # Calculate the accetpance
-phi_d_2H_Wcostheta_acceptance       = phi_d_2H_Wcostheta_yield_sim/phi_d_2H_Wcostheta_yield_tagged
-phi_d_2H_Wcostheta_acceptance_stats = np.sqrt(1/phi_d_2H_Wcostheta_yield_sim + 1/phi_d_2H_Wcostheta_yield_tagged) * phi_d_2H_Wcostheta_acceptance
+phi_d_2H_Wcostheta_efficiency               = phi_d_2H_Wcostheta_yield_sim/phi_d_2H_Wcostheta_yield_tagged
+phi_d_2H_Wcostheta_efficiency_statserr      = phi_d_2H_Wcostheta_efficiency * np.sqrt(1/phi_d_2H_Wcostheta_yield_sim + 1/phi_d_2H_Wcostheta_yield_tagged)
 
 # Calculate the results
-phi_d_2H_Wcostheta_results          = phi_d_2H_Wcostheta_yield_data/phi_d_2H_Wcostheta_acceptance  # raw results
-phi_d_2H_Wcostheta_results          = normalize_distribution(phi_d_2H_Wcostheta_results, phi_d_2H_Wcostheta_energy_low, phi_d_2H_Wcostheta_minust_low) # normalize to have the sum equal to 1
-phi_d_2H_Wcostheta_results          = phi_d_2H_Wcostheta_results/(phi_d_2H_Wcostheta_costheta_high - phi_d_2H_Wcostheta_costheta_low)  # normalize to have the integral equal to 1
-phi_d_2H_Wcostheta_results_stats    = phi_d_2H_Wcostheta_results/np.sqrt(phi_d_2H_Wcostheta_yield_data)
+phi_d_2H_Wcostheta_results                  = phi_d_2H_Wcostheta_yield_data/phi_d_2H_Wcostheta_efficiency  # raw results
+phi_d_2H_Wcostheta_results                  = normalize_distribution(phi_d_2H_Wcostheta_results, phi_d_2H_Wcostheta_energy_low, phi_d_2H_Wcostheta_minust_low) # normalize to have the sum equal to 1
+phi_d_2H_Wcostheta_results                  = phi_d_2H_Wcostheta_results/(phi_d_2H_Wcostheta_costheta_high - phi_d_2H_Wcostheta_costheta_low)  # normalize to have the integral equal to 1
+phi_d_2H_Wcostheta_results_statserr         = phi_d_2H_Wcostheta_results/np.sqrt(phi_d_2H_Wcostheta_yield_data)
 
+# Find the indices for the different energy and t bins
+index = []
+for i in range(len(phi_d_2H_Wcostheta_results)):
+    if (i == 0):
+        index.append(i)
+    elif (i == len(phi_d_2H_Wcostheta_results) - 1):
+        index.append(i+1)
+    else:
+        if (phi_d_2H_Wcostheta_energy_low[i] != phi_d_2H_Wcostheta_energy_low[i-1]) or (phi_d_2H_Wcostheta_minust_low[i] != phi_d_2H_Wcostheta_minust_low[i-1]):
+            index.append(i)
+
+# Plot the data yield
 fig = plt.figure(figsize=(12, 6))
 gs = fig.add_gridspec(1, 2, wspace=0)
 axs = gs.subplots(sharex=True, sharey=True)
-for i in range(len(phi_d_2H_Wcostheta_results)):
-    if (i == 0):
-        index = 0
-        plot_id = 0
-    elif (i == len(phi_d_2H_Wcostheta_results) - 1):
-        i += 1
-        axs[plot_id].errorbar((phi_d_2H_Wcostheta_costheta_low[index:i]+phi_d_2H_Wcostheta_costheta_high[index:i])/2, phi_d_2H_Wcostheta_yield_data[index:i], yerr=np.sqrt(phi_d_2H_Wcostheta_yield_data[index:i]), xerr=(phi_d_2H_Wcostheta_costheta_high[index:i]-phi_d_2H_Wcostheta_costheta_low[index:i])/2, fmt='.', label='This work')
-        axs[plot_id].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wcostheta_energy_low[i-1], phi_d_2H_Wcostheta_energy_high[i-1], phi_d_2H_Wcostheta_minust_low[i-1], phi_d_2H_Wcostheta_minust_high[i-1]))
-    else:
-        if (phi_d_2H_Wcostheta_energy_low[i] != phi_d_2H_Wcostheta_energy_low[i-1]) or (phi_d_2H_Wcostheta_minust_low[i] != phi_d_2H_Wcostheta_minust_low[i-1]):
-            axs[plot_id].errorbar((phi_d_2H_Wcostheta_costheta_low[index:i]+phi_d_2H_Wcostheta_costheta_high[index:i])/2, phi_d_2H_Wcostheta_yield_data[index:i], yerr=np.sqrt(phi_d_2H_Wcostheta_yield_data[index:i]), xerr=(phi_d_2H_Wcostheta_costheta_high[index:i]-phi_d_2H_Wcostheta_costheta_low[index:i])/2, fmt='.', label='This work')
-            axs[plot_id].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wcostheta_energy_low[i-1], phi_d_2H_Wcostheta_energy_high[i-1], phi_d_2H_Wcostheta_minust_low[i-1], phi_d_2H_Wcostheta_minust_high[i-1]))
-            index = i
-            plot_id += 1
+for i in range(len(index) - 1):
+    axs[i].errorbar(phi_d_2H_Wcostheta_costheta_center[index[i]:index[i+1]], phi_d_2H_Wcostheta_yield_data[index[i]:index[i+1]], xerr=phi_d_2H_Wcostheta_costheta_width[index[i]:index[i+1]], yerr=phi_d_2H_Wcostheta_yield_data_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
+    axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wcostheta_energy_low[index[i]], phi_d_2H_Wcostheta_energy_high[index[i]], phi_d_2H_Wcostheta_minust_low[index[i]], phi_d_2H_Wcostheta_minust_high[index[i]]))
 axs[0].set_xlim(-1, 1)
 axs[0].set_ylim(0, 150)
 axs[0].set_xticks(np.arange(-0.75, 0.9, 0.25))
@@ -162,55 +168,45 @@ fig.supylabel(r'$\mathrm{Yield}$')
 plt.savefig('output/fig_phi_d_2H_Wcostheta_yield.png', dpi=300)
 plt.close()
 
-plt.figure(figsize=(15, 6))
-plt.subplot(121)
-plt.errorbar((phi_d_2H_Wcostheta_costheta_low[0:10]+phi_d_2H_Wcostheta_costheta_high[0:10])/2, phi_d_2H_Wcostheta_acceptance[0:10], fmt='.')
-plt.xlabel(r'$\cos\theta_{H}$')
-plt.ylabel(r'$\epsilon(\cos\theta_{H})$')
-plt.title(r'$0.2<-t<0.8\ \mathrm{GeV}^2$')
-plt.ylim(0, 0.1)
-plt.subplot(122)
-plt.errorbar((phi_d_2H_Wcostheta_costheta_low[10:]+phi_d_2H_Wcostheta_costheta_high[10:])/2, phi_d_2H_Wcostheta_acceptance[10:], fmt='.')
-plt.xlabel(r'$\cos\theta_{H}$')
-plt.ylabel(r'$\epsilon(\cos\theta_{H})$')
-plt.title(r'$0.8<-t<2.0\ \mathrm{GeV}^2$')
-plt.ylim(0, 0.1)
-plt.savefig('output/fig_phi_d_2H_Wcostheta_acceptance.png', dpi=300)
+# Plot the efficiency
+fig = plt.figure(figsize=(12, 6))
+gs = fig.add_gridspec(1, 2, wspace=0)
+axs = gs.subplots(sharex=True, sharey=True)
+for i in range(len(index) - 1):
+    axs[i].errorbar(phi_d_2H_Wcostheta_costheta_center[index[i]:index[i+1]], phi_d_2H_Wcostheta_efficiency[index[i]:index[i+1]], xerr=phi_d_2H_Wcostheta_costheta_width[index[i]:index[i+1]], yerr=phi_d_2H_Wcostheta_efficiency_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
+    axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wcostheta_energy_low[index[i]], phi_d_2H_Wcostheta_energy_high[index[i]], phi_d_2H_Wcostheta_minust_low[index[i]], phi_d_2H_Wcostheta_minust_high[index[i]]))
+axs[0].set_xlim(-1, 1)
+axs[0].set_ylim(0, 0.1)
+axs[0].set_xticks(np.arange(-0.75, 0.9, 0.25))
+fig.suptitle(r"Efficiency of $d(\gamma, \phi d')$ vs $\cos\vartheta$")
+fig.supxlabel(r'$\cos\vartheta$')
+fig.supylabel(r'$\mathrm{Efficiency}$')
+plt.savefig('output/fig_phi_d_2H_Wcostheta_efficiency.png', dpi=300)
 plt.close()
 
-plt.figure(figsize=(15, 6))
-plt.subplot(121)
-plt.errorbar((phi_d_2H_Wcostheta_costheta_low[0:10]+phi_d_2H_Wcostheta_costheta_high[0:10])/2, phi_d_2H_Wcostheta_result[0:10], yerr=phi_d_2H_Wcostheta_error_stat[0:10], fmt='.', label='SRC-CT, 8.2 GeV')
-curve_fit_params, curve_fit_cov = curve_fit(Wcostheta_func, (phi_d_2H_Wcostheta_costheta_low[0:10]+phi_d_2H_Wcostheta_costheta_high[0:10])/2, phi_d_2H_Wcostheta_result[0:10], p0=[0.0, 0.0])
-curve_fit_residuals = phi_d_2H_Wcostheta_result[0:10] - Wcostheta_func((phi_d_2H_Wcostheta_costheta_low[0:10]+phi_d_2H_Wcostheta_costheta_high[0:10])/2, curve_fit_params[0], curve_fit_params[1])
-reduced_chi2 = np.sum((curve_fit_residuals/phi_d_2H_Wcostheta_error_stat[0:10])**2)/(len(phi_d_2H_Wcostheta_result[0:10])-2)
-plt.plot(np.linspace(-1, 1, 100), Wcostheta_func(np.linspace(-1, 1, 100), curve_fit_params[0], curve_fit_params[1]), 'b--', label='Fit')
-plt.text(0.0, 0.5, r'$\rho^0_{00}=%.2f$' % curve_fit_params[0], fontsize=15, color='b', ha='center', va='center')
-plt.text(0.0, 0.4, r'$\delta\rho^0_{00}=%.2f$' % np.sqrt(curve_fit_cov[0][0]), fontsize=15, color='b', ha='center', va='center')
-plt.text(0.0, 0.3, r'$\alpha=%.2e$' % curve_fit_params[1], fontsize=15, color='b', ha='center', va='center')
-plt.text(0.0, 0.2, r'$\delta\alpha=%.2e$' % np.sqrt(curve_fit_cov[1][1]), fontsize=15, color='b', ha='center', va='center')
-plt.text(0.0, 0.1, r'$\chi^2/\mathrm{dof}=%.2f$' % reduced_chi2, fontsize=15, color='b', ha='center', va='center')
-plt.plot(np.linspace(-1, 1, 100), 0.75*(1-np.linspace(-1, 1, 100)**2), 'r--', label='SCHC+NPE')
-plt.xlabel(r'$\cos\theta_{H}$')
-plt.ylabel(r'$W(\cos\theta_{H})$')
-plt.title(r'$0.2<-t<0.8\ \mathrm{GeV}^2$')
-plt.subplot(122)
-plt.errorbar((phi_d_2H_Wcostheta_costheta_low[10:]+phi_d_2H_Wcostheta_costheta_high[10:])/2, phi_d_2H_Wcostheta_result[10:], yerr=phi_d_2H_Wcostheta_error_stat[10:], fmt='.', label='SRC-CT, 8.2 GeV')
-curve_fit_params, curve_fit_cov = curve_fit(Wcostheta_func, (phi_d_2H_Wcostheta_costheta_low[10:]+phi_d_2H_Wcostheta_costheta_high[10:])/2, phi_d_2H_Wcostheta_result[10:], p0=[0.0, 0.0])
-curve_fit_residuals = phi_d_2H_Wcostheta_result[10:] - Wcostheta_func((phi_d_2H_Wcostheta_costheta_low[10:]+phi_d_2H_Wcostheta_costheta_high[10:])/2, curve_fit_params[0], curve_fit_params[1])
-reduced_chi2 = np.sum((curve_fit_residuals/phi_d_2H_Wcostheta_error_stat[10:])**2)/(len(phi_d_2H_Wcostheta_result[10:])-2)
-plt.plot(np.linspace(-1, 1, 100), Wcostheta_func(np.linspace(-1, 1, 100), curve_fit_params[0], curve_fit_params[1]), 'b--', label='Fit')
-plt.text(0.0, 0.5, r'$\rho^0_{00}=%.2f$' % curve_fit_params[0], fontsize=15, color='b', ha='center', va='center')
-plt.text(0.0, 0.4, r'$\delta\rho^0_{00}=%.2f$' % np.sqrt(curve_fit_cov[0][0]), fontsize=15, color='b', ha='center', va='center')
-plt.text(0.0, 0.3, r'$\alpha=%.2e$' % curve_fit_params[1], fontsize=15, color='b', ha='center', va='center')
-plt.text(0.0, 0.2, r'$\delta\alpha=%.2e$' % np.sqrt(curve_fit_cov[1][1]), fontsize=15, color='b', ha='center', va='center')
-plt.text(0.0, 0.1, r'$\chi^2/\mathrm{dof}=%.2f$' % reduced_chi2, fontsize=15, color='b', ha='center', va='center')
-plt.plot(np.linspace(-1, 1, 100), 0.75*(1-np.linspace(-1, 1, 100)**2), 'r--', label='SCHC+NPE')
-plt.xlabel(r'$\cos\theta_{H}$')
-plt.ylabel(r'$W(\cos\theta_{H})$')
-plt.title(r'$0.8<-t<2.0\ \mathrm{GeV}^2$')
+# Plot the results of W(cos(theta))
+fig = plt.figure(figsize=(12, 6))
+gs = fig.add_gridspec(1, 2, wspace=0)
+axs = gs.subplots(sharex=True, sharey=True)
+for i in range(len(index) - 1):
+    axs[i].errorbar(phi_d_2H_Wcostheta_costheta_center[index[i]:index[i+1]], phi_d_2H_Wcostheta_results[index[i]:index[i+1]], xerr=phi_d_2H_Wcostheta_costheta_width[index[i]:index[i+1]], yerr=phi_d_2H_Wcostheta_results_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
+    axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wcostheta_energy_low[index[i]], phi_d_2H_Wcostheta_energy_high[index[i]], phi_d_2H_Wcostheta_minust_low[index[i]], phi_d_2H_Wcostheta_minust_high[index[i]]))
+    curve_fit_params, curve_fit_cov = curve_fit(Wcostheta_func, phi_d_2H_Wcostheta_costheta_center[index[i]:index[i+1]], phi_d_2H_Wcostheta_results[index[i]:index[i+1]], p0=[0.0, 0.0])
+    curve_fit_residuals = phi_d_2H_Wcostheta_results[index[i]:index[i+1]] - Wcostheta_func(phi_d_2H_Wcostheta_costheta_center[index[i]:index[i+1]], curve_fit_params[0], curve_fit_params[1])
+    reduced_chi2 = np.sum((curve_fit_residuals/phi_d_2H_Wcostheta_results_statserr[index[i]:index[i+1]])**2)/(len(phi_d_2H_Wcostheta_results[index[i]:index[i+1]])-2)
+    axs[i].plot(np.linspace(-1, 1, 100), Wcostheta_func(np.linspace(-1, 1, 100), curve_fit_params[0], curve_fit_params[1]), 'b--', label='Fit')
+    axs[i].text(-0.9, 0.95, r'$\rho^0_{00}=%.2f\pm%.2f$' % (curve_fit_params[0], np.sqrt(curve_fit_cov[0][0])), fontsize=10, color='b', ha='left', va='top')
+    axs[i].text(-0.9, 0.90, r'$\alpha=%.2e\pm%.2e$' % (curve_fit_params[1], np.sqrt(curve_fit_cov[1][1])), fontsize=10, color='b', ha='left', va='top')
+    axs[i].text(-0.9, 0.85, r'$\chi^2/\mathrm{dof}=%.2f$' % reduced_chi2, fontsize=10, color='b', ha='left', va='top')
+    axs[i].plot(np.linspace(-1, 1, 100), 0.75*(1-np.linspace(-1, 1, 100)**2), 'r--', label='SCHC+NPE')
+axs[0].set_xlim(-1, 1)
+axs[0].set_ylim(0, 1)
+axs[0].set_xticks(np.arange(-0.75, 0.9, 0.25))
+fig.suptitle(r"W(\cos\vartheta) of $d(\gamma, \phi d')$ vs $\cos\vartheta$")
+fig.supxlabel(r'$\cos\vartheta$')
+fig.supylabel(r'$W(\cos\vartheta)$')
 plt.legend()
-plt.savefig('output/fig_phi_d_2H_Wcostheta_result.png', dpi=300)
+plt.savefig('output/fig_phi_d_2H_Wcostheta_results.png', dpi=300)
 plt.close()
 
 #======================================================================PHI_D_2H_Wphi======================================================================
