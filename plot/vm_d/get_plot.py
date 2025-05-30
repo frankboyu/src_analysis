@@ -131,7 +131,7 @@ phi_d_2H_Wcostheta_yield_data_statserr      = np.sqrt(phi_d_2H_Wcostheta_yield_d
 phi_d_2H_Wcostheta_yield_sim_statserr       = np.sqrt(phi_d_2H_Wcostheta_yield_sim)
 phi_d_2H_Wcostheta_yield_tagged_statserr    = np.sqrt(phi_d_2H_Wcostheta_yield_tagged)
 
-# Calculate the accetpance
+# Calculate the efficiency
 phi_d_2H_Wcostheta_efficiency               = phi_d_2H_Wcostheta_yield_sim/phi_d_2H_Wcostheta_yield_tagged
 phi_d_2H_Wcostheta_efficiency_statserr      = phi_d_2H_Wcostheta_efficiency * np.sqrt(1/phi_d_2H_Wcostheta_yield_sim + 1/phi_d_2H_Wcostheta_yield_tagged)
 
@@ -162,7 +162,7 @@ for i in range(len(index) - 1):
 axs[0].set_xlim(-1, 1)
 axs[0].set_ylim(0, 150)
 axs[0].set_xticks(np.arange(-0.75, 0.9, 0.25))
-fig.suptitle(r"Yield of $d(\gamma, \phi d')$ vs $\cos\vartheta$")
+fig.suptitle(r"$d(\gamma, \phi d')$ yield vs $\cos\vartheta$")
 fig.supxlabel(r'$\cos\vartheta$')
 fig.supylabel(r'$\mathrm{Yield}$')
 plt.savefig('output/fig_phi_d_2H_Wcostheta_yield.png', dpi=300)
@@ -178,13 +178,13 @@ for i in range(len(index) - 1):
 axs[0].set_xlim(-1, 1)
 axs[0].set_ylim(0, 0.1)
 axs[0].set_xticks(np.arange(-0.75, 0.9, 0.25))
-fig.suptitle(r"Efficiency of $d(\gamma, \phi d')$ vs $\cos\vartheta$")
+fig.suptitle(r"$d(\gamma, \phi d')$ efficiency vs $\cos\vartheta$")
 fig.supxlabel(r'$\cos\vartheta$')
 fig.supylabel(r'$\mathrm{Efficiency}$')
 plt.savefig('output/fig_phi_d_2H_Wcostheta_efficiency.png', dpi=300)
 plt.close()
 
-# Plot the results of W(cos(theta))
+# Plot the results
 fig = plt.figure(figsize=(12, 6))
 gs = fig.add_gridspec(1, 2, wspace=0)
 axs = gs.subplots(sharex=True, sharey=True)
@@ -202,7 +202,7 @@ for i in range(len(index) - 1):
 axs[0].set_xlim(-1, 1)
 axs[0].set_ylim(0, 1)
 axs[0].set_xticks(np.arange(-0.75, 0.9, 0.25))
-fig.suptitle(r"W(\cos\vartheta) of $d(\gamma, \phi d')$ vs $\cos\vartheta$")
+fig.suptitle(r"$d(\gamma, \phi d')$ $W(\cos\vartheta)$ vs $\cos\vartheta$")
 fig.supxlabel(r'$\cos\vartheta$')
 fig.supylabel(r'$W(\cos\vartheta)$')
 plt.legend()
@@ -211,279 +211,291 @@ plt.close()
 
 #======================================================================PHI_D_2H_Wphi======================================================================
 
-phi_d_2H_Wphi_yield_data = np.loadtxt('output/yield_phi_d_recon_data_2H_exc_Wphi.txt')[:,6]
-phi_d_2H_Wphi_yield_sim = np.loadtxt('output/yield_phi_d_recon_sim_2H_exc_Wphi.txt')[:,6]
-phi_d_2H_Wphi_yield_tagged = np.loadtxt('output/yield_phi_d_thrown_tagged_2H_Wphi.txt')[:,6]
+# Read the bin edges
+phi_d_2H_Wphi_energy_low            = np.loadtxt('output/bins_phi_d_2H_Wphi.txt')[:,0]
+phi_d_2H_Wphi_energy_high           = np.loadtxt('output/bins_phi_d_2H_Wphi.txt')[:,1]
+phi_d_2H_Wphi_minust_low            = np.loadtxt('output/bins_phi_d_2H_Wphi.txt')[:,2]
+phi_d_2H_Wphi_minust_high           = np.loadtxt('output/bins_phi_d_2H_Wphi.txt')[:,3]
+phi_d_2H_Wphi_phi_low               = np.loadtxt('output/bins_phi_d_2H_Wphi.txt')[:,4]
+phi_d_2H_Wphi_phi_high              = np.loadtxt('output/bins_phi_d_2H_Wphi.txt')[:,5]
+phi_d_2H_Wphi_phi_center            = (phi_d_2H_Wphi_phi_high + phi_d_2H_Wphi_phi_low) / 2
+phi_d_2H_Wphi_phi_width             = (phi_d_2H_Wphi_phi_high - phi_d_2H_Wphi_phi_low) / 2
 
-phi_d_2H_Wphi_energy_low = np.loadtxt('output/bins_phi_d_2H_Wphi.txt')[:,0]
-phi_d_2H_Wphi_energy_high = np.loadtxt('output/bins_phi_d_2H_Wphi.txt')[:,1]
-phi_d_2H_Wphi_minust_low = np.loadtxt('output/bins_phi_d_2H_Wphi.txt')[:,2]
-phi_d_2H_Wphi_minust_high = np.loadtxt('output/bins_phi_d_2H_Wphi.txt')[:,3]
-phi_d_2H_Wphi_phi_low = np.loadtxt('output/bins_phi_d_2H_Wphi.txt')[:,4]
-phi_d_2H_Wphi_phi_high = np.loadtxt('output/bins_phi_d_2H_Wphi.txt')[:,5]
+# Read the yield numbers
+phi_d_2H_Wphi_yield_data            = np.loadtxt('output/yield_phi_d_recon_data_2H_exc_Wphi.txt')[:,6]
+phi_d_2H_Wphi_yield_sim             = np.loadtxt('output/yield_phi_d_recon_sim_2H_exc_Wphi.txt')[:,6]
+phi_d_2H_Wphi_yield_tagged          = np.loadtxt('output/yield_phi_d_thrown_tagged_2H_Wphi.txt')[:,6]
+phi_d_2H_Wphi_yield_data_statserr   = np.sqrt(phi_d_2H_Wphi_yield_data)
+phi_d_2H_Wphi_yield_sim_statserr    = np.sqrt(phi_d_2H_Wphi_yield_sim)
+phi_d_2H_Wphi_yield_tagged_statserr = np.sqrt(phi_d_2H_Wphi_yield_tagged)
 
-phi_d_2H_Wphi_acceptance = np.zeros(len(phi_d_2H_Wphi_minust_low))
-phi_d_2H_Wphi_result = np.zeros(len(phi_d_2H_Wphi_minust_low))
-phi_d_2H_Wphi_error_stat = 1/np.sqrt(phi_d_2H_Wphi_yield_data)
+# Calculate the efficiency
+phi_d_2H_Wphi_efficiency            = phi_d_2H_Wphi_yield_sim/phi_d_2H_Wphi_yield_tagged
+phi_d_2H_Wphi_efficiency_statserr   = phi_d_2H_Wphi_efficiency * np.sqrt(1/phi_d_2H_Wphi_yield_sim + 1/phi_d_2H_Wphi_yield_tagged)
 
-for i in range(len(phi_d_2H_Wphi_minust_low)):
-    if (phi_d_2H_Wphi_yield_sim[i] == 0) or (phi_d_2H_Wphi_yield_tagged[i] == 0):
-        continue
-    phi_d_2H_Wphi_acceptance[i] = phi_d_2H_Wphi_yield_sim[i]/phi_d_2H_Wphi_yield_tagged[i]
-    phi_d_2H_Wphi_result[i] = phi_d_2H_Wphi_yield_data[i]/phi_d_2H_Wphi_acceptance[i]
+# Calculate the results
+phi_d_2H_Wphi_results               = phi_d_2H_Wphi_yield_data/phi_d_2H_Wphi_efficiency  # raw results
+phi_d_2H_Wphi_results               = normalize_distribution(phi_d_2H_Wphi_results, phi_d_2H_Wphi_energy_low, phi_d_2H_Wphi_minust_low) # normalize to have the sum equal to 1
+phi_d_2H_Wphi_results               = 2*np.pi*phi_d_2H_Wphi_results/((phi_d_2H_Wphi_phi_high - phi_d_2H_Wphi_phi_low)/180*np.pi)  # normalize to have the integral equal to 2pi
+phi_d_2H_Wphi_results_statserr      = phi_d_2H_Wphi_results/np.sqrt(phi_d_2H_Wphi_yield_data)
 
-phi_d_2H_Wphi_result[0:9] /= np.sum(phi_d_2H_Wphi_result[0:9])
-phi_d_2H_Wphi_result[9:18] /= np.sum(phi_d_2H_Wphi_result[9:18])
-phi_d_2H_Wphi_result /= (phi_d_2H_Wphi_phi_high - phi_d_2H_Wphi_phi_low)/180*np.pi
-phi_d_2H_Wphi_result *= 2*np.pi
-phi_d_2H_Wphi_error_stat = phi_d_2H_Wphi_result*phi_d_2H_Wphi_error_stat
+# Find the indices for the different energy and t bins
+index = []
+for i in range(len(phi_d_2H_Wphi_results)):
+    if (i == 0):
+        index.append(i)
+    elif (i == len(phi_d_2H_Wphi_results) - 1):
+        index.append(i+1)
+    else:
+        if (phi_d_2H_Wphi_energy_low[i] != phi_d_2H_Wphi_energy_low[i-1]) or (phi_d_2H_Wphi_minust_low[i] != phi_d_2H_Wphi_minust_low[i-1]):
+            index.append(i)
 
-plt.figure(figsize=(15, 6))
-plt.subplot(121)
-plt.errorbar((phi_d_2H_Wphi_phi_low[0:9]+phi_d_2H_Wphi_phi_high[0:9])/2, phi_d_2H_Wphi_yield_data[0:9], yerr=np.sqrt(phi_d_2H_Wphi_yield_data[0:9]), fmt='.')
-plt.xlabel(r'$\phi_{H}\ [\mathrm{deg}]$')
-plt.ylabel(r'$Y(\phi_{H}\ [\mathrm{deg}])$')
-plt.title(r'$0.2<-t<0.8\ \mathrm{GeV}^2$')
-plt.subplot(122)
-plt.errorbar((phi_d_2H_Wphi_phi_low[9:18]+phi_d_2H_Wphi_phi_high[9:18])/2, phi_d_2H_Wphi_yield_data[9:18], yerr=np.sqrt(phi_d_2H_Wphi_yield_data[9:18]), fmt='.')
-plt.xlabel(r'$\phi_{H}\ [\mathrm{deg}]$')
-plt.ylabel(r'$Y(\phi_{H}\ [\mathrm{deg}])$')
-plt.title(r'$0.8<-t<2.0\ \mathrm{GeV}^2$')
+# Plot the data yield
+fig = plt.figure(figsize=(12, 6))
+gs = fig.add_gridspec(1, 2, wspace=0)
+axs = gs.subplots(sharex=True, sharey=True)
+for i in range(len(index) - 1):
+    axs[i].errorbar(phi_d_2H_Wphi_phi_center[index[i]:index[i+1]], phi_d_2H_Wphi_yield_data[index[i]:index[i+1]], xerr=phi_d_2H_Wphi_phi_width[index[i]:index[i+1]], yerr=phi_d_2H_Wphi_yield_data_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
+    axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wphi_energy_low[index[i]], phi_d_2H_Wphi_energy_high[index[i]], phi_d_2H_Wphi_minust_low[index[i]], phi_d_2H_Wphi_minust_high[index[i]]))
+axs[0].set_xlim(-180, 180)
+axs[0].set_ylim(0, 150)
+axs[0].set_xticks(np.arange(-120, 180, 60))
+fig.suptitle(r"$d(\gamma, \phi d')$ yield vs $\varphi$")
+fig.supxlabel(r'$\varphi\ [\mathrm{deg}]$')
+fig.supylabel(r'$\mathrm{Yield}$')
 plt.savefig('output/fig_phi_d_2H_Wphi_yield.png', dpi=300)
 plt.close()
 
-plt.figure(figsize=(15, 6))
-plt.subplot(121)
-plt.errorbar((phi_d_2H_Wphi_phi_low[0:9]+phi_d_2H_Wphi_phi_high[0:9])/2, phi_d_2H_Wphi_acceptance[0:9], fmt='.')
-plt.xlabel(r'$\phi_{H}\ [\mathrm{deg}]$')
-plt.ylabel(r'$\epsilon(\phi_{H}\ [\mathrm{deg}])$')
-plt.title(r'$0.2<-t<0.8\ \mathrm{GeV}^2$')
-plt.ylim(0, 0.1)
-plt.subplot(122)
-plt.errorbar((phi_d_2H_Wphi_phi_low[9:18]+phi_d_2H_Wphi_phi_high[9:18])/2, phi_d_2H_Wphi_acceptance[9:18], fmt='.')
-plt.xlabel(r'$\phi_{H}\ [\mathrm{deg}]$')
-plt.ylabel(r'$\epsilon(\phi_{H}\ [\mathrm{deg}])$')
-plt.title(r'$0.8<-t<2.0\ \mathrm{GeV}^2$')
-plt.ylim(0, 0.1)
-plt.savefig('output/fig_phi_d_2H_Wphi_acceptance.png', dpi=300)
+# Plot the efficiency
+fig = plt.figure(figsize=(12, 6))
+gs = fig.add_gridspec(1, 2, wspace=0)
+axs = gs.subplots(sharex=True, sharey=True)
+for i in range(len(index) - 1):
+    axs[i].errorbar(phi_d_2H_Wphi_phi_center[index[i]:index[i+1]], phi_d_2H_Wphi_efficiency[index[i]:index[i+1]], xerr=phi_d_2H_Wphi_phi_width[index[i]:index[i+1]], yerr=phi_d_2H_Wphi_efficiency_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
+    axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wphi_energy_low[index[i]], phi_d_2H_Wphi_energy_high[index[i]], phi_d_2H_Wphi_minust_low[index[i]], phi_d_2H_Wphi_minust_high[index[i]]))
+axs[0].set_xlim(-180, 180)
+axs[0].set_ylim(0, 0.1)
+axs[0].set_xticks(np.arange(-120, 180, 60))
+fig.suptitle(r"$d(\gamma, \phi d')$ efficiency vs $\varphi$")
+fig.supxlabel(r'$\varphi\ [\mathrm{deg}]$')
+fig.supylabel(r'$\mathrm{Efficiency}$')
+plt.savefig('output/fig_phi_d_2H_Wphi_efficiency.png', dpi=300)
 plt.close()
 
-plt.figure(figsize=(15, 6))
-plt.subplot(121)
-plt.errorbar((phi_d_2H_Wphi_phi_low[0:9]+phi_d_2H_Wphi_phi_high[0:9])/2, phi_d_2H_Wphi_result[0:9], yerr=phi_d_2H_Wphi_error_stat[0:9], fmt='.', label='SRC-CT, 8.2 GeV')
-curve_fit_params, curve_fit_cov = curve_fit(Wphi_func, (phi_d_2H_Wphi_phi_low[0:9]+phi_d_2H_Wphi_phi_high[0:9])/2, phi_d_2H_Wphi_result[0:9], p0=[0.0])
-curve_fit_residuals = phi_d_2H_Wphi_result[0:9] - Wphi_func((phi_d_2H_Wphi_phi_low[0:9]+phi_d_2H_Wphi_phi_high[0:9])/2, curve_fit_params[0])
-reduced_chi2 = np.sum((curve_fit_residuals/phi_d_2H_Wphi_error_stat[0:9])**2)/(len(phi_d_2H_Wphi_result[0:9])-1)
-plt.plot(np.linspace(-180, 180, 360), Wphi_func(np.linspace(-180, 180, 360), curve_fit_params[0]), 'b--', label='Fit')
-plt.text(-175, 1.95, r'$\rho^0_{1-1}=%.2f\pm%.2f$' % (curve_fit_params[0], np.sqrt(curve_fit_cov[0])), fontsize=15, color='b', ha='left', va='top')
-plt.text(-175, 1.8, r'$\chi^2/\mathrm{dof}=%.2f$' % reduced_chi2, fontsize=15, color='b', ha='left', va='top')
-plt.plot(np.linspace(-180, 180, 360), np.ones(360), 'r--', label='SCHC+NPE')
-plt.xlim(-180, 180)
-plt.ylim(0, 2)
-plt.xlabel(r'$\phi_{H}\ [\mathrm{deg}]$')
-plt.ylabel(r'$2\pi W(\phi_{H})$')
-plt.title(r'$0.2<-t<0.8\ \mathrm{GeV}^2$')
+# Plot the results
+fig = plt.figure(figsize=(12, 6))
+gs = fig.add_gridspec(1, 2, wspace=0)
+axs = gs.subplots(sharex=True, sharey=True)
+for i in range(len(index) - 1):
+    axs[i].errorbar(phi_d_2H_Wphi_phi_center[index[i]:index[i+1]], phi_d_2H_Wphi_results[index[i]:index[i+1]], xerr=phi_d_2H_Wphi_phi_width[index[i]:index[i+1]], yerr=phi_d_2H_Wphi_results_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
+    axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wphi_energy_low[index[i]], phi_d_2H_Wphi_energy_high[index[i]], phi_d_2H_Wphi_minust_low[index[i]], phi_d_2H_Wphi_minust_high[index[i]]))
+    curve_fit_params, curve_fit_cov = curve_fit(Wphi_func, phi_d_2H_Wphi_phi_center[index[i]:index[i+1]], phi_d_2H_Wphi_results[index[i]:index[i+1]], p0=[0.0])
+    curve_fit_residuals = phi_d_2H_Wphi_results[index[i]:index[i+1]] - Wphi_func(phi_d_2H_Wphi_phi_center[index[i]:index[i+1]], curve_fit_params[0])
+    reduced_chi2 = np.sum((curve_fit_residuals/phi_d_2H_Wphi_results_statserr[index[i]:index[i+1]])**2)/(len(phi_d_2H_Wphi_results[index[i]:index[i+1]])-1)
+    axs[i].plot(np.linspace(-180, 180, 360), Wphi_func(np.linspace(-180, 180, 360), curve_fit_params[0]), 'b--', label='Fit')
+    axs[i].text(-175, 1.95, r'$\rho^0_{1-1}=%.2f\pm%.2f$' % (curve_fit_params[0], np.sqrt(curve_fit_cov[0])), fontsize=10, color='b', ha='left', va='top')
+    axs[i].text(-175, 1.85, r'$\chi^2/\mathrm{dof}=%.2f$' % reduced_chi2, fontsize=10, color='b', ha='left', va='top')
+    axs[i].plot(np.linspace(-180, 180, 360), np.ones(360), 'r--', label='SCHC+NPE')
+axs[0].set_xlim(-180, 180)
+axs[0].set_ylim(0, 2)
+axs[0].set_xticks(np.arange(-120, 180, 60))
+fig.suptitle(r"$d(\gamma, \phi d')$ $W(\cos\vartheta)$ vs $\cos\vartheta$")
+fig.supxlabel(r'$\varphi\ [\mathrm{deg}]$')
+fig.supylabel(r'$2\pi W(\varphi)$')
 plt.legend()
-plt.subplot(122)
-plt.errorbar((phi_d_2H_Wphi_phi_low[9:18]+phi_d_2H_Wphi_phi_high[9:18])/2, phi_d_2H_Wphi_result[9:18], yerr=phi_d_2H_Wphi_error_stat[9:18], fmt='.', label='SRC-CT, 8.2 GeV')
-curve_fit_params, curve_fit_cov = curve_fit(Wphi_func, (phi_d_2H_Wphi_phi_low[9:18]+phi_d_2H_Wphi_phi_high[9:18])/2, phi_d_2H_Wphi_result[9:18], p0=[0.0])
-curve_fit_residuals = phi_d_2H_Wphi_result[9:18] - Wphi_func((phi_d_2H_Wphi_phi_low[9:18]+phi_d_2H_Wphi_phi_high[9:18])/2, curve_fit_params[0])
-reduced_chi2 = np.sum((curve_fit_residuals/phi_d_2H_Wphi_error_stat[9:18])**2)/(len(phi_d_2H_Wphi_result[9:18])-1)
-plt.plot(np.linspace(-180, 180, 360), Wphi_func(np.linspace(-180, 180, 360), curve_fit_params[0]), 'b--', label='Fit')
-plt.text(-175, 1.95, r'$\rho^0_{1-1}=%.2f\pm%.2f$' % (curve_fit_params[0], np.sqrt(curve_fit_cov[0])), fontsize=15, color='b', ha='left', va='top')
-plt.text(-175, 1.8, r'$\chi^2/\mathrm{dof}=%.2f$' % reduced_chi2, fontsize=15, color='b', ha='left', va='top')
-plt.plot(np.linspace(-180, 180, 360), np.ones(360), 'r--', label='SCHC+NPE')
-plt.xlim(-180, 180)
-plt.ylim(0, 2)
-plt.xlabel(r'$\phi_{H}\ [\mathrm{deg}]$')
-plt.ylabel(r'$2\pi W(\phi_{H})$')
-plt.title(r'$0.8<-t<2.0\ \mathrm{GeV}^2$')
-plt.legend()
-plt.savefig('output/fig_phi_d_2H_Wphi_result.png', dpi=300)
+plt.savefig('output/fig_phi_d_2H_Wphi_results.png', dpi=300)
 plt.close()
 
 #======================================================================PHI_D_2H_WPhi======================================================================
 
-phi_d_2H_WPhi_yield_data = np.loadtxt('output/yield_phi_d_recon_data_2H_exc_WPhi.txt')[:,6]
-phi_d_2H_WPhi_yield_sim = np.loadtxt('output/yield_phi_d_recon_sim_2H_exc_WPhi.txt')[:,6]
-phi_d_2H_WPhi_yield_tagged = np.loadtxt('output/yield_phi_d_thrown_tagged_2H_WPhi.txt')[:,6]
+# Read the bin edges
+phi_d_2H_WPhi_energy_low            = np.loadtxt('output/bins_phi_d_2H_WPhi.txt')[:,0]
+phi_d_2H_WPhi_energy_high           = np.loadtxt('output/bins_phi_d_2H_WPhi.txt')[:,1]
+phi_d_2H_WPhi_minust_low            = np.loadtxt('output/bins_phi_d_2H_WPhi.txt')[:,2]
+phi_d_2H_WPhi_minust_high           = np.loadtxt('output/bins_phi_d_2H_WPhi.txt')[:,3]
+phi_d_2H_WPhi_Phi_low               = np.loadtxt('output/bins_phi_d_2H_WPhi.txt')[:,4]
+phi_d_2H_WPhi_Phi_high              = np.loadtxt('output/bins_phi_d_2H_WPhi.txt')[:,5]
+phi_d_2H_WPhi_Phi_center            = (phi_d_2H_WPhi_Phi_high + phi_d_2H_WPhi_Phi_low) / 2
+phi_d_2H_WPhi_Phi_width             = (phi_d_2H_WPhi_Phi_high - phi_d_2H_WPhi_Phi_low) / 2
 
-phi_d_2H_WPhi_energy_low = np.loadtxt('output/bins_phi_d_2H_WPhi.txt')[:,0]
-phi_d_2H_WPhi_energy_high = np.loadtxt('output/bins_phi_d_2H_WPhi.txt')[:,1]
-phi_d_2H_WPhi_minust_low = np.loadtxt('output/bins_phi_d_2H_WPhi.txt')[:,2]
-phi_d_2H_WPhi_minust_high = np.loadtxt('output/bins_phi_d_2H_WPhi.txt')[:,3]
-phi_d_2H_WPhi_phi_low = np.loadtxt('output/bins_phi_d_2H_WPhi.txt')[:,4]
-phi_d_2H_WPhi_phi_high = np.loadtxt('output/bins_phi_d_2H_WPhi.txt')[:,5]
+# Read the yield numbers
+phi_d_2H_WPhi_yield_data            = np.loadtxt('output/yield_phi_d_recon_data_2H_exc_WPhi.txt')[:,6]
+phi_d_2H_WPhi_yield_sim             = np.loadtxt('output/yield_phi_d_recon_sim_2H_exc_WPhi.txt')[:,6]
+phi_d_2H_WPhi_yield_tagged          = np.loadtxt('output/yield_phi_d_thrown_tagged_2H_WPhi.txt')[:,6]
+phi_d_2H_WPhi_yield_data_statserr   = np.sqrt(phi_d_2H_WPhi_yield_data)
+phi_d_2H_WPhi_yield_sim_statserr    = np.sqrt(phi_d_2H_WPhi_yield_sim)
+phi_d_2H_WPhi_yield_tagged_statserr = np.sqrt(phi_d_2H_WPhi_yield_tagged)
 
-phi_d_2H_WPhi_acceptance = np.zeros(len(phi_d_2H_WPhi_minust_low))
-phi_d_2H_WPhi_result = np.zeros(len(phi_d_2H_WPhi_minust_low))
-phi_d_2H_WPhi_error_stat = 1/np.sqrt(phi_d_2H_WPhi_yield_data)
+# Calculate the efficiency
+phi_d_2H_WPhi_efficiency            = phi_d_2H_WPhi_yield_sim/phi_d_2H_WPhi_yield_tagged
+phi_d_2H_WPhi_efficiency_statserr   = phi_d_2H_WPhi_efficiency * np.sqrt(1/phi_d_2H_WPhi_yield_sim + 1/phi_d_2H_WPhi_yield_tagged)
 
-for i in range(len(phi_d_2H_WPhi_minust_low)):
-    if (phi_d_2H_WPhi_yield_sim[i] == 0) or (phi_d_2H_WPhi_yield_tagged[i] == 0):
-        continue
-    phi_d_2H_WPhi_acceptance[i] = phi_d_2H_WPhi_yield_sim[i]/phi_d_2H_WPhi_yield_tagged[i]
-    phi_d_2H_WPhi_result[i] = phi_d_2H_WPhi_yield_data[i]/phi_d_2H_WPhi_acceptance[i]
+# Calculate the results
+phi_d_2H_WPhi_results               = phi_d_2H_WPhi_yield_data/phi_d_2H_WPhi_efficiency  # raw results
+phi_d_2H_WPhi_results               = normalize_distribution(phi_d_2H_WPhi_results, phi_d_2H_WPhi_energy_low, phi_d_2H_WPhi_minust_low) # normalize to have the sum equal to 1
+phi_d_2H_WPhi_results               = 2*np.pi*phi_d_2H_WPhi_results/((phi_d_2H_WPhi_Phi_high - phi_d_2H_WPhi_Phi_low)/180*np.pi)  # normalize to have the integral equal to 2pi
+phi_d_2H_WPhi_results_statserr      = phi_d_2H_WPhi_results/np.sqrt(phi_d_2H_WPhi_yield_data)
 
-phi_d_2H_WPhi_result[0:9] /= np.sum(phi_d_2H_WPhi_result[0:9])
-phi_d_2H_WPhi_result[9:18] /= np.sum(phi_d_2H_WPhi_result[9:18])
-phi_d_2H_WPhi_result /= (phi_d_2H_WPhi_phi_high - phi_d_2H_WPhi_phi_low)/180*np.pi
-phi_d_2H_WPhi_result *= 2*np.pi
-phi_d_2H_WPhi_error_stat = phi_d_2H_WPhi_result*phi_d_2H_WPhi_error_stat
+# Find the indices for the different energy and t bins
+index = []
+for i in range(len(phi_d_2H_WPhi_results)):
+    if (i == 0):
+        index.append(i)
+    elif (i == len(phi_d_2H_WPhi_results) - 1):
+        index.append(i+1)
+    else:
+        if (phi_d_2H_WPhi_energy_low[i] != phi_d_2H_WPhi_energy_low[i-1]) or (phi_d_2H_WPhi_minust_low[i] != phi_d_2H_WPhi_minust_low[i-1]):
+            index.append(i)
 
-plt.figure(figsize=(15, 6))
-plt.subplot(121)
-plt.errorbar((phi_d_2H_WPhi_phi_low[0:9]+phi_d_2H_WPhi_phi_high[0:9])/2, phi_d_2H_WPhi_yield_data[0:9], yerr=np.sqrt(phi_d_2H_WPhi_yield_data[0:9]), fmt='.')
-plt.xlabel(r'$\Phi\ [\mathrm{deg}]$')
-plt.ylabel(r'$Y(\Phi\ [\mathrm{deg}])$')
-plt.title(r'$0.2<-t<0.8\ \mathrm{GeV}^2$')
-plt.subplot(122)
-plt.errorbar((phi_d_2H_WPhi_phi_low[9:18]+phi_d_2H_WPhi_phi_high[9:18])/2, phi_d_2H_WPhi_yield_data[9:18], yerr=np.sqrt(phi_d_2H_WPhi_yield_data[9:18]), fmt='.')
-plt.xlabel(r'$\Phi\ [\mathrm{deg}]$')
-plt.ylabel(r'$Y(\Phi\ [\mathrm{deg}])$')
-plt.title(r'$0.8<-t<2.0\ \mathrm{GeV}^2$')
+# Plot the data yield
+fig = plt.figure(figsize=(12, 6))
+gs = fig.add_gridspec(1, 2, wspace=0)
+axs = gs.subplots(sharex=True, sharey=True)
+for i in range(len(index) - 1):
+    axs[i].errorbar(phi_d_2H_WPhi_Phi_center[index[i]:index[i+1]], phi_d_2H_WPhi_yield_data[index[i]:index[i+1]], xerr=phi_d_2H_WPhi_Phi_width[index[i]:index[i+1]], yerr=phi_d_2H_WPhi_yield_data_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
+    axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_WPhi_energy_low[index[i]], phi_d_2H_WPhi_energy_high[index[i]], phi_d_2H_WPhi_minust_low[index[i]], phi_d_2H_WPhi_minust_high[index[i]]))
+axs[0].set_xlim(-180, 180)
+axs[0].set_ylim(0, 150)
+axs[0].set_xticks(np.arange(-120, 180, 60))
+fig.suptitle(r"$d(\gamma, \phi d')$ yield vs $\Phi$")
+fig.supxlabel(r'$\Phi\ [\mathrm{deg}]$')
+fig.supylabel(r'$\mathrm{Yield}$')
 plt.savefig('output/fig_phi_d_2H_WPhi_yield.png', dpi=300)
 plt.close()
 
-plt.figure(figsize=(15, 6))
-plt.subplot(121)
-plt.errorbar((phi_d_2H_WPhi_phi_low[0:9]+phi_d_2H_WPhi_phi_high[0:9])/2, phi_d_2H_WPhi_acceptance[0:9], fmt='.')
-plt.xlabel(r'$\Phi\ [\mathrm{deg}]$')
-plt.ylabel(r'$\epsilon(\Phi\ [\mathrm{deg}])$')
-plt.title(r'$0.2<-t<0.8\ \mathrm{GeV}^2$')
-plt.ylim(0, 0.1)
-plt.subplot(122)
-plt.errorbar((phi_d_2H_WPhi_phi_low[9:18]+phi_d_2H_WPhi_phi_high[9:18])/2, phi_d_2H_WPhi_acceptance[9:18], fmt='.')
-plt.xlabel(r'$\Phi\ [\mathrm{deg}]$')
-plt.ylabel(r'$\epsilon(\Phi\ [\mathrm{deg}])$')
-plt.title(r'$0.8<-t<2.0\ \mathrm{GeV}^2$')
-plt.ylim(0, 0.1)
-plt.savefig('output/fig_phi_d_2H_WPhi_acceptance.png', dpi=300)
+# Plot the efficiency
+fig = plt.figure(figsize=(12, 6))
+gs = fig.add_gridspec(1, 2, wspace=0)
+axs = gs.subplots(sharex=True, sharey=True)
+for i in range(len(index) - 1):
+    axs[i].errorbar(phi_d_2H_WPhi_Phi_center[index[i]:index[i+1]], phi_d_2H_WPhi_efficiency[index[i]:index[i+1]], xerr=phi_d_2H_WPhi_Phi_width[index[i]:index[i+1]], yerr=phi_d_2H_WPhi_efficiency_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
+    axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_WPhi_energy_low[index[i]], phi_d_2H_WPhi_energy_high[index[i]], phi_d_2H_WPhi_minust_low[index[i]], phi_d_2H_WPhi_minust_high[index[i]]))
+axs[0].set_xlim(-180, 180)
+axs[0].set_ylim(0, 0.1)
+axs[0].set_xticks(np.arange(-120, 180, 60))
+fig.suptitle(r"$d(\gamma, \phi d')$ efficiency vs $\Phi$")
+fig.supxlabel(r'$\Phi\ [\mathrm{deg}]$')
+fig.supylabel(r'$\mathrm{Efficiency}$')
+plt.savefig('output/fig_phi_d_2H_WPhi_efficiency.png', dpi=300)
 plt.close()
 
-plt.figure(figsize=(15, 6))
-plt.subplot(121)
-plt.errorbar((phi_d_2H_WPhi_phi_low[0:9]+phi_d_2H_WPhi_phi_high[0:9])/2, phi_d_2H_WPhi_result[0:9], yerr=phi_d_2H_WPhi_error_stat[0:9], fmt='.', label='SRC-CT, 8.2 GeV')
-curve_fit_params, curve_fit_cov = curve_fit(Wphi_func, (phi_d_2H_WPhi_phi_low[0:9]+phi_d_2H_WPhi_phi_high[0:9])/2, phi_d_2H_WPhi_result[0:9], p0=[0.0])
-curve_fit_residuals = phi_d_2H_WPhi_result[0:9] - Wphi_func((phi_d_2H_WPhi_phi_low[0:9]+phi_d_2H_WPhi_phi_high[0:9])/2, curve_fit_params[0])
-reduced_chi2 = np.sum((curve_fit_residuals/phi_d_2H_WPhi_error_stat[0:9])**2)/(len(phi_d_2H_WPhi_result[0:9])-1)
-plt.plot(np.linspace(-180, 180, 360), Wphi_func(np.linspace(-180, 180, 360), curve_fit_params[0]), 'b--', label='Fit')
-plt.text(-175, 1.95, r'$\rho^0_{1-1}=%.2f\pm%.2f$' % (curve_fit_params[0], np.sqrt(curve_fit_cov[0])), fontsize=15, color='b', ha='left', va='top')
-plt.text(-175, 1.8, r'$\chi^2/\mathrm{dof}=%.2f$' % reduced_chi2, fontsize=15, color='b', ha='left', va='top')
-plt.plot(np.linspace(-180, 180, 360), np.ones(360), 'r--', label='SCHC+NPE')
-plt.xlim(-180, 180)
-plt.ylim(0, 2)
-plt.xlabel(r'$\Phi\ [\mathrm{deg}]$')
-plt.ylabel(r'$2\pi W(\Phi)$')
-plt.title(r'$0.2<-t<0.8\ \mathrm{GeV}^2$')
+# Plot the results
+fig = plt.figure(figsize=(12, 6))
+gs = fig.add_gridspec(1, 2, wspace=0)
+axs = gs.subplots(sharex=True, sharey=True)
+for i in range(len(index) - 1):
+    axs[i].errorbar(phi_d_2H_WPhi_Phi_center[index[i]:index[i+1]], phi_d_2H_WPhi_results[index[i]:index[i+1]], xerr=phi_d_2H_WPhi_Phi_width[index[i]:index[i+1]], yerr=phi_d_2H_WPhi_results_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
+    axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_WPhi_energy_low[index[i]], phi_d_2H_WPhi_energy_high[index[i]], phi_d_2H_WPhi_minust_low[index[i]], phi_d_2H_WPhi_minust_high[index[i]]))
+    curve_fit_params, curve_fit_cov = curve_fit(Wphi_func, phi_d_2H_WPhi_Phi_center[index[i]:index[i+1]], phi_d_2H_WPhi_results[index[i]:index[i+1]], p0=[0.0])
+    curve_fit_residuals = phi_d_2H_WPhi_results[index[i]:index[i+1]] - Wphi_func(phi_d_2H_WPhi_Phi_center[index[i]:index[i+1]], curve_fit_params[0])
+    reduced_chi2 = np.sum((curve_fit_residuals/phi_d_2H_WPhi_results_statserr[index[i]:index[i+1]])**2)/(len(phi_d_2H_WPhi_results[index[i]:index[i+1]])-1)
+    axs[i].plot(np.linspace(-180, 180, 360), Wphi_func(np.linspace(-180, 180, 360), curve_fit_params[0]), 'b--', label='Fit')
+    axs[i].text(-175, 1.95, r'$\rho^1_{00}=%.2f\pm%.2f$' % (2*curve_fit_params[0]/3/0.3, np.sqrt(curve_fit_cov[0])), fontsize=10, color='b', ha='left', va='top')
+    axs[i].text(-175, 1.85, r'$\chi^2/\mathrm{dof}=%.2f$' % reduced_chi2, fontsize=10, color='b', ha='left', va='top')
+    axs[i].plot(np.linspace(-180, 180, 360), np.ones(360), 'r--', label='SCHC+NPE')
+axs[0].set_xlim(-180, 180)
+axs[0].set_ylim(0, 2)
+axs[0].set_xticks(np.arange(-120, 180, 60))
+fig.suptitle(r"$d(\gamma, \phi d')$ $W(\cos\vartheta)$ vs $\cos\vartheta$")
+fig.supxlabel(r'$\Phi\ [\mathrm{deg}]$')
+fig.supylabel(r'$2\pi W(\Phi)$')
 plt.legend()
-plt.subplot(122)
-plt.errorbar((phi_d_2H_WPhi_phi_low[9:18]+phi_d_2H_WPhi_phi_high[9:18])/2, phi_d_2H_WPhi_result[9:18], yerr=phi_d_2H_WPhi_error_stat[9:18], fmt='.', label='SRC-CT, 8.2 GeV')
-curve_fit_params, curve_fit_cov = curve_fit(Wphi_func, (phi_d_2H_WPhi_phi_low[9:18]+phi_d_2H_WPhi_phi_high[9:18])/2, phi_d_2H_WPhi_result[9:18], p0=[0.0])
-curve_fit_residuals = phi_d_2H_WPhi_result[9:18] - Wphi_func((phi_d_2H_WPhi_phi_low[9:18]+phi_d_2H_WPhi_phi_high[9:18])/2, curve_fit_params[0])
-reduced_chi2 = np.sum((curve_fit_residuals/phi_d_2H_WPhi_error_stat[9:18])**2)/(len(phi_d_2H_WPhi_result[9:18])-1)
-plt.plot(np.linspace(-180, 180, 360), Wphi_func(np.linspace(-180, 180, 360), curve_fit_params[0]), 'b--', label='Fit')
-plt.text(-175, 1.95, r'$\rho^0_{1-1}=%.2f\pm%.2f$' % (curve_fit_params[0], np.sqrt(curve_fit_cov[0])), fontsize=15, color='b', ha='left', va='top')
-plt.text(-175, 1.8, r'$\chi^2/\mathrm{dof}=%.2f$' % reduced_chi2, fontsize=15, color='b', ha='left', va='top')
-plt.plot(np.linspace(-180, 180, 360), np.ones(360), 'r--', label='SCHC+NPE')
-plt.xlim(-180, 180)
-plt.ylim(0, 2)
-plt.xlabel(r'$\Phi\ [\mathrm{deg}]$')
-plt.ylabel(r'$2\pi W(\Phi)$')
-plt.title(r'$0.8<-t<2.0\ \mathrm{GeV}^2$')
-plt.legend()
-plt.savefig('output/fig_phi_d_2H_WPhi_result.png', dpi=300)
+plt.savefig('output/fig_phi_d_2H_WPhi_results.png', dpi=300)
 plt.close()
 
 #======================================================================PHI_D_2H_Wpsi======================================================================
 
-phi_d_2H_Wpsi_yield_data = np.loadtxt('output/yield_phi_d_recon_data_2H_exc_Wpsi.txt')[:,6]
-phi_d_2H_Wpsi_yield_sim = np.loadtxt('output/yield_phi_d_recon_sim_2H_exc_Wpsi.txt')[:,6]
-phi_d_2H_Wpsi_yield_tagged = np.loadtxt('output/yield_phi_d_thrown_tagged_2H_Wpsi.txt')[:,6]
+# Read the bin edges
+phi_d_2H_Wpsi_energy_low            = np.loadtxt('output/bins_phi_d_2H_Wpsi.txt')[:,0]
+phi_d_2H_Wpsi_energy_high           = np.loadtxt('output/bins_phi_d_2H_Wpsi.txt')[:,1]
+phi_d_2H_Wpsi_minust_low            = np.loadtxt('output/bins_phi_d_2H_Wpsi.txt')[:,2]
+phi_d_2H_Wpsi_minust_high           = np.loadtxt('output/bins_phi_d_2H_Wpsi.txt')[:,3]
+phi_d_2H_Wpsi_psi_low               = np.loadtxt('output/bins_phi_d_2H_Wpsi.txt')[:,4]
+phi_d_2H_Wpsi_psi_high              = np.loadtxt('output/bins_phi_d_2H_Wpsi.txt')[:,5]
+phi_d_2H_Wpsi_psi_center            = (phi_d_2H_Wpsi_psi_high + phi_d_2H_Wpsi_psi_low) / 2
+phi_d_2H_Wpsi_psi_width             = (phi_d_2H_Wpsi_psi_high - phi_d_2H_Wpsi_psi_low) / 2
 
-phi_d_2H_Wpsi_energy_low = np.loadtxt('output/bins_phi_d_2H_Wpsi.txt')[:,0]
-phi_d_2H_Wpsi_energy_high = np.loadtxt('output/bins_phi_d_2H_Wpsi.txt')[:,1]
-phi_d_2H_Wpsi_minust_low = np.loadtxt('output/bins_phi_d_2H_Wpsi.txt')[:,2]
-phi_d_2H_Wpsi_minust_high = np.loadtxt('output/bins_phi_d_2H_Wpsi.txt')[:,3]
-phi_d_2H_Wpsi_phi_low = np.loadtxt('output/bins_phi_d_2H_Wpsi.txt')[:,4]
-phi_d_2H_Wpsi_phi_high = np.loadtxt('output/bins_phi_d_2H_Wpsi.txt')[:,5]
+# Read the yield numbers
+phi_d_2H_Wpsi_yield_data            = np.loadtxt('output/yield_phi_d_recon_data_2H_exc_Wpsi.txt')[:,6]
+phi_d_2H_Wpsi_yield_sim             = np.loadtxt('output/yield_phi_d_recon_sim_2H_exc_Wpsi.txt')[:,6]
+phi_d_2H_Wpsi_yield_tagged          = np.loadtxt('output/yield_phi_d_thrown_tagged_2H_Wpsi.txt')[:,6]
+phi_d_2H_Wpsi_yield_data_statserr   = np.sqrt(phi_d_2H_Wpsi_yield_data)
+phi_d_2H_Wpsi_yield_sim_statserr    = np.sqrt(phi_d_2H_Wpsi_yield_sim)
+phi_d_2H_Wpsi_yield_tagged_statserr = np.sqrt(phi_d_2H_Wpsi_yield_tagged)
 
-phi_d_2H_Wpsi_acceptance = np.zeros(len(phi_d_2H_Wpsi_minust_low))
-phi_d_2H_Wpsi_result = np.zeros(len(phi_d_2H_Wpsi_minust_low))
-phi_d_2H_Wpsi_error_stat = 1/np.sqrt(phi_d_2H_Wpsi_yield_data)
+# Calculate the efficiency
+phi_d_2H_Wpsi_efficiency            = phi_d_2H_Wpsi_yield_sim/phi_d_2H_Wpsi_yield_tagged
+phi_d_2H_Wpsi_efficiency_statserr   = phi_d_2H_Wpsi_efficiency * np.sqrt(1/phi_d_2H_Wpsi_yield_sim + 1/phi_d_2H_Wpsi_yield_tagged)
 
-for i in range(len(phi_d_2H_Wpsi_minust_low)):
-    if (phi_d_2H_Wpsi_yield_sim[i] == 0) or (phi_d_2H_Wpsi_yield_tagged[i] == 0):
-        continue
-    phi_d_2H_Wpsi_acceptance[i] = phi_d_2H_Wpsi_yield_sim[i]/phi_d_2H_Wpsi_yield_tagged[i]
-    phi_d_2H_Wpsi_result[i] = phi_d_2H_Wpsi_yield_data[i]/phi_d_2H_Wpsi_acceptance[i]
+# Calculate the results
+phi_d_2H_Wpsi_results               = phi_d_2H_Wpsi_yield_data/phi_d_2H_Wpsi_efficiency  # raw results
+phi_d_2H_Wpsi_results               = normalize_distribution(phi_d_2H_Wpsi_results, phi_d_2H_Wpsi_energy_low, phi_d_2H_Wpsi_minust_low) # normalize to have the sum equal to 1
+phi_d_2H_Wpsi_results               = 2*np.pi*phi_d_2H_Wpsi_results/((phi_d_2H_Wpsi_psi_high - phi_d_2H_Wpsi_psi_low)/180*np.pi)  # normalize to have the integral equal to 2pi
+phi_d_2H_Wpsi_results_statserr      = phi_d_2H_Wpsi_results/np.sqrt(phi_d_2H_Wpsi_yield_data)
 
-phi_d_2H_Wpsi_result[0:9] /= np.sum(phi_d_2H_Wpsi_result[0:9])
-phi_d_2H_Wpsi_result[9:18] /= np.sum(phi_d_2H_Wpsi_result[9:18])
-phi_d_2H_Wpsi_result /= (phi_d_2H_Wpsi_phi_high - phi_d_2H_Wpsi_phi_low)/180*np.pi
-phi_d_2H_Wpsi_result *= 2*np.pi
-phi_d_2H_Wpsi_error_stat = phi_d_2H_Wpsi_result*phi_d_2H_Wpsi_error_stat
+# Find the indices for the different energy and t bins
+index = []
+for i in range(len(phi_d_2H_Wpsi_results)):
+    if (i == 0):
+        index.append(i)
+    elif (i == len(phi_d_2H_Wpsi_results) - 1):
+        index.append(i+1)
+    else:
+        if (phi_d_2H_Wpsi_energy_low[i] != phi_d_2H_Wpsi_energy_low[i-1]) or (phi_d_2H_Wpsi_minust_low[i] != phi_d_2H_Wpsi_minust_low[i-1]):
+            index.append(i)
 
-plt.figure(figsize=(15, 6))
-plt.subplot(121)
-plt.errorbar((phi_d_2H_Wpsi_phi_low[0:9]+phi_d_2H_Wpsi_phi_high[0:9])/2, phi_d_2H_Wpsi_yield_data[0:9], yerr=np.sqrt(phi_d_2H_Wpsi_yield_data[0:9]), fmt='.')
-plt.xlabel(r'$\psi_{H}\ [\mathrm{deg}]$')
-plt.ylabel(r'$Y(\psi_{H}\ [\mathrm{deg}])$')
-plt.title(r'$0.2<-t<0.8\ \mathrm{GeV}^2$')
-plt.subplot(122)
-plt.errorbar((phi_d_2H_Wpsi_phi_low[9:18]+phi_d_2H_Wpsi_phi_high[9:18])/2, phi_d_2H_Wpsi_yield_data[9:18], yerr=np.sqrt(phi_d_2H_Wpsi_yield_data[9:18]), fmt='.')
-plt.xlabel(r'$\psi_{H}\ [\mathrm{deg}]$')
-plt.ylabel(r'$Y(\psi_{H}\ [\mathrm{deg}])$')
-plt.title(r'$0.8<-t<2.0\ \mathrm{GeV}^2$')
+# Plot the data yield
+fig = plt.figure(figsize=(12, 6))
+gs = fig.add_gridspec(1, 2, wspace=0)
+axs = gs.subplots(sharex=True, sharey=True)
+for i in range(len(index) - 1):
+    axs[i].errorbar(phi_d_2H_Wpsi_psi_center[index[i]:index[i+1]], phi_d_2H_Wpsi_yield_data[index[i]:index[i+1]], xerr=phi_d_2H_Wpsi_psi_width[index[i]:index[i+1]], yerr=phi_d_2H_Wpsi_yield_data_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
+    axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wpsi_energy_low[index[i]], phi_d_2H_Wpsi_energy_high[index[i]], phi_d_2H_Wpsi_minust_low[index[i]], phi_d_2H_Wpsi_minust_high[index[i]]))
+axs[0].set_xlim(-180, 180)
+axs[0].set_ylim(0, 150)
+axs[0].set_xticks(np.arange(-120, 180, 60))
+fig.suptitle(r"$d(\gamma, \phi d')$ yield vs $\psi$")
+fig.supxlabel(r'$\psi\ [\mathrm{deg}]$')
+fig.supylabel(r'$\mathrm{Yield}$')
 plt.savefig('output/fig_phi_d_2H_Wpsi_yield.png', dpi=300)
 plt.close()
 
-plt.figure(figsize=(15, 6))
-plt.subplot(121)
-plt.errorbar((phi_d_2H_Wpsi_phi_low[0:9]+phi_d_2H_Wpsi_phi_high[0:9])/2, phi_d_2H_Wpsi_acceptance[0:9], fmt='.')
-plt.xlabel(r'$\psi_{H}\ [\mathrm{deg}]$')
-plt.ylabel(r'$\epsilon(\psi_{H}\ [\mathrm{deg}])$')
-plt.title(r'$0.2<-t<0.8\ \mathrm{GeV}^2$')
-plt.ylim(0, 0.1)
-plt.subplot(122)
-plt.errorbar((phi_d_2H_Wpsi_phi_low[9:18]+phi_d_2H_Wpsi_phi_high[9:18])/2, phi_d_2H_Wpsi_acceptance[9:18], fmt='.')
-plt.xlabel(r'$\psi_{H}\ [\mathrm{deg}]$')
-plt.ylabel(r'$\epsilon(\psi_{H}\ [\mathrm{deg}])$')
-plt.title(r'$0.8<-t<2.0\ \mathrm{GeV}^2$')
-plt.ylim(0, 0.1)
-plt.savefig('output/fig_phi_d_2H_Wpsi_acceptance.png', dpi=300)
+# Plot the efficiency
+fig = plt.figure(figsize=(12, 6))
+gs = fig.add_gridspec(1, 2, wspace=0)
+axs = gs.subplots(sharex=True, sharey=True)
+for i in range(len(index) - 1):
+    axs[i].errorbar(phi_d_2H_Wpsi_psi_center[index[i]:index[i+1]], phi_d_2H_Wpsi_efficiency[index[i]:index[i+1]], xerr=phi_d_2H_Wpsi_psi_width[index[i]:index[i+1]], yerr=phi_d_2H_Wpsi_efficiency_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
+    axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wpsi_energy_low[index[i]], phi_d_2H_Wpsi_energy_high[index[i]], phi_d_2H_Wpsi_minust_low[index[i]], phi_d_2H_Wpsi_minust_high[index[i]]))
+axs[0].set_xlim(-180, 180)
+axs[0].set_ylim(0, 0.1)
+axs[0].set_xticks(np.arange(-120, 180, 60))
+fig.suptitle(r"$d(\gamma, \phi d')$ efficiency vs $\psi$")
+fig.supxlabel(r'$\psi\ [\mathrm{deg}]$')
+fig.supylabel(r'$\mathrm{Efficiency}$')
+plt.savefig('output/fig_phi_d_2H_Wpsi_efficiency.png', dpi=300)
 plt.close()
 
-plt.figure(figsize=(15, 6))
-plt.subplot(121)
-plt.errorbar((phi_d_2H_Wpsi_phi_low[0:9]+phi_d_2H_Wpsi_phi_high[0:9])/2, phi_d_2H_Wpsi_result[0:9], yerr=phi_d_2H_Wpsi_error_stat[0:9], fmt='.', label='SRC-CT, 8.2 GeV')
-curve_fit_params, curve_fit_cov = curve_fit(Wphi_func, (phi_d_2H_Wpsi_phi_low[0:9]+phi_d_2H_Wpsi_phi_high[0:9])/2, phi_d_2H_Wpsi_result[0:9], p0=[0.0])
-curve_fit_residuals = phi_d_2H_Wpsi_result[0:9] - Wphi_func((phi_d_2H_Wpsi_phi_low[0:9]+phi_d_2H_Wpsi_phi_high[0:9])/2, curve_fit_params[0])
-reduced_chi2 = np.sum((curve_fit_residuals/phi_d_2H_Wpsi_error_stat[0:9])**2)/(len(phi_d_2H_Wpsi_result[0:9])-1)
-plt.plot(np.linspace(-180, 180, 360), Wphi_func(np.linspace(-180, 180, 360), curve_fit_params[0]), 'b--', label='Fit')
-plt.text(-175, 1.95, r'$\rho^0_{1-1}=%.2f\pm%.2f$' % (curve_fit_params[0], np.sqrt(curve_fit_cov[0])), fontsize=15, color='b', ha='left', va='top')
-plt.text(-175, 1.8, r'$\chi^2/\mathrm{dof}=%.2f$' % reduced_chi2, fontsize=15, color='b', ha='left', va='top')
-plt.plot(np.linspace(-180, 180, 360), np.ones(360)+0.3*np.cos(2*np.linspace(-180, 180, 360)/rad_to_deg), 'r--', label='SCHC+NPE')
-plt.xlim(-180, 180)
-plt.ylim(0, 2)
-plt.xlabel(r'$\psi_{H}\ [\mathrm{deg}]$')
-plt.ylabel(r'$2\pi W(\psi_{H})$')
-plt.title(r'$0.2<-t<0.8\ \mathrm{GeV}^2$')
+# Plot the results
+fig = plt.figure(figsize=(12, 6))
+gs = fig.add_gridspec(1, 2, wspace=0)
+axs = gs.subplots(sharex=True, sharey=True)
+for i in range(len(index) - 1):
+    axs[i].errorbar(phi_d_2H_Wpsi_psi_center[index[i]:index[i+1]], phi_d_2H_Wpsi_results[index[i]:index[i+1]], xerr=phi_d_2H_Wpsi_psi_width[index[i]:index[i+1]], yerr=phi_d_2H_Wpsi_results_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
+    axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wpsi_energy_low[index[i]], phi_d_2H_Wpsi_energy_high[index[i]], phi_d_2H_Wpsi_minust_low[index[i]], phi_d_2H_Wpsi_minust_high[index[i]]))
+    curve_fit_params, curve_fit_cov = curve_fit(Wphi_func, phi_d_2H_Wpsi_psi_center[index[i]:index[i+1]], phi_d_2H_Wpsi_results[index[i]:index[i+1]], p0=[0.0])
+    curve_fit_residuals = phi_d_2H_Wpsi_results[index[i]:index[i+1]] - Wphi_func(phi_d_2H_Wpsi_psi_center[index[i]:index[i+1]], curve_fit_params[0])
+    reduced_chi2 = np.sum((curve_fit_residuals/phi_d_2H_Wpsi_results_statserr[index[i]:index[i+1]])**2)/(len(phi_d_2H_Wpsi_results[index[i]:index[i+1]])-1)
+    axs[i].plot(np.linspace(-180, 180, 360), Wphi_func(np.linspace(-180, 180, 360), curve_fit_params[0]), 'b--', label='Fit')
+    axs[i].text(-175, 1.95, r'$\rho^1_{1-1}=%.2f\pm%.2f$' % (-curve_fit_params[0]/0.3, np.sqrt(curve_fit_cov[0])), fontsize=10, color='b', ha='left', va='top')
+    axs[i].text(-175, 1.85, r'$\chi^2/\mathrm{dof}=%.2f$' % reduced_chi2, fontsize=10, color='b', ha='left', va='top')
+    axs[i].plot(np.linspace(-180, 180, 360), np.ones(360)+0.3*np.cos(2*np.linspace(-180, 180, 360)/rad_to_deg), 'r--', label='SCHC+NPE')
+axs[0].set_xlim(-180, 180)
+axs[0].set_ylim(0, 2)
+axs[0].set_xticks(np.arange(-120, 180, 60))
+fig.suptitle(r"$d(\gamma, \phi d')$ $W(\cos\vartheta)$ vs $\cos\vartheta$")
+fig.supxlabel(r'$\psi\ [\mathrm{deg}]$')
+fig.supylabel(r'$2\pi W(\psi)$')
 plt.legend()
-plt.subplot(122)
-plt.errorbar((phi_d_2H_Wpsi_phi_low[9:18]+phi_d_2H_Wpsi_phi_high[9:18])/2, phi_d_2H_Wpsi_result[9:18], yerr=phi_d_2H_Wpsi_error_stat[9:18], fmt='.', label='SRC-CT, 8.2 GeV')
-curve_fit_params, curve_fit_cov = curve_fit(Wphi_func, (phi_d_2H_Wpsi_phi_low[9:18]+phi_d_2H_Wpsi_phi_high[9:18])/2, phi_d_2H_Wpsi_result[9:18], p0=[0.0])
-curve_fit_residuals = phi_d_2H_Wpsi_result[9:18] - Wphi_func((phi_d_2H_Wpsi_phi_low[9:18]+phi_d_2H_Wpsi_phi_high[9:18])/2, curve_fit_params[0])
-reduced_chi2 = np.sum((curve_fit_residuals/phi_d_2H_Wpsi_error_stat[9:18])**2)/(len(phi_d_2H_Wpsi_result[9:18])-1)
-plt.plot(np.linspace(-180, 180, 360), Wphi_func(np.linspace(-180, 180, 360), curve_fit_params[0]), 'b--', label='Fit')
-plt.text(-175, 1.95, r'$\rho^0_{1-1}=%.2f\pm%.2f$' % (curve_fit_params[0], np.sqrt(curve_fit_cov[0])), fontsize=15, color='b', ha='left', va='top')
-plt.text(-175, 1.8, r'$\chi^2/\mathrm{dof}=%.2f$' % reduced_chi2, fontsize=15, color='b', ha='left', va='top')
-plt.plot(np.linspace(-180, 180, 360), np.ones(360)+0.3*np.cos(2*np.linspace(-180, 180, 360)/rad_to_deg), 'r--', label='SCHC+NPE')
-plt.xlim(-180, 180)
-plt.ylim(0, 2)
-plt.xlabel(r'$\psi_{H}\ [\mathrm{deg}]$')
-plt.ylabel(r'$2\pi W(\psi_{H})$')
-plt.title(r'$0.8<-t<2.0\ \mathrm{GeV}^2$')
-plt.legend()
-plt.savefig('output/fig_phi_d_2H_Wpsi_result.png', dpi=300)
+plt.savefig('output/fig_phi_d_2H_Wpsi_results.png', dpi=300)
 plt.close()
