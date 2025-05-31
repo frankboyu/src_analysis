@@ -38,7 +38,7 @@ def normalize_distribution(results, energy_bins, t_bins):
                 index = i
     return results
 
-#======================================================================PHI_D_2H_DSDT======================================================================
+#======================================================================phi_d_2H_dsdt======================================================================
 
 # Read the bin edges
 phi_d_2H_dsdt_energy_low            = np.loadtxt('output/bins_phi_d_2H_dsdt.txt')[:,0]
@@ -84,17 +84,6 @@ phi_d_2H_dsdt_leps_minust_width         = (phi_d_2H_dsdt_leps_minust_high - phi_
 phi_d_2H_dsdt_leps_results_157          = np.array([0.0005, 0.004, 0.0087, 0.0068, 0.0238, 0.0317, 0.0567, 0.0722, 0.092, 0.1186, 0.1749, 0.2033, 0.2544, 0.3101, 0.3396])*1000
 phi_d_2H_dsdt_leps_results_157_statserr = np.array([0.0005, 0.002, 0.0035, 0.0028, 0.007, 0.0076, 0.0102, 0.0118, 0.0142, 0.0137, 0.0159, 0.0148, 0.0166, 0.0152, 0.0143])*1000
 
-# Find the indices for the different energy and t bins
-index = []
-for i in range(len(phi_d_2H_dsdt_results)):
-    if (i == 0):
-        index.append(i)
-    elif (i == len(phi_d_2H_dsdt_results) - 1):
-        index.append(i+1)
-    else:
-        if (phi_d_2H_dsdt_energy_low[i] != phi_d_2H_dsdt_energy_low[i-1]) or (phi_d_2H_dsdt_minust_low[i] != phi_d_2H_dsdt_minust_low[i-1]):
-            index.append(i)
-
 # Plot the data yield
 fig = plt.figure(figsize=(8, 6))
 plt.errorbar(phi_d_2H_dsdt_minust_center, phi_d_2H_dsdt_yield_data, xerr=phi_d_2H_dsdt_minust_width, yerr=phi_d_2H_dsdt_yield_data_statserr, fmt='k.', label='This work')
@@ -134,7 +123,7 @@ plt.legend()
 plt.savefig('output/fig_phi_d_2H_dsdt_results.png', dpi=300)
 plt.close()
 
-#======================================================================PHI_D_2H_WCOSTHETA======================================================================
+#======================================================================phi_d_2H_Wcostheta======================================================================
 
 # Read the bin edges
 phi_d_2H_Wcostheta_energy_low               = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,0]
@@ -232,7 +221,7 @@ plt.legend()
 plt.savefig('output/fig_phi_d_2H_Wcostheta_results.png', dpi=300)
 plt.close()
 
-#======================================================================PHI_D_2H_Wphi======================================================================
+#======================================================================phi_d_2H_Wphi======================================================================
 
 # Read the bin edges
 phi_d_2H_Wphi_energy_low            = np.loadtxt('output/bins_phi_d_2H_Wphi.txt')[:,0]
@@ -329,7 +318,7 @@ plt.legend()
 plt.savefig('output/fig_phi_d_2H_Wphi_results.png', dpi=300)
 plt.close()
 
-#======================================================================PHI_D_2H_WPhi======================================================================
+#======================================================================phi_d_2H_WPhi======================================================================
 
 # Read the bin edges
 phi_d_2H_WPhi_energy_low            = np.loadtxt('output/bins_phi_d_2H_WPhi.txt')[:,0]
@@ -426,7 +415,7 @@ plt.legend()
 plt.savefig('output/fig_phi_d_2H_WPhi_results.png', dpi=300)
 plt.close()
 
-#======================================================================PHI_D_2H_Wpsi======================================================================
+#======================================================================phi_d_2H_Wpsi======================================================================
 
 # Read the bin edges
 phi_d_2H_Wpsi_energy_low            = np.loadtxt('output/bins_phi_d_2H_Wpsi.txt')[:,0]

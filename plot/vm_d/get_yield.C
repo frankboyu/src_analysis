@@ -65,8 +65,8 @@ int get_yield(string channel, string reaction, string observable)
     {
         yield_observable = "rho_mass";
         hist_bins = 60;
-        hist_min = 0.4;
-        hist_max = 0.8;
+        hist_min = 0.2;
+        hist_max = 2.0;
     }
     else if (channel.find("omega") != string::npos)
     {
@@ -106,9 +106,9 @@ int get_yield(string channel, string reaction, string observable)
             cout << "cos(theta_H): " << bins[i][4] << "-" << bins[i][5] << endl;
             this_hist_name = Form("hist_%.1f_%.1f_%.1f_%.1f_%.1f_%.1f", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
             if (reaction.find("recon") != string::npos)
-                this_hist_cut = Form("accidweight*(beam_energy_kin>%f && beam_energy_kin<%f && minust_kin>%f && minust_kin<%f && kp_costheta_helicity_kin>%f && kp_costheta_helicity_kin<%f)", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
+                this_hist_cut = Form("accidweight*(beam_energy_kin>%f && beam_energy_kin<%f && minust_kin>%f && minust_kin<%f && decay_costheta_helicity_kin>%f && decay_costheta_helicity_kin<%f)", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
             else if (reaction.find("thrown") != string::npos)
-                this_hist_cut = Form("beam_energy_truth>%f && beam_energy_truth<%f && minust_truth>%f && minust_truth<%f && kp_costheta_helicity_truth>%f && kp_costheta_helicity_truth<%f", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
+                this_hist_cut = Form("beam_energy_truth>%f && beam_energy_truth<%f && minust_truth>%f && minust_truth<%f && decay_costheta_helicity_truth>%f && decay_costheta_helicity_truth<%f", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
         }
         else if (observable == "Wphi")
         {
@@ -117,9 +117,9 @@ int get_yield(string channel, string reaction, string observable)
             cout << "phi: " << bins[i][4] << "-" << bins[i][5] << " deg" << endl;
             this_hist_name = Form("hist_%.1f_%.1f_%.1f_%.1f_%.1f_%.1f", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
             if (reaction.find("recon") != string::npos)
-                this_hist_cut = Form("accidweight*(beam_energy_kin>%f && beam_energy_kin<%f && minust_kin>%f && minust_kin<%f && kp_phi_helicity_kin>%f && kp_phi_helicity_kin<%f)", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
+                this_hist_cut = Form("accidweight*(beam_energy_kin>%f && beam_energy_kin<%f && minust_kin>%f && minust_kin<%f && decay_phi_helicity_kin>%f && decay_phi_helicity_kin<%f)", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
             else if (reaction.find("thrown") != string::npos)
-                this_hist_cut = Form("beam_energy_truth>%f && beam_energy_truth<%f && minust_truth>%f && minust_truth<%f && kp_phi_helicity_truth>%f && kp_phi_helicity_truth<%f", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
+                this_hist_cut = Form("beam_energy_truth>%f && beam_energy_truth<%f && minust_truth>%f && minust_truth<%f && decay_phi_helicity_truth>%f && decay_phi_helicity_truth<%f", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
         }
         else if (observable == "WPhi")
         {
