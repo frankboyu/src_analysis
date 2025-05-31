@@ -3,7 +3,8 @@
 start=`date +%s`
 
 CHANNEL_LIST=()
-CHANNEL_LIST+=("phi_d")
+# CHANNEL_LIST+=("phi_d")
+CHANNEL_LIST+=("rho_d")
 
 REACTION_LIST=()
 REACTION_LIST+=("recon_data_2H_exc" "recon_sim_2H_exc" "thrown_tagged_2H")
@@ -23,6 +24,8 @@ do
         done
     done
 done
+
+python get_plot.py
 
 end=`date +%s`
 echo "Time taken: $(echo "scale=2; ($end - $start) / 60" | bc -l) minutes"
