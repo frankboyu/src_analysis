@@ -27,7 +27,7 @@ int get_yield(string channel, string reaction, string observable)
         target = "4He";
     else if (reaction.find("12C") != string::npos)
         target = "12C";
-    string input_txt_name = Form("output/bins_%s_%s_%s.txt", channel.c_str(), target.c_str(), observable.c_str());
+    string input_txt_name = Form("configs/bins_%s_%s_%s.txt", channel.c_str(), target.c_str(), observable.c_str());
     cout << "Input text file: " << input_txt_name << endl;
     ifstream input_txt(input_txt_name.c_str());
     vector<vector<double>> bins;

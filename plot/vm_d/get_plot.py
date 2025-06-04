@@ -41,10 +41,10 @@ def normalize_distribution(results, energy_bins, t_bins):
 # #======================================================================phi_d_2H_dsdt======================================================================
 
 # # Read the bin edges
-# phi_d_2H_dsdt_energy_low            = np.loadtxt('output/bins_phi_d_2H_dsdt.txt')[:,0]
-# phi_d_2H_dsdt_energy_high           = np.loadtxt('output/bins_phi_d_2H_dsdt.txt')[:,1]
-# phi_d_2H_dsdt_minust_low            = np.loadtxt('output/bins_phi_d_2H_dsdt.txt')[:,2]
-# phi_d_2H_dsdt_minust_high           = np.loadtxt('output/bins_phi_d_2H_dsdt.txt')[:,3]
+# phi_d_2H_dsdt_energy_low            = np.loadtxt('configs/bins_phi_d_2H_dsdt.txt')[:,0]
+# phi_d_2H_dsdt_energy_high           = np.loadtxt('configs/bins_phi_d_2H_dsdt.txt')[:,1]
+# phi_d_2H_dsdt_minust_low            = np.loadtxt('configs/bins_phi_d_2H_dsdt.txt')[:,2]
+# phi_d_2H_dsdt_minust_high           = np.loadtxt('configs/bins_phi_d_2H_dsdt.txt')[:,3]
 # phi_d_2H_dsdt_minust_center         = (phi_d_2H_dsdt_minust_high + phi_d_2H_dsdt_minust_low) / 2
 # phi_d_2H_dsdt_minust_width          = (phi_d_2H_dsdt_minust_high - phi_d_2H_dsdt_minust_low) / 2
 
@@ -128,12 +128,12 @@ def normalize_distribution(results, energy_bins, t_bins):
 # #======================================================================phi_d_2H_Wcostheta======================================================================
 
 # # Read the bin edges
-# phi_d_2H_Wcostheta_energy_low               = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,0]
-# phi_d_2H_Wcostheta_energy_high              = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,1]
-# phi_d_2H_Wcostheta_minust_low               = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,2]
-# phi_d_2H_Wcostheta_minust_high              = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,3]
-# phi_d_2H_Wcostheta_costheta_low             = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,4]
-# phi_d_2H_Wcostheta_costheta_high            = np.loadtxt('output/bins_phi_d_2H_Wcostheta.txt')[:,5]
+# phi_d_2H_Wcostheta_energy_low               = np.loadtxt('configs/bins_phi_d_2H_Wcostheta.txt')[:,0]
+# phi_d_2H_Wcostheta_energy_high              = np.loadtxt('configs/bins_phi_d_2H_Wcostheta.txt')[:,1]
+# phi_d_2H_Wcostheta_minust_low               = np.loadtxt('configs/bins_phi_d_2H_Wcostheta.txt')[:,2]
+# phi_d_2H_Wcostheta_minust_high              = np.loadtxt('configs/bins_phi_d_2H_Wcostheta.txt')[:,3]
+# phi_d_2H_Wcostheta_costheta_low             = np.loadtxt('configs/bins_phi_d_2H_Wcostheta.txt')[:,4]
+# phi_d_2H_Wcostheta_costheta_high            = np.loadtxt('configs/bins_phi_d_2H_Wcostheta.txt')[:,5]
 # phi_d_2H_Wcostheta_costheta_center          = (phi_d_2H_Wcostheta_costheta_high + phi_d_2H_Wcostheta_costheta_low) / 2
 # phi_d_2H_Wcostheta_costheta_width           = (phi_d_2H_Wcostheta_costheta_high - phi_d_2H_Wcostheta_costheta_low) / 2
 
@@ -228,12 +228,12 @@ def normalize_distribution(results, energy_bins, t_bins):
 # #======================================================================phi_d_2H_Wphi======================================================================
 
 # # Read the bin edges
-# phi_d_2H_Wphi_energy_low            = np.loadtxt('output/bins_phi_d_2H_Wphi.txt')[:,0]
-# phi_d_2H_Wphi_energy_high           = np.loadtxt('output/bins_phi_d_2H_Wphi.txt')[:,1]
-# phi_d_2H_Wphi_minust_low            = np.loadtxt('output/bins_phi_d_2H_Wphi.txt')[:,2]
-# phi_d_2H_Wphi_minust_high           = np.loadtxt('output/bins_phi_d_2H_Wphi.txt')[:,3]
-# phi_d_2H_Wphi_phi_low               = np.loadtxt('output/bins_phi_d_2H_Wphi.txt')[:,4]
-# phi_d_2H_Wphi_phi_high              = np.loadtxt('output/bins_phi_d_2H_Wphi.txt')[:,5]
+# phi_d_2H_Wphi_energy_low            = np.loadtxt('configs/bins_phi_d_2H_Wphi.txt')[:,0]
+# phi_d_2H_Wphi_energy_high           = np.loadtxt('configs/bins_phi_d_2H_Wphi.txt')[:,1]
+# phi_d_2H_Wphi_minust_low            = np.loadtxt('configs/bins_phi_d_2H_Wphi.txt')[:,2]
+# phi_d_2H_Wphi_minust_high           = np.loadtxt('configs/bins_phi_d_2H_Wphi.txt')[:,3]
+# phi_d_2H_Wphi_phi_low               = np.loadtxt('configs/bins_phi_d_2H_Wphi.txt')[:,4]
+# phi_d_2H_Wphi_phi_high              = np.loadtxt('configs/bins_phi_d_2H_Wphi.txt')[:,5]
 # phi_d_2H_Wphi_phi_center            = (phi_d_2H_Wphi_phi_high + phi_d_2H_Wphi_phi_low) / 2
 # phi_d_2H_Wphi_phi_width             = (phi_d_2H_Wphi_phi_high - phi_d_2H_Wphi_phi_low) / 2
 
@@ -327,12 +327,12 @@ def normalize_distribution(results, energy_bins, t_bins):
 # #======================================================================phi_d_2H_WPhi======================================================================
 
 # # Read the bin edges
-# phi_d_2H_WPhi_energy_low            = np.loadtxt('output/bins_phi_d_2H_WPhi.txt')[:,0]
-# phi_d_2H_WPhi_energy_high           = np.loadtxt('output/bins_phi_d_2H_WPhi.txt')[:,1]
-# phi_d_2H_WPhi_minust_low            = np.loadtxt('output/bins_phi_d_2H_WPhi.txt')[:,2]
-# phi_d_2H_WPhi_minust_high           = np.loadtxt('output/bins_phi_d_2H_WPhi.txt')[:,3]
-# phi_d_2H_WPhi_Phi_low               = np.loadtxt('output/bins_phi_d_2H_WPhi.txt')[:,4]
-# phi_d_2H_WPhi_Phi_high              = np.loadtxt('output/bins_phi_d_2H_WPhi.txt')[:,5]
+# phi_d_2H_WPhi_energy_low            = np.loadtxt('configs/bins_phi_d_2H_WPhi.txt')[:,0]
+# phi_d_2H_WPhi_energy_high           = np.loadtxt('configs/bins_phi_d_2H_WPhi.txt')[:,1]
+# phi_d_2H_WPhi_minust_low            = np.loadtxt('configs/bins_phi_d_2H_WPhi.txt')[:,2]
+# phi_d_2H_WPhi_minust_high           = np.loadtxt('configs/bins_phi_d_2H_WPhi.txt')[:,3]
+# phi_d_2H_WPhi_Phi_low               = np.loadtxt('configs/bins_phi_d_2H_WPhi.txt')[:,4]
+# phi_d_2H_WPhi_Phi_high              = np.loadtxt('configs/bins_phi_d_2H_WPhi.txt')[:,5]
 # phi_d_2H_WPhi_Phi_center            = (phi_d_2H_WPhi_Phi_high + phi_d_2H_WPhi_Phi_low) / 2
 # phi_d_2H_WPhi_Phi_width             = (phi_d_2H_WPhi_Phi_high - phi_d_2H_WPhi_Phi_low) / 2
 
@@ -426,12 +426,12 @@ def normalize_distribution(results, energy_bins, t_bins):
 # #======================================================================phi_d_2H_Wpsi======================================================================
 
 # # Read the bin edges
-# phi_d_2H_Wpsi_energy_low            = np.loadtxt('output/bins_phi_d_2H_Wpsi.txt')[:,0]
-# phi_d_2H_Wpsi_energy_high           = np.loadtxt('output/bins_phi_d_2H_Wpsi.txt')[:,1]
-# phi_d_2H_Wpsi_minust_low            = np.loadtxt('output/bins_phi_d_2H_Wpsi.txt')[:,2]
-# phi_d_2H_Wpsi_minust_high           = np.loadtxt('output/bins_phi_d_2H_Wpsi.txt')[:,3]
-# phi_d_2H_Wpsi_psi_low               = np.loadtxt('output/bins_phi_d_2H_Wpsi.txt')[:,4]
-# phi_d_2H_Wpsi_psi_high              = np.loadtxt('output/bins_phi_d_2H_Wpsi.txt')[:,5]
+# phi_d_2H_Wpsi_energy_low            = np.loadtxt('configs/bins_phi_d_2H_Wpsi.txt')[:,0]
+# phi_d_2H_Wpsi_energy_high           = np.loadtxt('configs/bins_phi_d_2H_Wpsi.txt')[:,1]
+# phi_d_2H_Wpsi_minust_low            = np.loadtxt('configs/bins_phi_d_2H_Wpsi.txt')[:,2]
+# phi_d_2H_Wpsi_minust_high           = np.loadtxt('configs/bins_phi_d_2H_Wpsi.txt')[:,3]
+# phi_d_2H_Wpsi_psi_low               = np.loadtxt('configs/bins_phi_d_2H_Wpsi.txt')[:,4]
+# phi_d_2H_Wpsi_psi_high              = np.loadtxt('configs/bins_phi_d_2H_Wpsi.txt')[:,5]
 # phi_d_2H_Wpsi_psi_center            = (phi_d_2H_Wpsi_psi_high + phi_d_2H_Wpsi_psi_low) / 2
 # phi_d_2H_Wpsi_psi_width             = (phi_d_2H_Wpsi_psi_high - phi_d_2H_Wpsi_psi_low) / 2
 
@@ -525,10 +525,10 @@ def normalize_distribution(results, energy_bins, t_bins):
 #======================================================================rho_d_2H_dsdt======================================================================
 
 # Read the bin edges
-rho_d_2H_dsdt_energy_low            = np.loadtxt('output/bins_rho_d_2H_dsdt.txt')[:,0]
-rho_d_2H_dsdt_energy_high           = np.loadtxt('output/bins_rho_d_2H_dsdt.txt')[:,1]
-rho_d_2H_dsdt_minust_low            = np.loadtxt('output/bins_rho_d_2H_dsdt.txt')[:,2]
-rho_d_2H_dsdt_minust_high           = np.loadtxt('output/bins_rho_d_2H_dsdt.txt')[:,3]
+rho_d_2H_dsdt_energy_low            = np.loadtxt('configs/bins_rho_d_2H_dsdt.txt')[:,0]
+rho_d_2H_dsdt_energy_high           = np.loadtxt('configs/bins_rho_d_2H_dsdt.txt')[:,1]
+rho_d_2H_dsdt_minust_low            = np.loadtxt('configs/bins_rho_d_2H_dsdt.txt')[:,2]
+rho_d_2H_dsdt_minust_high           = np.loadtxt('configs/bins_rho_d_2H_dsdt.txt')[:,3]
 rho_d_2H_dsdt_minust_center         = (rho_d_2H_dsdt_minust_high + rho_d_2H_dsdt_minust_low) / 2
 rho_d_2H_dsdt_minust_width          = (rho_d_2H_dsdt_minust_high - rho_d_2H_dsdt_minust_low) / 2
 
@@ -603,12 +603,12 @@ plt.close()
 #======================================================================rho_d_2H_Wcostheta======================================================================
 
 # Read the bin edges
-rho_d_2H_Wcostheta_energy_low               = np.loadtxt('output/bins_rho_d_2H_Wcostheta.txt')[:,0]
-rho_d_2H_Wcostheta_energy_high              = np.loadtxt('output/bins_rho_d_2H_Wcostheta.txt')[:,1]
-rho_d_2H_Wcostheta_minust_low               = np.loadtxt('output/bins_rho_d_2H_Wcostheta.txt')[:,2]
-rho_d_2H_Wcostheta_minust_high              = np.loadtxt('output/bins_rho_d_2H_Wcostheta.txt')[:,3]
-rho_d_2H_Wcostheta_costheta_low             = np.loadtxt('output/bins_rho_d_2H_Wcostheta.txt')[:,4]
-rho_d_2H_Wcostheta_costheta_high            = np.loadtxt('output/bins_rho_d_2H_Wcostheta.txt')[:,5]
+rho_d_2H_Wcostheta_energy_low               = np.loadtxt('configs/bins_rho_d_2H_Wcostheta.txt')[:,0]
+rho_d_2H_Wcostheta_energy_high              = np.loadtxt('configs/bins_rho_d_2H_Wcostheta.txt')[:,1]
+rho_d_2H_Wcostheta_minust_low               = np.loadtxt('configs/bins_rho_d_2H_Wcostheta.txt')[:,2]
+rho_d_2H_Wcostheta_minust_high              = np.loadtxt('configs/bins_rho_d_2H_Wcostheta.txt')[:,3]
+rho_d_2H_Wcostheta_costheta_low             = np.loadtxt('configs/bins_rho_d_2H_Wcostheta.txt')[:,4]
+rho_d_2H_Wcostheta_costheta_high            = np.loadtxt('configs/bins_rho_d_2H_Wcostheta.txt')[:,5]
 rho_d_2H_Wcostheta_costheta_center          = (rho_d_2H_Wcostheta_costheta_high + rho_d_2H_Wcostheta_costheta_low) / 2
 rho_d_2H_Wcostheta_costheta_width           = (rho_d_2H_Wcostheta_costheta_high - rho_d_2H_Wcostheta_costheta_low) / 2
 
@@ -703,12 +703,12 @@ plt.close()
 #======================================================================rho_d_2H_Wphi======================================================================
 
 # Read the bin edges
-rho_d_2H_Wphi_energy_low            = np.loadtxt('output/bins_rho_d_2H_Wphi.txt')[:,0]
-rho_d_2H_Wphi_energy_high           = np.loadtxt('output/bins_rho_d_2H_Wphi.txt')[:,1]
-rho_d_2H_Wphi_minust_low            = np.loadtxt('output/bins_rho_d_2H_Wphi.txt')[:,2]
-rho_d_2H_Wphi_minust_high           = np.loadtxt('output/bins_rho_d_2H_Wphi.txt')[:,3]
-rho_d_2H_Wphi_phi_low               = np.loadtxt('output/bins_rho_d_2H_Wphi.txt')[:,4]
-rho_d_2H_Wphi_phi_high              = np.loadtxt('output/bins_rho_d_2H_Wphi.txt')[:,5]
+rho_d_2H_Wphi_energy_low            = np.loadtxt('configs/bins_rho_d_2H_Wphi.txt')[:,0]
+rho_d_2H_Wphi_energy_high           = np.loadtxt('configs/bins_rho_d_2H_Wphi.txt')[:,1]
+rho_d_2H_Wphi_minust_low            = np.loadtxt('configs/bins_rho_d_2H_Wphi.txt')[:,2]
+rho_d_2H_Wphi_minust_high           = np.loadtxt('configs/bins_rho_d_2H_Wphi.txt')[:,3]
+rho_d_2H_Wphi_phi_low               = np.loadtxt('configs/bins_rho_d_2H_Wphi.txt')[:,4]
+rho_d_2H_Wphi_phi_high              = np.loadtxt('configs/bins_rho_d_2H_Wphi.txt')[:,5]
 rho_d_2H_Wphi_phi_center            = (rho_d_2H_Wphi_phi_high + rho_d_2H_Wphi_phi_low) / 2
 rho_d_2H_Wphi_phi_width             = (rho_d_2H_Wphi_phi_high - rho_d_2H_Wphi_phi_low) / 2
 
@@ -802,12 +802,12 @@ plt.close()
 #======================================================================rho_d_2H_WPhi======================================================================
 
 # Read the bin edges
-rho_d_2H_WPhi_energy_low            = np.loadtxt('output/bins_rho_d_2H_WPhi.txt')[:,0]
-rho_d_2H_WPhi_energy_high           = np.loadtxt('output/bins_rho_d_2H_WPhi.txt')[:,1]
-rho_d_2H_WPhi_minust_low            = np.loadtxt('output/bins_rho_d_2H_WPhi.txt')[:,2]
-rho_d_2H_WPhi_minust_high           = np.loadtxt('output/bins_rho_d_2H_WPhi.txt')[:,3]
-rho_d_2H_WPhi_Phi_low               = np.loadtxt('output/bins_rho_d_2H_WPhi.txt')[:,4]
-rho_d_2H_WPhi_Phi_high              = np.loadtxt('output/bins_rho_d_2H_WPhi.txt')[:,5]
+rho_d_2H_WPhi_energy_low            = np.loadtxt('configs/bins_rho_d_2H_WPhi.txt')[:,0]
+rho_d_2H_WPhi_energy_high           = np.loadtxt('configs/bins_rho_d_2H_WPhi.txt')[:,1]
+rho_d_2H_WPhi_minust_low            = np.loadtxt('configs/bins_rho_d_2H_WPhi.txt')[:,2]
+rho_d_2H_WPhi_minust_high           = np.loadtxt('configs/bins_rho_d_2H_WPhi.txt')[:,3]
+rho_d_2H_WPhi_Phi_low               = np.loadtxt('configs/bins_rho_d_2H_WPhi.txt')[:,4]
+rho_d_2H_WPhi_Phi_high              = np.loadtxt('configs/bins_rho_d_2H_WPhi.txt')[:,5]
 rho_d_2H_WPhi_Phi_center            = (rho_d_2H_WPhi_Phi_high + rho_d_2H_WPhi_Phi_low) / 2
 rho_d_2H_WPhi_Phi_width             = (rho_d_2H_WPhi_Phi_high - rho_d_2H_WPhi_Phi_low) / 2
 
@@ -901,12 +901,12 @@ plt.close()
 #======================================================================rho_d_2H_Wpsi======================================================================
 
 # Read the bin edges
-rho_d_2H_Wpsi_energy_low            = np.loadtxt('output/bins_rho_d_2H_Wpsi.txt')[:,0]
-rho_d_2H_Wpsi_energy_high           = np.loadtxt('output/bins_rho_d_2H_Wpsi.txt')[:,1]
-rho_d_2H_Wpsi_minust_low            = np.loadtxt('output/bins_rho_d_2H_Wpsi.txt')[:,2]
-rho_d_2H_Wpsi_minust_high           = np.loadtxt('output/bins_rho_d_2H_Wpsi.txt')[:,3]
-rho_d_2H_Wpsi_psi_low               = np.loadtxt('output/bins_rho_d_2H_Wpsi.txt')[:,4]
-rho_d_2H_Wpsi_psi_high              = np.loadtxt('output/bins_rho_d_2H_Wpsi.txt')[:,5]
+rho_d_2H_Wpsi_energy_low            = np.loadtxt('configs/bins_rho_d_2H_Wpsi.txt')[:,0]
+rho_d_2H_Wpsi_energy_high           = np.loadtxt('configs/bins_rho_d_2H_Wpsi.txt')[:,1]
+rho_d_2H_Wpsi_minust_low            = np.loadtxt('configs/bins_rho_d_2H_Wpsi.txt')[:,2]
+rho_d_2H_Wpsi_minust_high           = np.loadtxt('configs/bins_rho_d_2H_Wpsi.txt')[:,3]
+rho_d_2H_Wpsi_psi_low               = np.loadtxt('configs/bins_rho_d_2H_Wpsi.txt')[:,4]
+rho_d_2H_Wpsi_psi_high              = np.loadtxt('configs/bins_rho_d_2H_Wpsi.txt')[:,5]
 rho_d_2H_Wpsi_psi_center            = (rho_d_2H_Wpsi_psi_high + rho_d_2H_Wpsi_psi_low) / 2
 rho_d_2H_Wpsi_psi_width             = (rho_d_2H_Wpsi_psi_high - rho_d_2H_Wpsi_psi_low) / 2
 
