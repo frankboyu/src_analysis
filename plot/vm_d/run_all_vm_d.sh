@@ -10,7 +10,8 @@ REACTION_LIST=()
 REACTION_LIST+=("recon_data_2H_exc" "recon_sim_2H_exc" "thrown_tagged_2H")
 
 OBSERVABLE_LIST=()
-OBSERVABLE_LIST+=("dsdt" "Wcostheta" "Wphi" "WPhi" "Wpsi")
+# OBSERVABLE_LIST+=("dsdt" "Wcostheta" "Wphi" "WPhi" "Wpsi")
+OBSERVABLE_LIST+=("Wcostheta")
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
 gxenv $HALLD_VERSIONS/version.xml

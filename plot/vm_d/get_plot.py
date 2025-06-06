@@ -640,6 +640,10 @@ for i in range(len(rho_d_2H_Wcostheta_results)):
     else:
         if (rho_d_2H_Wcostheta_energy_low[i] != rho_d_2H_Wcostheta_energy_low[i-1]) or (rho_d_2H_Wcostheta_minust_low[i] != rho_d_2H_Wcostheta_minust_low[i-1]):
             index.append(i)
+minust = np.zeros(len(index) - 1, dtype=float)
+minust_err = np.zeros(len(index) - 1, dtype=float)
+sdme = np.zeros(len(index) - 1, dtype=float)
+sdme_err = np.zeros(len(index) - 1, dtype=float)
 
 # Plot the data yield
 fig = plt.figure(figsize=(6*(len(index) - 1), 6))
@@ -685,6 +689,10 @@ for i in range(len(index) - 1):
     curve_fit_params, curve_fit_cov = curve_fit(Wcostheta_func, rho_d_2H_Wcostheta_costheta_center[index[i]:index[i+1]], rho_d_2H_Wcostheta_results[index[i]:index[i+1]], p0=[0.0, 0.0])
     curve_fit_residuals = rho_d_2H_Wcostheta_results[index[i]:index[i+1]] - Wcostheta_func(rho_d_2H_Wcostheta_costheta_center[index[i]:index[i+1]], curve_fit_params[0], curve_fit_params[1])
     reduced_chi2 = np.sum((curve_fit_residuals/rho_d_2H_Wcostheta_results_statserr[index[i]:index[i+1]])**2)/(len(rho_d_2H_Wcostheta_results[index[i]:index[i+1]])-2)
+    minust[i] = (rho_d_2H_Wcostheta_minust_low[index[i]] + rho_d_2H_Wcostheta_minust_high[index[i]]) / 2
+    minust_err[i] = (rho_d_2H_Wcostheta_minust_high[index[i]] - rho_d_2H_Wcostheta_minust_low[index[i]]) / 2
+    sdme[i] = curve_fit_params[0]
+    sdme_err[i] = np.sqrt(curve_fit_cov[0][0])
     axs[i].plot(np.linspace(-1, 1, 100), Wcostheta_func(np.linspace(-1, 1, 100), curve_fit_params[0], curve_fit_params[1]), 'b--', label='Fit')
     axs[i].text(-0.9, 0.95, r'$\rho^0_{00}=%.2f\pm%.2f$' % (curve_fit_params[0], np.sqrt(curve_fit_cov[0][0])), fontsize=10, color='b', ha='left', va='top')
     axs[i].text(-0.9, 0.90, r'$\alpha=%.2e\pm%.2e$' % (curve_fit_params[1], np.sqrt(curve_fit_cov[1][1])), fontsize=10, color='b', ha='left', va='top')
@@ -698,6 +706,13 @@ fig.suptitle(r"$d(\gamma, \rho d')$ normalized distribution of $\cos\vartheta$")
 fig.supxlabel(r'$\cos\vartheta$')
 plt.legend()
 plt.savefig('output/fig_rho_d_2H_Wcostheta_results.png', dpi=300)
+plt.close()
+
+plt.errorbar(minust, sdme, xerr=minust_err, yerr=sdme_err, fmt='k.', label='This work')
+plt.xlabel(r'$-t\ [\mathrm{GeV}^2/c^2]$')
+plt.ylabel(r'$\rho^0_{00}$')
+plt.ylim(-0.2, 0.2)
+plt.savefig('output/fig_rho_d_2H_Wcostheta_sdme.png', dpi=300)
 plt.close()
 
 #======================================================================rho_d_2H_Wphi======================================================================
