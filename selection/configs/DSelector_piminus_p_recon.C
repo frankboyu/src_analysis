@@ -75,6 +75,8 @@ private:
     TH1F* dHist_MissingPMinus_Weighted;
     TH1F* dHist_ThrownTopology_Weighted;
 
+    TH1F* dHist_NumSCHits_Weighted;
+
     ClassDef(DSelector_piminus_p_recon, 0);
 };
 
@@ -182,6 +184,8 @@ void DSelector_piminus_p_recon::Init(TTree *locTree)
     dHist_MissingMomentum_Weighted  = new TH1F("MissingMomentum_Weighted",  ";P_{miss} (GeV)              ;Events/0.01 GeV",       1000,  0.0,  10.0);
     dHist_MissingPMinus_Weighted    = new TH1F("MissingPMinus_Weighted",    ";P^{-}_{miss} (GeV)          ;Events/0.01 GeV",        200,  0.0,   2.0);
     dHist_ThrownTopology_Weighted   = new TH1F("ThrownTopology_Weighted",   ";Thrown Topology             ;Events/1",                20,  0.5,  20.5);
+
+    dHist_NumSCHits_Weighted        = new TH1F("NumSCHits_Weighted", ";Number of SC Hits          ;Events/1", 10, 0.0, 10.0);
 
     // CUSTOM OUTPUT BRACHES: FLAT TREE
     dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("thrown_topology");
@@ -405,6 +409,10 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
         dHist_MissingMomentum_Weighted  ->Fill((locPiMinusP4 + locProtonP4 - locBeamP4).P(), locHistAccidWeightFactor);
         dHist_MissingPMinus_Weighted    ->Fill((locPiMinusP4 + locProtonP4 - locBeamP4).Minus(), locHistAccidWeightFactor);
         dHist_ThrownTopology_Weighted   ->Fill(locThrownTopology.Data(), locHistAccidWeightFactor);
+
+        UChar_t* dNumSCHits = (UChar_t*)dTreeInterface->Get_Branch("NumSCHits")->GetAddress();
+
+        dHist_NumSCHits_Weighted->Fill((int)*dNumSCHits, locHistAccidWeightFactor); // number of SC hits in the beam particle
 
 		// EXECUTE ANALYSIS ACTIONS
         if(!Execute_Actions()) // if the active combo fails a cut, IsComboCutFlag automatically set
