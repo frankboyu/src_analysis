@@ -709,9 +709,11 @@ plt.savefig('output/fig_rho_d_2H_Wcostheta_results.png', dpi=300)
 plt.close()
 
 plt.errorbar(minust, sdme, xerr=minust_err, yerr=sdme_err, fmt='k.', label='This work')
+plt.plot(np.linspace(0, 1, 100), np.zeros(100), 'r--')
 plt.xlabel(r'$-t\ [\mathrm{GeV}^2/c^2]$')
 plt.ylabel(r'$\rho^0_{00}$')
-plt.ylim(-0.2, 0.2)
+plt.xlim(0, 1)
+plt.ylim(-0.15, 0.15)
 plt.savefig('output/fig_rho_d_2H_Wcostheta_sdme.png', dpi=300)
 plt.close()
 
