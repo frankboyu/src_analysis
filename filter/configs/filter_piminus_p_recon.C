@@ -1,29 +1,16 @@
-#include <iostream>
-#include <string>
-#include <cstring>
-#include <cmath>
 #include </work/halld2/home/boyu/src_analysis/filter/configs/const.h>
-
-using namespace std;
-using namespace ROOT;
-using namespace RooFit;
-using namespace ROOT::RDF;
-using namespace ROOT::Detail::RDF;
 
 double mass_target = 0.0;
 
-TLorentzVector boost_lorentz_vector(TLorentzVector p4, TVector3 boost_vector)
-{
-    TLorentzVector p4_boosted(p4);
-    p4_boosted.Boost(boost_vector);
-    return p4_boosted;
-}
-
 void filter_piminus_p_recon(string reaction_name, string output_mode)
 {
-    string input_name   = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_piminus_p_recon_%s.root",reaction_name.c_str());
-    string hist_name    = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_piminus_p_recon_%s.root",reaction_name.c_str());
-    string tree_name    = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_piminus_p_recon_%s.root",reaction_name.c_str());
+    // string input_name   = Form("/work/halld2/home/boyu/src_analysis/selection/output/test/selectedtree_piminus_p_recon_%s.root",reaction_name.c_str());
+    // string hist_name    = Form("/work/halld2/home/boyu/src_analysis/filter/output/test/filteredhist_piminus_p_recon_%s.root",reaction_name.c_str());
+    // string tree_name    = Form("/work/halld2/home/boyu/src_analysis/filter/output/test/filteredtree_piminus_p_recon_%s.root",reaction_name.c_str());
+
+    string input_name   = "/work/halld2/home/boyu/src_analysis/selection/output/test/piminus_tree.root";
+    string hist_name    = "/work/halld2/home/boyu/src_analysis/filter/output/test/piminus_hist.root";
+    string tree_name    = "/work/halld2/home/boyu/src_analysis/filter/output/test/piminus_tree.root";
 
     // Determine reaction specific parameters
     if (reaction_name.find("2H") != string::npos)
@@ -195,9 +182,9 @@ void filter_piminus_p_recon(string reaction_name, string output_mode)
     .Define("topology_pippimn",             "accidweight*(thrown_topology == 2)")
     .Define("topology_pi0pimprot",          "accidweight*(thrown_topology == 3)")
     .Define("topology_others",              "accidweight*(thrown_topology == 9)")
-    .Define("extrapion_momentum_truth",     "extra_pion_p4_truth.P()")
-    .Define("extrapion_theta_truth",        "extra_pion_p4_truth.Theta()*RadToDeg")
-    .Define("rho_thrown_p4_truth",          "extra_pion_p4_truth + pim_p4_truth")
+    .Define("extrapion_momentum_truth",     "extrapion_p4_truth.P()")
+    .Define("extrapion_theta_truth",        "extrapion_p4_truth.Theta()*RadToDeg")
+    .Define("rho_thrown_p4_truth",          "extrapion_p4_truth + pim_p4_truth")
     .Define("rho_thrown_mass_truth",        "rho_thrown_p4_truth.M()")
     ;
 
@@ -249,6 +236,8 @@ void filter_piminus_p_recon(string reaction_name, string output_mode)
 
             TH1D hist_kinfit_fom                    = *rdf.Histo1D({("kinfit_fom_"+ label).c_str(), ";KinFit FOM;Counts", 100, 0.0, 1.0},"kinfit_fom","accidweight");
             hist_kinfit_fom.Write();
+            TH1D hist_num_schits_meas               = *rdf.Histo1D({("num_schits_meas_"+ label).c_str(), ";# of SC Hits;Counts", 10, 0.0, 10.0},"num_schits","accidweight");
+            hist_num_schits_meas.Write();
 
             TH1D hist_beam_DeltaT_kin               = *rdf.Histo1D({("beam_DeltaT_"+ label).c_str(), ";#Delta t_{beam} (ns);Counts", 400, -20.0, 20.0},"beam_DeltaT_kin");
             hist_beam_DeltaT_kin.Write();
