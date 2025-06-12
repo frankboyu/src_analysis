@@ -189,6 +189,7 @@ void DSelector_piminus_p_recon::Init(TTree *locTree)
 
     // CUSTOM OUTPUT BRACHES: FLAT TREE
     dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("thrown_topology");
+    dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("num_schits");
     dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("accidweight");
 	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("pim_pidfom");  // the PIDFOM in the default flat branches pim_pid_fom is corrupted and always 0
 	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("p_pidfom");    // the PIDFOM in the default flat branches p_pid_fom is corrupted and always 0
@@ -420,6 +421,7 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
 
         // FILL FLAT TREE
         dFlatTreeInterface->Fill_Fundamental<Int_t>("thrown_topology", locThrownTopologyFlag);
+        dFlatTreeInterface->Fill_Fundamental<Int_t>("num_schits", (int)*dNumSCHits);
         dFlatTreeInterface->Fill_Fundamental<Double_t>("accidweight", locHistAccidWeightFactor);
 		dFlatTreeInterface->Fill_Fundamental<Double_t>("pim_pidfom", dPiMinusWrapper->Get_PIDFOM());
 		dFlatTreeInterface->Fill_Fundamental<Double_t>("p_pidfom", dProtonWrapper->Get_PIDFOM());
