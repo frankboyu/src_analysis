@@ -4,13 +4,9 @@ double mass_target = 0.0;
 
 void filter_piminus_p_recon(string reaction_name, string output_mode)
 {
-    // string input_name   = Form("/work/halld2/home/boyu/src_analysis/selection/output/test/selectedtree_piminus_p_recon_%s.root",reaction_name.c_str());
-    // string hist_name    = Form("/work/halld2/home/boyu/src_analysis/filter/output/test/filteredhist_piminus_p_recon_%s.root",reaction_name.c_str());
-    // string tree_name    = Form("/work/halld2/home/boyu/src_analysis/filter/output/test/filteredtree_piminus_p_recon_%s.root",reaction_name.c_str());
-
-    string input_name   = "/work/halld2/home/boyu/src_analysis/selection/output/test/piminus_tree.root";
-    string hist_name    = "/work/halld2/home/boyu/src_analysis/filter/output/test/piminus_hist.root";
-    string tree_name    = "/work/halld2/home/boyu/src_analysis/filter/output/test/piminus_tree.root";
+    string input_name   = Form("/work/halld2/home/boyu/src_analysis/selection/output/test/selectedtree_piminus_p_recon_%s.root",reaction_name.c_str());
+    string hist_name    = Form("/work/halld2/home/boyu/src_analysis/filter/output/test/filteredhist_piminus_p_recon_%s.root",reaction_name.c_str());
+    string tree_name    = Form("/work/halld2/home/boyu/src_analysis/filter/output/test/filteredtree_piminus_p_recon_%s.root",reaction_name.c_str());
 
     // Determine reaction specific parameters
     if (reaction_name.find("2H") != string::npos)
