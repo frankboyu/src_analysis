@@ -411,9 +411,21 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
         dHist_MissingPMinus_Weighted    ->Fill((locPiMinusP4 + locProtonP4 - locBeamP4).Minus(), locHistAccidWeightFactor);
         dHist_ThrownTopology_Weighted   ->Fill(locThrownTopology.Data(), locHistAccidWeightFactor);
 
-        UChar_t* dNumSCHits = (UChar_t*)dTreeInterface->Get_Branch("NumSCHits")->GetAddress();
+        Int_t* locNumSCHits = (Int_t*)dTreeInterface->Get_Branch("NumSCHits")->GetAddress();
+        Int_t* locSCsector = (Int_t*)dTreeInterface->Get_Branch("sc_sector")->GetAddress();
+        Double_t* locSCphi = (Double_t*)dTreeInterface->Get_Branch("sc_phi")->GetAddress();
+        Double_t* locSCdE = (Double_t*)dTreeInterface->Get_Branch("sc_dE")->GetAddress();
+        Double_t* locSCt = (Double_t*)dTreeInterface->Get_Branch("sc_t")->GetAddress();
+        Double_t* locSCPulseHeight = (Double_t*)dTreeInterface->Get_Branch("sc_pulse_height")->GetAddress();
+        int num_sc_match = 0;
+        for (Int_t loc_j = 0; loc_j < *locNumSCHits; ++loc_j) // loop over SC hits
+            if (fabs(locBeamX4.T()-locSCt[loc_j])>1 && fabs(locBeamX4.T()-locSCt[loc_j])<7 && locSCdE[loc_j]>2e-4)
+            {
+                num_sc_match++;
+                cout << "SC hit " << num_sc_match << ": sector = " << locSCsector[loc_j] << ", phi = " << locSCphi[loc_j] << ", dE = " << locSCdE[loc_j] << ", t = " << fabs(locBeamX4.T()-locSCt[loc_j]) << ", pulse height = " << locSCPulseHeight[loc_j] << endl;
+            }
 
-        dHist_NumSCHits_Weighted->Fill((int)*dNumSCHits, locHistAccidWeightFactor); // number of SC hits in the beam particle
+        dHist_NumSCHits_Weighted->Fill(num_sc_match, locHistAccidWeightFactor); // number of SC hits in the beam particle
 
 		// EXECUTE ANALYSIS ACTIONS
         if(!Execute_Actions()) // if the active combo fails a cut, IsComboCutFlag automatically set
@@ -421,7 +433,7 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
 
         // FILL FLAT TREE
         dFlatTreeInterface->Fill_Fundamental<Int_t>("thrown_topology", locThrownTopologyFlag);
-        dFlatTreeInterface->Fill_Fundamental<Int_t>("num_schits", (int)*dNumSCHits);
+        dFlatTreeInterface->Fill_Fundamental<Int_t>("num_schits", num_sc_match);
         dFlatTreeInterface->Fill_Fundamental<Double_t>("accidweight", locHistAccidWeightFactor);
 		dFlatTreeInterface->Fill_Fundamental<Double_t>("pim_pidfom", dPiMinusWrapper->Get_PIDFOM());
 		dFlatTreeInterface->Fill_Fundamental<Double_t>("p_pidfom", dProtonWrapper->Get_PIDFOM());
