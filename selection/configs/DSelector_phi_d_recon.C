@@ -276,8 +276,8 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
         dHist_ThrownTopology_Before     ->Fill(locThrownTopology.Data(), 1);
 
         // PERFORM CUTS
-        if(dComboWrapper->Get_NumUnusedTracks()        > 0)                                                 dComboWrapper->Set_IsComboCut(true);
-        if(dComboWrapper->Get_NumUnusedShowers()       > 0)                                                 dComboWrapper->Set_IsComboCut(true);
+        if(dComboWrapper->Get_NumUnusedTracks()        < 0)                                                 dComboWrapper->Set_IsComboCut(true);
+        if(dComboWrapper->Get_NumUnusedShowers()       < 0)                                                 dComboWrapper->Set_IsComboCut(true);
         if(locBeamP4.E()                               < 5.8  || locBeamP4.E()                   > 10.7)    dComboWrapper->Set_IsComboCut(true);
         if(dComboBeamWrapper->Get_X4().Z()             < 51.0 || dComboBeamWrapper->Get_X4().Z() > 79.0)    dComboWrapper->Set_IsComboCut(true);
         if(dComboBeamWrapper->Get_X4().Perp()          > 1.0)                                               dComboWrapper->Set_IsComboCut(true);
@@ -285,7 +285,7 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
         if(dKPlusWrapper->Get_PIDFOM()                 < 1e-4)                                              dComboWrapper->Set_IsComboCut(true);
         if(dKMinusWrapper->Get_PIDFOM()                < 1e-4)                                              dComboWrapper->Set_IsComboCut(true);
         if(dDeuteronWrapper->Get_dEdx_CDC()            == 0.0)                                              dComboWrapper->Set_IsComboCut(true);
-        if((locKPlusP4+locKMinusP4).M()                <= 0.0)                                              dComboWrapper->Set_IsComboCut(true);
+        if((locKPlusP4+locKMinusP4).M()                > 1.5)                                               dComboWrapper->Set_IsComboCut(true);
 
         if(dComboWrapper->Get_IsComboCut())  continue;
 
