@@ -1,0 +1,18 @@
+
+Instructions->
+
+To run open up a ROOT terminal 
+> root -l
+
+Load the makePolVals2021.C file:
+
+root [0] .L makePolVals2021.C
+
+root [1] makePolVals2021(0)
+
+There is one argument:                0 -> Standard run set
+                                      1 -> User defined run set
+
+When using the user defined run set, place the list of runs
+(one run per row) in the file ./inFiles/userSet.txt
+
