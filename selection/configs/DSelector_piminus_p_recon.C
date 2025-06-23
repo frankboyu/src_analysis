@@ -419,10 +419,9 @@ Bool_t DSelector_piminus_p_recon::Process(Long64_t locEntry)
         Double_t* locSCPulseHeight = (Double_t*)dTreeInterface->Get_Branch("sc_pulse_height")->GetAddress();
         int num_sc_match = 0;
         for (Int_t loc_j = 0; loc_j < *locNumSCHits; ++loc_j) // loop over SC hits
-            if (fabs(locBeamX4.T()-locSCt[loc_j])>1 && fabs(locBeamX4.T()-locSCt[loc_j])<7 && locSCdE[loc_j]>2e-4)
+            if (fabs(dComboWrapper->Get_RFTime_Measured()-locSCt[loc_j])>1 && fabs(dComboWrapper->Get_RFTime_Measured()-locSCt[loc_j])<7 && locSCdE[loc_j]>2e-4)
             {
                 num_sc_match++;
-                cout << "SC hit " << num_sc_match << ": sector = " << locSCsector[loc_j] << ", phi = " << locSCphi[loc_j] << ", dE = " << locSCdE[loc_j] << ", t = " << fabs(locBeamX4.T()-locSCt[loc_j]) << ", pulse height = " << locSCPulseHeight[loc_j] << endl;
             }
 
         dHist_NumSCHits_Weighted->Fill(num_sc_match, locHistAccidWeightFactor); // number of SC hits in the beam particle
