@@ -3,12 +3,12 @@
 start=`date +%s`
 
 # data
-sh run_local.sh     'phi_d_recon' '/work/halld2/home/boyu/src_analysis/data/output/phi_d_2H_ver10/*.root'
-sh run_local.sh     'rho_d_recon' '/work/halld2/home/boyu/src_analysis/data/output/rho_d_2H_ver10/*.root'
+sh run_local.sh     'phi_d_recon' '/work/halld2/home/boyu/src_analysis/data/output/phi_d_2H_ver10/*.root'   'gd_kpkmd__B4_F4_Tree'
+sh run_local.sh     'rho_d_recon' '/work/halld2/home/boyu/src_analysis/data/output/rho_d_2H_ver10/*.root'   'gd_pippimd__B4_F4_Tree's
 
 # sim
-sh run_local.sh     'phi_d_recon' '/work/halld2/home/boyu/src_analysis/sim/output/phi_d_2H_ver01/root/tree_gd_kpkmd__B4_F4_gen_coherent/*.root'             'gd_kpkmd__B4_F4_Tree'
-sh run_local.sh     'rho_d_recon' '/work/halld2/home/boyu/src_analysis/sim/output/rho_d_2H_ver01/root/tree_gd_pippimd__B4_F4_gen_coherent/*.root'           'gd_pippimd__B4_F4_Tree'
+sh run_local.sh     'phi_d_recon' '/work/halld2/home/boyu/src_analysis/sim/output/phi_d_2H_ver01/root/tree_gd_kpkmd__B4_F4_gen_coherent/*.root'     'gd_kpkmd__B4_F4_Tree'
+sh run_local.sh     'rho_d_recon' '/work/halld2/home/boyu/src_analysis/sim/output/rho_d_2H_ver01/root/tree_gd_pippimd__B4_F4_gen_coherent/*.root'   'gd_pippimd__B4_F4_Tree'
 
 # tagged
 sh run_local.sh     'phi_d_thrown' '/work/halld2/home/boyu/src_analysis/sim/output/phi_d_2H_ver01/root/thrown/*.root'   'Thrown_Tree'
