@@ -153,6 +153,8 @@ void DSelector_phi_d_recon::Init(TTree *locTree)
     dHist_ThrownTopology_After      = new TH1F("ThrownTopology_After",      ";Thrown Topology           ;Events/1",             20,     0.5,    20.5);
 
     // CUSTOM OUTPUT BRACHES: FLAT TREE
+    dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("num_unused_tracks");
+    dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("num_unused_showers");
     dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("thrown_topology");
     dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("polarization_angle");
     dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("accidweight");
@@ -244,6 +246,8 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
                 else
                     cout << "Unexpected PID: " << dThrownWrapper->Get_PID() << endl;
             }
+            locDeuteronX4_Thrown = locKPlusX4_Thrown;  // workaround for the missing deuteron info in the tree
+            locDeuteronP4_Thrown = locBeamP4_Thrown + TLorentzVector(0, 0, 0, 1.875612859) - locKPlusP4_Thrown - locKMinusP4_Thrown; // workaround for the missing deuteron info in the tree
         }
 
         // FILL HISTOGRAMS BEFORE CUTS
@@ -314,6 +318,8 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
 			continue;
 
         // FILL FLAT TREE
+        dFlatTreeInterface->Fill_Fundamental<Int_t>("num_unused_tracks", dComboWrapper->Get_NumUnusedTracks());
+        dFlatTreeInterface->Fill_Fundamental<Int_t>("num_unused_showers", dComboWrapper->Get_NumUnusedShowers());
         dFlatTreeInterface->Fill_Fundamental<Int_t>("thrown_topology", locThrownTopologyFlag);
         dFlatTreeInterface->Fill_Fundamental<Int_t>("polarization_angle", dPolarizationAngle);
         dFlatTreeInterface->Fill_Fundamental<Double_t>("accidweight", locHistAccidWeightFactor);
