@@ -153,11 +153,17 @@ void DSelector_rho_d_recon::Init(TTree *locTree)
     dHist_ThrownTopology_After      = new TH1F("ThrownTopology_After",      ";Thrown Topology           ;Events/1",             20,     0.5,    20.5);
 
     // CUSTOM OUTPUT BRACHES: FLAT TREE
-    dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("thrown_topology");
-    dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("polarization_angle");
+    dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("num_unused_tracks");
+    dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("num_unused_showers");
+    dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("beam_id");
+    dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("pip_id");
+    dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("pim_id");
+    dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("d_id");
     dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("accidweight");
 	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("pip_pidfom");  // the PIDFOM in the default flat branches pip_pid_fom is corrupted and always 0
 	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("pim_pidfom");  // the PIDFOM in the default flat branches pim_pid_fom is corrupted and always 0
+    dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("thrown_topology");
+    dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("polarization_angle");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("beam_x4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("beam_p4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("pip_x4_truth");
@@ -244,6 +250,8 @@ Bool_t DSelector_rho_d_recon::Process(Long64_t locEntry)
                 else
                     cout << "Unexpected PID: " << dThrownWrapper->Get_PID() << endl;
             }
+            locDeuteronX4_Thrown = locPiPlusX4_Thrown;  // workaround for the missing deuteron info in the tree
+            locDeuteronP4_Thrown = locBeamP4_Thrown + TLorentzVector(0, 0, 0, 1.875612859) - locPiPlusP4_Thrown - locPiMinusP4_Thrown; // workaround for the missing deuteron info in the tree
         }
 
         // FILL HISTOGRAMS BEFORE CUTS
@@ -314,11 +322,17 @@ Bool_t DSelector_rho_d_recon::Process(Long64_t locEntry)
 			continue;
 
         // FILL FLAT TREE
+        dFlatTreeInterface->Fill_Fundamental<Int_t>("num_unused_tracks", dComboWrapper->Get_NumUnusedTracks());
+        dFlatTreeInterface->Fill_Fundamental<Int_t>("num_unused_showers", dComboWrapper->Get_NumUnusedShowers());
+        dFlatTreeInterface->Fill_Fundamental<Int_t>("beam_id", locBeamID);
+        dFlatTreeInterface->Fill_Fundamental<Int_t>("pip_id", locPiPlusTrackID);
+        dFlatTreeInterface->Fill_Fundamental<Int_t>("pim_id", locPiMinusTrackID);
+        dFlatTreeInterface->Fill_Fundamental<Int_t>("d_id", locDeuteronTrackID);
+        dFlatTreeInterface->Fill_Fundamental<Double_t>("accidweight", locHistAccidWeightFactor);
+        dFlatTreeInterface->Fill_Fundamental<Double_t>("pip_pidfom", dPiPlusWrapper->Get_PIDFOM());
+        dFlatTreeInterface->Fill_Fundamental<Double_t>("pim_pidfom", dPiMinusWrapper->Get_PIDFOM());
         dFlatTreeInterface->Fill_Fundamental<Int_t>("thrown_topology", locThrownTopologyFlag);
         dFlatTreeInterface->Fill_Fundamental<Int_t>("polarization_angle", dPolarizationAngle);
-        dFlatTreeInterface->Fill_Fundamental<Double_t>("accidweight", locHistAccidWeightFactor);
-		dFlatTreeInterface->Fill_Fundamental<Double_t>("pip_pidfom", dPiPlusWrapper->Get_PIDFOM());
-		dFlatTreeInterface->Fill_Fundamental<Double_t>("pim_pidfom", dPiMinusWrapper->Get_PIDFOM());
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_x4_truth", locBeamX4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_p4_truth", locBeamP4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("pip_x4_truth", locPiPlusX4_Thrown);

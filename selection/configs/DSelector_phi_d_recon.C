@@ -33,11 +33,11 @@ private:
     string dTag;
 
     // PARTICLE WRAPPERS
-    DParticleComboStep*      dStep0Wrapper;
-    DBeamParticle*           dComboBeamWrapper;
-    DChargedTrackHypothesis* dKPlusWrapper;
-    DChargedTrackHypothesis* dKMinusWrapper;
-    DChargedTrackHypothesis* dDeuteronWrapper;
+    DParticleComboStep*         dStep0Wrapper;
+    DBeamParticle*              dComboBeamWrapper;
+    DChargedTrackHypothesis*    dKPlusWrapper;
+    DChargedTrackHypothesis*    dKMinusWrapper;
+    DChargedTrackHypothesis*    dDeuteronWrapper;
 
     // CUSTOM HISTOGRAMS
     TH1F* dHist_NumUnusedTracks_Before;
@@ -75,11 +75,11 @@ private:
 
 void DSelector_phi_d_recon::Get_ComboWrappers(void)
 {
-	dStep0Wrapper     = dComboWrapper->Get_ParticleComboStep(0);
-	dComboBeamWrapper = static_cast<DBeamParticle*>(dStep0Wrapper->Get_InitialParticle());
-	dKPlusWrapper     = static_cast<DChargedTrackHypothesis*>(dStep0Wrapper->Get_FinalParticle(0));
-    dKMinusWrapper    = static_cast<DChargedTrackHypothesis*>(dStep0Wrapper->Get_FinalParticle(1));
-	dDeuteronWrapper  = static_cast<DChargedTrackHypothesis*>(dStep0Wrapper->Get_FinalParticle(2));
+	dStep0Wrapper       = dComboWrapper->Get_ParticleComboStep(0);
+	dComboBeamWrapper   = static_cast<DBeamParticle*>(dStep0Wrapper->Get_InitialParticle());
+	dKPlusWrapper       = static_cast<DChargedTrackHypothesis*>(dStep0Wrapper->Get_FinalParticle(0));
+    dKMinusWrapper      = static_cast<DChargedTrackHypothesis*>(dStep0Wrapper->Get_FinalParticle(1));
+	dDeuteronWrapper    = static_cast<DChargedTrackHypothesis*>(dStep0Wrapper->Get_FinalParticle(2));
 }
 
 void DSelector_phi_d_recon::Init(TTree *locTree)
@@ -159,18 +159,18 @@ void DSelector_phi_d_recon::Init(TTree *locTree)
     dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("kp_id");
     dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("km_id");
     dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("d_id");
-    dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("thrown_topology");
-    dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("polarization_angle");
     dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("accidweight");
 	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("kp_pidfom");  // the PIDFOM in the default flat branches kp_pid_fom is corrupted and always 0
 	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("km_pidfom");  // the PIDFOM in the default flat branches km_pid_fom is corrupted and always 0
+    dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("thrown_topology");
+    dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("polarization_angle");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("beam_x4_truth");
-    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("kp_x4_truth");
-    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("km_x4_truth");
-    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("d_x4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("beam_p4_truth");
+    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("kp_x4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("kp_p4_truth");
+    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("km_x4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("km_p4_truth");
+    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("d_x4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("d_p4_truth");
 }
 // END OF INITIALIZATION
@@ -209,16 +209,16 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
         }
 
 		// GET PARTICLE INDICES
-		Int_t locBeamID          = dComboBeamWrapper->Get_BeamID();
-        Int_t locKPlusTrackID    = dKPlusWrapper->Get_TrackID();
-		Int_t locKMinusTrackID   = dKMinusWrapper->Get_TrackID();
-		Int_t locDeuteronTrackID = dDeuteronWrapper->Get_TrackID();
+		Int_t locBeamID             = dComboBeamWrapper->Get_BeamID();
+        Int_t locKPlusTrackID       = dKPlusWrapper->Get_TrackID();
+		Int_t locKMinusTrackID      = dKMinusWrapper->Get_TrackID();
+		Int_t locDeuteronTrackID    = dDeuteronWrapper->Get_TrackID();
 
 		// GET RECONSTRUCTED P4
-        TLorentzVector locBeamP4     = dComboBeamWrapper->Get_P4();
-        TLorentzVector locKPlusP4    = dKPlusWrapper->Get_P4();
-		TLorentzVector locKMinusP4   = dKMinusWrapper->Get_P4();
-		TLorentzVector locDeuteronP4 = dDeuteronWrapper->Get_P4();
+        TLorentzVector locBeamP4        = dComboBeamWrapper->Get_P4();
+        TLorentzVector locKPlusP4       = dKPlusWrapper->Get_P4();
+		TLorentzVector locKMinusP4      = dKMinusWrapper->Get_P4();
+		TLorentzVector locDeuteronP4    = dDeuteronWrapper->Get_P4();
 
         //GET THROWN P4 AND TOPOLOGY
         TLorentzVector locBeamX4_Thrown, locKPlusX4_Thrown, locKMinusX4_Thrown, locDeuteronX4_Thrown;
@@ -328,18 +328,18 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
         dFlatTreeInterface->Fill_Fundamental<Int_t>("kp_id", locKPlusTrackID);
         dFlatTreeInterface->Fill_Fundamental<Int_t>("km_id", locKMinusTrackID);
         dFlatTreeInterface->Fill_Fundamental<Int_t>("d_id", locDeuteronTrackID);
+        dFlatTreeInterface->Fill_Fundamental<Double_t>("accidweight", locHistAccidWeightFactor);
+        dFlatTreeInterface->Fill_Fundamental<Double_t>("kp_pidfom", dKPlusWrapper->Get_PIDFOM());
+        dFlatTreeInterface->Fill_Fundamental<Double_t>("km_pidfom", dKMinusWrapper->Get_PIDFOM());
         dFlatTreeInterface->Fill_Fundamental<Int_t>("thrown_topology", locThrownTopologyFlag);
         dFlatTreeInterface->Fill_Fundamental<Int_t>("polarization_angle", dPolarizationAngle);
-        dFlatTreeInterface->Fill_Fundamental<Double_t>("accidweight", locHistAccidWeightFactor);
-		dFlatTreeInterface->Fill_Fundamental<Double_t>("kp_pidfom", dKPlusWrapper->Get_PIDFOM());
-		dFlatTreeInterface->Fill_Fundamental<Double_t>("km_pidfom", dKMinusWrapper->Get_PIDFOM());
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_x4_truth", locBeamX4_Thrown);
-        dFlatTreeInterface->Fill_TObject<TLorentzVector>("kp_x4_truth", locKPlusX4_Thrown);
-        dFlatTreeInterface->Fill_TObject<TLorentzVector>("km_x4_truth", locKMinusX4_Thrown);
-        dFlatTreeInterface->Fill_TObject<TLorentzVector>("d_x4_truth", locDeuteronX4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_p4_truth", locBeamP4_Thrown);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("kp_x4_truth", locKPlusX4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("kp_p4_truth", locKPlusP4_Thrown);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("km_x4_truth", locKMinusX4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("km_p4_truth", locKMinusP4_Thrown);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("d_x4_truth", locDeuteronX4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("d_p4_truth", locDeuteronP4_Thrown);
         Fill_FlatTree();
 	}
