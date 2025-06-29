@@ -2,7 +2,7 @@
 
 start=`date +%s`
 
-INPUTFILE=/work/halld2/home/boyu/src_analysis/data/output/phi_d_2H_ver10/*90213.root
+INPUTFILE=/work/halld2/home/boyu/src_analysis_launch/test/tree_gd_kpkmd__B4_F4.root
 TREENAME=gd_kpkmd__B4_F4_Tree
 SELECTOR=phi_d_recon
 
