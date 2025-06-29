@@ -87,6 +87,15 @@ phi_d_2H_dsdt_leps_minust_width         = (phi_d_2H_dsdt_leps_minust_high - phi_
 phi_d_2H_dsdt_leps_results_157          = np.array([0.0005, 0.004, 0.0087, 0.0068, 0.0238, 0.0317, 0.0567, 0.0722, 0.092, 0.1186, 0.1749, 0.2033, 0.2544, 0.3101, 0.3396])*1000
 phi_d_2H_dsdt_leps_results_157_statserr = np.array([0.0005, 0.002, 0.0035, 0.0028, 0.007, 0.0076, 0.0102, 0.0118, 0.0142, 0.0137, 0.0159, 0.0148, 0.0166, 0.0152, 0.0143])*1000
 
+# Theoretical prediction
+phi_d_2H_dsdt_theory_minust = np.loadtxt('ds_dt_theory/10mb_8gev_m0.csv', delimiter=',')[:,0]
+phi_d_2H_dsdt_theory_results_10mb_8gev_m0 = np.loadtxt('ds_dt_theory/10mb_8gev_m0.csv', delimiter=',')[:,1]
+phi_d_2H_dsdt_theory_results_10mb_8gev_m1 = np.loadtxt('ds_dt_theory/10mb_8gev_m1.csv', delimiter=',')[:,1]
+phi_d_2H_dsdt_theory_results_10mb_8gev = phi_d_2H_dsdt_theory_results_10mb_8gev_m1*2/3 + phi_d_2H_dsdt_theory_results_10mb_8gev_m0/3
+phi_d_2H_dsdt_theory_results_30mb_8gev_m0 = np.loadtxt('ds_dt_theory/30mb_8gev_m0.csv', delimiter=',')[:,1]
+phi_d_2H_dsdt_theory_results_30mb_8gev_m1 = np.loadtxt('ds_dt_theory/30mb_8gev_m1.csv', delimiter=',')[:,1]
+phi_d_2H_dsdt_theory_results_30mb_8gev = phi_d_2H_dsdt_theory_results_30mb_8gev_m1*2/3 + phi_d_2H_dsdt_theory_results_30mb_8gev_m0/3
+
 # Plot the data yield
 fig = plt.figure(figsize=(8, 6))
 plt.errorbar(phi_d_2H_dsdt_minust_center, phi_d_2H_dsdt_yield_data, xerr=phi_d_2H_dsdt_minust_width, yerr=phi_d_2H_dsdt_yield_data_statserr, fmt='k.', label='This work')
@@ -120,7 +129,9 @@ plt.errorbar(phi_d_2H_dsdt_leps_minust_center,  phi_d_2H_dsdt_leps_results_157, 
 curve_fit_params, curve_fit_cov = curve_fit(dsdt_func, phi_d_2H_dsdt_minust_center, phi_d_2H_dsdt_results, p0=[0, 0, 0, 0])
 curve_fit_residuals = phi_d_2H_dsdt_results - dsdt_func(phi_d_2H_dsdt_minust_center, curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3])
 reduced_chi2 = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr)**2)/(len(phi_d_2H_dsdt_results)-4)
-plt.plot(np.linspace(0, 2, 100), dsdt_func(np.linspace(0, 2, 100), curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3]), 'b--', label='Fit')
+# plt.plot(np.linspace(0, 2, 100), dsdt_func(np.linspace(0, 2, 100), curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3]), 'b--', label='Fit')
+plt.plot(phi_d_2H_dsdt_theory_minust, phi_d_2H_dsdt_theory_results_10mb_8gev, 'r--', label='10mb prediction')
+plt.plot(phi_d_2H_dsdt_theory_minust, phi_d_2H_dsdt_theory_results_30mb_8gev, 'b--', label='30mb prediction')
 plt.text(0.3, 0.15, 'preliminary', fontsize=15, color='r', style='italic', ha='center', va='center')
 plt.title(r"$d(\gamma, \phi d')$ differential cross section vs $-t$")
 plt.xlabel(r'$-t\ [GeV^2/c]$')
@@ -131,6 +142,8 @@ plt.yscale('log')
 plt.legend()
 plt.savefig('output/fig_phi_d_2H_dsdt_results.png', dpi=300)
 plt.close()
+
+print(curve_fit_params)
 
 # #======================================================================phi_d_2H_Wcostheta======================================================================
 
