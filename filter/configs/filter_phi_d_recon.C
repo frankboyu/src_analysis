@@ -379,8 +379,8 @@ void filter_phi_d_recon(string reaction, string output_mode)
             hist_d_DeltaT_momentum_kin.Write();
             TH2D hist_d_dEdx_cdc_meas                       = *rdf.Histo2D({("d_dEdx_cdc_meas_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 100, 0.0, 10.0, 100, 0.0, 40},"d_momentum_meas","d_dedx_cdc_keV_per_cm_meas","event_weight");
             hist_d_dEdx_cdc_meas.Write();
-            TH2D hist_d_dEdx_cdc_meas                       = *rdf.Histo2D({("d_dEdx_cdc_meas_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 100, 0.0, 10.0, 100, 0.0, 40},"d_momentum_meas","d_dedx_cdc_keV_per_cm_meas","event_weight");
-            hist_d_dEdx_cdc_meas.Write();
+            TH2D hist_d_dEdx_fdc_meas                       = *rdf.Histo2D({("d_dEdx_fdc_meas_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 100, 0.0, 10.0, 100, 0.0, 40},"d_momentum_meas","d_dedx_fdc_keV_per_cm_meas","event_weight");
+            hist_d_dEdx_fdc_meas.Write();
             TH2D hist_d_dEdx_tof_meas                       = *rdf.Histo2D({("d_dEdx_tof_meas_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 100, 0.0, 10.0, 100, 0.0, 40},"d_momentum_meas","d_dedx_tof_keV_per_cm_meas","event_weight");
             hist_d_dEdx_tof_meas.Write();
             TH2D hist_d_dEdx_st_meas                        = *rdf.Histo2D({("d_dEdx_st_meas_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 100, 0.0, 10.0, 100, 0.0, 40},"d_momentum_meas","d_dedx_st_keV_per_cm_meas","event_weight");
