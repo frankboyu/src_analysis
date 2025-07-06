@@ -264,10 +264,10 @@ void filter_phi_d_recon(string reaction, string output_mode)
     cout << "Filtering events...\n";
     auto rdf_NoCut          = rdf_input;
     auto rdf_dEdxCut        = rdf_NoCut.Filter("(d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-29.68353898*d_momentum_meas+13.50623694)+17.88279645*d_momentum_meas*d_momentum_meas-42.15473796*d_momentum_meas+28.83200736)) && (d_dedx_cdc_keV_per_cm_meas < (TMath::Exp(-26.69276323*d_momentum_meas+15.92466317)+17.1164272*d_momentum_meas*d_momentum_meas-48.7542903*d_momentum_meas+40.25692313))");
-    auto rdf_KinFitFOMCut   = rdf_dEdxCut.Filter("kinfit_fom_kin > 0.01");
+    auto rdf_KinFitFOMCut   = rdf_dEdxCut.Filter("kinfit_fom_kin > 1e-5");
     auto rdf_PIDFOMCut      = rdf_KinFitFOMCut.Filter("(kp_pidfom > 0.01) && (km_pidfom > 0.01)");
     auto rdf_MissPCut       = rdf_PIDFOMCut.Filter("(abs(struck_energy_balance_kin) < 1.0)");
-    auto rdf_PhiMassCut     = rdf_MissPCut.Filter("phi_mass_kin < 1.1");
+    auto rdf_PhiMassCut     = rdf_MissPCut.Filter("phi_mass_kin > 1.005 && phi_mass_kin < 1.04");
     auto rdf_output         = rdf_PhiMassCut;
     RNode rdfs []           = {rdf_NoCut,   rdf_dEdxCut,    rdf_KinFitFOMCut,   rdf_PIDFOMCut,  rdf_MissPCut,   rdf_PhiMassCut};
     string labels []        = {"NoCut",     "dEdxCut",      "KinFitFOMCut",     "PIDFOMCut",    "MissPCut",     "PhiMassCut"};
