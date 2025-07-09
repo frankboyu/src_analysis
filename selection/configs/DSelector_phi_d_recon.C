@@ -159,7 +159,7 @@ void DSelector_phi_d_recon::Init(TTree *locTree)
     dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("kp_id");
     dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("km_id");
     dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("d_id");
-    dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("accidweight");
+    dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("accidental_weight");
 	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("kp_pidfom");  // the PIDFOM in the default flat branches kp_pid_fom is corrupted and always 0
 	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("km_pidfom");  // the PIDFOM in the default flat branches km_pid_fom is corrupted and always 0
     dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("thrown_topology");
@@ -217,14 +217,18 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
 		// GET RECONSTRUCTED P4
         TLorentzVector locBeamP4        = dComboBeamWrapper->Get_P4();
         TLorentzVector locKPlusP4       = dKPlusWrapper->Get_P4();
-		TLorentzVector locKMinusP4      = dKMinusWrapper->Get_P4();
-		TLorentzVector locDeuteronP4    = dDeuteronWrapper->Get_P4();
+        TLorentzVector locKMinusP4      = dKMinusWrapper->Get_P4();
+        TLorentzVector locDeuteronP4    = dDeuteronWrapper->Get_P4();
+
+        // GET RECONSTRUCTED MEASURED P4
+        TLorentzVector locBeamP4_Measured       = dComboBeamWrapper->Get_P4_Measured();
+        TLorentzVector locKPlusP4_Measured      = dKPlusWrapper->Get_P4_Measured();
+        TLorentzVector locKMinusP4_Measured     = dKMinusWrapper->Get_P4_Measured();
+        TLorentzVector locDeuteronP4_Measured   = dDeuteronWrapper->Get_P4_Measured();
 
         //GET THROWN P4 AND TOPOLOGY
         TLorentzVector locBeamX4_Thrown, locKPlusX4_Thrown, locKMinusX4_Thrown, locDeuteronX4_Thrown;
         TLorentzVector locBeamP4_Thrown, locKPlusP4_Thrown, locKMinusP4_Thrown, locDeuteronP4_Thrown;
-        TString locThrownTopology = Get_ThrownTopologyString();
-        Int_t locThrownTopologyFlag = -1;
         if (dIsMC)
         {
             locBeamX4_Thrown = dThrownBeam->Get_X4();
@@ -261,25 +265,25 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
         dHist_VertexZ_Before            ->Fill(dComboBeamWrapper->Get_X4().Z());
         dHist_VertexXY_Before           ->Fill(dComboBeamWrapper->Get_X4().X(), dComboBeamWrapper->Get_X4().Y());
         dHist_ConfidenceLevel_Before    ->Fill(TMath::Log10(dComboWrapper->Get_ConfidenceLevel_KinFit()));
-        dHist_KPlusKinematics_Before    ->Fill(locKPlusP4.P(), locKPlusP4.Theta()*rad_to_deg);
-        dHist_KMinusKinematics_Before   ->Fill(locKMinusP4.P(), locKMinusP4.Theta()*rad_to_deg);
+        dHist_KPlusKinematics_Before    ->Fill(locKPlusP4_Measured.P(), locKPlusP4_Measured.Theta()*rad_to_deg);
+        dHist_KMinusKinematics_Before   ->Fill(locKMinusP4_Measured.P(), locKMinusP4_Measured.Theta()*rad_to_deg);
         dHist_DeuteronKinematics_Before ->Fill(locDeuteronP4.P(), locDeuteronP4.Theta()*rad_to_deg);
         dHist_KPlusPIDFOM_Before        ->Fill(TMath::Log10(dKPlusWrapper->Get_PIDFOM()));
         dHist_KMinusPIDFOM_Before       ->Fill(TMath::Log10(dKMinusWrapper->Get_PIDFOM()));
         dHist_DeuterondEdxCDC_Before    ->Fill(dDeuteronWrapper->Get_dEdx_CDC()*1e6);
         dHist_InvariantMassPhi_Before   ->Fill((locKPlusP4+locKMinusP4).M());
-        dHist_ThrownTopology_Before     ->Fill(locThrownTopology.Data(), 1);
+        dHist_ThrownTopology_Before     ->Fill(Get_ThrownTopologyString().Data(), 1);
 
         // PERFORM CUTS
-        if(locBeamP4.E()                                < 5.8   || locBeamP4.E()                    > 10.7) dComboWrapper->Set_IsComboCut(true);
-        if(dComboBeamWrapper->Get_X4().Z()              < 51.0  || dComboBeamWrapper->Get_X4().Z()  > 79.0) dComboWrapper->Set_IsComboCut(true);
-        if(dComboBeamWrapper->Get_X4().Perp()           > 1.0)                                              dComboWrapper->Set_IsComboCut(true);
-        if(locKPlusP4.P()                               < 0.4   || locKPlusP4.Theta()*rad_to_deg    < 2)    dComboWrapper->Set_IsComboCut(true);
-        if(locKMinusP4.P()                              < 0.4   || locKMinusP4.Theta()*rad_to_deg   < 2)    dComboWrapper->Set_IsComboCut(true);
-        if(locDeuteronP4.P()                            < 0.4   || locDeuteronP4.Theta()*rad_to_deg < 2)    dComboWrapper->Set_IsComboCut(true);
-        if(dDeuteronWrapper->Get_dEdx_CDC()             == 0.0)                                             dComboWrapper->Set_IsComboCut(true);
-        if((locKPlusP4+locKMinusP4).M()                 > 1.5)                                              dComboWrapper->Set_IsComboCut(true);
-        if(dComboWrapper->Get_ConfidenceLevel_KinFit()  < 1e-10)                                            dComboWrapper->Set_IsComboCut(true);
+        if(locBeamP4.E()                                < 5.8   || locBeamP4.E()                    > 10.7)         dComboWrapper->Set_IsComboCut(true);
+        if(dComboBeamWrapper->Get_X4().Z()              < 51.0  || dComboBeamWrapper->Get_X4().Z()  > 79.0)         dComboWrapper->Set_IsComboCut(true);
+        if(dComboBeamWrapper->Get_X4().Perp()           > 1.0)                                                      dComboWrapper->Set_IsComboCut(true);
+        if(locKPlusP4_Measured.P()                      < 0.4   || locKPlusP4_Measured.Theta()*rad_to_deg    < 2)   dComboWrapper->Set_IsComboCut(true);
+        if(locKMinusP4_Measured.P()                     < 0.4   || locKMinusP4_Measured.Theta()*rad_to_deg   < 2)   dComboWrapper->Set_IsComboCut(true);
+        if(locDeuteronP4_Measured.P()                   < 0.4   || locDeuteronP4_Measured.Theta()*rad_to_deg < 2)   dComboWrapper->Set_IsComboCut(true);
+        if(dDeuteronWrapper->Get_dEdx_CDC()             == 0.0)                                                     dComboWrapper->Set_IsComboCut(true);
+        if((locKPlusP4+locKMinusP4).M()                 > 1.5)                                                      dComboWrapper->Set_IsComboCut(true);
+        if(dComboWrapper->Get_ConfidenceLevel_KinFit()  < 1e-10)                                                    dComboWrapper->Set_IsComboCut(true);
 
         if(dComboWrapper->Get_IsComboCut())  continue;
 
@@ -290,14 +294,14 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
         dHist_VertexZ_After             ->Fill(dComboBeamWrapper->Get_X4().Z());
         dHist_VertexXY_After       	    ->Fill(dComboBeamWrapper->Get_X4().X(), dComboBeamWrapper->Get_X4().Y());
         dHist_ConfidenceLevel_After     ->Fill(TMath::Log10(dComboWrapper->Get_ConfidenceLevel_KinFit()));
-        dHist_KPlusKinematics_After     ->Fill(locKPlusP4.P(), locKPlusP4.Theta()*rad_to_deg);
-        dHist_KMinusKinematics_After    ->Fill(locKMinusP4.P(), locKMinusP4.Theta()*rad_to_deg);
+        dHist_KPlusKinematics_After     ->Fill(locKPlusP4_Measured.P(), locKPlusP4_Measured.Theta()*rad_to_deg);
+        dHist_KMinusKinematics_After    ->Fill(locKMinusP4_Measured.P(), locKMinusP4_Measured.Theta()*rad_to_deg);
         dHist_DeuteronKinematics_After  ->Fill(locDeuteronP4.P(), locDeuteronP4.Theta()*rad_to_deg);
         dHist_KPlusPIDFOM_After         ->Fill(TMath::Log10(dKPlusWrapper->Get_PIDFOM()));
         dHist_KMinusPIDFOM_After        ->Fill(TMath::Log10(dKMinusWrapper->Get_PIDFOM()));
         dHist_DeuterondEdxCDC_After     ->Fill(dDeuteronWrapper->Get_dEdx_CDC()*1e6);
         dHist_InvariantMassPhi_After    ->Fill((locKPlusP4+locKMinusP4).M());
-        dHist_ThrownTopology_After      ->Fill(locThrownTopology.Data(), 1);
+        dHist_ThrownTopology_After      ->Fill(Get_ThrownTopologyString().Data(), 1);
 
 		// GET THE ACCIDENTAL WEIGHT FACTOR
 		TLorentzVector locBeamX4                       = dComboBeamWrapper->Get_X4_Measured();
@@ -331,7 +335,7 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
         dFlatTreeInterface->Fill_Fundamental<Double_t>("accidweight", locHistAccidWeightFactor);
         dFlatTreeInterface->Fill_Fundamental<Double_t>("kp_pidfom", dKPlusWrapper->Get_PIDFOM());
         dFlatTreeInterface->Fill_Fundamental<Double_t>("km_pidfom", dKMinusWrapper->Get_PIDFOM());
-        dFlatTreeInterface->Fill_Fundamental<Int_t>("thrown_topology", locThrownTopologyFlag);
+        dFlatTreeInterface->Fill_Fundamental<Int_t>("thrown_topology", Get_ThrownTopologyString().Data());
         dFlatTreeInterface->Fill_Fundamental<Int_t>("polarization_angle", dPolarizationAngle);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_x4_truth", locBeamX4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_p4_truth", locBeamP4_Thrown);

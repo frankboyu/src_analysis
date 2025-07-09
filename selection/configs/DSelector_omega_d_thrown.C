@@ -88,8 +88,6 @@ Bool_t DSelector_omega_d_thrown::Process(Long64_t locEntry)
         //GET THROWN P4 AND TOPOLOGY
         TLorentzVector locBeamX4_Thrown, locPiPlusX4_Thrown, locPiMinusX4_Thrown, locDeuteronX4_Thrown, locDecayingPi0X4_Thrown, locPhoton1X4_Thrown, locPhoton2X4_Thrown;
         TLorentzVector locBeamP4_Thrown, locPiPlusP4_Thrown, locPiMinusP4_Thrown, locDeuteronP4_Thrown, locDecayingPi0P4_Thrown, locPhoton1P4_Thrown, locPhoton2P4_Thrown;
-        TString locThrownTopology = Get_ThrownTopologyString();
-        Int_t locThrownTopologyFlag = -1;
         if (dIsMC)
         {
             locBeamX4_Thrown = dThrownBeam->Get_X4();
@@ -144,7 +142,7 @@ Bool_t DSelector_omega_d_thrown::Process(Long64_t locEntry)
         }
 
         // FILL FLAT TREE
-        dFlatTreeInterface->Fill_Fundamental<Int_t>("thrown_topology", locThrownTopologyFlag);
+        dFlatTreeInterface->Fill_Fundamental<Int_t>("thrown_topology", Get_ThrownTopologyString().Data());
         dFlatTreeInterface->Fill_Fundamental<Int_t>("polarization_angle", dPolarizationAngle);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_x4_truth", locBeamX4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_p4_truth", locBeamP4_Thrown);
