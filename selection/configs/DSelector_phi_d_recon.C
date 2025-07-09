@@ -229,6 +229,8 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
         //GET THROWN P4 AND TOPOLOGY
         TLorentzVector locBeamX4_Thrown, locKPlusX4_Thrown, locKMinusX4_Thrown, locDeuteronX4_Thrown;
         TLorentzVector locBeamP4_Thrown, locKPlusP4_Thrown, locKMinusP4_Thrown, locDeuteronP4_Thrown;
+        TString locThrownTopology = Get_ThrownTopologyString();
+        Int_t locThrownTopologyFlag = -1;
         if (dIsMC)
         {
             locBeamX4_Thrown = dThrownBeam->Get_X4();
@@ -272,7 +274,7 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
         dHist_KMinusPIDFOM_Before       ->Fill(TMath::Log10(dKMinusWrapper->Get_PIDFOM()));
         dHist_DeuterondEdxCDC_Before    ->Fill(dDeuteronWrapper->Get_dEdx_CDC()*1e6);
         dHist_InvariantMassPhi_Before   ->Fill((locKPlusP4+locKMinusP4).M());
-        dHist_ThrownTopology_Before     ->Fill(Get_ThrownTopologyString().Data(), 1);
+        dHist_ThrownTopology_Before     ->Fill(locThrownTopology.Data(), 1);
 
         // PERFORM CUTS
         if(locBeamP4.E()                                < 5.8   || locBeamP4.E()                    > 10.7)         dComboWrapper->Set_IsComboCut(true);
@@ -301,7 +303,7 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
         dHist_KMinusPIDFOM_After        ->Fill(TMath::Log10(dKMinusWrapper->Get_PIDFOM()));
         dHist_DeuterondEdxCDC_After     ->Fill(dDeuteronWrapper->Get_dEdx_CDC()*1e6);
         dHist_InvariantMassPhi_After    ->Fill((locKPlusP4+locKMinusP4).M());
-        dHist_ThrownTopology_After      ->Fill(Get_ThrownTopologyString().Data(), 1);
+        dHist_ThrownTopology_After      ->Fill(locThrownTopology.Data(), 1);
 
 		// GET THE ACCIDENTAL WEIGHT FACTOR
 		TLorentzVector locBeamX4                       = dComboBeamWrapper->Get_X4_Measured();
@@ -332,10 +334,10 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
         dFlatTreeInterface->Fill_Fundamental<Int_t>("kp_id", locKPlusTrackID);
         dFlatTreeInterface->Fill_Fundamental<Int_t>("km_id", locKMinusTrackID);
         dFlatTreeInterface->Fill_Fundamental<Int_t>("d_id", locDeuteronTrackID);
-        dFlatTreeInterface->Fill_Fundamental<Double_t>("accidweight", locHistAccidWeightFactor);
+        dFlatTreeInterface->Fill_Fundamental<Double_t>("accidental_weight", locHistAccidWeightFactor);
         dFlatTreeInterface->Fill_Fundamental<Double_t>("kp_pidfom", dKPlusWrapper->Get_PIDFOM());
         dFlatTreeInterface->Fill_Fundamental<Double_t>("km_pidfom", dKMinusWrapper->Get_PIDFOM());
-        dFlatTreeInterface->Fill_Fundamental<Int_t>("thrown_topology", Get_ThrownTopologyString().Data());
+        dFlatTreeInterface->Fill_Fundamental<Int_t>("thrown_topology", locThrownTopologyFlag);
         dFlatTreeInterface->Fill_Fundamental<Int_t>("polarization_angle", dPolarizationAngle);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_x4_truth", locBeamX4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_p4_truth", locBeamP4_Thrown);
