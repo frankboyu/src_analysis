@@ -253,8 +253,6 @@ Bool_t DSelector_rho_d_recon::Process(Long64_t locEntry)
                     locDeuteronX4_Thrown = dThrownWrapper->Get_X4();
                     locDeuteronP4_Thrown = dThrownWrapper->Get_P4();
                 }
-                else
-                    cout << "Unexpected PID: " << dThrownWrapper->Get_PID() << endl;
             }
             locDeuteronX4_Thrown = locPiPlusX4_Thrown;  // workaround for the missing deuteron info in the tree
             locDeuteronP4_Thrown = locBeamP4_Thrown + TLorentzVector(0, 0, 0, 1.875612859) - locPiPlusP4_Thrown - locPiMinusP4_Thrown; // workaround for the missing deuteron info in the tree

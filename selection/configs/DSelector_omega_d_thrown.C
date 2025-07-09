@@ -136,8 +136,6 @@ Bool_t DSelector_omega_d_thrown::Process(Long64_t locEntry)
                         cout << "Unexpected thrown photon with ID: " << dThrownWrapper->Get_PID() << endl;
                     }
                 }
-                else
-                    cout << "Unexpected PID: " << dThrownWrapper->Get_PID() << endl;
             }
             locDeuteronX4_Thrown = locPiPlusX4_Thrown;  // workaround for the missing deuteron info in the tree
             locDeuteronP4_Thrown = locBeamP4_Thrown + TLorentzVector(0, 0, 0, 1.875612859) - locPiPlusP4_Thrown - locPiMinusP4_Thrown - locDecayingPi0P4_Thrown; // workaround for the missing deuteron info in the tree
