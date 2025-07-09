@@ -250,9 +250,8 @@ Bool_t DSelector_omega_d_recon::Process(Long64_t locEntry)
         TLorentzVector locPiPlusP4_Measured     = dPiPlusWrapper->Get_P4_Measured();
         TLorentzVector locPiMinusP4_Measured    = dPiMinusWrapper->Get_P4_Measured();
         TLorentzVector locDeuteronP4_Measured   = dDeuteronWrapper->Get_P4_Measured();
-        TLorentzVector locDecayingPi0P4_Measured    = dDecayingPi0Wrapper->Get_P4_Measured();
-		TLorentzVector locPhoton1P4_Measured        = dPhoton1Wrapper->Get_P4_Measured();
-		TLorentzVector locPhoton2P4_Measured        = dPhoton2Wrapper->Get_P4_Measured();
+		TLorentzVector locPhoton1P4_Measured    = dPhoton1Wrapper->Get_P4_Measured();
+		TLorentzVector locPhoton2P4_Measured    = dPhoton2Wrapper->Get_P4_Measured();
 
         //GET THROWN P4 AND TOPOLOGY
         TLorentzVector locBeamX4_Thrown, locPiPlusX4_Thrown, locPiMinusX4_Thrown, locDeuteronX4_Thrown, locDecayingPi0X4_Thrown, locPhoton1X4_Thrown, locPhoton2X4_Thrown;
