@@ -328,17 +328,17 @@ Bool_t DSelector_omega_d_recon::Process(Long64_t locEntry)
         dHist_ThrownTopology_Before     ->Fill(locThrownTopology.Data(), 1);
 
         // PERFORM CUTS
-        if(locBeamP4.E()                                < 5.8   || locBeamP4.E()                    > 10.7)         dComboWrapper->Set_IsComboCut(true);
-        if(dComboBeamWrapper->Get_X4().Z()              < 51.0  || dComboBeamWrapper->Get_X4().Z()  > 79.0)         dComboWrapper->Set_IsComboCut(true);
-        if(dComboBeamWrapper->Get_X4().Perp()           > 1.0)                                                      dComboWrapper->Set_IsComboCut(true);
-        if(locPiPlusP4_Measured.P()                     < 0.4   || locPiPlusP4_Measured.Theta()*rad_to_deg   < 2)   dComboWrapper->Set_IsComboCut(true);
-        if(locPiMinusP4_Measured.P()                    < 0.4   || locPiMinusP4_Measured.Theta()*rad_to_deg  < 2)   dComboWrapper->Set_IsComboCut(true);
-        if(locDeuteronP4_Measured.P()                   < 0.4   || locDeuteronP4_Measured.Theta()*rad_to_deg < 2)   dComboWrapper->Set_IsComboCut(true);
-        if(dPhoton1Wrapper->Get_Shower_Quality()        < 0.5)                                                      dComboWrapper->Set_IsComboCut(true);
-        if(dPhoton2Wrapper->Get_Shower_Quality()        < 0.5)                                                      dComboWrapper->Set_IsComboCut(true);
-        if(dDeuteronWrapper->Get_dEdx_CDC()             == 0.0)                                                     dComboWrapper->Set_IsComboCut(true);
-        if((locPiPlusP4+locPiMinusP4).M()               > 1.5)                                                      dComboWrapper->Set_IsComboCut(true);
-        if(dComboWrapper->Get_ConfidenceLevel_KinFit()  < 1e-10)                                                    dComboWrapper->Set_IsComboCut(true);
+        if(locBeamP4.E()                                    < 5.8   || locBeamP4.E()                    > 10.7)         dComboWrapper->Set_IsComboCut(true);
+        if(dComboBeamWrapper->Get_X4().Z()                  < 51.0  || dComboBeamWrapper->Get_X4().Z()  > 79.0)         dComboWrapper->Set_IsComboCut(true);
+        if(dComboBeamWrapper->Get_X4().Perp()               > 1.0)                                                      dComboWrapper->Set_IsComboCut(true);
+        if(locPiPlusP4_Measured.P()                         < 0.4   || locPiPlusP4_Measured.Theta()*rad_to_deg   < 2)   dComboWrapper->Set_IsComboCut(true);
+        if(locPiMinusP4_Measured.P()                        < 0.4   || locPiMinusP4_Measured.Theta()*rad_to_deg  < 2)   dComboWrapper->Set_IsComboCut(true);
+        if(locDeuteronP4_Measured.P()                       < 0.4   || locDeuteronP4_Measured.Theta()*rad_to_deg < 2)   dComboWrapper->Set_IsComboCut(true);
+        if(dPhoton1Wrapper->Get_Shower_Quality()            < 0.5)                                                      dComboWrapper->Set_IsComboCut(true);
+        if(dPhoton2Wrapper->Get_Shower_Quality()            < 0.5)                                                      dComboWrapper->Set_IsComboCut(true);
+        if(dDeuteronWrapper->Get_dEdx_CDC()                 == 0.0)                                                     dComboWrapper->Set_IsComboCut(true);
+        if((locDecayingPi0P4+locPiPlusP4+locPiMinusP4).M()  > 1.5)                                                      dComboWrapper->Set_IsComboCut(true);
+        if(dComboWrapper->Get_ConfidenceLevel_KinFit()      < 1e-10)                                                    dComboWrapper->Set_IsComboCut(true);
 
         if(dComboWrapper->Get_IsComboCut())  continue;
 
