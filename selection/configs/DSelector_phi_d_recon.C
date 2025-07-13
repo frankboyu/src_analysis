@@ -40,34 +40,34 @@ private:
     DChargedTrackHypothesis*    dDeuteronWrapper;
 
     // CUSTOM HISTOGRAMS
-    TH1F* dHist_NumUnusedTracks_Before;
-    TH1F* dHist_NumUnusedShowers_Before;
+    TH1D* dHist_NumUnusedTracks_Before;
+    TH1D* dHist_NumUnusedShowers_Before;
     TH1F* dHist_PhotonEnergy_Before;
     TH1F* dHist_VertexZ_Before;
     TH2F* dHist_VertexXY_Before;
-    TH1F* dHist_ConfidenceLevel_Before;
     TH2F* dHist_KPlusKinematics_Before;
     TH2F* dHist_KMinusKinematics_Before;
     TH2F* dHist_DeuteronKinematics_Before;
     TH1F* dHist_KPlusPIDFOM_Before;
     TH1F* dHist_KMinusPIDFOM_Before;
-    TH1F* dHist_DeuterondEdxCDC_Before;
+    TH2F* dHist_DeuterondEdxCDC_Before;
     TH1F* dHist_InvariantMassPhi_Before;
+    TH2F* dHist_ChiSqPerNDF_Before;
     TH1F* dHist_ThrownTopology_Before;
 
-    TH1F* dHist_NumUnusedTracks_After;
-    TH1F* dHist_NumUnusedShowers_After;
+    TH1D* dHist_NumUnusedTracks_After;
+    TH1D* dHist_NumUnusedShowers_After;
     TH1F* dHist_PhotonEnergy_After;
     TH1F* dHist_VertexZ_After;
     TH2F* dHist_VertexXY_After;
-    TH1F* dHist_ConfidenceLevel_After;
     TH2F* dHist_KPlusKinematics_After;
     TH2F* dHist_KMinusKinematics_After;
     TH2F* dHist_DeuteronKinematics_After;
     TH1F* dHist_KPlusPIDFOM_After;
     TH1F* dHist_KMinusPIDFOM_After;
-    TH1F* dHist_DeuterondEdxCDC_After;
+    TH2F* dHist_DeuterondEdxCDC_After;
     TH1F* dHist_InvariantMassPhi_After;
+    TH2F* dHist_ChiSqPerNDF_After;
     TH1F* dHist_ThrownTopology_After;
 
     ClassDef(DSelector_phi_d_recon, 0);
@@ -85,10 +85,15 @@ void DSelector_phi_d_recon::Get_ComboWrappers(void)
 void DSelector_phi_d_recon::Init(TTree *locTree)
 {
     // DETERMINE THE TAG NAME
+    if      (string(locTree->GetName()).find("kpkmd_") != string::npos)
+        dTag += "exc";
+    else if (string(locTree->GetName()).find("kpkmdinc_") != string::npos)
+        dTag += "inc";
+
     if (locTree->GetBranch("MCWeight") == NULL)
-        dTag += "data";
+        dTag += "_data";
     else
-        dTag += "sim";
+        dTag += "_sim";
 
     if      (string(locTree->GetName()).find("gd") != string::npos)
         dTag += "_2H";
@@ -96,13 +101,6 @@ void DSelector_phi_d_recon::Init(TTree *locTree)
         dTag += "_4He";
     else if (string(locTree->GetName()).find("gc12") != string::npos)
         dTag += "_12C";
-
-    if      (string(locTree->GetName()).find("kpkmd_") != string::npos)
-        dTag += "_exc";
-    else if (string(locTree->GetName()).find("kpkmdmiss") != string::npos)
-        dTag += "_IA";
-    else if (string(locTree->GetName()).find("kpkmdinc_") != string::npos)
-        dTag += "_inc";
 
     // SET OUTPUT FILE NAME
     dOutputFileName          = Form("selectedhist_phi_d_recon_%s.root", dTag.c_str());
@@ -122,34 +120,34 @@ void DSelector_phi_d_recon::Init(TTree *locTree)
     Initialize_Actions();
 
     // CUSTOM HISTOGRAMS
-    dHist_NumUnusedTracks_Before    = new TH1F("NumUnusedTracks_Before",    ";Unused Tracks             ;Events/1",             10,     0.0,    10.0);
-    dHist_NumUnusedShowers_Before   = new TH1F("NumUnusedShowers_Before",   ";Unused Showers            ;Events/1",             10,     0.0,    10.0);
+    dHist_NumUnusedTracks_Before    = new TH1D("NumUnusedTracks_Before",    ";Unused Tracks             ;Events/1",             10,     0.0,    10.0);
+    dHist_NumUnusedShowers_Before   = new TH1D("NumUnusedShowers_Before",   ";Unused Showers            ;Events/1",             10,     0.0,    10.0);
     dHist_PhotonEnergy_Before       = new TH1F("PhotonEnergy_Before",       ";Photon Energy (GeV)       ;Events/0.01 GeV",      900,    3.0,    12.0);
     dHist_VertexZ_Before            = new TH1F("VertexZ_Before",            ";Vertex Z (cm)             ;Events/1 cm",          200,    0.0,    200.0);
     dHist_VertexXY_Before           = new TH2F("VertexXY_Before",           ";Vertex X (cm)             ;Vertex Y (cm)",        100,    -5.0,   5.0,    100,    -5.0,   5.0);
-    dHist_ConfidenceLevel_Before    = new TH1F("ConfidenceLevel_Before",    ";log(CL)                   ;Events/1",             50,     -50.0,  0);
     dHist_KPlusKinematics_Before    = new TH2F("KPlusKinematics_Before",    ";P (GeV/c)                 ;#theta (deg)",         100,    0.0,    10.0,   90,     0.0,    180.0);
     dHist_KMinusKinematics_Before   = new TH2F("KMinusKinematics_Before",   ";P (GeV/c)                 ;#theta (deg)",         100,    0.0,    10.0,   90,     0.0,    180.0);
     dHist_DeuteronKinematics_Before = new TH2F("DeuteronKinematics_Before", ";P (GeV/c)                 ;#theta (deg)",         100,    0.0,    10.0,   90,     0.0,    180.0);
     dHist_KPlusPIDFOM_Before        = new TH1F("KPlusPIDFOM_Before",        ";log(PIDFOM)               ;Events/1",             50,     -50.0,  0);
     dHist_KMinusPIDFOM_Before       = new TH1F("KMinusPIDFOM_Before",       ";log(PIDFOM)               ;Events/1",             50,     -50.0,  0);
-    dHist_DeuterondEdxCDC_Before    = new TH1F("DeuterondEdxCDC_Before",    ";dE/dx_{CDC} (keV/cm)      ;Events/0.1 keV/cm",    400,    0.0,    40.0);
+    dHist_DeuterondEdxCDC_Before    = new TH2F("DeuterondEdxCDC_Before",    ";P (GeV/c)                 ;dE/dx_{CDC} (keV/cm)", 100,    0.0,    10.0,   400,    0.0,    40.0);
     dHist_InvariantMassPhi_Before   = new TH1F("InvariantMassPhi_Before",	";M_{K^{+}K^{-}} (GeV)      ;Events/0.01 GeV",      500,    0.0,    5.0);
+    dHist_ChiSqPerNDF_Before        = new TH2F("ChiSqPerNDF_Before",        ";M_{K^{+}K^{-}} (GeV)      ;#Chi^2/NDF",           500,    0.0,    5.0,    20,     0.0,    20);
     dHist_ThrownTopology_Before     = new TH1F("ThrownTopology_Before",     ";Thrown Topology           ;Events/1",             20,     0.5,    20.5);
 
-    dHist_NumUnusedTracks_After     = new TH1F("NumUnusedTracks_After",     ";Unused Tracks             ;Events/1",             10,     0.0,    10.0);
-    dHist_NumUnusedShowers_After    = new TH1F("NumUnusedShowers_After",    ";Unused Showers            ;Events/1",             10,     0.0,    10.0);
+    dHist_NumUnusedTracks_After     = new TH1D("NumUnusedTracks_After",     ";Unused Tracks             ;Events/1",             10,     0.0,    10.0);
+    dHist_NumUnusedShowers_After    = new TH1D("NumUnusedShowers_After",    ";Unused Showers            ;Events/1",             10,     0.0,    10.0);
     dHist_PhotonEnergy_After        = new TH1F("PhotonEnergy_After",        ";Photon Energy (GeV)       ;Events/0.01 GeV",      900,    3.0,    12.0);
     dHist_VertexZ_After             = new TH1F("VertexZ_After",             ";Vertex Z (cm)             ;Events/1 cm",          200,    0.0,    200.0);
     dHist_VertexXY_After            = new TH2F("VertexXY_After",            ";Vertex X (cm)             ;Vertex Y (cm)",        100,    -5.0,   5.0,    100,    -5.0,   5.0);
-    dHist_ConfidenceLevel_After     = new TH1F("ConfidenceLevel_After",     ";log(CL)                   ;Events/1",             50,     -50.0,  0);
     dHist_KPlusKinematics_After     = new TH2F("KPlusKinematics_After",     ";P (GeV/c)                 ;#theta (deg)",         100,    0.0,    10.0,   90,     0.0,    180.0);
     dHist_KMinusKinematics_After    = new TH2F("KMinusKinematics_After",    ";P (GeV/c)                 ;#theta (deg)",         100,    0.0,    10.0,   90,     0.0,    180.0);
     dHist_DeuteronKinematics_After  = new TH2F("DeuteronKinematics_After",  ";P (GeV/c)                 ;#theta (deg)",         100,    0.0,    10.0,   90,     0.0,    180.0);
     dHist_KPlusPIDFOM_After         = new TH1F("KPlusPIDFOM_After",         ";log(PIDFOM)               ;Events/1",             50,     -50.0,  0);
     dHist_KMinusPIDFOM_After        = new TH1F("KMinusPIDFOM_After",        ";log(PIDFOM)               ;Events/1",             50,     -50.0,  0);
-    dHist_DeuterondEdxCDC_After     = new TH1F("DeuterondEdxCDC_After",     ";dE/dx_{CDC} (keV/cm)      ;Events/0.1 keV/cm",    400,    0.0,    40.0);
+    dHist_DeuterondEdxCDC_After     = new TH2F("DeuterondEdxCDC_After",     ";P (GeV/c)                 ;dE/dx_{CDC} (keV/cm)", 100,    0.0,    10.0,   400,    0.0,    40.0);
     dHist_InvariantMassPhi_After    = new TH1F("InvariantMassPhi_After",	";M_{K^{+}K^{-}} (GeV)      ;Events/0.01 GeV",      500,    0.0,    5.0);
+    dHist_ChiSqPerNDF_After         = new TH2F("ChiSqPerNDF_After",         ";M_{K^{+}K^{-}} (GeV)      ;#Chi^2/NDF",           500,    0.0,    5.0,    20,     0.0,    20);
     dHist_ThrownTopology_After      = new TH1F("ThrownTopology_After",      ";Thrown Topology           ;Events/1",             20,     0.5,    20.5);
 
     // CUSTOM OUTPUT BRACHES: FLAT TREE
@@ -264,26 +262,26 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
         dHist_PhotonEnergy_Before       ->Fill(locBeamP4.E());
         dHist_VertexZ_Before            ->Fill(dComboBeamWrapper->Get_X4().Z());
         dHist_VertexXY_Before           ->Fill(dComboBeamWrapper->Get_X4().X(), dComboBeamWrapper->Get_X4().Y());
-        dHist_ConfidenceLevel_Before    ->Fill(TMath::Log10(dComboWrapper->Get_ConfidenceLevel_KinFit()));
         dHist_KPlusKinematics_Before    ->Fill(locKPlusP4_Measured.P(), locKPlusP4_Measured.Theta()*rad_to_deg);
         dHist_KMinusKinematics_Before   ->Fill(locKMinusP4_Measured.P(), locKMinusP4_Measured.Theta()*rad_to_deg);
-        dHist_DeuteronKinematics_Before ->Fill(locDeuteronP4.P(), locDeuteronP4.Theta()*rad_to_deg);
+        dHist_DeuteronKinematics_Before ->Fill(locDeuteronP4_Measured.P(), locDeuteronP4_Measured.Theta()*rad_to_deg);
         dHist_KPlusPIDFOM_Before        ->Fill(TMath::Log10(dKPlusWrapper->Get_PIDFOM()));
         dHist_KMinusPIDFOM_Before       ->Fill(TMath::Log10(dKMinusWrapper->Get_PIDFOM()));
-        dHist_DeuterondEdxCDC_Before    ->Fill(dDeuteronWrapper->Get_dEdx_CDC()*1e6);
+        dHist_DeuterondEdxCDC_Before    ->Fill(locDeuteronP4_Measured.P(), dDeuteronWrapper->Get_dEdx_CDC()*1e6);
         dHist_InvariantMassPhi_Before   ->Fill((locKPlusP4+locKMinusP4).M());
+        dHist_ChiSqPerNDF_Before        ->Fill((locKPlusP4+locKMinusP4).M(), dComboWrapper->Get_ChiSq_KinFit()/dComboWrapper->Get_NDF_KinFit());
         dHist_ThrownTopology_Before     ->Fill(locThrownTopology.Data(), 1);
 
         // PERFORM CUTS
-        if(locBeamP4.E()                                    < 5.8   || locBeamP4.E()                    > 10.7)         dComboWrapper->Set_IsComboCut(true);
-        if(dComboBeamWrapper->Get_X4().Z()                  < 51.0  || dComboBeamWrapper->Get_X4().Z()  > 79.0)         dComboWrapper->Set_IsComboCut(true);
-        if(dComboBeamWrapper->Get_X4().Perp()               > 1.0)                                                      dComboWrapper->Set_IsComboCut(true);
-        if(locKPlusP4_Measured.P()                          < 0.4   || locKPlusP4_Measured.Theta()*rad_to_deg    < 2)   dComboWrapper->Set_IsComboCut(true);
-        if(locKMinusP4_Measured.P()                         < 0.4   || locKMinusP4_Measured.Theta()*rad_to_deg   < 2)   dComboWrapper->Set_IsComboCut(true);
-        if(locDeuteronP4_Measured.P()                       < 0.4   || locDeuteronP4_Measured.Theta()*rad_to_deg < 2)   dComboWrapper->Set_IsComboCut(true);
-        if(dDeuteronWrapper->Get_dEdx_CDC()                 == 0.0)                                                     dComboWrapper->Set_IsComboCut(true);
-        if((locKPlusP4+locKMinusP4).M()                     > 1.5)                                                      dComboWrapper->Set_IsComboCut(true);
-        if(dComboWrapper->Get_ConfidenceLevel_KinFit()      < 1e-10)                                                    dComboWrapper->Set_IsComboCut(true);
+        if(locBeamP4.E()                        < 5.8   || locBeamP4.E()                                > 10.7) dComboWrapper->Set_IsComboCut(true);
+        if(dComboBeamWrapper->Get_X4().Z()      < 51.0  || dComboBeamWrapper->Get_X4().Z()              > 79.0) dComboWrapper->Set_IsComboCut(true);
+        if(dComboBeamWrapper->Get_X4().Perp()   > 1.0)                                                          dComboWrapper->Set_IsComboCut(true);
+        if(locKPlusP4_Measured.P()              < 0.4   || locKPlusP4_Measured.Theta()*rad_to_deg       < 2)    dComboWrapper->Set_IsComboCut(true);
+        if(locKMinusP4_Measured.P()             < 0.4   || locKMinusP4_Measured.Theta()*rad_to_deg      < 2)    dComboWrapper->Set_IsComboCut(true);
+        if(locDeuteronP4_Measured.P()           < 0.4   || locDeuteronP4_Measured.Theta()*rad_to_deg    < 2)    dComboWrapper->Set_IsComboCut(true);
+        if(dDeuteronWrapper->Get_dEdx_CDC()     == 0.0)                                                         dComboWrapper->Set_IsComboCut(true);
+        if((locKPlusP4+locKMinusP4).M()         > 1.5)                                                          dComboWrapper->Set_IsComboCut(true);
+        if(dComboWrapper->Get_ChiSq_KinFit()/dComboWrapper->Get_NDF_KinFit()                            > 10)   dComboWrapper->Set_IsComboCut(true);
 
         if(dComboWrapper->Get_IsComboCut())  continue;
 
@@ -292,15 +290,15 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
         dHist_NumUnusedShowers_After    ->Fill(dComboWrapper->Get_NumUnusedShowers());
         dHist_PhotonEnergy_After        ->Fill(locBeamP4.E());
         dHist_VertexZ_After             ->Fill(dComboBeamWrapper->Get_X4().Z());
-        dHist_VertexXY_After       	    ->Fill(dComboBeamWrapper->Get_X4().X(), dComboBeamWrapper->Get_X4().Y());
-        dHist_ConfidenceLevel_After     ->Fill(TMath::Log10(dComboWrapper->Get_ConfidenceLevel_KinFit()));
+        dHist_VertexXY_After            ->Fill(dComboBeamWrapper->Get_X4().X(), dComboBeamWrapper->Get_X4().Y());
         dHist_KPlusKinematics_After     ->Fill(locKPlusP4_Measured.P(), locKPlusP4_Measured.Theta()*rad_to_deg);
         dHist_KMinusKinematics_After    ->Fill(locKMinusP4_Measured.P(), locKMinusP4_Measured.Theta()*rad_to_deg);
-        dHist_DeuteronKinematics_After  ->Fill(locDeuteronP4.P(), locDeuteronP4.Theta()*rad_to_deg);
+        dHist_DeuteronKinematics_After  ->Fill(locDeuteronP4_Measured.P(), locDeuteronP4_Measured.Theta()*rad_to_deg);
         dHist_KPlusPIDFOM_After         ->Fill(TMath::Log10(dKPlusWrapper->Get_PIDFOM()));
         dHist_KMinusPIDFOM_After        ->Fill(TMath::Log10(dKMinusWrapper->Get_PIDFOM()));
-        dHist_DeuterondEdxCDC_After     ->Fill(dDeuteronWrapper->Get_dEdx_CDC()*1e6);
+        dHist_DeuterondEdxCDC_After     ->Fill(locDeuteronP4_Measured.P(), dDeuteronWrapper->Get_dEdx_CDC()*1e6);
         dHist_InvariantMassPhi_After    ->Fill((locKPlusP4+locKMinusP4).M());
+        dHist_ChiSqPerNDF_After         ->Fill((locKPlusP4+locKMinusP4).M(), dComboWrapper->Get_ChiSq_KinFit()/dComboWrapper->Get_NDF_KinFit());
         dHist_ThrownTopology_After      ->Fill(locThrownTopology.Data(), 1);
 
 		// GET THE ACCIDENTAL WEIGHT FACTOR
