@@ -58,10 +58,39 @@ phi_d_2H_dsdt_yield_tagged          = np.loadtxt('output/yield_phi_d_thrown_tagg
 phi_d_2H_dsdt_yield_data_statserr   = np.sqrt(phi_d_2H_dsdt_yield_data)
 phi_d_2H_dsdt_yield_sim_statserr    = np.sqrt(phi_d_2H_dsdt_yield_sim)
 phi_d_2H_dsdt_yield_tagged_statserr = np.sqrt(phi_d_2H_dsdt_yield_tagged)
+phi_d_2H_dsdt_yield_data_old            = np.loadtxt('output/yield_phi_d_recon_data_2H_exc_dsdt_old.txt')[:,4]
+phi_d_2H_dsdt_yield_sim_old             = np.loadtxt('output/yield_phi_d_recon_sim_2H_exc_dsdt_old.txt')[:,4]
+phi_d_2H_dsdt_yield_tagged_old          = np.loadtxt('output/yield_phi_d_thrown_tagged_2H_dsdt_old.txt')[:,4]
+phi_d_2H_dsdt_yield_data_statserr_old   = np.sqrt(phi_d_2H_dsdt_yield_data_old)
+phi_d_2H_dsdt_yield_sim_statserr_old    = np.sqrt(phi_d_2H_dsdt_yield_sim_old)
+phi_d_2H_dsdt_yield_tagged_statserr_old = np.sqrt(phi_d_2H_dsdt_yield_tagged_old)
+phi_d_2H_dsdt_efficiency_old            = phi_d_2H_dsdt_yield_sim_old/phi_d_2H_dsdt_yield_tagged_old
+phi_d_2H_dsdt_efficiency_statserr_old   = phi_d_2H_dsdt_efficiency_old * np.sqrt(1/phi_d_2H_dsdt_yield_sim_old + 1/phi_d_2H_dsdt_yield_tagged_old)
+phi_d_2H_dsdt_results_old               = phi_d_2H_dsdt_yield_data_old/phi_d_2H_dsdt_efficiency_old/lumi(phi_d_2H_dsdt_energy_low, phi_d_2H_dsdt_energy_high, '2H')/(phi_d_2H_dsdt_minust_high-phi_d_2H_dsdt_minust_low)/0.489/1000
+phi_d_2H_dsdt_results_statserr_old      = phi_d_2H_dsdt_results_old/np.sqrt(phi_d_2H_dsdt_yield_data_old)
+
+phi_d_2H_dsdt_yield_data_jana1            = np.loadtxt('output/yield_phi_d_recon_data_2H_exc_jana1_dsdt.txt')[:,4]
+phi_d_2H_dsdt_yield_data_jana2            = np.loadtxt('output/yield_phi_d_recon_data_2H_exc_jana2_dsdt.txt')[:,4]
+phi_d_2H_dsdt_yield_data_statserr_jana1   = np.sqrt(phi_d_2H_dsdt_yield_data_jana1)
+phi_d_2H_dsdt_yield_data_statserr_jana2   = np.sqrt(phi_d_2H_dsdt_yield_data_jana2)
+
+phi_d_2H_dsdt_yield_sim_jana1_uniform             = np.loadtxt('output/yield_phi_d_recon_sim_2H_exc_jana1_uniform_dsdt.txt')[:,4]
+phi_d_2H_dsdt_yield_tagged_jana1_uniform          = np.loadtxt('output/yield_phi_d_thrown_tagged_2H_jana1_uniform_dsdt.txt')[:,4]
+phi_d_2H_dsdt_yield_sim_statserr_jana1_uniform    = np.sqrt(phi_d_2H_dsdt_yield_sim_jana1_uniform)
+phi_d_2H_dsdt_yield_tagged_statserr_jana1_uniform = np.sqrt(phi_d_2H_dsdt_yield_tagged_jana1_uniform)
+phi_d_2H_dsdt_yield_sim_jana1_helicity             = np.loadtxt('output/yield_phi_d_recon_sim_2H_exc_jana1_helicity_dsdt.txt')[:,4]
+phi_d_2H_dsdt_yield_tagged_jana1_helicity          = np.loadtxt('output/yield_phi_d_thrown_tagged_2H_jana1_helicity_dsdt.txt')[:,4]
+phi_d_2H_dsdt_yield_sim_statserr_jana1_helicity    = np.sqrt(phi_d_2H_dsdt_yield_sim_jana1_helicity)
+phi_d_2H_dsdt_yield_tagged_statserr_jana1_helicity = np.sqrt(phi_d_2H_dsdt_yield_tagged_jana1_helicity)
 
 # Calculate the efficiency
 phi_d_2H_dsdt_efficiency            = phi_d_2H_dsdt_yield_sim/phi_d_2H_dsdt_yield_tagged
 phi_d_2H_dsdt_efficiency_statserr   = phi_d_2H_dsdt_efficiency * np.sqrt(1/phi_d_2H_dsdt_yield_sim + 1/phi_d_2H_dsdt_yield_tagged)
+
+phi_d_2H_dsdt_efficiency_jana1_uniform            = phi_d_2H_dsdt_yield_sim_jana1_uniform/phi_d_2H_dsdt_yield_tagged_jana1_uniform
+phi_d_2H_dsdt_efficiency_statserr_jana1_uniform   = phi_d_2H_dsdt_efficiency_jana1_uniform * np.sqrt(1/phi_d_2H_dsdt_yield_sim_jana1_uniform + 1/phi_d_2H_dsdt_yield_tagged_jana1_uniform)
+phi_d_2H_dsdt_efficiency_jana1_helicity            = phi_d_2H_dsdt_yield_sim_jana1_helicity/phi_d_2H_dsdt_yield_tagged_jana1_helicity
+phi_d_2H_dsdt_efficiency_statserr_jana1_helicity   = phi_d_2H_dsdt_efficiency_jana1_helicity * np.sqrt(1/phi_d_2H_dsdt_yield_sim_jana1_helicity + 1/phi_d_2H_dsdt_yield_tagged_jana1_helicity)
 
 # Calculate the results
 phi_d_2H_dsdt_results               = phi_d_2H_dsdt_yield_data/phi_d_2H_dsdt_efficiency/lumi(phi_d_2H_dsdt_energy_low, phi_d_2H_dsdt_energy_high, '2H')/(phi_d_2H_dsdt_minust_high-phi_d_2H_dsdt_minust_low)/0.489/1000
@@ -103,9 +132,33 @@ plt.title(r"$d(\gamma, \phi d')$ yield vs $-t$")
 plt.xlabel(r'$-t[GeV^2/c]$')
 plt.ylabel(r'$\mathrm{Yield}$')
 plt.xlim(0, 2)
-plt.ylim(0, 300)
+plt.ylim(0, 1500)
 plt.legend()
 plt.savefig('output/fig_phi_d_2H_dsdt_yield.png', dpi=300)
+plt.close()
+
+fig = plt.figure(figsize=(8, 6))
+plt.errorbar(phi_d_2H_dsdt_minust_center, phi_d_2H_dsdt_yield_data_jana1, xerr=phi_d_2H_dsdt_minust_width, yerr=phi_d_2H_dsdt_yield_data_statserr_jana1, fmt='b.', label='JANA1')
+plt.errorbar(phi_d_2H_dsdt_minust_center, phi_d_2H_dsdt_yield_data_jana2, xerr=phi_d_2H_dsdt_minust_width, yerr=phi_d_2H_dsdt_yield_data_statserr_jana2, fmt='k.', label='JANA2')
+plt.title(r"$d(\gamma, \phi d')$ yield vs $-t$")
+plt.xlabel(r'$-t[GeV^2/c]$')
+plt.ylabel(r'$\mathrm{Yield}$')
+plt.xlim(0, 2)
+plt.ylim(0, 1500)
+plt.legend()
+plt.savefig('output/fig_phi_d_2H_dsdt_yield_jana2.png', dpi=300)
+plt.close()
+
+fig = plt.figure(figsize=(8, 6))
+plt.errorbar(phi_d_2H_dsdt_minust_center, 100*(phi_d_2H_dsdt_yield_data_jana1-phi_d_2H_dsdt_yield_data_jana2)/phi_d_2H_dsdt_yield_data_jana2, fmt='k.', label='Percentage difference')
+plt.plot(np.linspace(0, 2, 100), np.zeros(100), 'r--', label='Zero line')
+plt.title(r"$d(\gamma, \phi d')$ yield vs $-t$")
+plt.xlabel(r'$-t[GeV^2/c]$')
+plt.ylabel(r'$\mathrm{Relative\ difference(\%)}$')
+plt.xlim(0, 2)
+plt.ylim(-1, 1)
+plt.legend()
+plt.savefig('output/fig_phi_d_2H_dsdt_yield_jana2_diff.png', dpi=300)
 plt.close()
 
 # Plot the efficiency
@@ -115,9 +168,33 @@ plt.title(r"$d(\gamma, \phi d')$ efficiency vs $-t$")
 plt.xlabel(r'$-t[GeV^2/c]$')
 plt.ylabel(r'$\mathrm{Efficiency}$')
 plt.xlim(0, 2)
-plt.ylim(0, 0.1)
+plt.ylim(0, 0.4)
 plt.legend()
 plt.savefig('output/fig_phi_d_2H_dsdt_efficiency.png', dpi=300)
+plt.close()
+
+fig = plt.figure(figsize=(8, 6))
+plt.errorbar(phi_d_2H_dsdt_minust_center, phi_d_2H_dsdt_efficiency_jana1_uniform, xerr=phi_d_2H_dsdt_minust_width, yerr=phi_d_2H_dsdt_efficiency_statserr_jana1_uniform, fmt='b.', label='Uniform decay')
+plt.errorbar(phi_d_2H_dsdt_minust_center, phi_d_2H_dsdt_efficiency_jana1_helicity, xerr=phi_d_2H_dsdt_minust_width, yerr=phi_d_2H_dsdt_efficiency_statserr_jana1_helicity, fmt='k.', label='Helicity-conserving decay')
+plt.title(r"$d(\gamma, \phi d')$ efficiency vs $-t$")
+plt.xlabel(r'$-t[GeV^2/c]$')
+plt.ylabel(r'$\mathrm{Efficiency}$')
+plt.xlim(0, 2)
+plt.ylim(0, 0.4)
+plt.legend()
+plt.savefig('output/fig_phi_d_2H_dsdt_efficiency_helicity.png', dpi=300)
+plt.close()
+
+fig = plt.figure(figsize=(8, 6))
+plt.errorbar(phi_d_2H_dsdt_minust_center, 100*(phi_d_2H_dsdt_efficiency_jana1_helicity-phi_d_2H_dsdt_efficiency_jana1_uniform)/phi_d_2H_dsdt_efficiency_jana1_helicity, fmt='b.', label='Percentage difference')
+plt.plot(np.linspace(0, 2, 100), np.zeros(100), 'r--', label='Zero line')
+plt.title(r"$d(\gamma, \phi d')$ efficiency difference vs $-t$")
+plt.xlabel(r'$-t[GeV^2/c]$')
+plt.ylabel(r'$\mathrm{Relative\ difference (\%)}$')
+plt.xlim(0, 2)
+plt.ylim(-10, 10)
+plt.legend()
+plt.savefig('output/fig_phi_d_2H_dsdt_efficiency_helicity_diff.png', dpi=300)
 plt.close()
 
 # Plot the results
@@ -143,7 +220,31 @@ plt.legend()
 plt.savefig('output/fig_phi_d_2H_dsdt_results.png', dpi=300)
 plt.close()
 
-print(curve_fit_params)
+fig = plt.figure(figsize=(8, 6))
+plt.errorbar(phi_d_2H_dsdt_minust_center,       phi_d_2H_dsdt_results,          xerr=phi_d_2H_dsdt_minust_width,        yerr=phi_d_2H_dsdt_results_statserr,            fmt='k.', label='New')
+plt.errorbar(phi_d_2H_dsdt_minust_center,       phi_d_2H_dsdt_results_old,          xerr=phi_d_2H_dsdt_minust_width,        yerr=phi_d_2H_dsdt_results_statserr_old,            fmt='b.', label='Old')
+plt.title(r"$d(\gamma, \phi d')$ differential cross section vs $-t$")
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$')
+plt.xlim(0, 2)
+plt.ylim(1e-1, 1e3)
+plt.yscale('log')
+plt.legend()
+plt.savefig('output/fig_phi_d_2H_dsdt_old.png', dpi=300)
+plt.close()
+
+fig = plt.figure(figsize=(8, 6))
+plt.errorbar(phi_d_2H_dsdt_minust_center,       (phi_d_2H_dsdt_results_old-phi_d_2H_dsdt_results)/phi_d_2H_dsdt_results_statserr_old, fmt='k.', label='New')
+plt.plot(np.linspace(0, 2, 100), np.zeros(100), 'r--', label='Zero line')
+plt.plot(np.linspace(0, 2, 100), np.ones(100), 'r--', label='Zero line')
+plt.plot(np.linspace(0, 2, 100), -1*np.ones(100), 'r--', label='Zero line')
+plt.title(r"$d(\gamma, \phi d')$ differential cross section difference vs $-t$")
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$Relative\ difference(\sigma)$')
+plt.xlim(0, 2)
+plt.ylim(-5, 5)
+plt.savefig('output/fig_phi_d_2H_dsdt_old_diff.png', dpi=300)
+plt.close()
 
 # #======================================================================phi_d_2H_Wcostheta======================================================================
 

@@ -95,9 +95,9 @@ int get_yield(string channel, string reaction, string observable)
             cout << "-t: " << bins[i][2] << "-" << bins[i][3] << " GeV^2" << endl;
             this_hist_name = Form("hist_%.1f_%.1f_%.1f_%.1f", bins[i][0], bins[i][1], bins[i][2], bins[i][3]);
             if (reaction.find("recon") != string::npos)
-                this_hist_cut = Form("accidweight*(beam_energy_kin>%f && beam_energy_kin<%f && minust_kin>%f && minust_kin<%f && rho_mass_kin>0.6 && rho_mass_kin<0.88)", bins[i][0], bins[i][1], bins[i][2], bins[i][3]);
+                this_hist_cut = Form("accidental_weight*(beam_energy_kin>%f && beam_energy_kin<%f && minust_beam_kin>%f && minust_beam_kin<%f)", bins[i][0], bins[i][1], bins[i][2], bins[i][3]);
             else if (reaction.find("thrown") != string::npos)
-                this_hist_cut = Form("beam_energy_truth>%f && beam_energy_truth<%f && minust_truth>%f && minust_truth<%f && rho_mass_truth>0.6 && rho_mass_truth<0.88", bins[i][0], bins[i][1], bins[i][2], bins[i][3]);
+                this_hist_cut = Form("beam_energy_truth>%f && beam_energy_truth<%f && minust_truth>%f && minust_truth<%f", bins[i][0], bins[i][1], bins[i][2], bins[i][3]);
         }
         else if (observable == "Wcostheta")
         {
@@ -106,9 +106,9 @@ int get_yield(string channel, string reaction, string observable)
             cout << "cos(theta_H): " << bins[i][4] << "-" << bins[i][5] << endl;
             this_hist_name = Form("hist_%.1f_%.1f_%.1f_%.1f_%.1f_%.1f", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
             if (reaction.find("recon") != string::npos)
-                this_hist_cut = Form("accidweight*(beam_energy_kin>%f && beam_energy_kin<%f && minust_kin>%f && minust_kin<%f && decay_costheta_helicity_kin>%f && decay_costheta_helicity_kin<%f && rho_mass_kin>0.6 && rho_mass_kin<0.88)", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
+                this_hist_cut = Form("accidental_weight*(beam_energy_kin>%f && beam_energy_kin<%f && minust_beam_kin>%f && minust_beam_kin<%f && decay_costheta_helicity_kin>%f && decay_costheta_helicity_kin<%f)", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
             else if (reaction.find("thrown") != string::npos)
-                this_hist_cut = Form("beam_energy_truth>%f && beam_energy_truth<%f && minust_truth>%f && minust_truth<%f && decay_costheta_helicity_truth>%f && decay_costheta_helicity_truth<%f && rho_mass_truth>0.6 && rho_mass_truth<0.88", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
+                this_hist_cut = Form("beam_energy_truth>%f && beam_energy_truth<%f && minust_truth>%f && minust_truth<%f && decay_costheta_helicity_truth>%f && decay_costheta_helicity_truth<%f", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
         }
         else if (observable == "Wphi")
         {
@@ -117,9 +117,9 @@ int get_yield(string channel, string reaction, string observable)
             cout << "phi: " << bins[i][4] << "-" << bins[i][5] << " deg" << endl;
             this_hist_name = Form("hist_%.1f_%.1f_%.1f_%.1f_%.1f_%.1f", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
             if (reaction.find("recon") != string::npos)
-                this_hist_cut = Form("accidweight*(beam_energy_kin>%f && beam_energy_kin<%f && minust_kin>%f && minust_kin<%f && decay_phi_helicity_kin>%f && decay_phi_helicity_kin<%f && rho_mass_kin>0.6 && rho_mass_kin<0.88)", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
+                this_hist_cut = Form("accidental_weight*(beam_energy_kin>%f && beam_energy_kin<%f && minust_beam_kin>%f && minust_beam_kin<%f && decay_phi_helicity_kin>%f && decay_phi_helicity_kin<%f)", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
             else if (reaction.find("thrown") != string::npos)
-                this_hist_cut = Form("beam_energy_truth>%f && beam_energy_truth<%f && minust_truth>%f && minust_truth<%f && decay_phi_helicity_truth>%f && decay_phi_helicity_truth<%f && rho_mass_truth>0.6 && rho_mass_truth<0.88", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
+                this_hist_cut = Form("beam_energy_truth>%f && beam_energy_truth<%f && minust_truth>%f && minust_truth<%f && decay_phi_helicity_truth>%f && decay_phi_helicity_truth<%f", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
         }
         else if (observable == "WPhi")
         {
@@ -128,9 +128,9 @@ int get_yield(string channel, string reaction, string observable)
             cout << "Phi: " << bins[i][4] << "-" << bins[i][5] << " deg" << endl;
             this_hist_name = Form("hist_%.1f_%.1f_%.1f_%.1f_%.1f_%.1f", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
             if (reaction.find("recon") != string::npos)
-                this_hist_cut = Form("accidweight*(beam_energy_kin>%f && beam_energy_kin<%f && minust_kin>%f && minust_kin<%f && polarization_phi_com_kin>%f && polarization_phi_com_kin<%f && rho_mass_kin>0.6 && rho_mass_kin<0.88)", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
+                this_hist_cut = Form("accidental_weight*(beam_energy_kin>%f && beam_energy_kin<%f && minust_beam_kin>%f && minust_beam_kin<%f && polarization_phi_com_kin>%f && polarization_phi_com_kin<%f)", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
             else if (reaction.find("thrown") != string::npos)
-                this_hist_cut = Form("beam_energy_truth>%f && beam_energy_truth<%f && minust_truth>%f && minust_truth<%f && polarization_phi_com_truth>%f && polarization_phi_com_truth<%f && rho_mass_truth>0.6 && rho_mass_truth<0.88", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
+                this_hist_cut = Form("beam_energy_truth>%f && beam_energy_truth<%f && minust_truth>%f && minust_truth<%f && polarization_phi_com_truth>%f && polarization_phi_com_truth<%f", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
         }
         else if (observable == "Wpsi")
         {
@@ -139,9 +139,9 @@ int get_yield(string channel, string reaction, string observable)
             cout << "psi: " << bins[i][4] << "-" << bins[i][5] << " deg" << endl;
             this_hist_name = Form("hist_%.1f_%.1f_%.1f_%.1f_%.1f_%.1f", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
             if (reaction.find("recon") != string::npos)
-                this_hist_cut = Form("accidweight*(beam_energy_kin>%f && beam_energy_kin<%f && minust_kin>%f && minust_kin<%f && psi_helicity_kin>%f && psi_helicity_kin<%f && rho_mass_kin>0.6 && rho_mass_kin<0.88)", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
+                this_hist_cut = Form("accidental_weight*(beam_energy_kin>%f && beam_energy_kin<%f && minust_beam_kin>%f && minust_beam_kin<%f && psi_helicity_kin>%f && psi_helicity_kin<%f)", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
             else if (reaction.find("thrown") != string::npos)
-                this_hist_cut = Form("beam_energy_truth>%f && beam_energy_truth<%f && minust_truth>%f && minust_truth<%f && psi_helicity_truth>%f && psi_helicity_truth<%f && rho_mass_truth>0.6 && rho_mass_truth<0.88", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
+                this_hist_cut = Form("beam_energy_truth>%f && beam_energy_truth<%f && minust_truth>%f && minust_truth<%f && psi_helicity_truth>%f && psi_helicity_truth<%f", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
         }
 
         this_hist = new TH1F(this_hist_name.c_str(), this_hist_name.c_str(), hist_bins, hist_min, hist_max);
