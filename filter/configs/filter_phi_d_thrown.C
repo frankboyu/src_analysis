@@ -1,7 +1,17 @@
 #include </work/halld2/home/boyu/src_analysis/filter/configs/const.h>
 
-double mass_target = 0.0;
-double mass_missing = 0.0;
+double sim_weight_func(double beam_energy_truth, double minust_truth)
+{
+    double a1 = 2813.72894997;
+    double b1 = 15.13997936;
+    double a2 = 17.88792021;
+    double b2 = 2.98839991;
+    double normalization = 10;
+    if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
+        return 1.0;
+    else                            // simulation, weighted by the measured cross section
+        return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
+}
 
 void filter_phi_d_thrown(string reaction, string output_mode)
 {
@@ -14,37 +24,24 @@ void filter_phi_d_thrown(string reaction, string output_mode)
     chain.Add(input_treefile_name.c_str());
 
     cout << "Defining data frame...\n";
-    if      (reaction.find("2H")   != string::npos)
-    {
-        mass_target = mass_2H;
-        mass_missing = 0.0;
-    }
-    else if (reaction.find("4He")  != string::npos)
-    {
-        mass_target = mass_4He;
-        mass_missing = mass_2H;
-    }
-    else if (reaction.find("12C")  != string::npos)
-    {
-        mass_target = mass_12C;
-        mass_missing = mass_10B;
-    }
-
     RDataFrame rdf_raw(chain);
     auto rdf_def = RNode(rdf_raw);
     if (reaction.find("gen") != string::npos)
     {
         rdf_def = rdf_def
         .Define("beam_p4_truth",            "pBeam")
-        // .Define("kp_p4_truth",              "pDecay1")
-        .Define("kp_p4_truth",              "TLorentzVector(0, 0, 0, 0)")
-        // .Define("km_p4_truth",              "pDecay2")
-        .Define("km_p4_truth",              "TLorentzVector(0, 0, 0, 0)")
+        .Define("kp_p4_truth",              "pDecay1")
+        // .Define("kp_p4_truth",              "TLorentzVector(0, 0, 0, 0)")
+        .Define("km_p4_truth",              "pDecay2")
+        // .Define("km_p4_truth",              "TLorentzVector(0, 0, 0, 0)")
         .Define("d_p4_truth",               "pBaryon")
         .Define("polarization_angle",       "-1")
         ;
     }
     auto rdf_input = rdf_def
+    .Define("target_p4",                        "TLorentzVector(0, 0, 0, mass_2H)")
+    .Define("sim_weight",                       "sim_weight_func(beam_p4_truth.E(), -(target_p4 - d_p4_truth).Mag2())")
+    .Define("event_weight",                     "sim_weight")
     .Define("beam_energy_truth",                "beam_p4_truth.E()")
     .Define("kp_as_pion_p4_truth",              "TLorentzVector(kp_p4_truth.Vect(), TMath::Sqrt(kp_p4_truth.P()*kp_p4_truth.P() + mass_piplus*mass_piplus))")
     .Define("kp_energy_truth",                  "kp_p4_truth.E()")
@@ -61,38 +58,20 @@ void filter_phi_d_thrown(string reaction, string output_mode)
     .Define("phi_energy_truth",                 "phi_p4_truth.E()")
     .Define("phi_momentum_truth",               "phi_p4_truth.P()")
     .Define("phi_mass_truth",                   "phi_p4_truth.M()")
-    .Define("phi_proxymass_truth",              "TMath::Sqrt(phi_p4_truth.Minus()*(2*beam_energy_truth + mass_target - d_p4_truth.Plus() - (TMath::Sq(mass_missing) + (phi_p4_truth + d_p4_truth).Perp2())/(mass_target - (phi_p4_truth + d_p4_truth).Minus())) - phi_p4_truth.Perp2())")
     .Define("phi_theta_truth",                  "phi_p4_truth.Theta()*RadToDeg")
-    .Define("struck_p4_truth",                  "phi_p4_truth + d_p4_truth - beam_p4_truth")
-    .Define("struck_energy_truth",              "struck_p4_truth.E()")
-    .Define("struck_energy_balance_truth",      "struck_energy_truth - mass_2H")
-    .Define("struck_mass_truth",                "struck_p4_truth.M()")
-    .Define("struck_masssquared_truth",         "struck_p4_truth.M2()")
-    .Define("struck_pminus_truth",              "struck_p4_truth.Minus()")
-    .Define("struck_momentum_truth",            "struck_p4_truth.P()")
-    .Define("struck_theta_truth",               "struck_p4_truth.Theta()*RadToDeg")
-    .Define("miss_p4_truth",                    "beam_p4_truth + TLorentzVector(0, 0, 0, mass_target) - phi_p4_truth - d_p4_truth")
+    .Define("miss_p4_truth",                    "beam_p4_truth + target_p4 - phi_p4_truth - d_p4_truth")
     .Define("miss_energy_truth",                "miss_p4_truth.E()")
-    .Define("miss_energy_balance_truth",        "miss_energy_truth - mass_missing")
-    .Define("miss_mass_truth",                  "miss_p4_truth.M()")
-    .Define("miss_mass_balance_truth",          "miss_mass_truth - mass_missing")
     .Define("miss_masssquared_truth",           "miss_p4_truth.M2()")
-    .Define("miss_masssquared_balance_truth",   "miss_masssquared_truth - mass_missing*mass_missing")
     .Define("miss_pminus_truth",                "miss_p4_truth.Minus()")
-    .Define("miss_pminus_balance_truth",        "miss_pminus_truth - mass_missing")
     .Define("miss_momentum_truth",              "miss_p4_truth.P()")
-    .Define("miss_theta_truth",                 "miss_p4_truth.Theta()*RadToDeg")
-    .Define("total_initial_p4_truth",           "beam_p4_truth + TLorentzVector(0, 0, 0, mass_target)")
-    .Define("total_final_p4_truth",             "phi_p4_truth + d_p4_truth")
-    .Define("sqrts_truth",                      "total_final_p4_truth.Mag()")
+    .Define("total_p4_truth",                   "phi_p4_truth + d_p4_truth")
     .Define("minust_truth",                     "-(beam_p4_truth - phi_p4_truth).Mag2()")
-    .Define("minusu_truth",                     "-(beam_p4_truth - d_p4_truth).Mag2()")
     .Define("coplanarity_truth",                "abs(phi_p4_truth.Phi() - d_p4_truth.Phi())*RadToDeg")
-    .Define("y_phi_truth",                      "minust_truth/(2*mass_2H*(beam_p4_truth.E()-phi_p4_truth.E()))")
     .Define("rho_mass_truth",                   "(kp_as_pion_p4_truth + km_as_pion_p4_truth).M()")
     .Define("epsilon_x3_com",                   "TVector3(TMath::Cos(polarization_angle/RadToDeg), TMath::Sin(polarization_angle/RadToDeg), 0)")
-    .Define("beam_p4_com_truth",                "boost_lorentz_vector(beam_p4_truth, -total_final_p4_truth.BoostVector())")
-    .Define("phi_p4_com_truth",                 "boost_lorentz_vector(phi_p4_truth, -total_final_p4_truth.BoostVector())")
+    .Define("beam_p4_com_truth",                "boost_lorentz_vector(beam_p4_truth, -total_p4_truth.BoostVector())")
+    .Define("phi_p4_com_truth",                 "boost_lorentz_vector(phi_p4_truth, -total_p4_truth.BoostVector())")
+    .Define("kp_p4_com_truth",                  "boost_lorentz_vector(kp_p4_truth, -total_p4_truth.BoostVector())")
     .Define("z_x3_com_truth",                   "beam_p4_com_truth.Vect().Unit()")
     .Define("y_x3_com_truth",                   "beam_p4_com_truth.Vect().Cross(phi_p4_com_truth.Vect()).Unit()")
     .Define("x_x3_com_truth",                   "y_x3_com_truth.Cross(z_x3_com_truth).Unit()")
@@ -101,7 +80,7 @@ void filter_phi_d_thrown(string reaction, string output_mode)
     .Define("z_x3_helicity_truth",              "phi_p4_com_truth.Vect().Unit()")
     .Define("y_x3_helicity_truth",              "beam_p4_com_truth.Vect().Cross(phi_p4_com_truth.Vect()).Unit()")
     .Define("x_x3_helicity_truth",              "y_x3_helicity_truth.Cross(z_x3_helicity_truth).Unit()")
-    .Define("pi_x3_helicity_truth",             "boost_lorentz_vector(kp_p4_truth, -phi_p4_truth.BoostVector()).Vect().Unit()")
+    .Define("pi_x3_helicity_truth",             "boost_lorentz_vector(kp_p4_com_truth, -phi_p4_com_truth.BoostVector()).Vect().Unit()")
     .Define("decay_costheta_helicity_truth",    "pi_x3_helicity_truth.Dot(z_x3_helicity_truth)")
     .Define("decay_phi_helicity_truth",         "TMath::ATan2(-x_x3_helicity_truth.Dot(pi_x3_helicity_truth.Cross(z_x3_helicity_truth)), y_x3_helicity_truth.Dot(pi_x3_helicity_truth.Cross(z_x3_helicity_truth)))*RadToDeg")
     .Define("psi_helicity_truth",               "fmod(polarization_phi_com_truth-decay_phi_helicity_truth+360, 360.0) >= 180 ? fmod(polarization_phi_com_truth-decay_phi_helicity_truth+360, 360.0) - 360 : fmod(polarization_phi_com_truth-decay_phi_helicity_truth+360, 360.0)")
@@ -137,65 +116,39 @@ void filter_phi_d_thrown(string reaction, string output_mode)
             TDirectory * dir = output_histfile->mkdir(label.c_str());
             dir->cd();
 
-                TH1D hist_beam_energy_truth                 = *rdf.Histo1D({("beam_energy_truth_"+ label).c_str(), ";E_{beam} (GeV);Counts", 60, 5.0, 11.0},"beam_energy_truth");
+                TH1D hist_beam_energy_truth                 = *rdf.Histo1D({("beam_energy_truth_"+ label).c_str(), ";E_{beam} (GeV);Counts", 60, 5.0, 11.0},"beam_energy_truth","event_weight");
                 hist_beam_energy_truth.Write();
-                TH2D hist_kp_kinematics_truth               = *rdf.Histo2D({("kp_kinematics_truth_"+ label).c_str(), ";P_{K^{+}} (GeV/c);#theta_{K^{+}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"kp_momentum_truth","kp_theta_truth");
+                TH2D hist_kp_kinematics_truth               = *rdf.Histo2D({("kp_kinematics_truth_"+ label).c_str(), ";P_{K^{+}} (GeV/c);#theta_{K^{+}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"kp_momentum_truth","kp_theta_truth","event_weight");
                 hist_kp_kinematics_truth.Write();
-                TH2D hist_km_kinematics_truth               = *rdf.Histo2D({("km_kinematics_truth_"+ label).c_str(), ";P_{K^{-}} (GeV/c);#theta_{K^{-}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"km_momentum_truth","km_theta_truth");
+                TH2D hist_km_kinematics_truth               = *rdf.Histo2D({("km_kinematics_truth_"+ label).c_str(), ";P_{K^{-}} (GeV/c);#theta_{K^{-}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"km_momentum_truth","km_theta_truth","event_weight");
                 hist_km_kinematics_truth.Write();
-                TH2D hist_d_kinematics_truth                = *rdf.Histo2D({("d_kinematics_truth_"+ label).c_str(), ";P_{d} (GeV/c);#theta_{d} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"d_momentum_truth","d_theta_truth");
+                TH2D hist_d_kinematics_truth                = *rdf.Histo2D({("d_kinematics_truth_"+ label).c_str(), ";P_{d} (GeV/c);#theta_{d} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"d_momentum_truth","d_theta_truth","event_weight");
                 hist_d_kinematics_truth.Write();
-                TH1D hist_phi_mass_truth                    = *rdf.Histo1D({("phi_mass_truth_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);Counts", 400, 0.9, 1.3},"phi_mass_truth");
+                TH1D hist_phi_mass_truth                    = *rdf.Histo1D({("phi_mass_truth_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);Counts", 500, 0.9, 1.9},"phi_mass_truth","event_weight");
                 hist_phi_mass_truth.Write();
-                TH2D hist_phi_kinematics_truth              = *rdf.Histo2D({("phi_kinematics_truth_"+ label).c_str(), ";P_{#phi} (GeV/c);#theta_{#phi} (deg)", 100, 0.0, 11.0, 180, 0.0, 180.0},"phi_momentum_truth","phi_theta_truth");
+                TH2D hist_phi_kinematics_truth              = *rdf.Histo2D({("phi_kinematics_truth_"+ label).c_str(), ";P_{#phi} (GeV/c);#theta_{#phi} (deg)", 100, 0.0, 11.0, 180, 0.0, 180.0},"phi_momentum_truth","phi_theta_truth","event_weight");
                 hist_phi_kinematics_truth.Write();
-                TH2D hist_phi_d_theta_truth                 = *rdf.Histo2D({("phi_d_theta_truth_"+ label).c_str(), ";#theta_{d} (deg);#theta_{#phi} (deg)", 180, 0.0, 180.0, 180, 0.0, 180.0},"d_theta_truth","phi_theta_truth");
+                TH2D hist_phi_d_theta_truth                 = *rdf.Histo2D({("phi_d_theta_truth_"+ label).c_str(), ";#theta_{d} (deg);#theta_{#phi} (deg)", 180, 0.0, 180.0, 180, 0.0, 180.0},"d_theta_truth","phi_theta_truth","event_weight");
                 hist_phi_d_theta_truth.Write();
-                TH2D hist_phi_d_momentum_truth              = *rdf.Histo2D({("phi_d_momentum_truth_"+ label).c_str(), ";P_{d} (GeV/c);P_{#phi} (GeV/c)", 100, 0.0, 10.0, 100, 0.0, 10.0},"d_momentum_truth","phi_momentum_truth");
+                TH2D hist_phi_d_momentum_truth              = *rdf.Histo2D({("phi_d_momentum_truth_"+ label).c_str(), ";P_{d} (GeV/c);P_{#phi} (GeV/c)", 100, 0.0, 10.0, 100, 0.0, 10.0},"d_momentum_truth","phi_momentum_truth","event_weight");
                 hist_phi_d_momentum_truth.Write();
-
-                TH1D hist_miss_energy_truth                 = *rdf.Histo1D({("miss_energy_truth_"+ label).c_str(), ";E_{miss} - m_{A-2} (GeV);Counts", 300, -3.0, 3.0},"miss_energy_balance_truth");
-                hist_miss_energy_truth.Write();
-                TH1D hist_miss_mass_truth                   = *rdf.Histo1D({("miss_mass_truth_"+ label).c_str(), ";m_{miss} - m_{A-2} (GeV/c^{2});Counts", 100, -0.5, 0.5},"miss_mass_balance_truth");
-                hist_miss_mass_truth.Write();
-                TH1D hist_miss_masssquared_truth            = *rdf.Histo1D({("miss_masssquared_truth_"+ label).c_str(), ";m_{miss}^{2} - m_{A-2}^{2} (GeV^{2}/c^{4});Counts", 100, 0.0, 0.1},"miss_masssquared_balance_truth");
-                hist_miss_masssquared_truth.Write();
-                TH1D hist_miss_pminus_truth                 = *rdf.Histo1D({("miss_pminus_truth_"+ label).c_str(), ";P_{miss}^{-} - m_{A-2} (GeV/c);Counts", 100, -1.0, 1.0},"miss_pminus_truth");
-                hist_miss_pminus_truth.Write();
-                TH1D hist_miss_momentum_truth               = *rdf.Histo1D({("miss_momentum_truth_"+ label).c_str(), ";P_{miss} (GeV/c);Counts", 200, 0.0, 2.0},"miss_momentum_truth");
-                hist_miss_momentum_truth.Write();
-                TH2D hist_miss_momentum_pminus_truth        = *rdf.Histo2D({("miss_momentum_pminus_truth_"+ label).c_str(), ";P_{miss} (GeV/c);P_{miss}^{-} - m_{A-2} (GeV/c)", 200, 0.0, 2.0, 100, -1.0, 1.0},"miss_momentum_truth","miss_pminus_truth");
-                hist_miss_momentum_pminus_truth.Write();
-                TH2D hist_miss_momentum_energy_truth        = *rdf.Histo2D({("miss_momentum_energy_truth_"+ label).c_str(), ";P_{miss} (GeV/c);E_{miss} - m_{A-2} (GeV)", 200, 0.0, 2.0, 300, -3.0, 3.0},"miss_momentum_truth","miss_energy_truth");
-                hist_miss_momentum_energy_truth.Write();
-
-                TH1D hist_sqrts_truth                       = *rdf.Histo1D({("sqrts_truth_"+ label).c_str(), ";#sqrt{s} (GeV);Counts", 40, 4.0, 8.0},"sqrts_truth");
-                hist_sqrts_truth.Write();
-                TH1D hist_minust_truth                      = *rdf.Histo1D({("minust_truth_"+ label).c_str(), ";-t (GeV^{2}/c^{2});Counts", 30, 0.0, 3.0},"minust_truth");
+                TH1D hist_minust_truth                      = *rdf.Histo1D({("minust_truth_"+ label).c_str(), ";-t (GeV^{2}/c^{2});Counts", 100, 0.0, 2.0},"minust_truth","event_weight");
                 hist_minust_truth.Write();
-                TH1D hist_minusu_truth                      = *rdf.Histo1D({("minusu_truth_"+ label).c_str(), ";-u (GeV^{2}/c^{2});Counts", 300, 15.0, 45.0},"minusu_truth");
-                hist_minusu_truth.Write();
-                TH1D hist_coplanarity_truth                 = *rdf.Histo1D({("coplanarity_truth_"+ label).c_str(), ";Coplanarity (deg);Counts", 40, 160.0, 200.0},"coplanarity_truth");
-                hist_coplanarity_truth.Write();
-                TH1D hist_yphi_truth                        = *rdf.Histo1D({("yphi_truth_"+ label).c_str(), ";y_{#phi};Counts", 200, 0.0, 2.0},"y_phi_truth");
-                hist_yphi_truth.Write();
-                TH1D hist_rho_mass_truth                    = *rdf.Histo1D({("rho_mass_truth_"+ label).c_str(), ";m_{#pi^{+}#pi^{-}} (GeV/c^{2});Counts", 100, 0.0, 1.0},"rho_mass_truth");
+                TH1D hist_rho_mass_truth                    = *rdf.Histo1D({("rho_mass_truth_"+ label).c_str(), ";m_{#pi^{+}#pi^{-}} (GeV/c^{2});Counts", 100, 0.0, 1.0},"rho_mass_truth","event_weight");
                 hist_rho_mass_truth.Write();
-                TH2D hist_beam_energy_minust_truth          = *rdf.Histo2D({("beam_energy_minust_truth_"+ label).c_str(), ";E_{beam} (GeV);-t (GeV^{2}/c^{2})", 60, 5.0, 11.0, 30, 0.0, 3.0},"beam_energy_truth","minust_truth");
+                TH2D hist_beam_energy_minust_truth          = *rdf.Histo2D({("beam_energy_minust_truth_"+ label).c_str(), ";E_{beam} (GeV);-t (GeV^{2}/c^{2})", 60, 5.0, 11.0, 20, 0.0, 2.0},"beam_energy_truth","minust_truth","event_weight");
                 hist_beam_energy_minust_truth.Write();
-
-                TH1D hist_scatter_theta_com_truth           = *rdf.Histo1D({("scatter_theta_com_truth_"+ label).c_str(), ";#theta_{CM} (deg);Counts", 180, 0.0, 180.0},"scatter_theta_com_truth");
+                TH1D hist_scatter_theta_com_truth           = *rdf.Histo1D({("scatter_theta_com_truth_"+ label).c_str(), ";#theta_{CM} (deg);Counts", 180, 0.0, 180.0},"scatter_theta_com_truth","event_weight");
                 hist_scatter_theta_com_truth.Write();
-                TH2D hist_minust_scatter_theta_com_truth    = *rdf.Histo2D({("minust_scatter_theta_com_truth_"+ label).c_str(), ";-t (GeV^{2}/c^{2});#theta_{CM} (deg)", 30, 0.0, 3.0, 180, 0.0, 180.0},"minust_truth","scatter_theta_com_truth");
+                TH2D hist_minust_scatter_theta_com_truth    = *rdf.Histo2D({("minust_scatter_theta_com_truth_"+ label).c_str(), ";-t (GeV^{2}/c^{2});#theta_{CM} (deg)", 20, 0.0, 2.0, 180, 0.0, 180.0},"minust_truth","scatter_theta_com_truth","event_weight");
                 hist_minust_scatter_theta_com_truth.Write();
-                TH1D hist_polarization_phi_com_truth        = *rdf.Histo1D({("polarization_phi_com_truth_"+ label).c_str(), ";#phi_{com} (deg);Counts", 9, -180, 180.0},"polarization_phi_com_truth");
+                TH1D hist_polarization_phi_com_truth        = *rdf.Histo1D({("polarization_phi_com_truth_"+ label).c_str(), ";#phi_{com} (deg);Counts", 9, -180, 180.0},"polarization_phi_com_truth","event_weight");
                 hist_polarization_phi_com_truth.Write();
-
-                TH1D hist_decay_costheta_helicity_truth     = *rdf.Histo1D({("decay_costheta_helicity_truth_"+ label).c_str(), ";cos(#theta_{helicity});Counts", 10, -1.0, 1.0},"decay_costheta_helicity_truth");
+                TH1D hist_decay_costheta_helicity_truth     = *rdf.Histo1D({("decay_costheta_helicity_truth_"+ label).c_str(), ";cos(#theta_{helicity});Counts", 10, -1.0, 1.0},"decay_costheta_helicity_truth","event_weight");
                 hist_decay_costheta_helicity_truth.Write();
-                TH1D hist_decay_phi_helicity_truth          = *rdf.Histo1D({("decay_phi_helicity_truth_"+ label).c_str(), ";#phi_{helicity} (deg);Counts", 9, -180.0, 180.0},"decay_phi_helicity_truth");
+                TH1D hist_decay_phi_helicity_truth          = *rdf.Histo1D({("decay_phi_helicity_truth_"+ label).c_str(), ";#phi_{helicity} (deg);Counts", 9, -180.0, 180.0},"decay_phi_helicity_truth","event_weight");
                 hist_decay_phi_helicity_truth.Write();
-                TH1D hist_psi_helicity_truth                = *rdf.Histo1D({("psi_helicity_truth_"+ label).c_str(), ";#psi_{helicity} (deg);Counts", 9, -270.0, 270.0},"psi_helicity_truth");
+                TH1D hist_psi_helicity_truth                = *rdf.Histo1D({("psi_helicity_truth_"+ label).c_str(), ";#psi_{helicity} (deg);Counts", 9, -270.0, 270.0},"psi_helicity_truth","event_weight");
                 hist_psi_helicity_truth.Write();
         }
         output_histfile->Close();
