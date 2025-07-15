@@ -166,39 +166,59 @@ class Hist2D:
         return Hist1D(self.TH2.ProjectionY(),**kwargs)
 
 
-def exponential(x, a, b, c, d, e):
-    return np.exp(a*x+b)+c*x*x+d*x+e
+# def exponential(x, a, b, c, d, e):
+#     return np.exp(a*x+b)+c*x*x+d*x+e
 
-points = np.loadtxt('points_high.txt', delimiter=',', skiprows=1)
+def exponential(x, a, b, c):
+    return np.exp(a*x+b)+c
+
+points = np.loadtxt('points_cdc.txt', delimiter=',', skiprows=1)
 
 popt, pcov = curve_fit(exponential, points[:,0], points[:,1])
 print(popt)
 
-# plt.plot(points[:,0], exponential(points[:,0], *popt))
+file_data = File("../../../filter/output/filteredhist_phi_d_recon_exc_data_2H.root")
 
-file_data = File("alldata.root")
-# file_sim = File("/work/halld2/home/boyu/src_analysis/filter/output/test/filteredtree_phi_d_recon_sim_2H_kpkmd.root")
-
-hist_data = file_data.get('no_cut/dEdx_d_no_cut')
-hist_data.yedge = hist_data.yedge*1000000
-# hist_sim = file_sim.get('pidfom_cut/dEdx_d_pidfom_cut')
-hist_data.plotHeatmap(label="Data")
-# hist_sim.plotHeatmap(label="Sim")
-# plt.legend()
+hist_data = file_data.get('NoCut/d_dEdx_cdc_meas_NoCut')
+hist_data.plotHeatmap(label="CDC", vmin=0, vmax=100)
 p_points = np.arange(0.25, 3, 0.01)
 
 dE_points = exponential(p_points, *popt)
-plt.plot(p_points, dE_points, label="Upper limit")
+plt.plot(p_points, dE_points, label="Fit")
 
-dE_points = np.exp(-29.68353898*p_points+13.50623694)+17.88279645*p_points*p_points-42.15473796*p_points+28.83200736
-plt.plot(p_points, dE_points, label="Lower limit")
+dE_points = np.exp(-3.3*p_points+4.1)+2.3
+plt.plot(p_points, dE_points, label="-3.3, 4.1, 2.3")
 
-# plt.plot(np.ones(400)*0.35, np.linspace(0, 40, 400))
-# plt.plot(np.ones(400)*1.30, np.linspace(0, 40, 400))
-# plt.plot(points[:,0], points[:,1], 'r.', label="Data points")
+plt.xlim(0,2)
 plt.ylim(0,40)
 plt.xlabel(r'$p$ (GeV/c)')
 plt.ylabel(r'$dE/dx$ (keV/cm)')
 plt.legend(loc='upper right')
+plt.savefig("fit_cdc.png")
+plt.close()
 
-plt.savefig("fit.png")
+
+points = np.loadtxt('points_st.txt', delimiter=',', skiprows=1)
+
+popt, pcov = curve_fit(exponential, points[:,0], points[:,1])
+print(popt)
+
+file_data = File("../../../filter/output/filteredhist_phi_d_recon_exc_data_2H.root")
+
+hist_data = file_data.get('NoCut/d_dEdx_st_meas_NoCut')
+hist_data.plotHeatmap(label="ST", vmin=0, vmax=100)
+p_points = np.arange(0.25, 3, 0.01)
+
+dE_points = exponential(p_points, *popt)
+plt.plot(p_points, dE_points, label="Fit")
+
+dE_points = np.exp(-1.9*p_points+2.8)+0.6
+plt.plot(p_points, dE_points, label="-1.9, 2.8, 0.6")
+
+plt.xlim(0,2)
+plt.ylim(0,20)
+plt.xlabel(r'$p$ (GeV/c)')
+plt.ylabel(r'$dE/dx$ (keV/cm)')
+plt.legend(loc='upper right')
+
+plt.savefig("fit_st.png")
