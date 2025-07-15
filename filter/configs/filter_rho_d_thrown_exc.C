@@ -3,7 +3,7 @@
 double mass_target = 0.0;
 double mass_missing = 0.0;
 
-void filter_rho_d_thrown(string reaction, string output_mode)
+void filter_rho_d_thrown_exc(string reaction, string output_mode)
 {
     cout << "Reading input files...\n";
     string input_treefile_name  = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_rho_d_thrown_%s.root",reaction.c_str());

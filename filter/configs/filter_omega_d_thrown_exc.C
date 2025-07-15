@@ -19,7 +19,7 @@ TLorentzVector boost_lorentz_vector(TLorentzVector p4, TVector3 boost_vector)
     return p4_boosted;
 }
 
-void filter_rho_d_thrown(string reaction_name, string output_mode)
+void filter_rho_d_thrown_exc(string reaction_name, string output_mode)
 {
     // Read input files
     cout << "Reading input files...\n";

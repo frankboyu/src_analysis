@@ -13,7 +13,7 @@ double sim_weight_func(double beam_energy_truth, double minust_truth)
         return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
 }
 
-void filter_phi_d_thrown(string reaction, string output_mode)
+void filter_phi_d_thrown_exc(string reaction, string output_mode)
 {
     cout << "Reading input files...\n";
     string input_treefile_name  = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_phi_d_thrown_%s.root",reaction.c_str());
