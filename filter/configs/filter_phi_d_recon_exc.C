@@ -16,7 +16,7 @@ double sim_weight_func(double beam_energy_truth, double minust_truth)
 void filter_phi_d_recon_exc(string reaction, string output_mode)
 {
     cout << "Reading input files...\n";
-    string input_treefile_name  = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_phi_d_recon_%s.root",reaction.c_str());
+    string input_treefile_name  = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_phi_d_recon_exc_%s.root",reaction.c_str());
     string input_tree_name  = "selectedtree_phi_d_recon";
     TChain chain(input_tree_name.c_str());
     chain.Add(input_treefile_name.c_str());
@@ -216,7 +216,7 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
     if (output_mode == "tree" || output_mode == "both")
     {
         cout << "Saving to new tree...\n";
-        string output_treefile_name = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_phi_d_recon_%s.root",reaction.c_str());
+        string output_treefile_name = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_phi_d_recon_exc_%s.root",reaction.c_str());
         string output_tree_name = "filteredtree_phi_d_recon";
         rdf_output.Snapshot(output_tree_name.c_str(), output_treefile_name.c_str());
     }
@@ -224,7 +224,7 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
     if (output_mode == "hist" || output_mode == "both")
     {
         cout << "Plotting histograms...\n";
-        string output_histfile_name = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_recon_%s.root",reaction.c_str());
+        string output_histfile_name = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_recon_exc_%s.root",reaction.c_str());
         TFile * output_histfile = new TFile(output_histfile_name.c_str(), "RECREATE");
         output_histfile->cd();
 
@@ -296,9 +296,9 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
             TH2D hist_km_kinematics_neither_kin             = *rdf.Histo2D({("km_kinematics_neither_kin_"+ label).c_str(), ";P_{K^{-}} (GeV/c);#theta_{K^{-}} (deg)", 100, 0.0, 10.0, 180, 0.0, 180.0},"km_momentum_kin","km_theta_kin","km_in_neither_meas");
             hist_km_kinematics_neither_kin.Write();
 
-            TH1D hist_d_DeltaT_kin                          = *rdf.Histo1D({("d_DeltaT_kin_"+ label).c_str(), ";#Delta t_{d} (ns);Counts", 100, -5.0, 5.0},"d_DeltaT_kin","event_weight");
+            TH1D hist_d_DeltaT_kin                          = *rdf.Histo1D({("d_DeltaT_kin_"+ label).c_str(), ";#Delta t_{d} (ns);Counts", 100, -5.0, 5.0},"d_DeltaT_meas","event_weight");
             hist_d_DeltaT_kin.Write();
-            TH2D hist_d_DeltaT_momentum_kin                 = *rdf.Histo2D({("d_DeltaT_momentum_kin_"+ label).c_str(), ";p (GeV/c);#Delta t_{d} (ns)", 200, 0.0, 2.0, 100, -5.0, 5.0},"d_momentum_kin","d_DeltaT_kin","event_weight");
+            TH2D hist_d_DeltaT_momentum_kin                 = *rdf.Histo2D({("d_DeltaT_momentum_kin_"+ label).c_str(), ";p (GeV/c);#Delta t_{d} (ns)", 200, 0.0, 2.0, 100, -5.0, 5.0},"d_momentum_meas","d_DeltaT_meas","event_weight");
             hist_d_DeltaT_momentum_kin.Write();
             TH2D hist_d_dEdx_cdc_meas                       = *rdf.Histo2D({("d_dEdx_cdc_meas_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 200, 0.0, 2.0, 100, 0.0, 40},"d_momentum_meas","d_dedx_cdc_keV_per_cm_meas","event_weight");
             hist_d_dEdx_cdc_meas.Write();

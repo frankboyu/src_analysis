@@ -6,7 +6,7 @@ double mass_missing = 0.0;
 void filter_omega_d_recon_exc(string reaction, string output_mode)
 {
     cout << "Reading input files...\n";
-    string input_treefile_name  = Form("/work/halld2/home/boyu/src_analysis/selection/output/test/selectedtree_omega_d_recon_%s.root",reaction.c_str());
+    string input_treefile_name  = Form("/work/halld2/home/boyu/src_analysis/selection/output/test/selectedtree_omega_d_recon_exc_%s.root",reaction.c_str());
     string input_tree_name  = "selectedtree_omega_d_recon";
     TChain chain(input_tree_name.c_str());
     chain.Add(input_treefile_name.c_str());
@@ -319,7 +319,7 @@ void filter_omega_d_recon_exc(string reaction, string output_mode)
     if (output_mode == "tree" || output_mode == "both")
     {
         cout << "Saving to new tree...\n";
-        string output_treefile_name = Form("/work/halld2/home/boyu/src_analysis/filter/output/test/filteredtree_omega_d_recon_%s.root",reaction.c_str());
+        string output_treefile_name = Form("/work/halld2/home/boyu/src_analysis/filter/output/test/filteredtree_omega_d_recon_exc_%s.root",reaction.c_str());
         string output_tree_name = "filteredtree_omega_d_recon";
         rdf_output.Snapshot(output_tree_name.c_str(), output_treefile_name.c_str());
     }
@@ -327,7 +327,7 @@ void filter_omega_d_recon_exc(string reaction, string output_mode)
     if (output_mode == "hist" || output_mode == "both")
     {
         cout << "Plotting histograms...\n";
-        string output_histfile_name = Form("/work/halld2/home/boyu/src_analysis/filter/output/test/filteredhist_omega_d_recon_%s.root",reaction.c_str());
+        string output_histfile_name = Form("/work/halld2/home/boyu/src_analysis/filter/output/test/filteredhist_omega_d_recon_exc_%s.root",reaction.c_str());
         TFile * output_histfile = new TFile(output_histfile_name.c_str(), "RECREATE");
         output_histfile->cd();
 

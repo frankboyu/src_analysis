@@ -96,7 +96,7 @@ void filter_phi_d_thrown_exc(string reaction, string output_mode)
     if (output_mode == "tree" || output_mode == "both")
     {
         cout << "Saving to new tree...\n";
-        string output_treefile_name = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_phi_d_thrown_%s.root",reaction.c_str());
+        string output_treefile_name = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_phi_d_thrown_exc_%s.root",reaction.c_str());
         string output_tree_name = "filteredtree_phi_d_thrown";
         rdf_output.Snapshot(output_tree_name.c_str(), output_treefile_name.c_str());
     }
@@ -104,7 +104,7 @@ void filter_phi_d_thrown_exc(string reaction, string output_mode)
     if (output_mode == "hist" || output_mode == "both")
     {
         cout << "Plotting histograms...\n";
-        string output_histfile_name = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_thrown_%s.root",reaction.c_str());
+        string output_histfile_name = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_thrown_exc_%s.root",reaction.c_str());
         TFile * output_histfile = new TFile(output_histfile_name.c_str(), "RECREATE");
         output_histfile->cd();
 
