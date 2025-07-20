@@ -157,7 +157,8 @@ void DSelector_phi_d_recon::Init(TTree *locTree)
     dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("kp_id");
     dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("km_id");
     dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("d_id");
-    dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("accidental_weight");
+    dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("beam_accid_weight");
+    dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("combo_accid_weight");
 	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("kp_pidfom");  // the PIDFOM in the default flat branches kp_pid_fom is corrupted and always 0
 	dFlatTreeInterface->Create_Branch_Fundamental<Double_t>("km_pidfom");  // the PIDFOM in the default flat branches km_pid_fom is corrupted and always 0
     dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("thrown_topology");
@@ -191,10 +192,22 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
     // MC INFORMATION
 	dIsMC = (dTreeInterface->Get_Branch("MCWeight") != NULL);
 
-	// LOOP OVER COMBOS
+    // PRELOOP THE COMBOS TO SORT THE COMBOS BY CHISQ
+    set<Int_t> locUsedSoFar_BeamID;
+    std::vector<std::pair<UInt_t, Double_t>> loc_combos;
     for(UInt_t loc_i = 0; loc_i < Get_NumCombos(); ++loc_i)
+    {
+        dComboWrapper->Set_ComboIndex(loc_i);
+        Double_t locChiSq = dComboWrapper->Get_ChiSq_KinFit("");
+        loc_combos.push_back(std::make_pair(loc_i, locChiSq));
+    }
+    std::sort(loc_combos.begin(), loc_combos.end(), [](const std::pair<UInt_t, Double_t>& a, const std::pair<UInt_t, Double_t>& b) { return a.second < b.second;});
+
+    // LOOP OVER COMBOS
+    for(const auto& loc_combo : loc_combos)
 	{
 		// INITIALIZE THE COMBO
+        UInt_t loc_i = loc_combo.first;
 		dComboWrapper->Set_ComboIndex(loc_i);  // set branch array indices
 		if(dComboWrapper->Get_IsComboCut())    // check whether the combo has been cut
 			continue;                          // combo has been cut previously
@@ -301,7 +314,7 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
         dHist_ChiSqPerNDF_After         ->Fill((locKPlusP4+locKMinusP4).M(), dComboWrapper->Get_ChiSq_KinFit()/dComboWrapper->Get_NDF_KinFit());
         dHist_ThrownTopology_After      ->Fill(locThrownTopology.Data(), 1);
 
-		// GET THE ACCIDENTAL WEIGHT FACTOR
+		// GET THE BEAM ACCIDENTAL WEIGHT FACTOR
 		TLorentzVector locBeamX4                       = dComboBeamWrapper->Get_X4_Measured();
 		Double_t       locBunchPeriod                  = dAnalysisUtilities.Get_BeamBunchPeriod(Get_RunNumber());
 		Double_t       locDeltaT_RF                    = dAnalysisUtilities.Get_DeltaT_RF(Get_RunNumber(), locBeamX4, dComboWrapper);
@@ -319,6 +332,14 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
 			continue;
         }
 
+        // GET THE COMBO ACCIDENTAL WEIGHT FACTOR
+        Double_t locComboAccidWeightFactor = 0.0; // default value
+        if(locUsedSoFar_BeamID.find(locBeamID) == locUsedSoFar_BeamID.end())
+        {
+            locComboAccidWeightFactor = 1.0; // combo with best chisq for this beam photon
+            locUsedSoFar_BeamID.insert(locBeamID);
+        }
+
 		// EXECUTE ANALYSIS ACTIONS
         if(!Execute_Actions()) // if the active combo fails a cut, IsComboCutFlag automatically set
 			continue;
@@ -330,7 +351,8 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
         dFlatTreeInterface->Fill_Fundamental<Int_t>("kp_id", locKPlusTrackID);
         dFlatTreeInterface->Fill_Fundamental<Int_t>("km_id", locKMinusTrackID);
         dFlatTreeInterface->Fill_Fundamental<Int_t>("d_id", locDeuteronTrackID);
-        dFlatTreeInterface->Fill_Fundamental<Double_t>("accidental_weight", locHistAccidWeightFactor);
+        dFlatTreeInterface->Fill_Fundamental<Double_t>("beam_accid_weight", locHistAccidWeightFactor);
+        dFlatTreeInterface->Fill_Fundamental<Double_t>("combo_accid_weight", locComboAccidWeightFactor);
         dFlatTreeInterface->Fill_Fundamental<Double_t>("kp_pidfom", dKPlusWrapper->Get_PIDFOM());
         dFlatTreeInterface->Fill_Fundamental<Double_t>("km_pidfom", dKMinusWrapper->Get_PIDFOM());
         dFlatTreeInterface->Fill_Fundamental<Int_t>("thrown_topology", locThrownTopologyFlag);
