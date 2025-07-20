@@ -1,6 +1,7 @@
 import ROOT
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
 
 ROOT.gROOT.SetBatch(True)
 nObj = 0
@@ -171,9 +172,10 @@ class Hist2D:
 
 file_data = File("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_recon_exc_data_2H.root")
 file_sim = File("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_recon_exc_sim_2H.root")
+file_pdf = PdfPages("output/hists_phi_d.pdf")
 
 # K+K- invariant mass
-fig = plt.figure(figsize=(8, 6))
+fig = plt.figure(figsize=(8, 6), dpi=300)
 hist_data = file_data.get('KinFitFOMCut/phi_mass_kin_KinFitFOMCut')
 hist_sim = file_sim.get('KinFitFOMCut/phi_mass_kin_KinFitFOMCut')
 hist_sim.scale(0.017)
@@ -184,11 +186,11 @@ plt.ylim(0, 1400)
 plt.xlabel(r"$M_{K^+K^-} (GeV/c^2)$")
 plt.ylabel("Counts")
 plt.legend()
-plt.savefig("output/plot_hist/phi_mass.png", dpi=300)
+file_pdf.savefig()
 plt.close()
 
 # -t
-fig = plt.figure(figsize=(8, 6))
+fig = plt.figure(figsize=(8, 6), dpi=300)
 hist_data = file_data.get('PhiMassCut/minust_kin_PhiMassCut')
 hist_sim = file_sim.get('PhiMassCut/minust_kin_PhiMassCut')
 hist_sim.scale(0.017)
@@ -199,11 +201,11 @@ plt.xlim(0, 2)
 plt.xlabel(r"$-t (GeV^2/c^4)$")
 plt.ylabel("Counts")
 plt.legend()
-plt.savefig("output/plot_hist/minust.png", dpi=300)
+file_pdf.savefig()
 plt.close()
 
 # Number of unused tracks
-fig = plt.figure(figsize=(8, 6))
+fig = plt.figure(figsize=(8, 6), dpi=300)
 hist_data = file_data.get('PhiMassCut/num_unused_tracks_meas_PhiMassCut')
 hist_sim = file_sim.get('PhiMassCut/num_unused_tracks_meas_PhiMassCut')
 hist_sim.scale(0.017)
@@ -214,11 +216,11 @@ plt.xlim(0, 5)
 plt.xlabel("Number of Unused Tracks")
 plt.ylabel("Counts")
 plt.legend()
-plt.savefig("output/plot_hist/num_unused_tracks.png", dpi=300)
+file_pdf.savefig()
 plt.close()
 
 # Number of unused showers
-fig = plt.figure(figsize=(8, 6))
+fig = plt.figure(figsize=(8, 6), dpi=300)
 hist_data = file_data.get('PhiMassCut/num_unused_showers_meas_PhiMassCut')
 hist_sim = file_sim.get('PhiMassCut/num_unused_showers_meas_PhiMassCut')
 hist_sim.scale(0.017)
@@ -229,11 +231,11 @@ plt.xlim(0, 10)
 plt.xlabel("Number of Unused Showers")
 plt.ylabel("Counts")
 plt.legend()
-plt.savefig("output/plot_hist/num_unused_showers.png", dpi=300)
+file_pdf.savefig()
 plt.close()
 
 # KinFit Chi2
-fig = plt.figure(figsize=(8, 6))
+fig = plt.figure(figsize=(8, 6), dpi=300)
 hist_data = file_data.get('PhiMassCut/chisq_per_ndf_kin_PhiMassCut')
 hist_sim = file_sim.get('PhiMassCut/chisq_per_ndf_kin_PhiMassCut')
 hist_sim.scale(0.017)
@@ -244,11 +246,11 @@ plt.xlim(0, 10)
 plt.xlabel(r"$\chi^{2}$/NDF")
 plt.ylabel("Counts")
 plt.legend()
-plt.savefig("output/plot_hist/chisq_per_ndf.png", dpi=300)
+file_pdf.savefig()
 plt.close()
 
 # Missing energy
-fig = plt.figure(figsize=(8, 6))
+fig = plt.figure(figsize=(8, 6), dpi=300)
 hist_data = file_data.get('PhiMassCut/miss_energy_meas_PhiMassCut')
 hist_sim = file_sim.get('PhiMassCut/miss_energy_meas_PhiMassCut')
 hist_sim.scale(0.02)
@@ -259,11 +261,11 @@ plt.xlim(-2, 2)
 plt.xlabel("Missing Energy (GeV)")
 plt.ylabel("Counts")
 plt.legend()
-plt.savefig("output/plot_hist/missing_energy.png", dpi=300)
+file_pdf.savefig()
 plt.close()
 
 # Missing mass squared
-fig = plt.figure(figsize=(8, 6))
+fig = plt.figure(figsize=(8, 6), dpi=300)
 hist_data = file_data.get('PhiMassCut/miss_masssquared_meas_PhiMassCut')
 hist_sim = file_sim.get('PhiMassCut/miss_masssquared_meas_PhiMassCut')
 hist_sim.scale(0.019)
@@ -274,5 +276,7 @@ plt.xlim(-0.1, 0.1)
 plt.xlabel(r"Missing Mass Squared ($GeV^2/c^4$)")
 plt.ylabel("Counts")
 plt.legend()
-plt.savefig("output/plot_hist/missing_masssquared.png", dpi=300)
+file_pdf.savefig()
 plt.close()
+
+file_pdf.close()
