@@ -172,7 +172,7 @@ class Hist2D:
 
 file_data = File("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_recon_exc_data_2H.root")
 file_sim = File("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_recon_exc_sim_2H.root")
-file_pdf = PdfPages("output/hists_phi_d.pdf")
+file_pdf = PdfPages("/work/halld2/home/boyu/src_analysis/filter/output/hist_phi_d.pdf")
 
 # K+K- invariant mass
 fig = plt.figure(figsize=(8, 6), dpi=300)

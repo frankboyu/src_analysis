@@ -1,6 +1,7 @@
 .vscode
 .vscode-server
 .ipynb_checkpoints
+*.pdf
 *.png
 *.root
 *.hddm
