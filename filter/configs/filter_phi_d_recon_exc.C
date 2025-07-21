@@ -27,7 +27,7 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
     auto rdf_input = rdf_def
     .Define("target_p4",                        "TLorentzVector(0, 0, 0, mass_2H)")
     .Define("sim_weight",                       "sim_weight_func(beam_p4_truth.E(), -(target_p4 - d_p4_truth).Mag2())")
-    .Define("event_weight",                     "accidental_weight*sim_weight")
+    .Define("event_weight",                     "beam_accid_weight*combo_accid_weight*sim_weight")
 
     .Define("beam_energy_meas",                 "beam_p4_meas.E()")
     .Define("beam_energy_kin",                  "beam_p4_kin.E()")
@@ -201,6 +201,10 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
     .Define("psi_helicity_kin",                 "fmod(polarization_phi_com_kin-decay_phi_helicity_kin+360, 360.0) >= 180 ? fmod(polarization_phi_com_kin-decay_phi_helicity_kin+360, 360.0) - 360 : fmod(polarization_phi_com_kin-decay_phi_helicity_kin+360, 360.0)")
     .Define("psi_helicity_truth",               "fmod(polarization_phi_com_truth-decay_phi_helicity_truth+360, 360.0) >= 180 ? fmod(polarization_phi_com_truth-decay_phi_helicity_truth+360, 360.0) - 360 : fmod(polarization_phi_com_truth-decay_phi_helicity_truth+360, 360.0)")
     .Define("psi_helicity_diff",                "psi_helicity_kin - psi_helicity_truth")
+    .Define("Psi_helicity_meas",                "fmod(polarization_phi_com_meas+decay_phi_helicity_meas+360, 360.0) >= 180 ? fmod(polarization_phi_com_meas+decay_phi_helicity_meas+360, 360.0) - 360 : fmod(polarization_phi_com_meas+decay_phi_helicity_meas+360, 360.0)")
+    .Define("Psi_helicity_kin",                 "fmod(polarization_phi_com_kin+decay_phi_helicity_kin+360, 360.0) >= 180 ? fmod(polarization_phi_com_kin+decay_phi_helicity_kin+360, 360.0) - 360 : fmod(polarization_phi_com_kin+decay_phi_helicity_kin+360, 360.0)")
+    .Define("Psi_helicity_truth",               "fmod(polarization_phi_com_truth+decay_phi_helicity_truth+360, 360.0) >= 180 ? fmod(polarization_phi_com_truth+decay_phi_helicity_truth+360, 360.0) - 360 : fmod(polarization_phi_com_truth+decay_phi_helicity_truth+360, 360.0)")
+    .Define("Psi_helicity_diff",                "Psi_helicity_kin - Psi_helicity_truth")
     ;
 
     cout << "Filtering events...\n";

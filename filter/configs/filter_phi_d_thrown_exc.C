@@ -31,9 +31,7 @@ void filter_phi_d_thrown_exc(string reaction, string output_mode)
         rdf_def = rdf_def
         .Define("beam_p4_truth",            "pBeam")
         .Define("kp_p4_truth",              "pDecay1")
-        // .Define("kp_p4_truth",              "TLorentzVector(0, 0, 0, 0)")
         .Define("km_p4_truth",              "pDecay2")
-        // .Define("km_p4_truth",              "TLorentzVector(0, 0, 0, 0)")
         .Define("d_p4_truth",               "pBaryon")
         .Define("polarization_angle",       "-1")
         ;
@@ -84,6 +82,7 @@ void filter_phi_d_thrown_exc(string reaction, string output_mode)
     .Define("decay_costheta_helicity_truth",    "pi_x3_helicity_truth.Dot(z_x3_helicity_truth)")
     .Define("decay_phi_helicity_truth",         "TMath::ATan2(-x_x3_helicity_truth.Dot(pi_x3_helicity_truth.Cross(z_x3_helicity_truth)), y_x3_helicity_truth.Dot(pi_x3_helicity_truth.Cross(z_x3_helicity_truth)))*RadToDeg")
     .Define("psi_helicity_truth",               "fmod(polarization_phi_com_truth-decay_phi_helicity_truth+360, 360.0) >= 180 ? fmod(polarization_phi_com_truth-decay_phi_helicity_truth+360, 360.0) - 360 : fmod(polarization_phi_com_truth-decay_phi_helicity_truth+360, 360.0)")
+    .Define("Psi_helicity_truth",               "fmod(polarization_phi_com_truth+decay_phi_helicity_truth+360, 360.0) >= 180 ? fmod(polarization_phi_com_truth+decay_phi_helicity_truth+360, 360.0) - 360 : fmod(polarization_phi_com_truth+decay_phi_helicity_truth+360, 360.0)")
     ;
 
     cout << "Filtering events...\n";
