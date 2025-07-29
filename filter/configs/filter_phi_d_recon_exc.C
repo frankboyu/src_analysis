@@ -217,16 +217,20 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
     ;
 
     cout << "Filtering events...\n";
+    string KinematicsCut    = "kp_momentum_meas > 0.4 && km_momentum_meas > 0.4 && d_momentum_meas > 0.4 && kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
     string dEdxCut          = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.3*d_momentum_meas+4.1)+2.3) && d_dedx_st_keV_per_cm_meas > (TMath::Exp(-1.9*d_momentum_meas+2.8)+0.6)";
-    string KinFitFOMCut     = "kinfit_fom_kin > 1e-5";
+    string VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.0";
+    string KinFitChiSqCut   = "chisq_per_ndf_kin < 5.0";
     string PhiMassCut       = "phi_mass_kin > 1.005 && phi_mass_kin < 1.04";
     auto rdf_NoCut          = rdf_input;
-    auto rdf_dEdxCut        = rdf_input.Filter(KinFitFOMCut.c_str()).Filter(PhiMassCut.c_str());
-    auto rdf_KinFitFOMCut   = rdf_input.Filter(dEdxCut.c_str()).Filter(PhiMassCut.c_str());
-    auto rdf_PhiMassCut     = rdf_input.Filter(dEdxCut.c_str()).Filter(KinFitFOMCut.c_str());
-    auto rdf_AllCut         = rdf_input.Filter(dEdxCut.c_str()).Filter(KinFitFOMCut.c_str()).Filter(PhiMassCut.c_str());
-    RNode rdfs []           = {rdf_NoCut,   rdf_dEdxCut,    rdf_KinFitFOMCut,   rdf_PhiMassCut, rdf_AllCut};
-    string labels []        = {"NoCut",     "dEdxCut",      "KinFitFOMCut",     "PhiMassCut",   "AllCut"};
+    auto rdf_KinematicsCut  = rdf_input.Filter(dEdxCut.c_str()).Filter(VertexCut.c_str()).Filter(KinFitChiSqCut.c_str());
+    auto rdf_dEdxCut        = rdf_input.Filter(KinematicsCut.c_str()).Filter(VertexCut.c_str()).Filter(KinFitChiSqCut.c_str());
+    auto rdf_VertexCut      = rdf_input.Filter(KinematicsCut.c_str()).Filter(dEdxCut.c_str()).Filter(KinFitChiSqCut.c_str());
+    auto rdf_KinFitChiSqCut = rdf_input.Filter(KinematicsCut.c_str()).Filter(dEdxCut.c_str()).Filter(VertexCut.c_str());
+    auto rdf_NominalCut     = rdf_input.Filter(KinematicsCut.c_str()).Filter(dEdxCut.c_str()).Filter(VertexCut.c_str()).Filter(KinFitChiSqCut.c_str());
+    auto rdf_AllCut         = rdf_input.Filter(KinematicsCut.c_str()).Filter(dEdxCut.c_str()).Filter(VertexCut.c_str()).Filter(KinFitChiSqCut.c_str()).Filter(PhiMassCut.c_str());
+    RNode rdfs []           = {rdf_NoCut,   rdf_KinematicsCut,  rdf_dEdxCut,    rdf_VertexCut,  rdf_KinFitChiSqCut, rdf_NominalCut, rdf_AllCut};
+    string labels []        = {"NoCut",     "KinematicsCut",    "dEdxCut",      "VertexCut",    "KinFitChiSqCut",   "NominalCut",   "AllCut"};
     int N_filters           = sizeof(labels) / sizeof(labels[0]);
 
     if (output_mode == "tree" || output_mode == "both")
@@ -261,7 +265,7 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
 
             TH1D hist_beam_energy_meas                      = *rdf.Histo1D({("beam_energy_"+ label).c_str(), ";E_{beam} (GeV);Counts", 60, 5.0, 11.0},"beam_energy_meas","event_weight");
             hist_beam_energy_meas.Write();
-            TH1D hist_beam_DeltaT_meas                      = *rdf.Histo1D({("beam_DeltaT_"+ label).c_str(), ";#Delta t_{beam} (ns);Counts", 100, -20.0, 20.0},"beam_DeltaT_meas","event_weight");
+            TH1D hist_beam_DeltaT_meas                      = *rdf.Histo1D({("beam_DeltaT_"+ label).c_str(), ";#Delta t_{beam} (ns);Counts", 100, -20.0, 20.0},"beam_DeltaT_meas","beam_accid_weight");
             hist_beam_DeltaT_meas.Write();
 
             TH1D hist_kp_pidfom                             = *rdf.Histo1D({("kp_pidfom_"+ label).c_str(), ";kp_pidfom;Counts", 100, 0.0, 1.0},"kp_pidfom","event_weight");
