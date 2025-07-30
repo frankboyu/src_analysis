@@ -210,10 +210,6 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
     .Define("psi_helicity_kin",                 "fmod(polarization_phi_com_kin-decay_phi_helicity_kin+360, 360.0) >= 180 ? fmod(polarization_phi_com_kin-decay_phi_helicity_kin+360, 360.0) - 360 : fmod(polarization_phi_com_kin-decay_phi_helicity_kin+360, 360.0)")
     .Define("psi_helicity_truth",               "fmod(polarization_phi_com_truth-decay_phi_helicity_truth+360, 360.0) >= 180 ? fmod(polarization_phi_com_truth-decay_phi_helicity_truth+360, 360.0) - 360 : fmod(polarization_phi_com_truth-decay_phi_helicity_truth+360, 360.0)")
     .Define("psi_helicity_diff",                "psi_helicity_kin - psi_helicity_truth")
-    .Define("Psi_helicity_meas",                "fmod(polarization_phi_com_meas+decay_phi_helicity_meas+360, 360.0) >= 180 ? fmod(polarization_phi_com_meas+decay_phi_helicity_meas+360, 360.0) - 360 : fmod(polarization_phi_com_meas+decay_phi_helicity_meas+360, 360.0)")
-    .Define("Psi_helicity_kin",                 "fmod(polarization_phi_com_kin+decay_phi_helicity_kin+360, 360.0) >= 180 ? fmod(polarization_phi_com_kin+decay_phi_helicity_kin+360, 360.0) - 360 : fmod(polarization_phi_com_kin+decay_phi_helicity_kin+360, 360.0)")
-    .Define("Psi_helicity_truth",               "fmod(polarization_phi_com_truth+decay_phi_helicity_truth+360, 360.0) >= 180 ? fmod(polarization_phi_com_truth+decay_phi_helicity_truth+360, 360.0) - 360 : fmod(polarization_phi_com_truth+decay_phi_helicity_truth+360, 360.0)")
-    .Define("Psi_helicity_diff",                "Psi_helicity_kin - Psi_helicity_truth")
     ;
 
     cout << "Filtering events...\n";
@@ -385,8 +381,6 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
             hist_decay_phi_helicity_kin.Write();
             TH1D hist_psi_helicity_kin                      = *rdf.Histo1D({("psi_helicity_kin_"+ label).c_str(), ";#psi_{helicity} (deg);Counts", 18, -180.0, 180.0},"psi_helicity_kin","event_weight");
             hist_psi_helicity_kin.Write();
-            TH1D hist_Psi_helicity_kin                      = *rdf.Histo1D({("Psi_helicity_kin_"+ label).c_str(), ";#Psi_{helicity} (deg);Counts", 18, -180.0, 180.0},"Psi_helicity_kin","event_weight");
-            hist_Psi_helicity_kin.Write();
 
             if (reaction.find("sim") != string::npos)
             {
@@ -424,8 +418,6 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
                 hist_decay_phi_helicity_truth.Write();
                 TH1D hist_psi_helicity_truth                = *rdf.Histo1D({("psi_helicity_truth_"+ label).c_str(), ";#psi_{helicity} (deg);Counts", 9, -270.0, 270.0},"psi_helicity_truth","event_weight");
                 hist_psi_helicity_truth.Write();
-                TH1D hist_Psi_helicity_truth                = *rdf.Histo1D({("Psi_helicity_truth_"+ label).c_str(), ";#Psi_{helicity} (deg);Counts", 9, -270.0, 270.0},"Psi_helicity_truth","event_weight");
-                hist_Psi_helicity_truth.Write();
 
                 TH2D hist_beam_energy_kin_truth             = *rdf.Histo2D({("beam_energy_kin_truth_"+ label).c_str(), ";E_{beam} (GeV);E_{beam} (GeV)", 60, 5.0, 11.0, 60, 5.0, 11.0},"beam_energy_kin","beam_energy_truth","event_weight");
                 hist_beam_energy_kin_truth.Write();
@@ -443,8 +435,6 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
                 hist_decay_phi_helicity_diff.Write();
                 TH2D hist_psi_helicity_diff                 = *rdf.Histo2D({("psi_helicity_diff_"+ label).c_str(), ";-t_{truth} (GeV^{2}/c^{2});#psi_{helicity}^{kin} - #psi_{helicity}^{truth} (deg)", 40, 0.0, 2.0, 80, -8.0, 8.0},"minust_truth","psi_helicity_diff","event_weight");
                 hist_psi_helicity_diff.Write();
-                TH2D hist_Psi_helicity_diff                 = *rdf.Histo2D({("Psi_helicity_diff_"+ label).c_str(), ";-t_{truth} (GeV^{2}/c^{2});#Psi_{helicity}^{kin} - #Psi_{helicity}^{truth} (deg)", 40, 0.0, 2.0, 80, -8.0, 8.0},"minust_truth","Psi_helicity_diff","event_weight");
-                hist_Psi_helicity_diff.Write();
                 TH2D hist_phi_mass_diff                     = *rdf.Histo2D({("phi_mass_diff_"+ label).c_str(), ";-t_{truth} (GeV^{2}/c^{2});m_{K^{+}K^{-}}^{kin} - m_{K^{+}K^{-}}^{truth} (GeV/c^{2})", 40, 0.0, 2.0, 80, -0.02, 0.02},"minust_truth","phi_mass_diff","event_weight");
                 hist_phi_mass_diff.Write();
             }
