@@ -67,8 +67,8 @@ int get_yield(string channel, string reaction, string observable)
         if (reaction.find("recon") != string::npos)
         {
             energy_cut  = Form("beam_energy_kin>%.2f && beam_energy_kin<%.2f", bins[i][0], bins[i][1]);
-            t_cut       = Form("minust_kin>%.2f && minust_kin<%.2f", bins[i][2], bins[i][3]);
-            auto rdf_energy_cut = rdf_all.Filter(energy_cut.c_str()).Define("accidental_weight_squared", "accidental_weight*accidental_weight");
+            t_cut       = Form("minust_kin>%.3f && minust_kin<%.3f", bins[i][2], bins[i][3]);
+            auto rdf_energy_cut = rdf_all.Filter(energy_cut.c_str()).Define("event_weight_squared", "event_weight*event_weight");
             auto rdf_t_cut      = rdf_energy_cut.Filter(t_cut.c_str());
             if (reaction.find("data") != string::npos)
             {
@@ -81,8 +81,8 @@ int get_yield(string channel, string reaction, string observable)
             if (observable == "dsdt")
             {
                 cout << energy_cut << " && " << t_cut << endl;
-                yield           = rdf_t_cut.Sum("accidental_weight").GetValue();
-                yield_err       = sqrt(rdf_t_cut.Sum("accidental_weight_squared").GetValue());
+                yield           = rdf_t_cut.Sum("event_weight").GetValue();
+                yield_err       = sqrt(rdf_t_cut.Sum("event_weight_squared").GetValue());
             }
             else
             {
@@ -102,22 +102,25 @@ int get_yield(string channel, string reaction, string observable)
                     angle_width  = rdf_angle_cut.StdDev(variable.c_str()).GetValue();
                 }
                 cout << energy_cut << " && " << t_cut << " && " << angle_cut << endl;
-                yield           = rdf_angle_cut.Sum("accidental_weight").GetValue();
-                yield_err       = sqrt(rdf_angle_cut.Sum("accidental_weight_squared").GetValue());
+                yield           = rdf_angle_cut.Sum("event_weight").GetValue();
+                yield_err       = sqrt(rdf_angle_cut.Sum("event_weight_squared").GetValue());
             }
         }
         else if (reaction.find("thrown") != string::npos)
         {
             energy_cut  = Form("beam_energy_truth>%.2f && beam_energy_truth<%.2f", bins[i][0], bins[i][1]);
-            t_cut       = Form("minust_truth>%.2f && minust_truth<%.2f", bins[i][2], bins[i][3]);
-            auto rdf_energy_cut = rdf_all.Filter(energy_cut.c_str());
+            t_cut       = Form("minust_truth>%.3f && minust_truth<%.3f", bins[i][2], bins[i][3]);
+            // auto rdf_energy_cut = rdf_all.Filter(energy_cut.c_str());
+            auto rdf_energy_cut = rdf_all.Filter(energy_cut.c_str()).Define("event_weight_squared", "event_weight*event_weight");
             auto rdf_t_cut      = rdf_energy_cut.Filter(t_cut.c_str());
 
             if (observable == "dsdt")
             {
                 cout << energy_cut << " && " << t_cut << endl;
-                yield           = rdf_t_cut.Count().GetValue();
-                yield_err       = sqrt(yield);
+                // yield           = rdf_t_cut.Count().GetValue();
+                // yield_err       = sqrt(yield);
+                yield           = rdf_t_cut.Sum("event_weight").GetValue();
+                yield_err       = sqrt(rdf_t_cut.Sum("event_weight_squared").GetValue());
             }
             else
             {
@@ -138,9 +141,9 @@ int get_yield(string channel, string reaction, string observable)
         }
 
         if (observable == "dsdt")
-            fprintf(output_textfile, "%6.4f\t%6.4f\t%6.1f\t%6.1f\t%6.4f\t%6.4f\t%6.1f\t%6.1f\t%f\t%f\n", energy_center, energy_width, bins[i][0], bins[i][1], t_center, t_width, bins[i][2], bins[i][3], yield, yield_err);
+            fprintf(output_textfile, "%6.4f\t%6.4f\t%6.1f\t%6.1f\t%6.4f\t%6.4f\t%6.3f\t%6.3f\t%f\t%f\n", energy_center, energy_width, bins[i][0], bins[i][1], t_center, t_width, bins[i][2], bins[i][3], yield, yield_err);
         else
-            fprintf(output_textfile, "%6.4f\t%6.4f\t%6.1f\t%6.1f\t%6.4f\t%6.4f\t%6.1f\t%6.1f\t%6.4f\t%6.4f\t%6.1f\t%6.1f\t%f\t%f\n", energy_center, energy_width, bins[i][0], bins[i][1], t_center, t_width, bins[i][2], bins[i][3], angle_center, angle_width, bins[i][4], bins[i][5], yield, yield_err);
+            fprintf(output_textfile, "%6.4f\t%6.4f\t%6.1f\t%6.1f\t%6.4f\t%6.4f\t%6.3f\t%6.3f\t%6.4f\t%6.4f\t%6.1f\t%6.1f\t%f\t%f\n", energy_center, energy_width, bins[i][0], bins[i][1], t_center, t_width, bins[i][2], bins[i][3], angle_center, angle_width, bins[i][4], bins[i][5], yield, yield_err);
     }
 
     return 0;
