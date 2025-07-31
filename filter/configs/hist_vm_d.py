@@ -153,6 +153,10 @@ class Hist2D:
         self.z = np.array(z)
         self.zerr = np.array(zerr)
 
+    def scale(self,factor):
+        self.z *= factor
+        self.zerr *= factor
+
     def plotHeatmap(self,kill_zeros=True,**kwargs):
         z = self.z
         if (kill_zeros):
@@ -166,18 +170,112 @@ class Hist2D:
         return Hist1D(self.TH2.ProjectionY(),**kwargs)
 
 
+file_pdf = PdfPages("/work/halld2/home/boyu/src_analysis/filter/output/hist_vm_d.pdf")
 
-
-
-
+#####################################################################################################################################################
 file_data = File("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_recon_exc_data_2H.root")
 file_sim = File("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_recon_exc_sim_2H.root")
-file_pdf = PdfPages("/work/halld2/home/boyu/src_analysis/filter/output/hist_phi_d.pdf")
+
+# K+ kinematics
+fig = plt.figure(figsize=(16, 6), dpi=300)
+gs = fig.add_gridspec(1, 2)
+axs = gs.subplots()
+hist_data = file_data.get('KinematicsCut/kp_kinematics_meas_KinematicsCut')
+hist_sim = file_sim.get('KinematicsCut/kp_kinematics_meas_KinematicsCut')
+hist_sim.scale(0.017)
+plt.axes(axs[0])
+hist_data.plotHeatmap()
+plt.title("Data")
+plt.axes(axs[1])
+hist_sim.plotHeatmap()
+plt.title("Simulation")
+for i in range(2):
+    plt.axes(axs[i])
+    plt.plot([0,10], [2,2], '-', color='red')
+    plt.plot([0.4,0.4], [0,20], '-', color='red')
+    plt.xlim(0, 10)
+    plt.ylim(0, 20)
+    plt.yticks(np.arange(0, 21, 2))
+    plt.xlabel(r"$p_{K^+}$ (GeV/c)")
+    plt.ylabel(r"$\theta_{K^+}$ (deg)")
+file_pdf.savefig()
+plt.close()
+
+# K- kinematics
+fig = plt.figure(figsize=(16, 6), dpi=300)
+gs = fig.add_gridspec(1, 2)
+axs = gs.subplots()
+hist_data = file_data.get('KinematicsCut/km_kinematics_meas_KinematicsCut')
+hist_sim = file_sim.get('KinematicsCut/km_kinematics_meas_KinematicsCut')
+hist_sim.scale(0.017)
+plt.axes(axs[0])
+hist_data.plotHeatmap()
+plt.title("Data")
+plt.axes(axs[1])
+hist_sim.plotHeatmap()
+plt.title("Simulation")
+for i in range(2):
+    plt.axes(axs[i])
+    plt.plot([0,10], [2,2], '-', color='red')
+    plt.plot([0.4,0.4], [0,20], '-', color='red')
+    plt.xlim(0, 10)
+    plt.ylim(0, 20)
+    plt.yticks(np.arange(0, 21, 2))
+    plt.xlabel(r"$p_{K^-}$ (GeV/c)")
+    plt.ylabel(r"$\theta_{K^-}$ (deg)")
+file_pdf.savefig()
+plt.close()
+
+# CDC dE/dx
+fig = plt.figure(figsize=(16, 6), dpi=300)
+gs = fig.add_gridspec(1, 2)
+axs = gs.subplots()
+hist_data = file_data.get('dEdxCut/d_dEdx_cdc_meas_dEdxCut')
+hist_sim = file_sim.get('dEdxCut/d_dEdx_cdc_meas_dEdxCut')
+hist_sim.scale(0.017)
+plt.axes(axs[0])
+hist_data.plotHeatmap(vmin=0, vmax=50)
+plt.title("Data")
+plt.axes(axs[1])
+hist_sim.plotHeatmap(vmin=0, vmax=50)
+plt.title("Simulation")
+for i in range(2):
+    plt.axes(axs[i])
+    plt.plot(np.arange(0.25, 3, 0.01), np.exp(-3.3*np.arange(0.25, 3, 0.01)+4.1)+2.3, color='red')
+    plt.xlim(0, 2)
+    plt.ylim(0, 40)
+    plt.xlabel("$p$ (GeV/c)")
+    plt.ylabel("CDC $dE/dx$ (keV/cm)")
+file_pdf.savefig()
+plt.close()
+
+# ST dE/dx
+fig = plt.figure(figsize=(16, 6), dpi=300)
+gs = fig.add_gridspec(1, 2)
+axs = gs.subplots()
+hist_data = file_data.get('dEdxCut/d_dEdx_st_meas_dEdxCut')
+hist_sim = file_sim.get('dEdxCut/d_dEdx_st_meas_dEdxCut')
+hist_sim.scale(0.017)
+plt.axes(axs[0])
+hist_data.plotHeatmap(vmin=0, vmax=50)
+plt.title("Data")
+plt.axes(axs[1])
+hist_sim.plotHeatmap(vmin=0, vmax=50)
+plt.title("Simulation")
+for i in range(2):
+    plt.axes(axs[i])
+    plt.plot(np.arange(0.25, 3, 0.01), np.exp(-1.9*np.arange(0.25, 3, 0.01)+2.8)+0.6, color='red')
+    plt.xlim(0, 2)
+    plt.ylim(0, 20)
+    plt.xlabel("$p$ (GeV/c)")
+    plt.ylabel("ST $dE/dx$ (keV/cm)")
+file_pdf.savefig()
+plt.close()
 
 # K+K- invariant mass
 fig = plt.figure(figsize=(8, 6), dpi=300)
-hist_data = file_data.get('KinFitFOMCut/phi_mass_kin_KinFitFOMCut')
-hist_sim = file_sim.get('KinFitFOMCut/phi_mass_kin_KinFitFOMCut')
+hist_data = file_data.get('NominalCut/phi_mass_kin_NominalCut')
+hist_sim = file_sim.get('NominalCut/phi_mass_kin_NominalCut')
 hist_sim.scale(0.017)
 hist_data.plotPoints(label="Data", marker='o', markersize=3, linestyle='-', color='black')
 hist_sim.plotPoints(label="Sim", marker='o', markersize=3, linestyle='-', color='red')
@@ -191,8 +289,8 @@ plt.close()
 
 # -t
 fig = plt.figure(figsize=(8, 6), dpi=300)
-hist_data = file_data.get('PhiMassCut/minust_kin_PhiMassCut')
-hist_sim = file_sim.get('PhiMassCut/minust_kin_PhiMassCut')
+hist_data = file_data.get('AllCut/minust_kin_AllCut')
+hist_sim = file_sim.get('AllCut/minust_kin_AllCut')
 hist_sim.scale(0.017)
 hist_data.plotPoints(label="Data", marker='o', markersize=3, linestyle='None', color='black')
 hist_sim.plotPoints(label="Sim", marker='o', markersize=3, linestyle='-', color='red')
@@ -206,8 +304,8 @@ plt.close()
 
 # Number of unused tracks
 fig = plt.figure(figsize=(8, 6), dpi=300)
-hist_data = file_data.get('PhiMassCut/num_unused_tracks_meas_PhiMassCut')
-hist_sim = file_sim.get('PhiMassCut/num_unused_tracks_meas_PhiMassCut')
+hist_data = file_data.get('AllCut/num_unused_tracks_meas_AllCut')
+hist_sim = file_sim.get('AllCut/num_unused_tracks_meas_AllCut')
 hist_sim.scale(0.017)
 hist_data.plotPoints(label="Data", marker='o', markersize=3, linestyle='None', color='black')
 hist_sim.plotPoints(label="Sim", marker='o', markersize=3, linestyle='None', color='red')
@@ -221,8 +319,8 @@ plt.close()
 
 # Number of unused showers
 fig = plt.figure(figsize=(8, 6), dpi=300)
-hist_data = file_data.get('PhiMassCut/num_unused_showers_meas_PhiMassCut')
-hist_sim = file_sim.get('PhiMassCut/num_unused_showers_meas_PhiMassCut')
+hist_data = file_data.get('AllCut/num_unused_showers_meas_AllCut')
+hist_sim = file_sim.get('AllCut/num_unused_showers_meas_AllCut')
 hist_sim.scale(0.017)
 hist_data.plotPoints(label="Data", marker='o', markersize=3, linestyle='None', color='black')
 hist_sim.plotPoints(label="Sim", marker='o', markersize=3, linestyle='None', color='red')
@@ -236,8 +334,8 @@ plt.close()
 
 # KinFit Chi2
 fig = plt.figure(figsize=(8, 6), dpi=300)
-hist_data = file_data.get('PhiMassCut/chisq_per_ndf_kin_PhiMassCut')
-hist_sim = file_sim.get('PhiMassCut/chisq_per_ndf_kin_PhiMassCut')
+hist_data = file_data.get('AllCut/chisq_per_ndf_kin_AllCut')
+hist_sim = file_sim.get('AllCut/chisq_per_ndf_kin_AllCut')
 hist_sim.scale(0.017)
 hist_data.plotPoints(label="Data", marker='o', markersize=3, linestyle='None', color='black')
 hist_sim.plotPoints(label="Sim", marker='o', markersize=3, linestyle='None', color='red')
@@ -251,8 +349,8 @@ plt.close()
 
 # Missing energy
 fig = plt.figure(figsize=(8, 6), dpi=300)
-hist_data = file_data.get('PhiMassCut/miss_energy_meas_PhiMassCut')
-hist_sim = file_sim.get('PhiMassCut/miss_energy_meas_PhiMassCut')
+hist_data = file_data.get('AllCut/miss_energy_meas_AllCut')
+hist_sim = file_sim.get('AllCut/miss_energy_meas_AllCut')
 hist_sim.scale(0.02)
 hist_data.plotPoints(label="Data", marker='o', markersize=3, linestyle='None', color='black')
 hist_sim.plotPoints(label="Sim", marker='o', markersize=3, linestyle='-', color='red')
@@ -266,8 +364,8 @@ plt.close()
 
 # Missing mass squared
 fig = plt.figure(figsize=(8, 6), dpi=300)
-hist_data = file_data.get('PhiMassCut/miss_masssquared_meas_PhiMassCut')
-hist_sim = file_sim.get('PhiMassCut/miss_masssquared_meas_PhiMassCut')
+hist_data = file_data.get('AllCut/miss_masssquared_meas_AllCut')
+hist_sim = file_sim.get('AllCut/miss_masssquared_meas_AllCut')
 hist_sim.scale(0.019)
 hist_data.plotPoints(label="Data", marker='o', markersize=3, linestyle='-', color='black')
 hist_sim.plotPoints(label="Sim", marker='o', markersize=3, linestyle='-', color='red')
