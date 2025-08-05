@@ -214,7 +214,8 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
 
     cout << "Filtering events...\n";
     string KinematicsCut    = "kp_momentum_meas > 0.4 && km_momentum_meas > 0.4 && d_momentum_meas > 0.4 && kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
-    string dEdxCut          = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.3*d_momentum_meas+4.1)+2.3) && d_dedx_st_keV_per_cm_meas > (TMath::Exp(-1.9*d_momentum_meas+2.8)+0.6)";
+    string dEdxCut          = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.3*d_momentum_meas+4.1)+2.3)";
+    // string dEdxCut          = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.3*d_momentum_meas+4.1)+2.3) && d_dedx_st_keV_per_cm_meas > (TMath::Exp(-1.9*d_momentum_meas+2.8)+0.6)";
     string VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.0";
     string KinFitChiSqCut   = "chisq_per_ndf_kin < 5.0";
     string PhiMassCut       = "phi_mass_kin > 1.005 && phi_mass_kin < 1.04";
