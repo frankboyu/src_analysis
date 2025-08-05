@@ -48,39 +48,32 @@ def normalize_distribution(results, energy_bins, t_bins):
 # Read the bin edges
 phi_d_2H_dsdt_energy_low            = np.loadtxt('configs/bins_phi_d_dsdt.txt')[:,0]
 phi_d_2H_dsdt_energy_high           = np.loadtxt('configs/bins_phi_d_dsdt.txt')[:,1]
-phi_d_2H_dsdt_minust_low            = np.loadtxt('configs/bins_phi_d_dsdt.txt')[:,2]
-phi_d_2H_dsdt_minust_high           = np.loadtxt('configs/bins_phi_d_dsdt.txt')[:,3]
 phi_d_2H_dsdt_energy_center         = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_dsdt.txt')[:,0]
 phi_d_2H_dsdt_energy_width          = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_dsdt.txt')[:,1]
+phi_d_2H_dsdt_energy_middle         = (phi_d_2H_dsdt_energy_high + phi_d_2H_dsdt_energy_low) / 2
+phi_d_2H_dsdt_energy_size           = (phi_d_2H_dsdt_energy_high - phi_d_2H_dsdt_energy_low) / 2
+phi_d_2H_dsdt_minust_low            = np.loadtxt('configs/bins_phi_d_dsdt.txt')[:,2]
+phi_d_2H_dsdt_minust_high           = np.loadtxt('configs/bins_phi_d_dsdt.txt')[:,3]
 phi_d_2H_dsdt_minust_center         = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_dsdt.txt')[:,4]
 phi_d_2H_dsdt_minust_width          = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_dsdt.txt')[:,5]
+phi_d_2H_dsdt_minust_middle         = (phi_d_2H_dsdt_minust_high + phi_d_2H_dsdt_minust_low) / 2
+phi_d_2H_dsdt_minust_size           = (phi_d_2H_dsdt_minust_high - phi_d_2H_dsdt_minust_low) / 2
 
 # Read the yield numbers
 phi_d_2H_dsdt_yield_data            = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_dsdt.txt')[:,8]
 phi_d_2H_dsdt_yield_sim             = np.loadtxt('output/yield_phi_d_recon_exc_sim_2H_dsdt.txt')[:,8]
 phi_d_2H_dsdt_yield_tagged          = np.loadtxt('output/yield_phi_d_thrown_exc_tagged_2H_dsdt.txt')[:,8]
-phi_d_2H_dsdt_yield_data_statserr   = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_dsdt.txt')[:,9]
-phi_d_2H_dsdt_yield_sim_statserr    = np.loadtxt('output/yield_phi_d_recon_exc_sim_2H_dsdt.txt')[:,9]
-phi_d_2H_dsdt_yield_tagged_statserr = np.loadtxt('output/yield_phi_d_thrown_exc_tagged_2H_dsdt.txt')[:,9]
-
-# phi_d_2H_dsdt_yield_sim_flat             = np.loadtxt('output/yield_phi_d_recon_exc_sim_2H_dsdt_flat.txt')[:,8]
-# phi_d_2H_dsdt_yield_tagged_flat          = np.loadtxt('output/yield_phi_d_thrown_exc_tagged_2H_dsdt_flat.txt')[:,8]
-# phi_d_2H_dsdt_yield_sim_statserr_flat    = np.loadtxt('output/yield_phi_d_recon_exc_sim_2H_dsdt_flat.txt')[:,9]
-# phi_d_2H_dsdt_yield_tagged_statserr_flat = np.loadtxt('output/yield_phi_d_thrown_exc_tagged_2H_dsdt_flat.txt')[:,9]
+phi_d_2H_dsdt_yield_data_statserr   = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_dsdt.txt')[:,9]/phi_d_2H_dsdt_yield_data
+phi_d_2H_dsdt_yield_sim_statserr    = np.loadtxt('output/yield_phi_d_recon_exc_sim_2H_dsdt.txt')[:,9]/phi_d_2H_dsdt_yield_sim
+phi_d_2H_dsdt_yield_tagged_statserr = np.loadtxt('output/yield_phi_d_thrown_exc_tagged_2H_dsdt.txt')[:,9]/phi_d_2H_dsdt_yield_tagged
 
 # Calculate the efficiency
 phi_d_2H_dsdt_efficiency            = phi_d_2H_dsdt_yield_sim/phi_d_2H_dsdt_yield_tagged
-phi_d_2H_dsdt_efficiency_statserr   = phi_d_2H_dsdt_efficiency * np.sqrt(1/phi_d_2H_dsdt_yield_sim + 1/phi_d_2H_dsdt_yield_tagged)
-
-# phi_d_2H_dsdt_efficiency_flat            = phi_d_2H_dsdt_yield_sim_flat/phi_d_2H_dsdt_yield_tagged_flat
-# phi_d_2H_dsdt_efficiency_statserr_flat   = phi_d_2H_dsdt_efficiency_flat * np.sqrt(1/phi_d_2H_dsdt_yield_sim_flat + 1/phi_d_2H_dsdt_yield_tagged_flat)
+phi_d_2H_dsdt_efficiency_statserr   = phi_d_2H_dsdt_efficiency*np.sqrt(phi_d_2H_dsdt_yield_sim_statserr**2 + phi_d_2H_dsdt_yield_tagged_statserr**2)
 
 # Calculate the results
 phi_d_2H_dsdt_results               = phi_d_2H_dsdt_yield_data/phi_d_2H_dsdt_efficiency/lumi(phi_d_2H_dsdt_energy_low, phi_d_2H_dsdt_energy_high, '2H')/(phi_d_2H_dsdt_minust_high-phi_d_2H_dsdt_minust_low)/0.489/1000
-phi_d_2H_dsdt_results_statserr      = phi_d_2H_dsdt_results*(phi_d_2H_dsdt_yield_data_statserr/phi_d_2H_dsdt_yield_data)
-
-# phi_d_2H_dsdt_results_flat               = phi_d_2H_dsdt_yield_data/phi_d_2H_dsdt_efficiency_flat/lumi(phi_d_2H_dsdt_energy_low, phi_d_2H_dsdt_energy_high, '2H')/(phi_d_2H_dsdt_minust_high-phi_d_2H_dsdt_minust_low)/0.489/1000
-# phi_d_2H_dsdt_results_statserr_flat      = phi_d_2H_dsdt_results_flat*(phi_d_2H_dsdt_yield_data_statserr/phi_d_2H_dsdt_yield_data)
+phi_d_2H_dsdt_results_statserr      = phi_d_2H_dsdt_results*np.sqrt(phi_d_2H_dsdt_yield_data_statserr**2 + phi_d_2H_dsdt_efficiency_statserr**2)
 
 # Find the indices for the different energy and t bins
 index = []
@@ -141,7 +134,6 @@ plt.close()
 # Plot the efficiency
 fig = plt.figure(figsize=(8, 6), dpi=300)
 plt.errorbar(phi_d_2H_dsdt_minust_center, phi_d_2H_dsdt_efficiency, xerr=phi_d_2H_dsdt_minust_width, yerr=phi_d_2H_dsdt_efficiency_statserr, fmt='k.', label='Weighted')
-# plt.errorbar(phi_d_2H_dsdt_minust_center, phi_d_2H_dsdt_efficiency_flat, xerr=phi_d_2H_dsdt_minust_width, yerr=phi_d_2H_dsdt_efficiency_statserr_flat, fmt='b.', label='Flat')
 plt.title(r"$d(\gamma, \phi d')$ efficiency vs $-t$")
 plt.xlabel(r'$-t[GeV^2/c]$')
 plt.ylabel(r'$\mathrm{Efficiency}$')
@@ -150,18 +142,6 @@ plt.ylim(0, 0.4)
 plt.legend()
 file_pdf.savefig()
 plt.close()
-
-# fig = plt.figure(figsize=(8, 6), dpi=300)
-# plt.errorbar(phi_d_2H_dsdt_minust_center, 100*(phi_d_2H_dsdt_efficiency_flat-phi_d_2H_dsdt_efficiency)/phi_d_2H_dsdt_efficiency, fmt='b.', label='Relative difference')
-# plt.plot(np.linspace(0, 2, 100), np.zeros(100), 'r--', label='Zero line')
-# plt.title(r"$d(\gamma, \phi d')$ efficiency difference vs $-t$")
-# plt.xlabel(r'$-t[GeV^2/c]$')
-# plt.ylabel(r'$\mathrm{Relative\ difference (\%)}$')
-# plt.xlim(0, 2)
-# plt.ylim(-50, 50)
-# plt.legend()
-# file_pdf.savefig()
-# plt.close()
 
 # Plot the results
 fig = plt.figure(figsize=(8, 6), dpi=300)
@@ -183,6 +163,64 @@ plt.xlabel(r'$-t\ [GeV^2/c]$')
 plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$')
 plt.xlim(0, 2)
 plt.ylim(1e-1, 1e3)
+plt.yscale('log')
+plt.legend()
+file_pdf.savefig()
+plt.close()
+
+fig = plt.figure(figsize=(8, 6), dpi=300)
+color_code = ['b', 'k', 'r']
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[0]:index[1]],       phi_d_2H_dsdt_results[index[0]:index[1]],          xerr=phi_d_2H_dsdt_minust_width[index[0]:index[1]],        yerr=phi_d_2H_dsdt_results_statserr[index[0]:index[1]],            fmt='b.', label='6-8 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[1]:index[2]],       phi_d_2H_dsdt_results[index[1]:index[2]],          xerr=phi_d_2H_dsdt_minust_width[index[1]:index[2]],        yerr=phi_d_2H_dsdt_results_statserr[index[1]:index[2]],            fmt='k.', label='8-9 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[2]:index[3]],       phi_d_2H_dsdt_results[index[2]:index[3]],          xerr=phi_d_2H_dsdt_minust_width[index[2]:index[3]],        yerr=phi_d_2H_dsdt_results_statserr[index[2]:index[3]],            fmt='r.', label='9-11 GeV')
+plt.text(0.3, 0.15, 'preliminary', fontsize=15, color='r', style='italic', ha='center', va='center')
+plt.title(r"$d(\gamma, \phi d')$ differential cross section vs $-t$")
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$')
+plt.xlim(0, 2)
+plt.ylim(1e-1, 1e3)
+plt.yscale('log')
+plt.legend()
+file_pdf.savefig()
+plt.close()
+
+fig = plt.figure(figsize=(8, 6), dpi=300)
+color_code = ['b', 'k', 'r']
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[0]:index[1]],       phi_d_2H_dsdt_results[index[0]:index[1]],          xerr=phi_d_2H_dsdt_minust_width[index[0]:index[1]],        yerr=phi_d_2H_dsdt_results_statserr[index[0]:index[1]],            fmt='b.', label='6-8 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[1]:index[2]],       phi_d_2H_dsdt_results[index[1]:index[2]],          xerr=phi_d_2H_dsdt_minust_width[index[1]:index[2]],        yerr=phi_d_2H_dsdt_results_statserr[index[1]:index[2]],            fmt='k.', label='8-9 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[2]:index[3]],       phi_d_2H_dsdt_results[index[2]:index[3]],          xerr=phi_d_2H_dsdt_minust_width[index[2]:index[3]],        yerr=phi_d_2H_dsdt_results_statserr[index[2]:index[3]],            fmt='r.', label='9-11 GeV')
+for i in range(3):
+    curve_fit_params, curve_fit_cov = curve_fit(dsdt_func, phi_d_2H_dsdt_minust_center[index[i]:index[i+1]], phi_d_2H_dsdt_results[index[i]:index[i+1]], p0=[0, 0, 0, 0])
+    curve_fit_residuals = phi_d_2H_dsdt_results[index[i]:index[i+1]] - dsdt_func(phi_d_2H_dsdt_minust_center[index[i]:index[i+1]], curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3])
+    reduced_chi2 = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr[index[i]:index[i+1]])**2)/(len(phi_d_2H_dsdt_results[index[i]:index[i+1]])-4)
+    plt.plot(np.linspace(0, 2, 100), dsdt_func(np.linspace(0, 2, 100), curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3]), '--', color = color_code[i], label='Paras: %.2f, %.2f, %.2f, %.2f, $\chi^2$/ndf = %.2f' % (curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3], reduced_chi2))
+plt.text(0.3, 0.15, 'preliminary', fontsize=15, color='r', style='italic', ha='center', va='center')
+plt.title(r"$d(\gamma, \phi d')$ differential cross section vs $-t$")
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$')
+plt.xlim(0, 2)
+plt.ylim(1e-1, 1e3)
+plt.yscale('log')
+plt.legend()
+file_pdf.savefig()
+plt.close()
+
+fig = plt.figure(figsize=(8, 6), dpi=300)
+color_code = ['b', 'k', 'r']
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[0]:index[1]],       phi_d_2H_dsdt_results[index[0]:index[1]],          xerr=phi_d_2H_dsdt_minust_width[index[0]:index[1]],        yerr=phi_d_2H_dsdt_results_statserr[index[0]:index[1]],            fmt='b.', label='6-8 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[1]:index[2]],       10*phi_d_2H_dsdt_results[index[1]:index[2]],          xerr=phi_d_2H_dsdt_minust_width[index[1]:index[2]],        yerr=10*phi_d_2H_dsdt_results_statserr[index[1]:index[2]],            fmt='k.', label='8-9 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[2]:index[3]],       100*phi_d_2H_dsdt_results[index[2]:index[3]],          xerr=phi_d_2H_dsdt_minust_width[index[2]:index[3]],        yerr=100*phi_d_2H_dsdt_results_statserr[index[2]:index[3]],            fmt='r.', label='9-11 GeV')
+for i in range(3):
+    curve_fit_params, curve_fit_cov = curve_fit(dsdt_func, phi_d_2H_dsdt_minust_center[index[i]:index[i+1]], phi_d_2H_dsdt_results[index[i]:index[i+1]], p0=[0, 0, 0, 0])
+    curve_fit_residuals = phi_d_2H_dsdt_results[index[i]:index[i+1]] - dsdt_func(phi_d_2H_dsdt_minust_center[index[i]:index[i+1]], curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3])
+    reduced_chi2 = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr[index[i]:index[i+1]])**2)/(len(phi_d_2H_dsdt_results[index[i]:index[i+1]])-4)
+    plt.plot(np.linspace(0, 2, 100), pow(10,i)*dsdt_func(np.linspace(0, 2, 100), curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3]), '--', color = color_code[i])
+plt.text(0.3, 0.15, 'preliminary', fontsize=15, color='r', style='italic', ha='center', va='center')
+plt.title(r"$d(\gamma, \phi d')$ differential cross section vs $-t$")
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$')
+plt.xlim(0, 2)
+plt.ylim(1e-1, 1e4)
 plt.yscale('log')
 plt.legend()
 file_pdf.savefig()
