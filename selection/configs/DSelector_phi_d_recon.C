@@ -295,7 +295,8 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
         // if(locKPlusP4_Measured.P()              < 0.4   || locKPlusP4_Measured.Theta()*rad_to_deg       < 2)    dComboWrapper->Set_IsComboCut(true);
         // if(locKMinusP4_Measured.P()             < 0.4   || locKMinusP4_Measured.Theta()*rad_to_deg      < 2)    dComboWrapper->Set_IsComboCut(true);
         // if(locDeuteronP4_Measured.P()           < 0.4   || locDeuteronP4_Measured.Theta()*rad_to_deg    < 2)    dComboWrapper->Set_IsComboCut(true);
-        if(dDeuteronWrapper->Get_dEdx_CDC()     == 0.0  || dDeuteronWrapper->Get_dEdx_ST()              == 0.0) dComboWrapper->Set_IsComboCut(true);
+        // if(dDeuteronWrapper->Get_dEdx_CDC()     == 0.0  || dDeuteronWrapper->Get_dEdx_ST()              == 0.0) dComboWrapper->Set_IsComboCut(true);
+        if(dDeuteronWrapper->Get_dEdx_CDC()     == 0.0)                                                         dComboWrapper->Set_IsComboCut(true);
         if((locKPlusP4+locKMinusP4).M()         > 1.5)                                                          dComboWrapper->Set_IsComboCut(true);
         if(dComboWrapper->Get_ChiSq_KinFit()/dComboWrapper->Get_NDF_KinFit()                            > 10)   dComboWrapper->Set_IsComboCut(true);
 
