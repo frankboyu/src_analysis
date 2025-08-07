@@ -214,7 +214,7 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
 
     cout << "Filtering events...\n";
     string KinematicsCut    = "kp_momentum_meas > 0.4 && km_momentum_meas > 0.4 && d_momentum_meas > 0.4 && kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
-    string dEdxCut          = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.3*d_momentum_meas+4.1)+2.3)";
+    string dEdxCut          = "(d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-29.68353898*d_momentum_meas+13.50623694)+17.88279645*d_momentum_meas*d_momentum_meas-42.15473796*d_momentum_meas+28.83200736)) && (d_dedx_cdc_keV_per_cm_meas < (TMath::Exp(-26.69276323*d_momentum_meas+15.92466317)+17.1164272*d_momentum_meas*d_momentum_meas-48.7542903*d_momentum_meas+40.25692313))";
     // string dEdxCut          = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.3*d_momentum_meas+4.1)+2.3) && d_dedx_st_keV_per_cm_meas > (TMath::Exp(-1.9*d_momentum_meas+2.8)+0.6)";
     string VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.0";
     string KinFitChiSqCut   = "chisq_per_ndf_kin < 5.0";
@@ -354,6 +354,8 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
 
             TH1D hist_minust_kin                            = *rdf.Histo1D({("minust_kin_"+ label).c_str(), ";-t (GeV^{2}/c^{2});Counts", 100, 0.0, 2.0},"minust_kin","event_weight");
             hist_minust_kin.Write();
+            TH2D hist_minust_kin_d_momentum_meas            = *rdf.Histo2D({("minust_kin_d_momentum_meas_"+ label).c_str(), ";-t (GeV^{2}/c^{2});P_{d} (GeV/c)", 100, 0.0, 2.0, 200, 0.0, 2.0},"minust_kin","d_momentum_meas","event_weight");
+            hist_minust_kin_d_momentum_meas.Write();
             TH1D hist_vertex_z_kin                          = *rdf.Histo1D({("vertex_z_kin_"+ label).c_str(), ";Z_{vertex} (cm);Counts", 100, 40.0, 90.0},"vertex_z_kin","event_weight");
             hist_vertex_z_kin.Write();
             TH2D hist_vertex_x_y_kin                        = *rdf.Histo2D({("vertex_x_y_kin_"+ label).c_str(), ";X_{vertex} (cm);Y_{vertex} (cm)", 100, -2.0, 2.0, 100, -2.0, 2.0},"vertex_x_kin","vertex_y_kin","event_weight");
