@@ -49,6 +49,9 @@ int get_yield(string channel, string reaction, string observable)
 
     // Loop over bins and calculate yield
     cout << "Calculating yield..." << endl;
+    TCanvas *canvas = new TCanvas("c1", "c1", 800, 600);
+    gStyle->SetOptStat(1);
+    gStyle->SetOptFit(1);
     double yield, yield_err, energy_center, energy_width, t_center, t_width, angle_center, angle_width;
     string energy_cut, t_cut, angle_cut;
     string variable;
@@ -81,6 +84,11 @@ int get_yield(string channel, string reaction, string observable)
             if (observable == "dsdt")
             {
                 cout << energy_cut << " && " << t_cut << endl;
+                TH1D hist = *rdf_t_cut.Histo1D({Form("hist_%.1f_%.1f_%.1f_%.1f", bins[i][0], bins[i][1], bins[i][2], bins[i][3]), ";m_{K^{+}K^{-}} (GeV/c);Counts", 24, 0.98, 1.1},"phi_mass_kin","event_weight");
+                hist.Draw();
+                canvas->Update();
+                canvas->Print("test.pdf(");
+                canvas->Clear();
                 yield           = rdf_t_cut.Sum("event_weight").GetValue();
                 yield_err       = sqrt(rdf_t_cut.Sum("event_weight_squared").GetValue());
             }
@@ -145,6 +153,7 @@ int get_yield(string channel, string reaction, string observable)
         else
             fprintf(output_textfile, "%6.4f\t%6.4f\t%6.1f\t%6.1f\t%6.4f\t%6.4f\t%6.3f\t%6.3f\t%6.4f\t%6.4f\t%6.1f\t%6.1f\t%f\t%f\n", energy_center, energy_width, bins[i][0], bins[i][1], t_center, t_width, bins[i][2], bins[i][3], angle_center, angle_width, bins[i][4], bins[i][5], yield, yield_err);
     }
+    canvas->Print("test.pdf)");
 
     return 0;
 
