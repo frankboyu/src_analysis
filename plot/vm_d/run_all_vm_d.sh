@@ -7,12 +7,12 @@ CHANNEL_LIST+=("phi_d")
 # CHANNEL_LIST+=("rho_d")
 
 REACTION_LIST=()
-REACTION_LIST+=("recon_exc_data_2H" "recon_exc_sim_2H" "thrown_exc_tagged_2H")
-# REACTION_LIST+=("recon_exc_data_2H")
+# REACTION_LIST+=("recon_exc_data_2H" "recon_exc_sim_2H" "thrown_exc_tagged_2H")
+REACTION_LIST+=("recon_exc_data_2H")
 
 OBSERVABLE_LIST=()
 # OBSERVABLE_LIST+=("dsdt" "Wcostheta" "Wphi" "WPhi" "Wpsi")
-OBSERVABLE_LIST+=("Wcostheta" "Wphi" "WPhi" "Wpsi")
+OBSERVABLE_LIST+=("dsdt")
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
 gxenv $HALLD_VERSIONS/version.xml

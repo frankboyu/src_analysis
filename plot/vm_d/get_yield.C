@@ -10,6 +10,50 @@ using namespace ROOT;
 using namespace ROOT::RDF;
 using namespace ROOT::Detail::RDF;
 
+Double_t voigt_plus_linear(Double_t *x, Double_t *par)
+{
+    // par[0] = Voigt amplitude
+    // par[1] = Voigt mean
+    // par[2] = Voigt sigma (Gaussian width)
+    // par[3] = Voigt gamma (Lorentzian width)
+    // par[4] = linear slope
+    // par[5] = linear intercept
+    Double_t voigt = par[0] * TMath::Voigt(x[0] - par[1], par[2], par[3]);
+    Double_t linear = par[4] * x[0] + par[5];
+    return voigt + linear;
+}
+
+Double_t voigt_plus_nonlinear(Double_t *x, Double_t *par)
+{
+    // par[0] = Voigt amplitude
+    // par[1] = Voigt mean
+    // par[2] = Voigt sigma (Gaussian width)
+    // par[3] = Voigt gamma (Lorentzian width)
+    // par[4] = linear slope
+    // par[5] = linear intercept
+    double mass_kaon = 0.493677;
+    Double_t voigt = par[0] * TMath::Voigt(x[0] - par[1], par[2], par[3]);
+    Double_t nonlinear;
+    if (x[0] < 2*mass_kaon)
+        nonlinear = 0.0;
+    else
+        nonlinear = par[4] * sqrt(x[0]*x[0] - 4*mass_kaon*mass_kaon) + par[5] * (x[0]*x[0] - 4*mass_kaon*mass_kaon);
+    return voigt + nonlinear;
+}
+
+Double_t nonlinear(Double_t *x, Double_t *par)
+{
+    // par[0] = linear slope
+    // par[1] = linear intercept
+    double mass_kaon = 0.493677;
+    Double_t nonlinear;
+    if (x[0] < 2*mass_kaon)
+        nonlinear = 0.0;
+    else
+        nonlinear = par[0] * sqrt(x[0]*x[0] - 4*mass_kaon*mass_kaon) + par[1] * (x[0]*x[0] - 4*mass_kaon*mass_kaon);
+    return nonlinear;
+}
+
 int get_yield(string channel, string reaction, string observable)
 {
     // Read tree from input root file
@@ -86,6 +130,25 @@ int get_yield(string channel, string reaction, string observable)
                 cout << energy_cut << " && " << t_cut << endl;
                 TH1D hist = *rdf_t_cut.Histo1D({Form("hist_%.1f_%.1f_%.1f_%.1f", bins[i][0], bins[i][1], bins[i][2], bins[i][3]), ";m_{K^{+}K^{-}} (GeV/c);Counts", 24, 0.98, 1.1},"phi_mass_kin","event_weight");
                 hist.Draw();
+                TF1 fit_func("fit_func", voigt_plus_nonlinear, 0.98, 1.06, 6);
+                fit_func.SetParameters(1.00, 1.02, 0.01, 0.004, 0, 0);
+                fit_func.SetParLimits(0, 0.1, 2.0);
+                fit_func.FixParameter(1, 1.019456);
+                fit_func.FixParameter(2, 0.003);
+                // fit_func.SetParLimits(2, 0.001, 0.5);
+                fit_func.FixParameter(3, 0.00425);
+                fit_func.SetParLimits(4, 1.0, 40);
+                fit_func.SetParLimits(5, -40, -1.0);
+                hist.Fit(&fit_func, "R");
+                hist.Draw("same");
+                TF1 linear_function("linear_function", "[0]*x+[1]", 0.98, 1.1);
+                linear_function.SetParameters(fit_func.GetParameter(4), fit_func.GetParameter(5));
+                linear_function.SetLineColor(kBlue);
+                linear_function.Draw("same");
+                // TF1 nonlinear_function("nonlinear_function", nonlinear, 0.98, 1.06, 2);
+                // nonlinear_function.SetParameters(fit_func.GetParameter(4), fit_func.GetParameter(5));
+                // nonlinear_function.SetLineColor(kBlue);
+                // nonlinear_function.Draw("same");
                 canvas->Update();
                 canvas->Print("test.pdf(");
                 canvas->Clear();
