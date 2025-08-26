@@ -22,7 +22,7 @@ do
     do
         for REACTION in "${REACTION_LIST[@]}"
         do
-            root -b -q -l "get_yield.C(\"$CHANNEL\", \"$REACTION\", \"$OBSERVABLE\")"
+            root -b -q -l "get_yield.C(\"$CHANNEL\", \"$REACTION\", \"$OBSERVABLE\", \"linear\", 0.02)"
         done
     done
 done

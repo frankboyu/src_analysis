@@ -10,6 +10,8 @@ using namespace ROOT;
 using namespace ROOT::RDF;
 using namespace ROOT::Detail::RDF;
 
+double mass_kaon = 0.493677;
+
 Double_t voigt_plus_linear(Double_t *x, Double_t *par)
 {
     // par[0] = Voigt amplitude
@@ -19,7 +21,7 @@ Double_t voigt_plus_linear(Double_t *x, Double_t *par)
     // par[4] = linear slope
     // par[5] = linear intercept
     Double_t voigt = par[0] * TMath::Voigt(x[0] - par[1], par[2], par[3]);
-    Double_t linear = par[4] * x[0] + par[5];
+    Double_t linear = par[4] * (x[0] - 2*mass_kaon);
     return voigt + linear;
 }
 
@@ -31,7 +33,6 @@ Double_t voigt_plus_nonlinear(Double_t *x, Double_t *par)
     // par[3] = Voigt gamma (Lorentzian width)
     // par[4] = linear slope
     // par[5] = linear intercept
-    double mass_kaon = 0.493677;
     Double_t voigt = par[0] * TMath::Voigt(x[0] - par[1], par[2], par[3]);
     Double_t nonlinear;
     if (x[0] < 2*mass_kaon)
@@ -39,6 +40,21 @@ Double_t voigt_plus_nonlinear(Double_t *x, Double_t *par)
     else
         nonlinear = par[4] * sqrt(x[0]*x[0] - 4*mass_kaon*mass_kaon) + par[5] * (x[0]*x[0] - 4*mass_kaon*mass_kaon);
     return voigt + nonlinear;
+}
+
+Double_t voigt(Double_t *x, Double_t *par)
+{
+    // par[0] = Voigt amplitude
+    // par[1] = Voigt mean
+    // par[2] = Voigt sigma (Gaussian width)
+    // par[3] = Voigt gamma (Lorentzian width)
+    return par[0] * TMath::Voigt(x[0] - par[1], par[2], par[3]);
+}
+
+Double_t linear(Double_t *x, Double_t *par)
+{
+    // par[0] = linear slope
+    return par[0] * (x[0] - 2*mass_kaon);
 }
 
 Double_t nonlinear(Double_t *x, Double_t *par)
@@ -54,7 +70,7 @@ Double_t nonlinear(Double_t *x, Double_t *par)
     return nonlinear;
 }
 
-int get_yield(string channel, string reaction, string observable)
+int get_yield(string channel, string reaction, string observable, string fitfunc, double masscut)
 {
     // Read tree from input root file
     string input_treefile_name  = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_%s_%s.root", channel.c_str(), reaction.c_str());
@@ -87,8 +103,10 @@ int get_yield(string channel, string reaction, string observable)
     input_txt.close();
 
     // Prepare output files
-    string output_textfile_name = Form("output/yield_%s_%s_%s.txt", channel.c_str(), reaction.c_str(), observable.c_str());
+    string output_textfile_name = Form("output/yield_%s_%s_%s_%s.txt", channel.c_str(), reaction.c_str(), observable.c_str(), fitfunc.c_str());
+    string output_pdffile_name = Form("output/yield_%s_%s_%s_%s.pdf", channel.c_str(), reaction.c_str(), observable.c_str(), fitfunc.c_str());
     cout << "Output text file: " << output_textfile_name << endl;
+    cout << "Output PDF file: " << output_pdffile_name << endl;
     FILE *output_textfile = fopen(output_textfile_name.c_str(),"w");
 
     // Loop over bins and calculate yield
@@ -128,32 +146,68 @@ int get_yield(string channel, string reaction, string observable)
             if (observable == "dsdt")
             {
                 cout << energy_cut << " && " << t_cut << endl;
-                TH1D hist = *rdf_t_cut.Histo1D({Form("hist_%.1f_%.1f_%.1f_%.1f", bins[i][0], bins[i][1], bins[i][2], bins[i][3]), ";m_{K^{+}K^{-}} (GeV/c);Counts", 24, 0.98, 1.1},"phi_mass_kin","event_weight");
+                TH1D hist = *rdf_t_cut.Histo1D({Form("hist_%.1f_%.1f_%.3f_%.3f", bins[i][0], bins[i][1], bins[i][2], bins[i][3]), ";m_{K^{+}K^{-}} (GeV/c);Counts", 24, 0.9825, 1.1025},"phi_mass_kin","event_weight");
                 hist.Draw();
-                TF1 fit_func("fit_func", voigt_plus_nonlinear, 0.98, 1.06, 6);
-                fit_func.SetParameters(1.00, 1.02, 0.01, 0.004, 0, 0);
-                fit_func.SetParLimits(0, 0.1, 2.0);
-                fit_func.FixParameter(1, 1.019456);
-                fit_func.FixParameter(2, 0.003);
-                // fit_func.SetParLimits(2, 0.001, 0.5);
-                fit_func.FixParameter(3, 0.00425);
-                fit_func.SetParLimits(4, 1.0, 40);
-                fit_func.SetParLimits(5, -40, -1.0);
-                hist.Fit(&fit_func, "R");
-                hist.Draw("same");
-                TF1 linear_function("linear_function", "[0]*x+[1]", 0.98, 1.1);
-                linear_function.SetParameters(fit_func.GetParameter(4), fit_func.GetParameter(5));
-                linear_function.SetLineColor(kBlue);
-                linear_function.Draw("same");
-                // TF1 nonlinear_function("nonlinear_function", nonlinear, 0.98, 1.06, 2);
-                // nonlinear_function.SetParameters(fit_func.GetParameter(4), fit_func.GetParameter(5));
-                // nonlinear_function.SetLineColor(kBlue);
-                // nonlinear_function.Draw("same");
+                if (fitfunc == "none")
+                {
+                    yield = rdf_t_cut.Filter("phi_mass_kin>1.00 && phi_mass_kin<1.04").Sum("event_weight").GetValue();
+                    yield_err = sqrt(rdf_t_cut.Filter("phi_mass_kin>1.00 && phi_mass_kin<1.04").Sum("event_weight_squared").GetValue());
+                }
+                else if (fitfunc == "nonlinear")
+                {
+                    TF1 fit_func("fit_func", voigt_plus_nonlinear, 1.00, 1.06, 6);
+                    fit_func.SetParameters(1.00, 1.02, 0.01, 0.004, 5, -5);
+                    fit_func.SetParLimits(0, 0.05, 2.0);
+                    fit_func.FixParameter(1, 1.019456);
+                    fit_func.FixParameter(2, 0.0035);
+                    fit_func.FixParameter(3, 0.00425);
+                    fit_func.SetParLimits(4, 1.0, 40);
+                    fit_func.SetParLimits(5, -40, -1.0);
+                    hist.Fit(&fit_func, "WLR");
+                    hist.GetFunction("fit_func")->SetLineColor(kBlack);
+                    hist.Draw("same");
+                    TF1 *voigt_function = new TF1("voigt_function", voigt, 0.98, 1.06, 4);
+                    voigt_function->SetParameters(fit_func.GetParameter(0), fit_func.GetParameter(1), fit_func.GetParameter(2), fit_func.GetParameter(3));
+                    voigt_function->SetLineColor(kRed);
+                    voigt_function->Draw("same");
+                    TF1 *nonlinear_function = new TF1("nonlinear_function", nonlinear, 0.98, 1.06, 2);
+                    nonlinear_function->SetParameters(fit_func.GetParameter(4), fit_func.GetParameter(5));
+                    nonlinear_function->SetLineColor(kBlue);
+                    nonlinear_function->Draw("same");
+                    // yield = fit_func.Integral(1.00, 1.04) - nonlinear_function.Integral(1.00, 1.04);
+                    // yield_err = sqrt(fit_func.Integral(1.00, 1.04) - nonlinear_function.Integral(1.00, 1.04));
+                    yield = rdf_t_cut.Filter("phi_mass_kin>1.00 && phi_mass_kin<1.04").Sum("event_weight").GetValue();
+                    yield_err = sqrt(rdf_t_cut.Filter("phi_mass_kin>1.00 && phi_mass_kin<1.04").Sum("event_weight_squared").GetValue());
+                }
+                else if (fitfunc == "linear")
+                {
+                    TF1 fit_func("fit_func", voigt_plus_linear, 1.00, 1.08, 5);
+                    fit_func.SetParameters(1.00, 1.02, 0.0035, 0.004, 20);
+                    fit_func.SetParLimits(0, 0.1, 2.0);
+                    fit_func.FixParameter(1, 1.019456);
+                    fit_func.FixParameter(2, 0.0035);
+                    fit_func.FixParameter(3, 0.00425);
+                    fit_func.SetParLimits(4, 5.0, 50.0);
+                    hist.Fit(&fit_func, "WR");
+                    hist.GetFunction("fit_func")->SetLineColor(kBlack);
+                    hist.Draw("same");
+                    TF1 *voigt_function = new TF1("voigt_function", voigt, 0.98, 1.08, 4);
+                    voigt_function->SetParameters(fit_func.GetParameter(0), fit_func.GetParameter(1), fit_func.GetParameter(2), fit_func.GetParameter(3));
+                    voigt_function->SetLineColor(kRed);
+                    voigt_function->Draw("same");
+                    TF1 *linear_function = new TF1("linear_function", linear, 0.98, 1.08, 1);
+                    linear_function->SetParameter(0, fit_func.GetParameter(4));
+                    linear_function->SetLineColor(kBlue);
+                    linear_function->Draw("same");
+                    // yield_err = sqrt(fit_func.Integral(1.00, 1.04) - linear_function.Integral(1.00, 1.04));
+                    yield = rdf_t_cut.Filter("phi_mass_kin>1.00 && phi_mass_kin<1.04").Sum("event_weight").GetValue();
+                    yield_err = sqrt(rdf_t_cut.Filter("phi_mass_kin>1.00 && phi_mass_kin<1.04").Sum("event_weight_squared").GetValue());
+                    cout << voigt_function->Integral(1.00, 1.04)/0.005 << endl;
+                    cout << yield << endl;
+                }
                 canvas->Update();
-                canvas->Print("test.pdf(");
+                canvas->Print((output_pdffile_name+"(").c_str());
                 canvas->Clear();
-                yield           = rdf_t_cut.Sum("event_weight").GetValue();
-                yield_err       = sqrt(rdf_t_cut.Sum("event_weight_squared").GetValue());
             }
             else
             {
@@ -216,7 +270,7 @@ int get_yield(string channel, string reaction, string observable)
         else
             fprintf(output_textfile, "%6.4f\t%6.4f\t%6.1f\t%6.1f\t%6.4f\t%6.4f\t%6.3f\t%6.3f\t%6.4f\t%6.4f\t%6.1f\t%6.1f\t%f\t%f\n", energy_center, energy_width, bins[i][0], bins[i][1], t_center, t_width, bins[i][2], bins[i][3], angle_center, angle_width, bins[i][4], bins[i][5], yield, yield_err);
     }
-    canvas->Print("test.pdf)");
+    canvas->Print((output_pdffile_name+")").c_str());
 
     return 0;
 
