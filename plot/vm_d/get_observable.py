@@ -42,14 +42,14 @@ def normalize_distribution(results, energy_bins, t_bins):
 #======================================================================phi_d_2H_dsdt======================================================================
 
 # Read the bin edges
-phi_d_2H_dsdt_energy_low            = np.loadtxt('configs/bins_phi_d_dsdt.txt')[:,0]
-phi_d_2H_dsdt_energy_high           = np.loadtxt('configs/bins_phi_d_dsdt.txt')[:,1]
+phi_d_2H_dsdt_energy_low            = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_dsdt.txt')[:,2]
+phi_d_2H_dsdt_energy_high           = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_dsdt.txt')[:,3]
 phi_d_2H_dsdt_energy_center         = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_dsdt.txt')[:,0]
 phi_d_2H_dsdt_energy_width          = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_dsdt.txt')[:,1]
 phi_d_2H_dsdt_energy_middle         = (phi_d_2H_dsdt_energy_high + phi_d_2H_dsdt_energy_low) / 2
 phi_d_2H_dsdt_energy_size           = (phi_d_2H_dsdt_energy_high - phi_d_2H_dsdt_energy_low) / 2
-phi_d_2H_dsdt_minust_low            = np.loadtxt('configs/bins_phi_d_dsdt.txt')[:,2]
-phi_d_2H_dsdt_minust_high           = np.loadtxt('configs/bins_phi_d_dsdt.txt')[:,3]
+phi_d_2H_dsdt_minust_low            = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_dsdt.txt')[:,6]
+phi_d_2H_dsdt_minust_high           = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_dsdt.txt')[:,7]
 phi_d_2H_dsdt_minust_center         = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_dsdt.txt')[:,4]
 phi_d_2H_dsdt_minust_width          = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_dsdt.txt')[:,5]
 phi_d_2H_dsdt_minust_middle         = (phi_d_2H_dsdt_minust_high + phi_d_2H_dsdt_minust_low) / 2
@@ -62,6 +62,11 @@ phi_d_2H_dsdt_yield_tagged          = np.loadtxt('output/yield_phi_d_thrown_exc_
 phi_d_2H_dsdt_yield_data_statserr   = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_dsdt.txt')[:,9]/phi_d_2H_dsdt_yield_data
 phi_d_2H_dsdt_yield_sim_statserr    = np.loadtxt('output/yield_phi_d_recon_exc_sim_2H_dsdt.txt')[:,9]/phi_d_2H_dsdt_yield_sim
 phi_d_2H_dsdt_yield_tagged_statserr = np.loadtxt('output/yield_phi_d_thrown_exc_tagged_2H_dsdt.txt')[:,9]/phi_d_2H_dsdt_yield_tagged
+
+phi_d_2H_dsdt_minust_center_none         = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_dsdt_none.txt')[:,4]
+phi_d_2H_dsdt_yield_data_none            = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_dsdt_none.txt')[:,8]
+phi_d_2H_dsdt_yield_data_linear            = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_dsdt_linear.txt')[:,8]
+phi_d_2H_dsdt_yield_data_quadratic            = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_dsdt_quadratic.txt')[:,8]
 
 # Calculate the efficiency
 phi_d_2H_dsdt_efficiency            = phi_d_2H_dsdt_yield_sim/phi_d_2H_dsdt_yield_tagged
@@ -126,6 +131,28 @@ plt.xlabel(r'$-t[GeV^2/c]$')
 plt.ylabel(r'$\mathrm{Yield}$')
 plt.xlim(0, 2)
 plt.ylim(0, 200)
+plt.legend()
+file_pdf.savefig()
+plt.close()
+
+fig = plt.figure(figsize=(8, 6), dpi=300)
+plt.errorbar(phi_d_2H_dsdt_minust_center_none, (phi_d_2H_dsdt_yield_data_none - phi_d_2H_dsdt_yield_data_linear)/phi_d_2H_dsdt_yield_data_none, fmt='b.')
+plt.title("Difference between simple counting and fit with linear background function")
+plt.xlabel(r'$-t[GeV^2/c]$')
+plt.ylabel('Relative difference')
+plt.xlim(0, 2)
+plt.ylim(0, 0.2)
+plt.legend()
+file_pdf.savefig()
+plt.close()
+
+fig = plt.figure(figsize=(8, 6), dpi=300)
+plt.errorbar(phi_d_2H_dsdt_minust_center_none, (phi_d_2H_dsdt_yield_data_quadratic - phi_d_2H_dsdt_yield_data_linear)/phi_d_2H_dsdt_yield_data_quadratic, fmt='r.')
+plt.title("Difference between linear and quadratic background function")
+plt.xlabel(r'$-t[GeV^2/c]$')
+plt.ylabel('Relative difference')
+plt.xlim(0, 2)
+plt.ylim(-0.2, 0.2)
 plt.legend()
 file_pdf.savefig()
 plt.close()

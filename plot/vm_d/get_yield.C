@@ -12,6 +12,15 @@ using namespace ROOT::Detail::RDF;
 
 double mass_kaon = 0.493677;
 
+Double_t voigt(Double_t *x, Double_t *par)
+{
+    // par[0] = Voigt amplitude
+    // par[1] = Voigt mean
+    // par[2] = Voigt sigma (Gaussian width)
+    // par[3] = Voigt gamma (Lorentzian width)
+    return par[0] * TMath::Voigt(x[0] - par[1], par[2], par[3]);
+}
+
 Double_t voigt_plus_linear(Double_t *x, Double_t *par)
 {
     // par[0] = Voigt amplitude
@@ -25,7 +34,7 @@ Double_t voigt_plus_linear(Double_t *x, Double_t *par)
     return voigt + linear;
 }
 
-Double_t voigt_plus_nonlinear(Double_t *x, Double_t *par)
+Double_t voigt_plus_quadratic(Double_t *x, Double_t *par)
 {
     // par[0] = Voigt amplitude
     // par[1] = Voigt mean
@@ -34,21 +43,12 @@ Double_t voigt_plus_nonlinear(Double_t *x, Double_t *par)
     // par[4] = linear slope
     // par[5] = linear intercept
     Double_t voigt = par[0] * TMath::Voigt(x[0] - par[1], par[2], par[3]);
-    Double_t nonlinear;
+    Double_t quadratic;
     if (x[0] < 2*mass_kaon)
-        nonlinear = 0.0;
+        quadratic = 0.0;
     else
-        nonlinear = par[4] * sqrt(x[0]*x[0] - 4*mass_kaon*mass_kaon) + par[5] * (x[0]*x[0] - 4*mass_kaon*mass_kaon);
-    return voigt + nonlinear;
-}
-
-Double_t voigt(Double_t *x, Double_t *par)
-{
-    // par[0] = Voigt amplitude
-    // par[1] = Voigt mean
-    // par[2] = Voigt sigma (Gaussian width)
-    // par[3] = Voigt gamma (Lorentzian width)
-    return par[0] * TMath::Voigt(x[0] - par[1], par[2], par[3]);
+        quadratic = par[4] * (x[0]*x[0] - 4*mass_kaon*mass_kaon);
+    return voigt + quadratic;
 }
 
 Double_t linear(Double_t *x, Double_t *par)
@@ -57,17 +57,17 @@ Double_t linear(Double_t *x, Double_t *par)
     return par[0] * (x[0] - 2*mass_kaon);
 }
 
-Double_t nonlinear(Double_t *x, Double_t *par)
+Double_t quadratic(Double_t *x, Double_t *par)
 {
     // par[0] = linear slope
     // par[1] = linear intercept
     double mass_kaon = 0.493677;
-    Double_t nonlinear;
+    Double_t quadratic;
     if (x[0] < 2*mass_kaon)
-        nonlinear = 0.0;
+        quadratic = 0.0;
     else
-        nonlinear = par[0] * sqrt(x[0]*x[0] - 4*mass_kaon*mass_kaon) + par[1] * (x[0]*x[0] - 4*mass_kaon*mass_kaon);
-    return nonlinear;
+        quadratic = par[0] * (x[0]*x[0] - 4*mass_kaon*mass_kaon);
+    return quadratic;
 }
 
 int get_yield(string channel, string reaction, string observable, string fitfunc, double masscut)
@@ -153,42 +153,41 @@ int get_yield(string channel, string reaction, string observable, string fitfunc
                     yield = rdf_t_cut.Filter("phi_mass_kin>1.00 && phi_mass_kin<1.04").Sum("event_weight").GetValue();
                     yield_err = sqrt(rdf_t_cut.Filter("phi_mass_kin>1.00 && phi_mass_kin<1.04").Sum("event_weight_squared").GetValue());
                 }
-                else if (fitfunc == "nonlinear")
+                else if (fitfunc == "quadratic")
                 {
-                    TF1 fit_func("fit_func", voigt_plus_nonlinear, 1.00, 1.06, 6);
-                    fit_func.SetParameters(1.00, 1.02, 0.01, 0.004, 5, -5);
+                    TF1 fit_func("fit_func", voigt_plus_quadratic, 0.99, 1.06, 5);
+                    fit_func.SetParameters(1.00, 1.02, 0.0035, 0.004, 20);
                     fit_func.SetParLimits(0, 0.05, 2.0);
                     fit_func.FixParameter(1, 1.019456);
                     fit_func.FixParameter(2, 0.0035);
                     fit_func.FixParameter(3, 0.00425);
-                    fit_func.SetParLimits(4, 1.0, 40);
-                    fit_func.SetParLimits(5, -40, -1.0);
-                    hist.Fit(&fit_func, "WLR");
+                    fit_func.SetParLimits(4, 0.5, 50.0);
+                    hist.Fit(&fit_func, "WLRM");
                     hist.GetFunction("fit_func")->SetLineColor(kBlack);
                     hist.Draw("same");
-                    TF1 *voigt_function = new TF1("voigt_function", voigt, 0.98, 1.06, 4);
+                    TF1 *voigt_function = new TF1("voigt_function", voigt, 0.98, 1.08, 4);
                     voigt_function->SetParameters(fit_func.GetParameter(0), fit_func.GetParameter(1), fit_func.GetParameter(2), fit_func.GetParameter(3));
                     voigt_function->SetLineColor(kRed);
                     voigt_function->Draw("same");
-                    TF1 *nonlinear_function = new TF1("nonlinear_function", nonlinear, 0.98, 1.06, 2);
-                    nonlinear_function->SetParameters(fit_func.GetParameter(4), fit_func.GetParameter(5));
-                    nonlinear_function->SetLineColor(kBlue);
-                    nonlinear_function->Draw("same");
-                    // yield = fit_func.Integral(1.00, 1.04) - nonlinear_function.Integral(1.00, 1.04);
-                    // yield_err = sqrt(fit_func.Integral(1.00, 1.04) - nonlinear_function.Integral(1.00, 1.04));
-                    yield = rdf_t_cut.Filter("phi_mass_kin>1.00 && phi_mass_kin<1.04").Sum("event_weight").GetValue();
-                    yield_err = sqrt(rdf_t_cut.Filter("phi_mass_kin>1.00 && phi_mass_kin<1.04").Sum("event_weight_squared").GetValue());
+                    TF1 *quadratic_function = new TF1("quadratic_function", quadratic, 0.98, 1.08, 1);
+                    quadratic_function->SetParameter(0, fit_func.GetParameter(4));
+                    quadratic_function->SetLineColor(kBlue);
+                    quadratic_function->Draw("same");
+                    yield = voigt_function->Integral(1.00, 1.04)/0.005;
+                    yield_err = voigt_function->IntegralError(1.00, 1.04)/0.005;
+                    // yield = rdf_t_cut.Filter("phi_mass_kin>1.00 && phi_mass_kin<1.04").Sum("event_weight").GetValue();
+                    // yield_err = sqrt(rdf_t_cut.Filter("phi_mass_kin>1.00 && phi_mass_kin<1.04").Sum("event_weight_squared").GetValue());
                 }
                 else if (fitfunc == "linear")
                 {
-                    TF1 fit_func("fit_func", voigt_plus_linear, 1.00, 1.08, 5);
+                    TF1 fit_func("fit_func", voigt_plus_linear, 0.99, 1.06, 5);
                     fit_func.SetParameters(1.00, 1.02, 0.0035, 0.004, 20);
-                    fit_func.SetParLimits(0, 0.1, 2.0);
+                    fit_func.SetParLimits(0, 0.05, 2.0);
                     fit_func.FixParameter(1, 1.019456);
                     fit_func.FixParameter(2, 0.0035);
                     fit_func.FixParameter(3, 0.00425);
-                    fit_func.SetParLimits(4, 5.0, 50.0);
-                    hist.Fit(&fit_func, "WR");
+                    fit_func.SetParLimits(4, 0.5, 50.0);
+                    hist.Fit(&fit_func, "WLRM");
                     hist.GetFunction("fit_func")->SetLineColor(kBlack);
                     hist.Draw("same");
                     TF1 *voigt_function = new TF1("voigt_function", voigt, 0.98, 1.08, 4);
@@ -199,11 +198,12 @@ int get_yield(string channel, string reaction, string observable, string fitfunc
                     linear_function->SetParameter(0, fit_func.GetParameter(4));
                     linear_function->SetLineColor(kBlue);
                     linear_function->Draw("same");
-                    // yield_err = sqrt(fit_func.Integral(1.00, 1.04) - linear_function.Integral(1.00, 1.04));
-                    yield = rdf_t_cut.Filter("phi_mass_kin>1.00 && phi_mass_kin<1.04").Sum("event_weight").GetValue();
-                    yield_err = sqrt(rdf_t_cut.Filter("phi_mass_kin>1.00 && phi_mass_kin<1.04").Sum("event_weight_squared").GetValue());
-                    cout << voigt_function->Integral(1.00, 1.04)/0.005 << endl;
-                    cout << yield << endl;
+                    yield = voigt_function->Integral(1.00, 1.04)/0.005;
+                    yield_err = voigt_function->IntegralError(1.00, 1.04)/0.005;
+                    // yield = rdf_t_cut.Filter("phi_mass_kin>1.00 && phi_mass_kin<1.04").Sum("event_weight").GetValue();
+                    // yield_err = sqrt(rdf_t_cut.Filter("phi_mass_kin>1.00 && phi_mass_kin<1.04").Sum("event_weight_squared").GetValue());
+                    // cout << voigt_function->Integral(1.00, 1.04)/0.005 << endl;
+                    // cout << yield << endl;
                 }
                 canvas->Update();
                 canvas->Print((output_pdffile_name+"(").c_str());
