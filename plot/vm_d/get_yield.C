@@ -12,6 +12,56 @@ using namespace ROOT::Detail::RDF;
 
 double mass_kaon = 0.493677;
 
+Double_t signal(Double_t *x, Double_t *par)
+{
+    // Relativistic Breit-Wigner with Blatt-Weisskopf factor
+    // par[0] = amplitude
+    // par[1] = mass (pole mass)
+    // par[2] = width (pole width)
+
+    Double_t mass = x[0];
+    Double_t M = par[1];
+    Double_t Gamma0 = par[2];
+    Int_t L = 1;
+
+    // Kaon mass and momentum calculations
+    Double_t mk = mass_kaon;
+    Double_t q = sqrt((mass*mass - 4*mk*mk)/4); // momentum of kaon in phi rest frame
+    Double_t q0 = sqrt((M*M - 4*mk*mk)/4);     // momentum at pole mass
+
+    if (q <= 0 || q0 <= 0) return 0;
+
+    // Blatt-Weisskopf barrier factor squared
+    Double_t rho = 5.0677; // interaction radius in GeV^-1
+    Double_t z = q * rho;
+    Double_t z0 = q0 * rho;
+    Double_t BL = 1.0;
+
+    if (L == 0) {
+        BL = 1.0;
+    } else if (L == 1) {
+        BL = (1 + z0*z0) / (1 + z*z);
+    } else if (L == 2) {
+        BL = (9 + 3*z0*z0 + z0*z0*z0*z0) / (9 + 3*z*z + z*z*z*z);
+    }
+
+    // Mass-dependent width
+    Double_t Gamma = Gamma0 * (q/q0) * (M/mass) * BL;
+
+    // Relativistic Breit-Wigner
+    Double_t denominator = (mass*mass - M*M)*(mass*mass - M*M) + M*M*Gamma*Gamma;
+
+    return par[0] * M * Gamma / denominator;
+}
+
+Double_t gauss(Double_t *x, Double_t *par)
+{
+    // par[0] = Gaussian amplitude
+    // par[1] = Gaussian mean
+    // par[2] = Gaussian sigma (width)
+    return par[0] * TMath::Gaus(x[0], par[1], par[2]);
+}
+
 Double_t voigt(Double_t *x, Double_t *par)
 {
     // par[0] = Voigt amplitude
@@ -180,6 +230,8 @@ int get_yield(string channel, string reaction, string observable, string fitfunc
                 }
                 else if (fitfunc == "linear")
                 {
+                    TF1Convolution *conv = new TF1Convolution("conv", signal, gauss, 0.99, 1.06, true);
+
                     TF1 fit_func("fit_func", voigt_plus_linear, 0.99, 1.06, 5);
                     fit_func.SetParameters(1.00, 1.02, 0.0035, 0.004, 20);
                     fit_func.SetParLimits(0, 0.05, 2.0);
