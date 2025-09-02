@@ -12,46 +12,95 @@ using namespace ROOT::Detail::RDF;
 
 double mass_kaon = 0.493677;
 
-Double_t signal(Double_t *x, Double_t *par)
+Double_t rel_bw_plus_linear(Double_t *x, Double_t *par)
 {
     // Relativistic Breit-Wigner with Blatt-Weisskopf factor
-    // par[0] = amplitude
-    // par[1] = mass (pole mass)
-    // par[2] = width (pole width)
+    // par[0] = BW amplitude
+    // par[1] = BW pole mass
+    // par[2] = BW pole width
+    // par[3] = Gaussian width
+    // par[4] = linear slope
 
-    Double_t mass = x[0];
-    Double_t M = par[1];
+    Double_t M0 = par[1];
     Double_t Gamma0 = par[2];
+    Double_t sigma = par[3];
+    Double_t bg0 = par[4];
     Int_t L = 1;
+    Double_t convol_sum = 0.0;
+    Double_t convol_range = 10.0;
+    Double_t convol_step = 0.001;
 
-    // Kaon mass and momentum calculations
-    Double_t mk = mass_kaon;
-    Double_t q = sqrt((mass*mass - 4*mk*mk)/4); // momentum of kaon in phi rest frame
-    Double_t q0 = sqrt((M*M - 4*mk*mk)/4);     // momentum at pole mass
+    for (double xprime = x[0]-convol_range; xprime < x[0]+convol_range; xprime += convol_step)
+    {
+        if (xprime < 2*mass_kaon)
+            continue;
 
-    if (q <= 0 || q0 <= 0) return 0;
+        // Kaon mass and momentum calculations
+        Double_t mk = mass_kaon;
+        Double_t q = sqrt((xprime*xprime - 4*mk*mk)/4); // momentum of kaon in phi rest frame
+        Double_t q0 = sqrt((M0*M0 - 4*mk*mk)/4);     // momentum at pole mass
 
-    // Blatt-Weisskopf barrier factor squared
-    Double_t rho = 5.0677; // interaction radius in GeV^-1
-    Double_t z = q * rho;
-    Double_t z0 = q0 * rho;
-    Double_t BL = 1.0;
+        // Blatt-Weisskopf barrier factor squared
+        Double_t R0 = 5.0677; // interaction radius in GeV^-1
+        Double_t z = q * R0;
+        Double_t z0 = q0 * R0;
+        Double_t BL = (1 + z0*z0) / (1 + z*z);
 
-    if (L == 0) {
-        BL = 1.0;
-    } else if (L == 1) {
-        BL = (1 + z0*z0) / (1 + z*z);
-    } else if (L == 2) {
-        BL = (9 + 3*z0*z0 + z0*z0*z0*z0) / (9 + 3*z*z + z*z*z*z);
+        // Mass-dependent width
+        Double_t Gamma = Gamma0 * (q/q0) * (q/q0) * (q/q0) * (M0/xprime) * BL;
+
+        // Relativistic Breit-Wigner
+        Double_t denominator = (xprime*xprime - M0*M0)*(xprime*xprime - M0*M0) + M0*M0*Gamma*Gamma;
+
+        convol_sum += (2 / TMath::Pi()) * xprime * M0 * Gamma / denominator * TMath::Gaus(x[0]-xprime, 0, sigma, true) * convol_step;
     }
 
-    // Mass-dependent width
-    Double_t Gamma = Gamma0 * (q/q0) * (M/mass) * BL;
+    return par[0] * convol_sum + par[4]*(x[0] - 2*mass_kaon);
+}
 
-    // Relativistic Breit-Wigner
-    Double_t denominator = (mass*mass - M*M)*(mass*mass - M*M) + M*M*Gamma*Gamma;
+Double_t rel_bw(Double_t *x, Double_t *par)
+{
+    // Relativistic Breit-Wigner with Blatt-Weisskopf factor
+    // par[0] = BW amplitude
+    // par[1] = BW pole mass
+    // par[2] = BW pole width
+    // par[3] = Gaussian width
 
-    return par[0] * M * Gamma / denominator;
+    Double_t M0 = par[1];
+    Double_t Gamma0 = par[2];
+    Double_t sigma = par[3];
+    Double_t bg0 = par[4];
+    Int_t L = 1;
+    Double_t convol_sum = 0.0;
+    Double_t convol_range = 10.0;
+    Double_t convol_step = 0.001;
+
+    for (double xprime = x[0]-convol_range; xprime < x[0]+convol_range; xprime += convol_step)
+    {
+        if (xprime < 2*mass_kaon)
+            continue;
+
+        // Kaon mass and momentum calculations
+        Double_t mk = mass_kaon;
+        Double_t q = sqrt((xprime*xprime - 4*mk*mk)/4); // momentum of kaon in phi rest frame
+        Double_t q0 = sqrt((M0*M0 - 4*mk*mk)/4);     // momentum at pole mass
+
+        // Blatt-Weisskopf barrier factor squared
+        Double_t R0 = 5.0677; // interaction radius in GeV^-1
+        Double_t z = q * R0;
+        Double_t z0 = q0 * R0;
+        Double_t BL = (1 + z0*z0) / (1 + z*z);
+
+        // Mass-dependent width
+        Double_t Gamma = Gamma0 * (q/q0) * (q/q0) * (q/q0) * (M0/xprime) * BL;
+
+        // Relativistic Breit-Wigner
+        Double_t denominator = (xprime*xprime - M0*M0)*(xprime*xprime - M0*M0) + M0*M0*Gamma*Gamma;
+
+        convol_sum += (2 / TMath::Pi()) * xprime * M0 * Gamma / denominator * TMath::Gaus(x[0]-xprime, 0, sigma, true) * convol_step;
+    }
+
+    return par[0] * convol_sum;
 }
 
 Double_t gauss(Double_t *x, Double_t *par)
@@ -59,7 +108,7 @@ Double_t gauss(Double_t *x, Double_t *par)
     // par[0] = Gaussian amplitude
     // par[1] = Gaussian mean
     // par[2] = Gaussian sigma (width)
-    return par[0] * TMath::Gaus(x[0], par[1], par[2]);
+    return TMath::Gaus(x[0], 0, par[0], true);
 }
 
 Double_t voigt(Double_t *x, Double_t *par)
@@ -230,28 +279,39 @@ int get_yield(string channel, string reaction, string observable, string fitfunc
                 }
                 else if (fitfunc == "linear")
                 {
-                    TF1Convolution *conv = new TF1Convolution("conv", signal, gauss, 0.99, 1.06, true);
+                    TF1 fit_func("fit_func", rel_bw_plus_linear, 1.01, 1.06, 5);
+                    // TF1 fit_func("fit_func", [&](Double_t *x, Double_t *par) {
+                    //     Double_t conv_val = convolved_signal->EvalPar(x, par);
+                    //     Double_t linear_val = par[4] * (x[0] - 2*mass_kaon);
+                    //     return conv_val + linear_val;
+                    // }, 0.99, 1.06, 5);
 
-                    TF1 fit_func("fit_func", voigt_plus_linear, 0.99, 1.06, 5);
+                    // // TF1 fit_func("fit_func", voigt_plus_linear, 0.99, 1.06, 5);
                     fit_func.SetParameters(1.00, 1.02, 0.0035, 0.004, 20);
-                    fit_func.SetParLimits(0, 0.05, 2.0);
+                    fit_func.SetParLimits(0, 0.01, 200);
                     fit_func.FixParameter(1, 1.019456);
-                    fit_func.FixParameter(2, 0.0035);
-                    fit_func.FixParameter(3, 0.00425);
+                    fit_func.FixParameter(2, 0.00425);
+                    // fit_func.FixParameter(3, 0.0035);
                     fit_func.SetParLimits(4, 0.5, 50.0);
-                    hist.Fit(&fit_func, "WLRM");
+                    hist.Fit(&fit_func, "LR");
                     hist.GetFunction("fit_func")->SetLineColor(kBlack);
                     hist.Draw("same");
-                    TF1 *voigt_function = new TF1("voigt_function", voigt, 0.98, 1.08, 4);
-                    voigt_function->SetParameters(fit_func.GetParameter(0), fit_func.GetParameter(1), fit_func.GetParameter(2), fit_func.GetParameter(3));
-                    voigt_function->SetLineColor(kRed);
-                    voigt_function->Draw("same");
+                    yield = 1;
+                    yield_err = 1;
+                    TF1 *rel_bw_func = new TF1("rel_bw_func", rel_bw, 0.99, 1.08, 4);
+                    rel_bw_func->SetParameters(fit_func.GetParameter(0), fit_func.GetParameter(1), fit_func.GetParameter(2), fit_func.GetParameter(3));
+                    rel_bw_func->SetLineColor(kRed);
+                    rel_bw_func->Draw("same");
+                    // TF1 *voigt_function = new TF1("voigt_function", voigt, 0.98, 1.08, 4);
+                    // voigt_function->SetParameters(fit_func.GetParameter(0), fit_func.GetParameter(1), fit_func.GetParameter(2), fit_func.GetParameter(3));
+                    // voigt_function->SetLineColor(kRed);
+                    // voigt_function->Draw("same");
                     TF1 *linear_function = new TF1("linear_function", linear, 0.98, 1.08, 1);
                     linear_function->SetParameter(0, fit_func.GetParameter(4));
                     linear_function->SetLineColor(kBlue);
                     linear_function->Draw("same");
-                    yield = voigt_function->Integral(1.00, 1.04)/0.005;
-                    yield_err = voigt_function->IntegralError(1.00, 1.04)/0.005;
+                    // yield = voigt_function->Integral(1.00, 1.04)/0.005;
+                    // yield_err = voigt_function->IntegralError(1.00, 1.04)/0.005;
                     // yield = rdf_t_cut.Filter("phi_mass_kin>1.00 && phi_mass_kin<1.04").Sum("event_weight").GetValue();
                     // yield_err = sqrt(rdf_t_cut.Filter("phi_mass_kin>1.00 && phi_mass_kin<1.04").Sum("event_weight_squared").GetValue());
                     // cout << voigt_function->Integral(1.00, 1.04)/0.005 << endl;
