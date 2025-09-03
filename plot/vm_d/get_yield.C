@@ -246,7 +246,14 @@ int get_yield(string channel, string reaction, string observable, string fitfunc
             {
                 cout << energy_cut << " && " << t_cut << endl;
                 TH1D hist = *rdf_t_cut.Histo1D({Form("hist_%.1f_%.1f_%.3f_%.3f", bins[i][0], bins[i][1], bins[i][2], bins[i][3]), ";m_{K^{+}K^{-}} (GeV/c);Counts", 24, 0.9825, 1.1025},"phi_mass_kin","event_weight");
-                hist.Draw();
+                for (int i = 0; i < hist.GetNbinsX(); i++)
+                {
+                    if (hist.GetBinContent(i) < 0)
+                    {
+                        hist.SetBinContent(i, 0);
+                        hist.SetBinError(i, 0);
+                    }
+                }
                 if (fitfunc == "none")
                 {
                     yield = rdf_t_cut.Filter("phi_mass_kin>1.00 && phi_mass_kin<1.04").Sum("event_weight").GetValue();
@@ -279,7 +286,7 @@ int get_yield(string channel, string reaction, string observable, string fitfunc
                 }
                 else if (fitfunc == "linear")
                 {
-                    TF1 fit_func("fit_func", rel_bw_plus_linear, 1.01, 1.06, 5);
+                    TF1 fit_func("fit_func", rel_bw_plus_linear, 0.99, 1.08, 5);
                     // TF1 fit_func("fit_func", [&](Double_t *x, Double_t *par) {
                     //     Double_t conv_val = convolved_signal->EvalPar(x, par);
                     //     Double_t linear_val = par[4] * (x[0] - 2*mass_kaon);
