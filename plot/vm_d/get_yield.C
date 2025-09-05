@@ -14,7 +14,7 @@ double mass_kaon = 0.493677;
 
 Double_t rel_bw_plus_linear(Double_t *x, Double_t *par)
 {
-    // Relativistic Breit-Wigner with Blatt-Weisskopf factor
+    // Relativistic Breit-Wigner with Blatt-Weisskopf factor, plus a linear background function
     // par[0] = BW amplitude
     // par[1] = BW pole mass
     // par[2] = BW pole width
@@ -24,7 +24,7 @@ Double_t rel_bw_plus_linear(Double_t *x, Double_t *par)
     Double_t M0 = par[1];
     Double_t Gamma0 = par[2];
     Double_t sigma = par[3];
-    Double_t bg0 = par[4];
+    Double_t slope = par[4];
     Int_t L = 1;
     Double_t convol_sum = 0.0;
     Double_t convol_range = 10.0;
@@ -55,7 +55,56 @@ Double_t rel_bw_plus_linear(Double_t *x, Double_t *par)
         convol_sum += (2 / TMath::Pi()) * xprime * M0 * Gamma / denominator * TMath::Gaus(x[0]-xprime, 0, sigma, true) * convol_step;
     }
 
-    return par[0] * convol_sum + par[4]*(x[0] - 2*mass_kaon);
+    // return par[0] * convol_sum + slope * (x[0] - 2*mass_kaon);
+    return par[0] * convol_sum + slope * (x[0] - 2*mass_kaon);
+}
+
+Double_t rel_bw_plus_quadratic(Double_t *x, Double_t *par)
+{
+    // Relativistic Breit-Wigner with Blatt-Weisskopf factor, plus a quadratic background function
+    // par[0] = BW amplitude
+    // par[1] = BW pole mass
+    // par[2] = BW pole width
+    // par[3] = Gaussian width
+    // par[4] = linear slope
+    // par[5] = quadratic coefficient
+
+    Double_t M0 = par[1];
+    Double_t Gamma0 = par[2];
+    Double_t sigma = par[3];
+
+    Int_t L = 1;
+    Double_t convol_sum = 0.0;
+    Double_t convol_range = 10.0;
+    Double_t convol_step = 0.001;
+
+    for (double xprime = x[0]-convol_range; xprime < x[0]+convol_range; xprime += convol_step)
+    {
+        if (xprime < 2*mass_kaon)
+            continue;
+
+        // Kaon mass and momentum calculations
+        Double_t mk = mass_kaon;
+        Double_t q = sqrt((xprime*xprime - 4*mk*mk)/4); // momentum of kaon in phi rest frame
+        Double_t q0 = sqrt((M0*M0 - 4*mk*mk)/4);     // momentum at pole mass
+
+        // Blatt-Weisskopf barrier factor squared
+        Double_t R0 = 5.0677; // interaction radius in GeV^-1
+        Double_t z = q * R0;
+        Double_t z0 = q0 * R0;
+        Double_t BL = (1 + z0*z0) / (1 + z*z);
+
+        // Mass-dependent width
+        Double_t Gamma = Gamma0 * (q/q0) * (q/q0) * (q/q0) * (M0/xprime) * BL;
+
+        // Relativistic Breit-Wigner
+        Double_t denominator = (xprime*xprime - M0*M0)*(xprime*xprime - M0*M0) + M0*M0*Gamma*Gamma;
+
+        convol_sum += (2 / TMath::Pi()) * xprime * M0 * Gamma / denominator * TMath::Gaus(x[0]-xprime, 0, sigma, true) * convol_step;
+    }
+
+    // return par[0] * convol_sum + slope * (x[0] - 2*mass_kaon);
+    return par[0] * convol_sum + par[4] * (x[0]*x[0] - 4*mass_kaon*mass_kaon);
 }
 
 Double_t rel_bw(Double_t *x, Double_t *par)
@@ -69,7 +118,6 @@ Double_t rel_bw(Double_t *x, Double_t *par)
     Double_t M0 = par[1];
     Double_t Gamma0 = par[2];
     Double_t sigma = par[3];
-    Double_t bg0 = par[4];
     Int_t L = 1;
     Double_t convol_sum = 0.0;
     Double_t convol_range = 10.0;
@@ -101,14 +149,6 @@ Double_t rel_bw(Double_t *x, Double_t *par)
     }
 
     return par[0] * convol_sum;
-}
-
-Double_t gauss(Double_t *x, Double_t *par)
-{
-    // par[0] = Gaussian amplitude
-    // par[1] = Gaussian mean
-    // par[2] = Gaussian sigma (width)
-    return TMath::Gaus(x[0], 0, par[0], true);
 }
 
 Double_t voigt(Double_t *x, Double_t *par)
@@ -153,6 +193,7 @@ Double_t voigt_plus_quadratic(Double_t *x, Double_t *par)
 Double_t linear(Double_t *x, Double_t *par)
 {
     // par[0] = linear slope
+    // return par[0] * (x[0] - 2*mass_kaon);
     return par[0] * (x[0] - 2*mass_kaon);
 }
 
@@ -258,49 +299,43 @@ int get_yield(string channel, string reaction, string observable, string fitfunc
                 {
                     yield = rdf_t_cut.Filter("phi_mass_kin>1.00 && phi_mass_kin<1.04").Sum("event_weight").GetValue();
                     yield_err = sqrt(rdf_t_cut.Filter("phi_mass_kin>1.00 && phi_mass_kin<1.04").Sum("event_weight_squared").GetValue());
+                    hist.Draw();
                 }
                 else if (fitfunc == "quadratic")
                 {
-                    TF1 fit_func("fit_func", voigt_plus_quadratic, 0.99, 1.06, 5);
+                    TF1 fit_func("fit_func", rel_bw_plus_quadratic, 0.99, 1.08, 5);
                     fit_func.SetParameters(1.00, 1.02, 0.0035, 0.004, 20);
-                    fit_func.SetParLimits(0, 0.05, 2.0);
+                    fit_func.SetParLimits(0, 0.01, 200);
                     fit_func.FixParameter(1, 1.019456);
-                    fit_func.FixParameter(2, 0.0035);
-                    fit_func.FixParameter(3, 0.00425);
-                    fit_func.SetParLimits(4, 0.5, 50.0);
-                    hist.Fit(&fit_func, "WLRM");
+                    fit_func.FixParameter(2, 0.00425);
+                    // fit_func.FixParameter(3, 0.0035);
+                    fit_func.SetParLimits(4, 0.01, 100.0);
+                    auto fit_results = hist.Fit(&fit_func, "SLR");
                     hist.GetFunction("fit_func")->SetLineColor(kBlack);
                     hist.Draw("same");
-                    TF1 *voigt_function = new TF1("voigt_function", voigt, 0.98, 1.08, 4);
-                    voigt_function->SetParameters(fit_func.GetParameter(0), fit_func.GetParameter(1), fit_func.GetParameter(2), fit_func.GetParameter(3));
-                    voigt_function->SetLineColor(kRed);
-                    voigt_function->Draw("same");
-                    TF1 *quadratic_function = new TF1("quadratic_function", quadratic, 0.98, 1.08, 1);
+                    TF1 *rel_bw_func = new TF1("rel_bw_func", rel_bw, 0.99, 1.08, 4);
+                    rel_bw_func->SetParameters(fit_func.GetParameter(0), fit_func.GetParameter(1), fit_func.GetParameter(2), fit_func.GetParameter(3));
+                    rel_bw_func->SetLineColor(kRed);
+                    rel_bw_func->Draw("same");
+                    TF1 *quadratic_function = new TF1("quadratic_function", quadratic, 0.99, 1.08, 1);
                     quadratic_function->SetParameter(0, fit_func.GetParameter(4));
                     quadratic_function->SetLineColor(kBlue);
                     quadratic_function->Draw("same");
-                    yield = voigt_function->Integral(1.00, 1.04)/0.005;
-                    yield_err = voigt_function->IntegralError(1.00, 1.04)/0.005;
-                    // yield = rdf_t_cut.Filter("phi_mass_kin>1.00 && phi_mass_kin<1.04").Sum("event_weight").GetValue();
-                    // yield_err = sqrt(rdf_t_cut.Filter("phi_mass_kin>1.00 && phi_mass_kin<1.04").Sum("event_weight_squared").GetValue());
+                    // yield = fit_func.GetParameter(0)/0.005;
+                    // yield_err = fit_func.GetParError(0)/0.005;
+                    yield = rel_bw_func->Integral(1.00, 1.04)/0.005;
+                    yield_err = rel_bw_func->IntegralError(1.00, 1.04, fit_results->GetParams(), fit_results->GetCovarianceMatrix().GetMatrixArray())/0.005;
                 }
                 else if (fitfunc == "linear")
                 {
                     TF1 fit_func("fit_func", rel_bw_plus_linear, 0.99, 1.08, 5);
-                    // TF1 fit_func("fit_func", [&](Double_t *x, Double_t *par) {
-                    //     Double_t conv_val = convolved_signal->EvalPar(x, par);
-                    //     Double_t linear_val = par[4] * (x[0] - 2*mass_kaon);
-                    //     return conv_val + linear_val;
-                    // }, 0.99, 1.06, 5);
-
-                    // // TF1 fit_func("fit_func", voigt_plus_linear, 0.99, 1.06, 5);
                     fit_func.SetParameters(1.00, 1.02, 0.0035, 0.004, 20);
                     fit_func.SetParLimits(0, 0.01, 200);
                     fit_func.FixParameter(1, 1.019456);
                     fit_func.FixParameter(2, 0.00425);
                     // fit_func.FixParameter(3, 0.0035);
                     fit_func.SetParLimits(4, 0.5, 50.0);
-                    hist.Fit(&fit_func, "LR");
+                    auto fit_results = hist.Fit(&fit_func, "SLR");
                     hist.GetFunction("fit_func")->SetLineColor(kBlack);
                     hist.Draw("same");
                     yield = 1;
@@ -309,20 +344,14 @@ int get_yield(string channel, string reaction, string observable, string fitfunc
                     rel_bw_func->SetParameters(fit_func.GetParameter(0), fit_func.GetParameter(1), fit_func.GetParameter(2), fit_func.GetParameter(3));
                     rel_bw_func->SetLineColor(kRed);
                     rel_bw_func->Draw("same");
-                    // TF1 *voigt_function = new TF1("voigt_function", voigt, 0.98, 1.08, 4);
-                    // voigt_function->SetParameters(fit_func.GetParameter(0), fit_func.GetParameter(1), fit_func.GetParameter(2), fit_func.GetParameter(3));
-                    // voigt_function->SetLineColor(kRed);
-                    // voigt_function->Draw("same");
-                    TF1 *linear_function = new TF1("linear_function", linear, 0.98, 1.08, 1);
+                    TF1 *linear_function = new TF1("linear_function", linear, 0.99, 1.08, 1);
                     linear_function->SetParameter(0, fit_func.GetParameter(4));
                     linear_function->SetLineColor(kBlue);
                     linear_function->Draw("same");
-                    // yield = voigt_function->Integral(1.00, 1.04)/0.005;
-                    // yield_err = voigt_function->IntegralError(1.00, 1.04)/0.005;
-                    // yield = rdf_t_cut.Filter("phi_mass_kin>1.00 && phi_mass_kin<1.04").Sum("event_weight").GetValue();
-                    // yield_err = sqrt(rdf_t_cut.Filter("phi_mass_kin>1.00 && phi_mass_kin<1.04").Sum("event_weight_squared").GetValue());
-                    // cout << voigt_function->Integral(1.00, 1.04)/0.005 << endl;
-                    // cout << yield << endl;
+                    // yield = fit_func.GetParameter(0)/0.005;
+                    // yield_err = fit_func.GetParError(0)/0.005;
+                    yield = rel_bw_func->Integral(1.00, 1.04)/0.005;
+                    yield_err = rel_bw_func->IntegralError(1.00, 1.04, fit_results->GetParams(), fit_results->GetCovarianceMatrix().GetMatrixArray())/0.005;
                 }
                 canvas->Update();
                 canvas->Print((output_pdffile_name+"(").c_str());
