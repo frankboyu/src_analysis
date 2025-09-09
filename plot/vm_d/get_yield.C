@@ -292,7 +292,7 @@ int get_yield(string channel, string reaction, string observable, string fitfunc
                     if (hist.GetBinContent(i) < 0)
                     {
                         hist.SetBinContent(i, 0);
-                        hist.SetBinError(i, 0);
+                        hist.SetBinError(i, 1);
                     }
                 }
                 if (fitfunc == "none")
