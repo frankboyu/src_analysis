@@ -11,5 +11,6 @@
 *.so
 *.pcm
 *.nfs*
+*.out
 
 temp

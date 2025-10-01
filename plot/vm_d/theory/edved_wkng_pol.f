@@ -17,13 +17,13 @@
         q2 =  0.0  !(if q2=0 - real photoproduction)
         epsl = 0.0
 
-        q0 = 10.0                                    ! photon energy
+        q0 = 8.5                                    ! photon energy
         s = -q2 + 2.0*pm*q0 + pm**2
         w = sqrt(s)
         t_min = t_minimum(q2,s)
         print *,t_min
-        do it = 1,20,1                              ! defines t
-        t = -float(it)/10.0
+        do it = 10,200,1                              ! defines t
+        t = -float(it)/100.0
         if(t_min.lt.t)goto 1
 *        print *,t
         in = 0
@@ -49,7 +49,7 @@
        
         
         write(6,*)"       ",-t,crs0,crs,tcrs0,tcrs
-        write(6,*)"checkig",-t,crs0_chk,crs_chk,tcrs0_chk,tcrs_chk1
+*        write(6,*)"checkig",-t,crs0_chk,crs_chk,tcrs0_chk,tcrs_chk1
 *        write(12,12)abs(t),crs0,crs
  12     format(2x,f6.3,2(2x,e10.3))
  1      continue
@@ -207,8 +207,8 @@
 *  b_vn      - slope factor of the amplitude
 *  al_vn     - real part of the amplitude
 ********************************************************************
-        sigma_vn = 20.0
-        b_vn     = 6
+        sigma_vn = 10.0
+        b_vn     = 2.0
         al_vn    = -0.5
 ********************************************************************
 
