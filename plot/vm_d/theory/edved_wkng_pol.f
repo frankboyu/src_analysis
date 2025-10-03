@@ -21,7 +21,7 @@
         s = -q2 + 2.0*pm*q0 + pm**2
         w = sqrt(s)
         t_min = t_minimum(q2,s)
-        print *,t_min
+*        print *,t_min
         do it = 10,200,1                              ! defines t
         t = -float(it)/100.0
         if(t_min.lt.t)goto 1
@@ -195,8 +195,8 @@
 
 ********************************************************************
         gn_scale = 1.0
-        icase    =   1
-        b_g      =   6. !relevant only for icase=3
+        icase    =   3
+        b_g      =   10.0 !relevant only for icase=3
         alpha_g  =  -0.5
 ********************************************************************
 *         Parameters of cross section, slope  factor and real part
@@ -207,8 +207,8 @@
 *  b_vn      - slope factor of the amplitude
 *  al_vn     - real part of the amplitude
 ********************************************************************
-        sigma_vn = 10.0
-        b_vn     = 2.0
+        sigma_vn = 30.0
+        b_vn     = 10.0
         al_vn    = -0.5
 ********************************************************************
 
