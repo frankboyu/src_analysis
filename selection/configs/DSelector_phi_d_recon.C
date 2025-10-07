@@ -132,8 +132,8 @@ void DSelector_phi_d_recon::Init(TTree *locTree)
     dHist_DeuteronKinematics_Before = new TH2F("DeuteronKinematics_Before", ";P (GeV/c)                 ;#theta (deg)",         100,    0.0,    10.0,   180,    0.0,    180.0);
     dHist_KPlusPIDFOM_Before        = new TH1F("KPlusPIDFOM_Before",        ";log(PIDFOM)               ;Events/1",             50,     -50.0,  0);
     dHist_KMinusPIDFOM_Before       = new TH1F("KMinusPIDFOM_Before",       ";log(PIDFOM)               ;Events/1",             50,     -50.0,  0);
-    dHist_DeuterondEdxCDC_Before    = new TH2F("DeuterondEdxCDC_Before",    ";P (GeV/c)                 ;dE/dx_{CDC} (keV/cm)", 100,    0.0,    10.0,   400,    0.0,    40.0);
-    dHist_DeuterondEdxST_Before     = new TH2F("DeuterondEdxST_Before",     ";P (GeV/c)                 ;dE/dx_{ST} (keV/cm)",  100,    0.0,    10.0,   400,    0.0,    40.0);
+    dHist_DeuterondEdxCDC_Before    = new TH2F("DeuterondEdxCDC_Before",    ";P (GeV/c)                 ;dE/dx_{CDC} (keV/cm)", 200,    0.0,     2.0,   100,    0.0,    40.0);
+    dHist_DeuterondEdxST_Before     = new TH2F("DeuterondEdxST_Before",     ";P (GeV/c)                 ;dE/dx_{ST} (keV/cm)",  200,    0.0,     2.0,   100,    0.0,    40.0);
     dHist_InvariantMassPhi_Before   = new TH1F("InvariantMassPhi_Before",	";M_{K^{+}K^{-}} (GeV)      ;Events/0.01 GeV",      500,    0.0,    5.0);
     dHist_ChiSqPerNDF_Before        = new TH2F("ChiSqPerNDF_Before",        ";M_{K^{+}K^{-}} (GeV)      ;log(#chi^{2}/NDF)",    400,    0.9,    4.9,    100,    0.0,    5);
     dHist_ThrownTopology_Before     = new TH1F("ThrownTopology_Before",     ";Thrown Topology           ;Events/1",             20,     0.5,    20.5);
@@ -148,8 +148,8 @@ void DSelector_phi_d_recon::Init(TTree *locTree)
     dHist_DeuteronKinematics_After  = new TH2F("DeuteronKinematics_After",  ";P (GeV/c)                 ;#theta (deg)",         100,    0.0,    10.0,   180,    0.0,    180.0);
     dHist_KPlusPIDFOM_After         = new TH1F("KPlusPIDFOM_After",         ";log(PIDFOM)               ;Events/1",             50,     -50.0,  0);
     dHist_KMinusPIDFOM_After        = new TH1F("KMinusPIDFOM_After",        ";log(PIDFOM)               ;Events/1",             50,     -50.0,  0);
-    dHist_DeuterondEdxCDC_After     = new TH2F("DeuterondEdxCDC_After",     ";P (GeV/c)                 ;dE/dx_{CDC} (keV/cm)", 100,    0.0,    10.0,   400,    0.0,    40.0);
-    dHist_DeuterondEdxST_After      = new TH2F("DeuterondEdxST_After",      ";P (GeV/c)                 ;dE/dx_{ST} (keV/cm)",  100,    0.0,    10.0,   400,    0.0,    40.0);
+    dHist_DeuterondEdxCDC_After     = new TH2F("DeuterondEdxCDC_After",     ";P (GeV/c)                 ;dE/dx_{CDC} (keV/cm)", 200,    0.0,     2.0,   100,    0.0,    40.0);
+    dHist_DeuterondEdxST_After      = new TH2F("DeuterondEdxST_After",      ";P (GeV/c)                 ;dE/dx_{ST} (keV/cm)",  200,    0.0,     2.0,   100,    0.0,    40.0);
     dHist_InvariantMassPhi_After    = new TH1F("InvariantMassPhi_After",	";M_{K^{+}K^{-}} (GeV)      ;Events/0.01 GeV",      500,    0.0,    5.0);
     dHist_ChiSqPerNDF_After         = new TH2F("ChiSqPerNDF_After",         ";M_{K^{+}K^{-}} (GeV)      ;log(#chi^{2}/NDF)",    400,    0.9,    4.9,    100,     0.0,   5);
     dHist_ThrownTopology_After      = new TH1F("ThrownTopology_After",      ";Thrown Topology           ;Events/1",             20,     0.5,    20.5);
