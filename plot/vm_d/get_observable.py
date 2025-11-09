@@ -171,18 +171,61 @@ plt.close()
 
 # Plot the results
 fig = plt.figure(figsize=(8, 6), dpi=300)
+plt.errorbar(phi_d_2H_dsdt_clas_minust_center,  phi_d_2H_dsdt_clas_results_16,  yerr=phi_d_2H_dsdt_clas_results_16_statserr,    fmt='ys', markerfacecolor='white', markersize=3, capsize=2, capthick=1)
+plt.errorbar(phi_d_2H_dsdt_clas_minust_center,  phi_d_2H_dsdt_clas_results_16,  yerr=phi_d_2H_dsdt_clas_results_16_totalerr,    fmt='ys', markerfacecolor='white', markersize=3, label='CLAS (1.6-2.6 GeV)')
+plt.errorbar(phi_d_2H_dsdt_clas_minust_center,  phi_d_2H_dsdt_clas_results_26,  yerr=phi_d_2H_dsdt_clas_results_26_statserr,    fmt='cs', markerfacecolor='white', markersize=3, capsize=2, capthick=1)
+plt.errorbar(phi_d_2H_dsdt_clas_minust_center,  phi_d_2H_dsdt_clas_results_26,  yerr=phi_d_2H_dsdt_clas_results_26_totalerr,    fmt='cs', markerfacecolor='white', markersize=3, label='CLAS (2.6-3.6 GeV)')
+plt.errorbar(phi_d_2H_dsdt_leps_minust_center,  phi_d_2H_dsdt_leps_results_157, yerr=phi_d_2H_dsdt_leps_results_157_statserr,   fmt='g^', markerfacecolor='white', markersize=3, capsize=2, capthick=1)
+plt.errorbar(phi_d_2H_dsdt_leps_minust_center,  phi_d_2H_dsdt_leps_results_157, yerr=phi_d_2H_dsdt_leps_results_157_statserr,   fmt='g^', markerfacecolor='white', markersize=3, label='LEPS (1.57-2.37 GeV)')
 plt.errorbar(phi_d_2H_dsdt_minust_center[index[0]:index[1]], phi_d_2H_dsdt_results[index[0]:index[1]], yerr=phi_d_2H_dsdt_results_statserr[index[0]:index[1]], fmt='bo', markersize=3, capsize=2, capthick=1)
-plt.errorbar(phi_d_2H_dsdt_minust_center[index[0]:index[1]], phi_d_2H_dsdt_results[index[0]:index[1]], yerr=phi_d_2H_dsdt_results_statserr[index[0]:index[1]], fmt='bo', markersize=3, label='6-8 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[0]:index[1]], phi_d_2H_dsdt_results[index[0]:index[1]], yerr=phi_d_2H_dsdt_results_statserr[index[0]:index[1]], fmt='bo', markersize=3, label='This work (6-8 GeV)')
 plt.errorbar(phi_d_2H_dsdt_minust_center[index[1]:index[2]], phi_d_2H_dsdt_results[index[1]:index[2]], yerr=phi_d_2H_dsdt_results_statserr[index[1]:index[2]], fmt='ko', markersize=3, capsize=2, capthick=1)
-plt.errorbar(phi_d_2H_dsdt_minust_center[index[1]:index[2]], phi_d_2H_dsdt_results[index[1]:index[2]], yerr=phi_d_2H_dsdt_results_statserr[index[1]:index[2]], fmt='ko', markersize=3, label='8-9 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[1]:index[2]], phi_d_2H_dsdt_results[index[1]:index[2]], yerr=phi_d_2H_dsdt_results_statserr[index[1]:index[2]], fmt='ko', markersize=3, label='This work (8-9 GeV)')
 plt.errorbar(phi_d_2H_dsdt_minust_center[index[2]:index[3]], phi_d_2H_dsdt_results[index[2]:index[3]], yerr=phi_d_2H_dsdt_results_statserr[index[2]:index[3]], fmt='ro', markersize=3, capsize=2, capthick=1)
-plt.errorbar(phi_d_2H_dsdt_minust_center[index[2]:index[3]], phi_d_2H_dsdt_results[index[2]:index[3]], yerr=phi_d_2H_dsdt_results_statserr[index[2]:index[3]], fmt='ro', markersize=3, label='9-11 GeV')
-plt.errorbar(phi_d_2H_dsdt_clas_minust_center,  phi_d_2H_dsdt_clas_results_16,  yerr=phi_d_2H_dsdt_clas_results_16_statserr,    fmt='yo', markersize=3, capsize=2, capthick=1)
-plt.errorbar(phi_d_2H_dsdt_clas_minust_center,  phi_d_2H_dsdt_clas_results_16,  yerr=phi_d_2H_dsdt_clas_results_16_totalerr,    fmt='yo', markersize=3, label='CLAS 1.6-2.6 GeV')
-plt.errorbar(phi_d_2H_dsdt_clas_minust_center,  phi_d_2H_dsdt_clas_results_26,  yerr=phi_d_2H_dsdt_clas_results_26_statserr,    fmt='co', markersize=3, capsize=2, capthick=1)
-plt.errorbar(phi_d_2H_dsdt_clas_minust_center,  phi_d_2H_dsdt_clas_results_26,  yerr=phi_d_2H_dsdt_clas_results_26_totalerr,    fmt='co', markersize=3, label='CLAS 2.6-3.6 GeV')
-plt.errorbar(phi_d_2H_dsdt_leps_minust_center,  phi_d_2H_dsdt_leps_results_157, yerr=phi_d_2H_dsdt_leps_results_157_statserr,   fmt='go', markersize=3, capsize=2, capthick=1)
-plt.errorbar(phi_d_2H_dsdt_leps_minust_center,  phi_d_2H_dsdt_leps_results_157, yerr=phi_d_2H_dsdt_leps_results_157_statserr,   fmt='go', markersize=3, label='LEPS 1.57-2.37 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[2]:index[3]], phi_d_2H_dsdt_results[index[2]:index[3]], yerr=phi_d_2H_dsdt_results_statserr[index[2]:index[3]], fmt='ro', markersize=3, label='This work (9-11 GeV)')
+plt.text(0.3, 0.15, 'preliminary', fontsize=15, color='r', style='italic', ha='center', va='center')
+plt.title(r"$d(\gamma, \phi d')$ differential cross section vs $-t$")
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$')
+plt.xlim(0, 2)
+plt.ylim(1e-1, 1e3)
+plt.yscale('log')
+plt.legend()
+file_pdf.savefig()
+plt.close()
+
+fig = plt.figure(figsize=(8, 6), dpi=300)
+color_code = ['b', 'k', 'r']
+# plt.errorbar(phi_d_2H_dsdt_minust_center[index[0]:index[1]],       phi_d_2H_dsdt_results[index[0]:index[1]],          xerr=phi_d_2H_dsdt_minust_width[index[0]:index[1]],        yerr=phi_d_2H_dsdt_results_statserr[index[0]:index[1]],            fmt='b.', label='This work (6-8 GeV)')
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[1]:index[2]],       phi_d_2H_dsdt_results[index[1]:index[2]],          xerr=phi_d_2H_dsdt_minust_width[index[1]:index[2]],        yerr=phi_d_2H_dsdt_results_statserr[index[1]:index[2]],            fmt='k.', label='This work (8-9 GeV)')
+# plt.errorbar(phi_d_2H_dsdt_minust_center[index[2]:index[3]],       phi_d_2H_dsdt_results[index[2]:index[3]],          xerr=phi_d_2H_dsdt_minust_width[index[2]:index[3]],        yerr=phi_d_2H_dsdt_results_statserr[index[2]:index[3]],            fmt='r.', label='This work (9-11 GeV)')
+plt.errorbar(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/temp_sigma20_b6.5_2.22.txt')[:,2], fmt='-', color = 'y', label=r'$\sigma_{\phi N}=$20 mb, $b_{\phi N}=6.5 \rm \ GeV^{-2}, \chi^2/NDF=2.22$')
+plt.errorbar(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/temp_sigma25_b8.5_1.61.txt')[:,2], fmt='-', color = 'g', label=r'$\sigma_{\phi N}=$25 mb, $b_{\phi N}=8.5 \rm \ GeV^{-2}, \chi^2/NDF=1.61$')
+plt.errorbar(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/temp_sigma30_b10.0_1.44.txt')[:,2], fmt='-', color = 'r', label=r'$\sigma_{\phi N}=$30 mb, $b_{\phi N}=10.0 \rm \ GeV^{-2}, \chi^2/NDF=1.44$')
+plt.errorbar(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/temp_sigma35_b11.5_1.51.txt')[:,2], fmt='-', color = 'b', label=r'$\sigma_{\phi N}=$35 mb, $b_{\phi N}=11.5 \rm \ GeV^{-2}, \chi^2/NDF=1.51$')
+plt.errorbar(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/temp_sigma40_b13.0_1.69.txt')[:,2], fmt='-', color = 'c', label=r'$\sigma_{\phi N}=$40 mb, $b_{\phi N}=13.0 \rm \ GeV^{-2}, \chi^2/NDF=1.69$')
+plt.errorbar(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/temp_sigma45_b14.5_1.95.txt')[:,2], fmt='-', color = 'm', label=r'$\sigma_{\phi N}=$45 mb, $b_{\phi N}=14.5 \rm \ GeV^{-2}, \chi^2/NDF=1.95$')
+plt.fill_between(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/temp_sigma30_b10.0_1.44.txt')[:,2]-0.2*(np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/temp_sigma30_b10.0_1.44.txt')[:,2]), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/temp_sigma30_b10.0_1.44.txt')[:,2]+0.2*(np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/temp_sigma30_b10.0_1.44.txt')[:,2]), color='r', alpha=0.2)
+plt.text(0.3, 0.15, 'preliminary', fontsize=15, color='r', style='italic', ha='center', va='center')
+plt.title(r"$d(\gamma, \phi d')$ differential cross section vs $-t$")
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$')
+plt.xlim(0, 2)
+plt.ylim(1e-1, 1e3)
+plt.yscale('log')
+plt.legend()
+file_pdf.savefig()
+plt.close()
+
+fig = plt.figure(figsize=(8, 6), dpi=300)
+color_code = ['b', 'k', 'r']
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[0]:index[1]],       phi_d_2H_dsdt_results[index[0]:index[1]],          xerr=phi_d_2H_dsdt_minust_width[index[0]:index[1]],        yerr=phi_d_2H_dsdt_results_statserr[index[0]:index[1]],            fmt='b.', label='This work (6-8 GeV)')
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[1]:index[2]],       phi_d_2H_dsdt_results[index[1]:index[2]],          xerr=phi_d_2H_dsdt_minust_width[index[1]:index[2]],        yerr=phi_d_2H_dsdt_results_statserr[index[1]:index[2]],            fmt='k.', label='This work (8-9 GeV)')
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[2]:index[3]],       phi_d_2H_dsdt_results[index[2]:index[3]],          xerr=phi_d_2H_dsdt_minust_width[index[2]:index[3]],        yerr=phi_d_2H_dsdt_results_statserr[index[2]:index[3]],            fmt='r.', label='This work (9-11 GeV)')
+plt.errorbar(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/8.5gev_sigma10_b6_case3_new.txt')[:,2], fmt='-', color = 'g', label='E=8.5 GeV $\sigma_{\phi N}=$10 mb (VMD)')
+plt.fill_between(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/8.5gev_sigma10_b6_case3_new.txt')[:,2]-0.2*(np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/8.5gev_sigma10_b6_case3_new.txt')[:,2]), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/8.5gev_sigma10_b6_case3_new.txt')[:,2]+0.2*(np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/8.5gev_sigma10_b6_case3_new.txt')[:,2]), color='g', alpha=0.2)
+plt.errorbar(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/8.5gev_sigma30_b8_case3.txt')[:,2], fmt='-', color = 'y', label=r'E=8.5 GeV $\sigma_{\phi N}=$30 mb ($b_{\phi N}=8 \rm \ GeV^{-2}$)')
+plt.fill_between(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/8.5gev_sigma30_b8_case3.txt')[:,2]-0.2*(np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/8.5gev_sigma30_b8_case3.txt')[:,2]), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/8.5gev_sigma30_b8_case3.txt')[:,2]+0.2*(np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/8.5gev_sigma30_b8_case3.txt')[:,2]), color='y', alpha=0.2)
 plt.text(0.3, 0.15, 'preliminary', fontsize=15, color='r', style='italic', ha='center', va='center')
 plt.title(r"$d(\gamma, \phi d')$ differential cross section vs $-t$")
 plt.xlabel(r'$-t\ [GeV^2/c]$')
@@ -199,11 +242,11 @@ color_code = ['b', 'k', 'r']
 plt.errorbar(phi_d_2H_dsdt_minust_center[index[0]:index[1]],       phi_d_2H_dsdt_results[index[0]:index[1]],          xerr=phi_d_2H_dsdt_minust_width[index[0]:index[1]],        yerr=phi_d_2H_dsdt_results_statserr[index[0]:index[1]],            fmt='b.', label='6-8 GeV')
 plt.errorbar(phi_d_2H_dsdt_minust_center[index[1]:index[2]],       phi_d_2H_dsdt_results[index[1]:index[2]],          xerr=phi_d_2H_dsdt_minust_width[index[1]:index[2]],        yerr=phi_d_2H_dsdt_results_statserr[index[1]:index[2]],            fmt='k.', label='8-9 GeV')
 plt.errorbar(phi_d_2H_dsdt_minust_center[index[2]:index[3]],       phi_d_2H_dsdt_results[index[2]:index[3]],          xerr=phi_d_2H_dsdt_minust_width[index[2]:index[3]],        yerr=phi_d_2H_dsdt_results_statserr[index[2]:index[3]],            fmt='r.', label='9-11 GeV')
-# plt.plot(np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/8.5gev_sigma10_b6_case3.txt')[:,0], np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/8.5gev_sigma10_b2_case3.txt')[:,2], '-', color = 'k', label='Theory 10mb 8.5 GeV b=2')
-plt.plot(np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/8.5gev_sigma10_b6_case3.txt')[:,0], np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/8.5gev_sigma10_b6_case3.txt')[:,2], '-', color = 'b', label='Theory 10mb 8.5 GeV b=6')
-plt.plot(np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/8.5gev_sigma30_b6_case3.txt')[:,0], np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/8.5gev_sigma30_b6_case3.txt')[:,2], '-', color = 'r', label='Theory 30mb 8.5 GeV b=6')
-plt.plot(np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/8.5gev_sigma30_b8_case3.txt')[:,0], np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/8.5gev_sigma30_b8_case3.txt')[:,2], '-', color = 'orange', label='Theory 30mb 8.5 GeV b=8')
-plt.plot(np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/8.5gev_sigma30_b10_case3.txt')[:,0], np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/8.5gev_sigma30_b10_case3.txt')[:,2], '-', color = 'y', label='Theory 30mb 8.5 GeV b=10')
+plt.plot(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/8.5gev_sigma30_b4_case3_new.txt')[:,2], '-', color = 'k', label='Theory 8.5 GeV 30mb b=4')
+plt.errorbar(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/8.5gev_sigma30_b6_case3_new.txt')[:,2], yerr=0.2*(np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/8.5gev_sigma30_b6_case3_new.txt')[:,2]), fmt='-', color = 'b', label='Theory 8.5 GeV 30mb b=6')
+plt.plot(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/8.5gev_sigma30_b8_case3_new.txt')[:,2], '-', color = 'r', label='Theory 8.5 GeV 30mb b=8')
+plt.plot(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/8.5gev_sigma30_b4_10_case3.txt')[:,2], '-', color = 'm', label='Theory 8.5 GeV 30mb b=4_10')
+plt.plot(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/8.5gev_sigma30_b10_case3_new.txt')[:,2], '-', color = 'g', label='Theory 8.5 GeV 30mb b=10')
 plt.text(0.3, 0.15, 'preliminary', fontsize=15, color='r', style='italic', ha='center', va='center')
 plt.title(r"$d(\gamma, \phi d')$ differential cross section vs $-t$")
 plt.xlabel(r'$-t\ [GeV^2/c]$')
@@ -280,401 +323,401 @@ plt.legend()
 file_pdf.savefig()
 plt.close()
 
-#======================================================================phi_d_2H_Wcostheta======================================================================
+# #======================================================================phi_d_2H_Wcostheta======================================================================
 
-# Read the bin edges
-phi_d_2H_Wcostheta_energy_low               = np.loadtxt('configs/bins_phi_d_Wcostheta.txt')[:,0]
-phi_d_2H_Wcostheta_energy_high              = np.loadtxt('configs/bins_phi_d_Wcostheta.txt')[:,1]
-phi_d_2H_Wcostheta_minust_low               = np.loadtxt('configs/bins_phi_d_Wcostheta.txt')[:,2]
-phi_d_2H_Wcostheta_minust_high              = np.loadtxt('configs/bins_phi_d_Wcostheta.txt')[:,3]
-phi_d_2H_Wcostheta_costheta_low             = np.loadtxt('configs/bins_phi_d_Wcostheta.txt')[:,4]
-phi_d_2H_Wcostheta_costheta_high            = np.loadtxt('configs/bins_phi_d_Wcostheta.txt')[:,5]
-phi_d_2H_Wcostheta_costheta_center          = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_Wcostheta.txt')[:,8]
-phi_d_2H_Wcostheta_costheta_width           = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_Wcostheta.txt')[:,9]
+# # Read the bin edges
+# phi_d_2H_Wcostheta_energy_low               = np.loadtxt('configs/bins_phi_d_Wcostheta.txt')[:,0]
+# phi_d_2H_Wcostheta_energy_high              = np.loadtxt('configs/bins_phi_d_Wcostheta.txt')[:,1]
+# phi_d_2H_Wcostheta_minust_low               = np.loadtxt('configs/bins_phi_d_Wcostheta.txt')[:,2]
+# phi_d_2H_Wcostheta_minust_high              = np.loadtxt('configs/bins_phi_d_Wcostheta.txt')[:,3]
+# phi_d_2H_Wcostheta_costheta_low             = np.loadtxt('configs/bins_phi_d_Wcostheta.txt')[:,4]
+# phi_d_2H_Wcostheta_costheta_high            = np.loadtxt('configs/bins_phi_d_Wcostheta.txt')[:,5]
+# phi_d_2H_Wcostheta_costheta_center          = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_Wcostheta.txt')[:,8]
+# phi_d_2H_Wcostheta_costheta_width           = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_Wcostheta.txt')[:,9]
 
-# Read the yield numbers
-phi_d_2H_Wcostheta_yield_data               = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_Wcostheta.txt')[:,12]
-phi_d_2H_Wcostheta_yield_sim                = np.loadtxt('output/yield_phi_d_recon_exc_sim_2H_Wcostheta.txt')[:,12]
-phi_d_2H_Wcostheta_yield_tagged             = np.loadtxt('output/yield_phi_d_thrown_exc_tagged_2H_Wcostheta.txt')[:,12]
-phi_d_2H_Wcostheta_yield_data_statserr      = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_Wcostheta.txt')[:,13]/phi_d_2H_Wcostheta_yield_data
-phi_d_2H_Wcostheta_yield_sim_statserr       = np.loadtxt('output/yield_phi_d_recon_exc_sim_2H_Wcostheta.txt')[:,13]/phi_d_2H_Wcostheta_yield_sim
-phi_d_2H_Wcostheta_yield_tagged_statserr    = np.loadtxt('output/yield_phi_d_thrown_exc_tagged_2H_Wcostheta.txt')[:,13]/phi_d_2H_Wcostheta_yield_tagged
+# # Read the yield numbers
+# phi_d_2H_Wcostheta_yield_data               = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_Wcostheta.txt')[:,12]
+# phi_d_2H_Wcostheta_yield_sim                = np.loadtxt('output/yield_phi_d_recon_exc_sim_2H_Wcostheta.txt')[:,12]
+# phi_d_2H_Wcostheta_yield_tagged             = np.loadtxt('output/yield_phi_d_thrown_exc_tagged_2H_Wcostheta.txt')[:,12]
+# phi_d_2H_Wcostheta_yield_data_statserr      = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_Wcostheta.txt')[:,13]/phi_d_2H_Wcostheta_yield_data
+# phi_d_2H_Wcostheta_yield_sim_statserr       = np.loadtxt('output/yield_phi_d_recon_exc_sim_2H_Wcostheta.txt')[:,13]/phi_d_2H_Wcostheta_yield_sim
+# phi_d_2H_Wcostheta_yield_tagged_statserr    = np.loadtxt('output/yield_phi_d_thrown_exc_tagged_2H_Wcostheta.txt')[:,13]/phi_d_2H_Wcostheta_yield_tagged
 
-# Calculate the efficiency
-phi_d_2H_Wcostheta_efficiency               = phi_d_2H_Wcostheta_yield_sim/phi_d_2H_Wcostheta_yield_tagged
-phi_d_2H_Wcostheta_efficiency_statserr      = phi_d_2H_Wcostheta_efficiency*np.sqrt(phi_d_2H_Wcostheta_yield_sim_statserr**2 + phi_d_2H_Wcostheta_yield_tagged_statserr**2)
+# # Calculate the efficiency
+# phi_d_2H_Wcostheta_efficiency               = phi_d_2H_Wcostheta_yield_sim/phi_d_2H_Wcostheta_yield_tagged
+# phi_d_2H_Wcostheta_efficiency_statserr      = phi_d_2H_Wcostheta_efficiency*np.sqrt(phi_d_2H_Wcostheta_yield_sim_statserr**2 + phi_d_2H_Wcostheta_yield_tagged_statserr**2)
 
-# Calculate the results
-phi_d_2H_Wcostheta_results                  = phi_d_2H_Wcostheta_yield_data/phi_d_2H_Wcostheta_efficiency  # raw results
-phi_d_2H_Wcostheta_results                  = normalize_distribution(phi_d_2H_Wcostheta_results, phi_d_2H_Wcostheta_energy_low, phi_d_2H_Wcostheta_minust_low) # normalize to have the sum equal to 1
-phi_d_2H_Wcostheta_results                  = phi_d_2H_Wcostheta_results/(phi_d_2H_Wcostheta_costheta_high - phi_d_2H_Wcostheta_costheta_low)  # normalize to have the integral equal to 1
-phi_d_2H_Wcostheta_results_statserr         = phi_d_2H_Wcostheta_results*np.sqrt(phi_d_2H_Wcostheta_yield_data_statserr**2 + phi_d_2H_Wcostheta_efficiency_statserr**2)
+# # Calculate the results
+# phi_d_2H_Wcostheta_results                  = phi_d_2H_Wcostheta_yield_data/phi_d_2H_Wcostheta_efficiency  # raw results
+# phi_d_2H_Wcostheta_results                  = normalize_distribution(phi_d_2H_Wcostheta_results, phi_d_2H_Wcostheta_energy_low, phi_d_2H_Wcostheta_minust_low) # normalize to have the sum equal to 1
+# phi_d_2H_Wcostheta_results                  = phi_d_2H_Wcostheta_results/(phi_d_2H_Wcostheta_costheta_high - phi_d_2H_Wcostheta_costheta_low)  # normalize to have the integral equal to 1
+# phi_d_2H_Wcostheta_results_statserr         = phi_d_2H_Wcostheta_results*np.sqrt(phi_d_2H_Wcostheta_yield_data_statserr**2 + phi_d_2H_Wcostheta_efficiency_statserr**2)
 
-# Find the indices for the different energy and t bins
-index = []
-for i in range(len(phi_d_2H_Wcostheta_results)):
-    if (i == 0):
-        index.append(i)
-    elif (i == len(phi_d_2H_Wcostheta_results) - 1):
-        index.append(i+1)
-    else:
-        if (phi_d_2H_Wcostheta_energy_low[i] != phi_d_2H_Wcostheta_energy_low[i-1]) or (phi_d_2H_Wcostheta_minust_low[i] != phi_d_2H_Wcostheta_minust_low[i-1]):
-            index.append(i)
+# # Find the indices for the different energy and t bins
+# index = []
+# for i in range(len(phi_d_2H_Wcostheta_results)):
+#     if (i == 0):
+#         index.append(i)
+#     elif (i == len(phi_d_2H_Wcostheta_results) - 1):
+#         index.append(i+1)
+#     else:
+#         if (phi_d_2H_Wcostheta_energy_low[i] != phi_d_2H_Wcostheta_energy_low[i-1]) or (phi_d_2H_Wcostheta_minust_low[i] != phi_d_2H_Wcostheta_minust_low[i-1]):
+#             index.append(i)
 
-# Plot the data yield
-fig = plt.figure(figsize=(6*(len(index) - 1), 6), dpi=300)
-gs = fig.add_gridspec(1, len(index) - 1, wspace=0)
-axs = gs.subplots(sharex=True, sharey=True)
-for i in range(len(index) - 1):
-    axs[i].errorbar(phi_d_2H_Wcostheta_costheta_center[index[i]:index[i+1]], phi_d_2H_Wcostheta_yield_data[index[i]:index[i+1]], xerr=phi_d_2H_Wcostheta_costheta_width[index[i]:index[i+1]], yerr=phi_d_2H_Wcostheta_yield_data_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
-    axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wcostheta_energy_low[index[i]], phi_d_2H_Wcostheta_energy_high[index[i]], phi_d_2H_Wcostheta_minust_low[index[i]], phi_d_2H_Wcostheta_minust_high[index[i]]))
-axs[0].set_xlim(-1, 1)
-axs[0].set_ylim(0, 150)
-axs[0].set_xticks(np.arange(-0.75, 0.9, 0.25))
-axs[0].set_ylabel(r'$\mathrm{Yield}$')
-fig.suptitle(r"$d(\gamma, \phi d')$ yield vs $\cos\vartheta$")
-fig.supxlabel(r'$\cos\vartheta$')
-plt.legend()
-file_pdf.savefig()
-plt.close()
+# # Plot the data yield
+# fig = plt.figure(figsize=(6*(len(index) - 1), 6), dpi=300)
+# gs = fig.add_gridspec(1, len(index) - 1, wspace=0)
+# axs = gs.subplots(sharex=True, sharey=True)
+# for i in range(len(index) - 1):
+#     axs[i].errorbar(phi_d_2H_Wcostheta_costheta_center[index[i]:index[i+1]], phi_d_2H_Wcostheta_yield_data[index[i]:index[i+1]], xerr=phi_d_2H_Wcostheta_costheta_width[index[i]:index[i+1]], yerr=phi_d_2H_Wcostheta_yield_data_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
+#     axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wcostheta_energy_low[index[i]], phi_d_2H_Wcostheta_energy_high[index[i]], phi_d_2H_Wcostheta_minust_low[index[i]], phi_d_2H_Wcostheta_minust_high[index[i]]))
+# axs[0].set_xlim(-1, 1)
+# axs[0].set_ylim(0, 150)
+# axs[0].set_xticks(np.arange(-0.75, 0.9, 0.25))
+# axs[0].set_ylabel(r'$\mathrm{Yield}$')
+# fig.suptitle(r"$d(\gamma, \phi d')$ yield vs $\cos\vartheta$")
+# fig.supxlabel(r'$\cos\vartheta$')
+# plt.legend()
+# file_pdf.savefig()
+# plt.close()
 
-# Plot the efficiency
-fig = plt.figure(figsize=(6*(len(index) - 1), 6), dpi=300)
-gs = fig.add_gridspec(1, len(index) - 1, wspace=0)
-axs = gs.subplots(sharex=True, sharey=True)
-for i in range(len(index) - 1):
-    axs[i].errorbar(phi_d_2H_Wcostheta_costheta_center[index[i]:index[i+1]], phi_d_2H_Wcostheta_efficiency[index[i]:index[i+1]], xerr=phi_d_2H_Wcostheta_costheta_width[index[i]:index[i+1]], yerr=phi_d_2H_Wcostheta_efficiency_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
-    axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wcostheta_energy_low[index[i]], phi_d_2H_Wcostheta_energy_high[index[i]], phi_d_2H_Wcostheta_minust_low[index[i]], phi_d_2H_Wcostheta_minust_high[index[i]]))
-axs[0].set_xlim(-1, 1)
-axs[0].set_ylim(0, 0.1)
-axs[0].set_xticks(np.arange(-0.75, 0.9, 0.25))
-axs[0].set_ylabel(r'$\mathrm{Efficiency}$')
-fig.suptitle(r"$d(\gamma, \phi d')$ efficiency vs $\cos\vartheta$")
-fig.supxlabel(r'$\cos\vartheta$')
-plt.legend()
-file_pdf.savefig()
-plt.close()
+# # Plot the efficiency
+# fig = plt.figure(figsize=(6*(len(index) - 1), 6), dpi=300)
+# gs = fig.add_gridspec(1, len(index) - 1, wspace=0)
+# axs = gs.subplots(sharex=True, sharey=True)
+# for i in range(len(index) - 1):
+#     axs[i].errorbar(phi_d_2H_Wcostheta_costheta_center[index[i]:index[i+1]], phi_d_2H_Wcostheta_efficiency[index[i]:index[i+1]], xerr=phi_d_2H_Wcostheta_costheta_width[index[i]:index[i+1]], yerr=phi_d_2H_Wcostheta_efficiency_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
+#     axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wcostheta_energy_low[index[i]], phi_d_2H_Wcostheta_energy_high[index[i]], phi_d_2H_Wcostheta_minust_low[index[i]], phi_d_2H_Wcostheta_minust_high[index[i]]))
+# axs[0].set_xlim(-1, 1)
+# axs[0].set_ylim(0, 0.1)
+# axs[0].set_xticks(np.arange(-0.75, 0.9, 0.25))
+# axs[0].set_ylabel(r'$\mathrm{Efficiency}$')
+# fig.suptitle(r"$d(\gamma, \phi d')$ efficiency vs $\cos\vartheta$")
+# fig.supxlabel(r'$\cos\vartheta$')
+# plt.legend()
+# file_pdf.savefig()
+# plt.close()
 
-# Plot the results
-fig = plt.figure(figsize=(6*(len(index) - 1), 6), dpi=300)
-gs = fig.add_gridspec(1, len(index) - 1, wspace=0)
-axs = gs.subplots(sharex=True, sharey=True)
-for i in range(len(index) - 1):
-    axs[i].errorbar(phi_d_2H_Wcostheta_costheta_center[index[i]:index[i+1]], phi_d_2H_Wcostheta_results[index[i]:index[i+1]], xerr=phi_d_2H_Wcostheta_costheta_width[index[i]:index[i+1]], yerr=phi_d_2H_Wcostheta_results_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
-    axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wcostheta_energy_low[index[i]], phi_d_2H_Wcostheta_energy_high[index[i]], phi_d_2H_Wcostheta_minust_low[index[i]], phi_d_2H_Wcostheta_minust_high[index[i]]))
-    curve_fit_params, curve_fit_cov = curve_fit(Wcostheta_func, phi_d_2H_Wcostheta_costheta_center[index[i]:index[i+1]], phi_d_2H_Wcostheta_results[index[i]:index[i+1]], p0=[0.0])
-    curve_fit_residuals = phi_d_2H_Wcostheta_results[index[i]:index[i+1]] - Wcostheta_func(phi_d_2H_Wcostheta_costheta_center[index[i]:index[i+1]], curve_fit_params[0])
-    reduced_chi2 = np.sum((curve_fit_residuals/phi_d_2H_Wcostheta_results_statserr[index[i]:index[i+1]])**2)/(len(phi_d_2H_Wcostheta_results[index[i]:index[i+1]])-1)
-    axs[i].plot(np.linspace(-1, 1, 100), Wcostheta_func(np.linspace(-1, 1, 100), curve_fit_params[0]), 'b--', label='Fit')
-    axs[i].text(-0.9, 0.95, r'$\rho^0_{00}=%.2f\pm%.2f$' % (curve_fit_params[0], np.sqrt(curve_fit_cov[0])), fontsize=10, color='b', ha='left', va='top')
-    axs[i].text(-0.9, 0.85, r'$\chi^2/\mathrm{dof}=%.2f$' % reduced_chi2, fontsize=10, color='b', ha='left', va='top')
-    axs[i].plot(np.linspace(-1, 1, 100), 0.75*(1-np.linspace(-1, 1, 100)**2), 'r--', label='SCHC+NPE')
-axs[0].set_xlim(-1, 1)
-axs[0].set_ylim(0, 1)
-axs[0].set_xticks(np.arange(-0.75, 0.9, 0.25))
-axs[0].set_ylabel(r'$W(\cos\vartheta)$')
-fig.suptitle(r"$d(\gamma, \phi d')$ normalized distribution of $\cos\vartheta$$")
-fig.supxlabel(r'$\cos\vartheta$')
-plt.legend()
-file_pdf.savefig()
-plt.close()
+# # Plot the results
+# fig = plt.figure(figsize=(6*(len(index) - 1), 6), dpi=300)
+# gs = fig.add_gridspec(1, len(index) - 1, wspace=0)
+# axs = gs.subplots(sharex=True, sharey=True)
+# for i in range(len(index) - 1):
+#     axs[i].errorbar(phi_d_2H_Wcostheta_costheta_center[index[i]:index[i+1]], phi_d_2H_Wcostheta_results[index[i]:index[i+1]], xerr=phi_d_2H_Wcostheta_costheta_width[index[i]:index[i+1]], yerr=phi_d_2H_Wcostheta_results_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
+#     axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wcostheta_energy_low[index[i]], phi_d_2H_Wcostheta_energy_high[index[i]], phi_d_2H_Wcostheta_minust_low[index[i]], phi_d_2H_Wcostheta_minust_high[index[i]]))
+#     curve_fit_params, curve_fit_cov = curve_fit(Wcostheta_func, phi_d_2H_Wcostheta_costheta_center[index[i]:index[i+1]], phi_d_2H_Wcostheta_results[index[i]:index[i+1]], p0=[0.0])
+#     curve_fit_residuals = phi_d_2H_Wcostheta_results[index[i]:index[i+1]] - Wcostheta_func(phi_d_2H_Wcostheta_costheta_center[index[i]:index[i+1]], curve_fit_params[0])
+#     reduced_chi2 = np.sum((curve_fit_residuals/phi_d_2H_Wcostheta_results_statserr[index[i]:index[i+1]])**2)/(len(phi_d_2H_Wcostheta_results[index[i]:index[i+1]])-1)
+#     axs[i].plot(np.linspace(-1, 1, 100), Wcostheta_func(np.linspace(-1, 1, 100), curve_fit_params[0]), 'b--', label='Fit')
+#     axs[i].text(-0.9, 0.95, r'$\rho^0_{00}=%.2f\pm%.2f$' % (curve_fit_params[0], np.sqrt(curve_fit_cov[0])), fontsize=10, color='b', ha='left', va='top')
+#     axs[i].text(-0.9, 0.85, r'$\chi^2/\mathrm{dof}=%.2f$' % reduced_chi2, fontsize=10, color='b', ha='left', va='top')
+#     axs[i].plot(np.linspace(-1, 1, 100), 0.75*(1-np.linspace(-1, 1, 100)**2), 'r--', label='SCHC+NPE')
+# axs[0].set_xlim(-1, 1)
+# axs[0].set_ylim(0, 1)
+# axs[0].set_xticks(np.arange(-0.75, 0.9, 0.25))
+# axs[0].set_ylabel(r'$W(\cos\vartheta)$')
+# fig.suptitle(r"$d(\gamma, \phi d')$ normalized distribution of $\cos\vartheta$$")
+# fig.supxlabel(r'$\cos\vartheta$')
+# plt.legend()
+# file_pdf.savefig()
+# plt.close()
 
-#======================================================================phi_d_2H_Wphi======================================================================
+# #======================================================================phi_d_2H_Wphi======================================================================
 
-# Read the bin edges
-phi_d_2H_Wphi_energy_low            = np.loadtxt('configs/bins_phi_d_Wphi.txt')[:,0]
-phi_d_2H_Wphi_energy_high           = np.loadtxt('configs/bins_phi_d_Wphi.txt')[:,1]
-phi_d_2H_Wphi_minust_low            = np.loadtxt('configs/bins_phi_d_Wphi.txt')[:,2]
-phi_d_2H_Wphi_minust_high           = np.loadtxt('configs/bins_phi_d_Wphi.txt')[:,3]
-phi_d_2H_Wphi_phi_low               = np.loadtxt('configs/bins_phi_d_Wphi.txt')[:,4]
-phi_d_2H_Wphi_phi_high              = np.loadtxt('configs/bins_phi_d_Wphi.txt')[:,5]
-phi_d_2H_Wphi_phi_center            = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_Wphi.txt')[:,8]
-phi_d_2H_Wphi_phi_width             = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_Wphi.txt')[:,9]
+# # Read the bin edges
+# phi_d_2H_Wphi_energy_low            = np.loadtxt('configs/bins_phi_d_Wphi.txt')[:,0]
+# phi_d_2H_Wphi_energy_high           = np.loadtxt('configs/bins_phi_d_Wphi.txt')[:,1]
+# phi_d_2H_Wphi_minust_low            = np.loadtxt('configs/bins_phi_d_Wphi.txt')[:,2]
+# phi_d_2H_Wphi_minust_high           = np.loadtxt('configs/bins_phi_d_Wphi.txt')[:,3]
+# phi_d_2H_Wphi_phi_low               = np.loadtxt('configs/bins_phi_d_Wphi.txt')[:,4]
+# phi_d_2H_Wphi_phi_high              = np.loadtxt('configs/bins_phi_d_Wphi.txt')[:,5]
+# phi_d_2H_Wphi_phi_center            = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_Wphi.txt')[:,8]
+# phi_d_2H_Wphi_phi_width             = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_Wphi.txt')[:,9]
 
-# Read the yield numbers
-phi_d_2H_Wphi_yield_data            = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_Wphi.txt')[:,12]
-phi_d_2H_Wphi_yield_sim             = np.loadtxt('output/yield_phi_d_recon_exc_sim_2H_Wphi.txt')[:,12]
-phi_d_2H_Wphi_yield_tagged          = np.loadtxt('output/yield_phi_d_thrown_exc_tagged_2H_Wphi.txt')[:,12]
-phi_d_2H_Wphi_yield_data_statserr   = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_Wphi.txt')[:,13]/phi_d_2H_Wphi_yield_data
-phi_d_2H_Wphi_yield_sim_statserr    = np.loadtxt('output/yield_phi_d_recon_exc_sim_2H_Wphi.txt')[:,13]/phi_d_2H_Wphi_yield_sim
-phi_d_2H_Wphi_yield_tagged_statserr = np.loadtxt('output/yield_phi_d_thrown_exc_tagged_2H_Wphi.txt')[:,13]/phi_d_2H_Wphi_yield_tagged
+# # Read the yield numbers
+# phi_d_2H_Wphi_yield_data            = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_Wphi.txt')[:,12]
+# phi_d_2H_Wphi_yield_sim             = np.loadtxt('output/yield_phi_d_recon_exc_sim_2H_Wphi.txt')[:,12]
+# phi_d_2H_Wphi_yield_tagged          = np.loadtxt('output/yield_phi_d_thrown_exc_tagged_2H_Wphi.txt')[:,12]
+# phi_d_2H_Wphi_yield_data_statserr   = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_Wphi.txt')[:,13]/phi_d_2H_Wphi_yield_data
+# phi_d_2H_Wphi_yield_sim_statserr    = np.loadtxt('output/yield_phi_d_recon_exc_sim_2H_Wphi.txt')[:,13]/phi_d_2H_Wphi_yield_sim
+# phi_d_2H_Wphi_yield_tagged_statserr = np.loadtxt('output/yield_phi_d_thrown_exc_tagged_2H_Wphi.txt')[:,13]/phi_d_2H_Wphi_yield_tagged
 
-# Calculate the efficiency
-phi_d_2H_Wphi_efficiency            = phi_d_2H_Wphi_yield_sim/phi_d_2H_Wphi_yield_tagged
-phi_d_2H_Wphi_efficiency_statserr   = phi_d_2H_Wphi_efficiency*np.sqrt(phi_d_2H_Wphi_yield_sim_statserr**2 + phi_d_2H_Wphi_yield_tagged_statserr**2)
+# # Calculate the efficiency
+# phi_d_2H_Wphi_efficiency            = phi_d_2H_Wphi_yield_sim/phi_d_2H_Wphi_yield_tagged
+# phi_d_2H_Wphi_efficiency_statserr   = phi_d_2H_Wphi_efficiency*np.sqrt(phi_d_2H_Wphi_yield_sim_statserr**2 + phi_d_2H_Wphi_yield_tagged_statserr**2)
 
-# Calculate the results
-phi_d_2H_Wphi_results               = phi_d_2H_Wphi_yield_data/phi_d_2H_Wphi_efficiency  # raw results
-phi_d_2H_Wphi_results               = normalize_distribution(phi_d_2H_Wphi_results, phi_d_2H_Wphi_energy_low, phi_d_2H_Wphi_minust_low) # normalize to have the sum equal to 1
-phi_d_2H_Wphi_results               = 2*np.pi*phi_d_2H_Wphi_results/((phi_d_2H_Wphi_phi_high - phi_d_2H_Wphi_phi_low)/180*np.pi)  # normalize to have the integral equal to 2pi
-phi_d_2H_Wphi_results_statserr      = phi_d_2H_Wphi_results*np.sqrt(phi_d_2H_Wphi_yield_data_statserr**2 + phi_d_2H_Wphi_efficiency_statserr**2)
+# # Calculate the results
+# phi_d_2H_Wphi_results               = phi_d_2H_Wphi_yield_data/phi_d_2H_Wphi_efficiency  # raw results
+# phi_d_2H_Wphi_results               = normalize_distribution(phi_d_2H_Wphi_results, phi_d_2H_Wphi_energy_low, phi_d_2H_Wphi_minust_low) # normalize to have the sum equal to 1
+# phi_d_2H_Wphi_results               = 2*np.pi*phi_d_2H_Wphi_results/((phi_d_2H_Wphi_phi_high - phi_d_2H_Wphi_phi_low)/180*np.pi)  # normalize to have the integral equal to 2pi
+# phi_d_2H_Wphi_results_statserr      = phi_d_2H_Wphi_results*np.sqrt(phi_d_2H_Wphi_yield_data_statserr**2 + phi_d_2H_Wphi_efficiency_statserr**2)
 
-# Find the indices for the different energy and t bins
-index = []
-for i in range(len(phi_d_2H_Wphi_results)):
-    if (i == 0):
-        index.append(i)
-    elif (i == len(phi_d_2H_Wphi_results) - 1):
-        index.append(i+1)
-    else:
-        if (phi_d_2H_Wphi_energy_low[i] != phi_d_2H_Wphi_energy_low[i-1]) or (phi_d_2H_Wphi_minust_low[i] != phi_d_2H_Wphi_minust_low[i-1]):
-            index.append(i)
+# # Find the indices for the different energy and t bins
+# index = []
+# for i in range(len(phi_d_2H_Wphi_results)):
+#     if (i == 0):
+#         index.append(i)
+#     elif (i == len(phi_d_2H_Wphi_results) - 1):
+#         index.append(i+1)
+#     else:
+#         if (phi_d_2H_Wphi_energy_low[i] != phi_d_2H_Wphi_energy_low[i-1]) or (phi_d_2H_Wphi_minust_low[i] != phi_d_2H_Wphi_minust_low[i-1]):
+#             index.append(i)
 
-# Plot the data yield
-fig = plt.figure(figsize=(6*(len(index) - 1), 6), dpi=300)
-gs = fig.add_gridspec(1, len(index) - 1, wspace=0)
-axs = gs.subplots(sharex=True, sharey=True)
-for i in range(len(index) - 1):
-    axs[i].errorbar(phi_d_2H_Wphi_phi_center[index[i]:index[i+1]], phi_d_2H_Wphi_yield_data[index[i]:index[i+1]], xerr=phi_d_2H_Wphi_phi_width[index[i]:index[i+1]], yerr=phi_d_2H_Wphi_yield_data_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
-    axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wphi_energy_low[index[i]], phi_d_2H_Wphi_energy_high[index[i]], phi_d_2H_Wphi_minust_low[index[i]], phi_d_2H_Wphi_minust_high[index[i]]))
-axs[0].set_xlim(-180, 180)
-axs[0].set_ylim(0, 150)
-axs[0].set_xticks(np.arange(-120, 180, 60))
-axs[0].set_ylabel(r'$\mathrm{Yield}$')
-fig.suptitle(r"$d(\gamma, \phi d')$ yield vs $\varphi$")
-fig.supxlabel(r'$\varphi\ [\mathrm{deg}]$')
-plt.legend()
-file_pdf.savefig()
-plt.close()
+# # Plot the data yield
+# fig = plt.figure(figsize=(6*(len(index) - 1), 6), dpi=300)
+# gs = fig.add_gridspec(1, len(index) - 1, wspace=0)
+# axs = gs.subplots(sharex=True, sharey=True)
+# for i in range(len(index) - 1):
+#     axs[i].errorbar(phi_d_2H_Wphi_phi_center[index[i]:index[i+1]], phi_d_2H_Wphi_yield_data[index[i]:index[i+1]], xerr=phi_d_2H_Wphi_phi_width[index[i]:index[i+1]], yerr=phi_d_2H_Wphi_yield_data_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
+#     axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wphi_energy_low[index[i]], phi_d_2H_Wphi_energy_high[index[i]], phi_d_2H_Wphi_minust_low[index[i]], phi_d_2H_Wphi_minust_high[index[i]]))
+# axs[0].set_xlim(-180, 180)
+# axs[0].set_ylim(0, 150)
+# axs[0].set_xticks(np.arange(-120, 180, 60))
+# axs[0].set_ylabel(r'$\mathrm{Yield}$')
+# fig.suptitle(r"$d(\gamma, \phi d')$ yield vs $\varphi$")
+# fig.supxlabel(r'$\varphi\ [\mathrm{deg}]$')
+# plt.legend()
+# file_pdf.savefig()
+# plt.close()
 
-# Plot the efficiency
-fig = plt.figure(figsize=(6*(len(index) - 1), 6), dpi=300)
-gs = fig.add_gridspec(1, len(index) - 1, wspace=0)
-axs = gs.subplots(sharex=True, sharey=True)
-for i in range(len(index) - 1):
-    axs[i].errorbar(phi_d_2H_Wphi_phi_center[index[i]:index[i+1]], phi_d_2H_Wphi_efficiency[index[i]:index[i+1]], xerr=phi_d_2H_Wphi_phi_width[index[i]:index[i+1]], yerr=phi_d_2H_Wphi_efficiency_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
-    axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wphi_energy_low[index[i]], phi_d_2H_Wphi_energy_high[index[i]], phi_d_2H_Wphi_minust_low[index[i]], phi_d_2H_Wphi_minust_high[index[i]]))
-axs[0].set_xlim(-180, 180)
-axs[0].set_ylim(0, 0.1)
-axs[0].set_xticks(np.arange(-120, 180, 60))
-axs[0].set_ylabel(r'$\mathrm{Efficiency}$')
-fig.suptitle(r"$d(\gamma, \phi d')$ efficiency vs $\varphi$")
-fig.supxlabel(r'$\varphi\ [\mathrm{deg}]$')
-plt.legend()
-file_pdf.savefig()
-plt.close()
+# # Plot the efficiency
+# fig = plt.figure(figsize=(6*(len(index) - 1), 6), dpi=300)
+# gs = fig.add_gridspec(1, len(index) - 1, wspace=0)
+# axs = gs.subplots(sharex=True, sharey=True)
+# for i in range(len(index) - 1):
+#     axs[i].errorbar(phi_d_2H_Wphi_phi_center[index[i]:index[i+1]], phi_d_2H_Wphi_efficiency[index[i]:index[i+1]], xerr=phi_d_2H_Wphi_phi_width[index[i]:index[i+1]], yerr=phi_d_2H_Wphi_efficiency_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
+#     axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wphi_energy_low[index[i]], phi_d_2H_Wphi_energy_high[index[i]], phi_d_2H_Wphi_minust_low[index[i]], phi_d_2H_Wphi_minust_high[index[i]]))
+# axs[0].set_xlim(-180, 180)
+# axs[0].set_ylim(0, 0.1)
+# axs[0].set_xticks(np.arange(-120, 180, 60))
+# axs[0].set_ylabel(r'$\mathrm{Efficiency}$')
+# fig.suptitle(r"$d(\gamma, \phi d')$ efficiency vs $\varphi$")
+# fig.supxlabel(r'$\varphi\ [\mathrm{deg}]$')
+# plt.legend()
+# file_pdf.savefig()
+# plt.close()
 
-# Plot the results
-fig = plt.figure(figsize=(6*(len(index) - 1), 6), dpi=300)
-gs = fig.add_gridspec(1, len(index) - 1, wspace=0)
-axs = gs.subplots(sharex=True, sharey=True)
-for i in range(len(index) - 1):
-    axs[i].errorbar(phi_d_2H_Wphi_phi_center[index[i]:index[i+1]], phi_d_2H_Wphi_results[index[i]:index[i+1]], xerr=phi_d_2H_Wphi_phi_width[index[i]:index[i+1]], yerr=phi_d_2H_Wphi_results_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
-    axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wphi_energy_low[index[i]], phi_d_2H_Wphi_energy_high[index[i]], phi_d_2H_Wphi_minust_low[index[i]], phi_d_2H_Wphi_minust_high[index[i]]))
-    curve_fit_params, curve_fit_cov = curve_fit(Wphi_func, phi_d_2H_Wphi_phi_center[index[i]:index[i+1]], phi_d_2H_Wphi_results[index[i]:index[i+1]], p0=[0.0])
-    curve_fit_residuals = phi_d_2H_Wphi_results[index[i]:index[i+1]] - Wphi_func(phi_d_2H_Wphi_phi_center[index[i]:index[i+1]], curve_fit_params[0])
-    reduced_chi2 = np.sum((curve_fit_residuals/phi_d_2H_Wphi_results_statserr[index[i]:index[i+1]])**2)/(len(phi_d_2H_Wphi_results[index[i]:index[i+1]])-1)
-    axs[i].plot(np.linspace(-180, 180, 360), Wphi_func(np.linspace(-180, 180, 360), curve_fit_params[0]), 'b--', label='Fit')
-    axs[i].text(-175, 1.95, r'$\rho^0_{1-1}=%.2f\pm%.2f$' % (curve_fit_params[0], np.sqrt(curve_fit_cov[0])), fontsize=10, color='b', ha='left', va='top')
-    axs[i].text(-175, 1.85, r'$\chi^2/\mathrm{dof}=%.2f$' % reduced_chi2, fontsize=10, color='b', ha='left', va='top')
-    axs[i].plot(np.linspace(-180, 180, 360), np.ones(360), 'r--', label='SCHC+NPE')
-axs[0].set_xlim(-180, 180)
-axs[0].set_ylim(0, 2)
-axs[0].set_xticks(np.arange(-120, 180, 60))
-axs[0].set_ylabel(r'$2\pi W(\varphi)$')
-fig.suptitle(r"$d(\gamma, \phi d')$ normalized distribution of $\varphi$")
-fig.supxlabel(r'$\varphi\ [\mathrm{deg}]$')
-plt.legend()
-file_pdf.savefig()
-plt.close()
+# # Plot the results
+# fig = plt.figure(figsize=(6*(len(index) - 1), 6), dpi=300)
+# gs = fig.add_gridspec(1, len(index) - 1, wspace=0)
+# axs = gs.subplots(sharex=True, sharey=True)
+# for i in range(len(index) - 1):
+#     axs[i].errorbar(phi_d_2H_Wphi_phi_center[index[i]:index[i+1]], phi_d_2H_Wphi_results[index[i]:index[i+1]], xerr=phi_d_2H_Wphi_phi_width[index[i]:index[i+1]], yerr=phi_d_2H_Wphi_results_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
+#     axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wphi_energy_low[index[i]], phi_d_2H_Wphi_energy_high[index[i]], phi_d_2H_Wphi_minust_low[index[i]], phi_d_2H_Wphi_minust_high[index[i]]))
+#     curve_fit_params, curve_fit_cov = curve_fit(Wphi_func, phi_d_2H_Wphi_phi_center[index[i]:index[i+1]], phi_d_2H_Wphi_results[index[i]:index[i+1]], p0=[0.0])
+#     curve_fit_residuals = phi_d_2H_Wphi_results[index[i]:index[i+1]] - Wphi_func(phi_d_2H_Wphi_phi_center[index[i]:index[i+1]], curve_fit_params[0])
+#     reduced_chi2 = np.sum((curve_fit_residuals/phi_d_2H_Wphi_results_statserr[index[i]:index[i+1]])**2)/(len(phi_d_2H_Wphi_results[index[i]:index[i+1]])-1)
+#     axs[i].plot(np.linspace(-180, 180, 360), Wphi_func(np.linspace(-180, 180, 360), curve_fit_params[0]), 'b--', label='Fit')
+#     axs[i].text(-175, 1.95, r'$\rho^0_{1-1}=%.2f\pm%.2f$' % (curve_fit_params[0], np.sqrt(curve_fit_cov[0])), fontsize=10, color='b', ha='left', va='top')
+#     axs[i].text(-175, 1.85, r'$\chi^2/\mathrm{dof}=%.2f$' % reduced_chi2, fontsize=10, color='b', ha='left', va='top')
+#     axs[i].plot(np.linspace(-180, 180, 360), np.ones(360), 'r--', label='SCHC+NPE')
+# axs[0].set_xlim(-180, 180)
+# axs[0].set_ylim(0, 2)
+# axs[0].set_xticks(np.arange(-120, 180, 60))
+# axs[0].set_ylabel(r'$2\pi W(\varphi)$')
+# fig.suptitle(r"$d(\gamma, \phi d')$ normalized distribution of $\varphi$")
+# fig.supxlabel(r'$\varphi\ [\mathrm{deg}]$')
+# plt.legend()
+# file_pdf.savefig()
+# plt.close()
 
-#======================================================================phi_d_2H_WPhi======================================================================
+# #======================================================================phi_d_2H_WPhi======================================================================
 
-# Read the bin edges
-phi_d_2H_WPhi_energy_low            = np.loadtxt('configs/bins_phi_d_WPhi.txt')[:,0]
-phi_d_2H_WPhi_energy_high           = np.loadtxt('configs/bins_phi_d_WPhi.txt')[:,1]
-phi_d_2H_WPhi_minust_low            = np.loadtxt('configs/bins_phi_d_WPhi.txt')[:,2]
-phi_d_2H_WPhi_minust_high           = np.loadtxt('configs/bins_phi_d_WPhi.txt')[:,3]
-phi_d_2H_WPhi_Phi_low               = np.loadtxt('configs/bins_phi_d_WPhi.txt')[:,4]
-phi_d_2H_WPhi_Phi_high              = np.loadtxt('configs/bins_phi_d_WPhi.txt')[:,5]
-phi_d_2H_WPhi_Phi_center            = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_WPhi.txt')[:,8]
-phi_d_2H_WPhi_Phi_width             = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_WPhi.txt')[:,9]
+# # Read the bin edges
+# phi_d_2H_WPhi_energy_low            = np.loadtxt('configs/bins_phi_d_WPhi.txt')[:,0]
+# phi_d_2H_WPhi_energy_high           = np.loadtxt('configs/bins_phi_d_WPhi.txt')[:,1]
+# phi_d_2H_WPhi_minust_low            = np.loadtxt('configs/bins_phi_d_WPhi.txt')[:,2]
+# phi_d_2H_WPhi_minust_high           = np.loadtxt('configs/bins_phi_d_WPhi.txt')[:,3]
+# phi_d_2H_WPhi_Phi_low               = np.loadtxt('configs/bins_phi_d_WPhi.txt')[:,4]
+# phi_d_2H_WPhi_Phi_high              = np.loadtxt('configs/bins_phi_d_WPhi.txt')[:,5]
+# phi_d_2H_WPhi_Phi_center            = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_WPhi.txt')[:,8]
+# phi_d_2H_WPhi_Phi_width             = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_WPhi.txt')[:,9]
 
-# Read the yield numbers
-phi_d_2H_WPhi_yield_data            = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_WPhi.txt')[:,12]
-phi_d_2H_WPhi_yield_sim             = np.loadtxt('output/yield_phi_d_recon_exc_sim_2H_WPhi.txt')[:,12]
-phi_d_2H_WPhi_yield_tagged          = np.loadtxt('output/yield_phi_d_thrown_exc_tagged_2H_WPhi.txt')[:,12]
-phi_d_2H_WPhi_yield_data_statserr   = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_WPhi.txt')[:,13]/phi_d_2H_WPhi_yield_data
-phi_d_2H_WPhi_yield_sim_statserr    = np.loadtxt('output/yield_phi_d_recon_exc_sim_2H_WPhi.txt')[:,13]/phi_d_2H_WPhi_yield_sim
-phi_d_2H_WPhi_yield_tagged_statserr = np.loadtxt('output/yield_phi_d_thrown_exc_tagged_2H_WPhi.txt')[:,13]/phi_d_2H_WPhi_yield_tagged
+# # Read the yield numbers
+# phi_d_2H_WPhi_yield_data            = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_WPhi.txt')[:,12]
+# phi_d_2H_WPhi_yield_sim             = np.loadtxt('output/yield_phi_d_recon_exc_sim_2H_WPhi.txt')[:,12]
+# phi_d_2H_WPhi_yield_tagged          = np.loadtxt('output/yield_phi_d_thrown_exc_tagged_2H_WPhi.txt')[:,12]
+# phi_d_2H_WPhi_yield_data_statserr   = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_WPhi.txt')[:,13]/phi_d_2H_WPhi_yield_data
+# phi_d_2H_WPhi_yield_sim_statserr    = np.loadtxt('output/yield_phi_d_recon_exc_sim_2H_WPhi.txt')[:,13]/phi_d_2H_WPhi_yield_sim
+# phi_d_2H_WPhi_yield_tagged_statserr = np.loadtxt('output/yield_phi_d_thrown_exc_tagged_2H_WPhi.txt')[:,13]/phi_d_2H_WPhi_yield_tagged
 
-# Calculate the efficiency
-phi_d_2H_WPhi_efficiency            = phi_d_2H_WPhi_yield_sim/phi_d_2H_WPhi_yield_tagged
-phi_d_2H_WPhi_efficiency_statserr   = phi_d_2H_WPhi_efficiency*np.sqrt(phi_d_2H_WPhi_yield_sim_statserr**2 + phi_d_2H_WPhi_yield_tagged_statserr**2)
+# # Calculate the efficiency
+# phi_d_2H_WPhi_efficiency            = phi_d_2H_WPhi_yield_sim/phi_d_2H_WPhi_yield_tagged
+# phi_d_2H_WPhi_efficiency_statserr   = phi_d_2H_WPhi_efficiency*np.sqrt(phi_d_2H_WPhi_yield_sim_statserr**2 + phi_d_2H_WPhi_yield_tagged_statserr**2)
 
-# Calculate the results
-phi_d_2H_WPhi_results               = phi_d_2H_WPhi_yield_data/phi_d_2H_WPhi_efficiency  # raw results
-phi_d_2H_WPhi_results               = normalize_distribution(phi_d_2H_WPhi_results, phi_d_2H_WPhi_energy_low, phi_d_2H_WPhi_minust_low) # normalize to have the sum equal to 1
-phi_d_2H_WPhi_results               = 2*np.pi*phi_d_2H_WPhi_results/((phi_d_2H_WPhi_Phi_high - phi_d_2H_WPhi_Phi_low)/180*np.pi)  # normalize to have the integral equal to 2pi
-phi_d_2H_WPhi_results_statserr      = phi_d_2H_WPhi_results*np.sqrt(phi_d_2H_WPhi_yield_data_statserr**2 + phi_d_2H_WPhi_efficiency_statserr**2)
+# # Calculate the results
+# phi_d_2H_WPhi_results               = phi_d_2H_WPhi_yield_data/phi_d_2H_WPhi_efficiency  # raw results
+# phi_d_2H_WPhi_results               = normalize_distribution(phi_d_2H_WPhi_results, phi_d_2H_WPhi_energy_low, phi_d_2H_WPhi_minust_low) # normalize to have the sum equal to 1
+# phi_d_2H_WPhi_results               = 2*np.pi*phi_d_2H_WPhi_results/((phi_d_2H_WPhi_Phi_high - phi_d_2H_WPhi_Phi_low)/180*np.pi)  # normalize to have the integral equal to 2pi
+# phi_d_2H_WPhi_results_statserr      = phi_d_2H_WPhi_results*np.sqrt(phi_d_2H_WPhi_yield_data_statserr**2 + phi_d_2H_WPhi_efficiency_statserr**2)
 
-# Find the indices for the different energy and t bins
-index = []
-for i in range(len(phi_d_2H_WPhi_results)):
-    if (i == 0):
-        index.append(i)
-    elif (i == len(phi_d_2H_WPhi_results) - 1):
-        index.append(i+1)
-    else:
-        if (phi_d_2H_WPhi_energy_low[i] != phi_d_2H_WPhi_energy_low[i-1]) or (phi_d_2H_WPhi_minust_low[i] != phi_d_2H_WPhi_minust_low[i-1]):
-            index.append(i)
+# # Find the indices for the different energy and t bins
+# index = []
+# for i in range(len(phi_d_2H_WPhi_results)):
+#     if (i == 0):
+#         index.append(i)
+#     elif (i == len(phi_d_2H_WPhi_results) - 1):
+#         index.append(i+1)
+#     else:
+#         if (phi_d_2H_WPhi_energy_low[i] != phi_d_2H_WPhi_energy_low[i-1]) or (phi_d_2H_WPhi_minust_low[i] != phi_d_2H_WPhi_minust_low[i-1]):
+#             index.append(i)
 
-# Plot the data yield
-fig = plt.figure(figsize=(6*(len(index) - 1), 6), dpi=300)
-gs = fig.add_gridspec(1, len(index) - 1, wspace=0)
-axs = gs.subplots(sharex=True, sharey=True)
-for i in range(len(index) - 1):
-    axs[i].errorbar(phi_d_2H_WPhi_Phi_center[index[i]:index[i+1]], phi_d_2H_WPhi_yield_data[index[i]:index[i+1]], xerr=phi_d_2H_WPhi_Phi_width[index[i]:index[i+1]], yerr=phi_d_2H_WPhi_yield_data_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
-    axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_WPhi_energy_low[index[i]], phi_d_2H_WPhi_energy_high[index[i]], phi_d_2H_WPhi_minust_low[index[i]], phi_d_2H_WPhi_minust_high[index[i]]))
-axs[0].set_xlim(-180, 180)
-axs[0].set_ylim(0, 150)
-axs[0].set_xticks(np.arange(-120, 180, 60))
-axs[0].set_ylabel(r'$\mathrm{Yield}$')
-fig.suptitle(r"$d(\gamma, \phi d')$ yield vs $\Phi$")
-fig.supxlabel(r'$\Phi\ [\mathrm{deg}]$')
-plt.legend()
-file_pdf.savefig()
-plt.close()
+# # Plot the data yield
+# fig = plt.figure(figsize=(6*(len(index) - 1), 6), dpi=300)
+# gs = fig.add_gridspec(1, len(index) - 1, wspace=0)
+# axs = gs.subplots(sharex=True, sharey=True)
+# for i in range(len(index) - 1):
+#     axs[i].errorbar(phi_d_2H_WPhi_Phi_center[index[i]:index[i+1]], phi_d_2H_WPhi_yield_data[index[i]:index[i+1]], xerr=phi_d_2H_WPhi_Phi_width[index[i]:index[i+1]], yerr=phi_d_2H_WPhi_yield_data_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
+#     axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_WPhi_energy_low[index[i]], phi_d_2H_WPhi_energy_high[index[i]], phi_d_2H_WPhi_minust_low[index[i]], phi_d_2H_WPhi_minust_high[index[i]]))
+# axs[0].set_xlim(-180, 180)
+# axs[0].set_ylim(0, 150)
+# axs[0].set_xticks(np.arange(-120, 180, 60))
+# axs[0].set_ylabel(r'$\mathrm{Yield}$')
+# fig.suptitle(r"$d(\gamma, \phi d')$ yield vs $\Phi$")
+# fig.supxlabel(r'$\Phi\ [\mathrm{deg}]$')
+# plt.legend()
+# file_pdf.savefig()
+# plt.close()
 
-# Plot the efficiency
-fig = plt.figure(figsize=(6*(len(index) - 1), 6), dpi=300)
-gs = fig.add_gridspec(1, len(index) - 1, wspace=0)
-axs = gs.subplots(sharex=True, sharey=True)
-for i in range(len(index) - 1):
-    axs[i].errorbar(phi_d_2H_WPhi_Phi_center[index[i]:index[i+1]], phi_d_2H_WPhi_efficiency[index[i]:index[i+1]], xerr=phi_d_2H_WPhi_Phi_width[index[i]:index[i+1]], yerr=phi_d_2H_WPhi_efficiency_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
-    axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_WPhi_energy_low[index[i]], phi_d_2H_WPhi_energy_high[index[i]], phi_d_2H_WPhi_minust_low[index[i]], phi_d_2H_WPhi_minust_high[index[i]]))
-axs[0].set_xlim(-180, 180)
-axs[0].set_ylim(0, 0.1)
-axs[0].set_xticks(np.arange(-120, 180, 60))
-axs[0].set_ylabel(r'$\mathrm{Efficiency}$')
-fig.suptitle(r"$d(\gamma, \phi d')$ efficiency vs $\Phi$")
-fig.supxlabel(r'$\Phi\ [\mathrm{deg}]$')
-plt.legend()
-file_pdf.savefig()
-plt.close()
+# # Plot the efficiency
+# fig = plt.figure(figsize=(6*(len(index) - 1), 6), dpi=300)
+# gs = fig.add_gridspec(1, len(index) - 1, wspace=0)
+# axs = gs.subplots(sharex=True, sharey=True)
+# for i in range(len(index) - 1):
+#     axs[i].errorbar(phi_d_2H_WPhi_Phi_center[index[i]:index[i+1]], phi_d_2H_WPhi_efficiency[index[i]:index[i+1]], xerr=phi_d_2H_WPhi_Phi_width[index[i]:index[i+1]], yerr=phi_d_2H_WPhi_efficiency_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
+#     axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_WPhi_energy_low[index[i]], phi_d_2H_WPhi_energy_high[index[i]], phi_d_2H_WPhi_minust_low[index[i]], phi_d_2H_WPhi_minust_high[index[i]]))
+# axs[0].set_xlim(-180, 180)
+# axs[0].set_ylim(0, 0.1)
+# axs[0].set_xticks(np.arange(-120, 180, 60))
+# axs[0].set_ylabel(r'$\mathrm{Efficiency}$')
+# fig.suptitle(r"$d(\gamma, \phi d')$ efficiency vs $\Phi$")
+# fig.supxlabel(r'$\Phi\ [\mathrm{deg}]$')
+# plt.legend()
+# file_pdf.savefig()
+# plt.close()
 
-# Plot the results
-fig = plt.figure(figsize=(6*(len(index) - 1), 6), dpi=300)
-gs = fig.add_gridspec(1, len(index) - 1, wspace=0)
-axs = gs.subplots(sharex=True, sharey=True)
-for i in range(len(index) - 1):
-    axs[i].errorbar(phi_d_2H_WPhi_Phi_center[index[i]:index[i+1]], phi_d_2H_WPhi_results[index[i]:index[i+1]], xerr=phi_d_2H_WPhi_Phi_width[index[i]:index[i+1]], yerr=phi_d_2H_WPhi_results_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
-    axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_WPhi_energy_low[index[i]], phi_d_2H_WPhi_energy_high[index[i]], phi_d_2H_WPhi_minust_low[index[i]], phi_d_2H_WPhi_minust_high[index[i]]))
-    curve_fit_params, curve_fit_cov = curve_fit(Wphi_func, phi_d_2H_WPhi_Phi_center[index[i]:index[i+1]], phi_d_2H_WPhi_results[index[i]:index[i+1]], p0=[0.0])
-    curve_fit_residuals = phi_d_2H_WPhi_results[index[i]:index[i+1]] - Wphi_func(phi_d_2H_WPhi_Phi_center[index[i]:index[i+1]], curve_fit_params[0])
-    reduced_chi2 = np.sum((curve_fit_residuals/phi_d_2H_WPhi_results_statserr[index[i]:index[i+1]])**2)/(len(phi_d_2H_WPhi_results[index[i]:index[i+1]])-1)
-    axs[i].plot(np.linspace(-180, 180, 360), Wphi_func(np.linspace(-180, 180, 360), curve_fit_params[0]), 'b--', label='Fit')
-    axs[i].text(-175, 1.95, r'$\rho^1_{00}=%.2f\pm%.2f$' % (2*curve_fit_params[0]/3/0.3, np.sqrt(curve_fit_cov[0])), fontsize=10, color='b', ha='left', va='top')
-    axs[i].text(-175, 1.85, r'$\chi^2/\mathrm{dof}=%.2f$' % reduced_chi2, fontsize=10, color='b', ha='left', va='top')
-    axs[i].plot(np.linspace(-180, 180, 360), np.ones(360), 'r--', label='SCHC+NPE')
-axs[0].set_xlim(-180, 180)
-axs[0].set_ylim(0, 2)
-axs[0].set_xticks(np.arange(-120, 180, 60))
-axs[0].set_ylabel(r'$2\pi W(\Phi)$')
-fig.suptitle(r"$d(\gamma, \phi d')$ normalized distribution of $\Phi$")
-fig.supxlabel(r'$\Phi\ [\mathrm{deg}]$')
-plt.legend()
-file_pdf.savefig()
-plt.close()
+# # Plot the results
+# fig = plt.figure(figsize=(6*(len(index) - 1), 6), dpi=300)
+# gs = fig.add_gridspec(1, len(index) - 1, wspace=0)
+# axs = gs.subplots(sharex=True, sharey=True)
+# for i in range(len(index) - 1):
+#     axs[i].errorbar(phi_d_2H_WPhi_Phi_center[index[i]:index[i+1]], phi_d_2H_WPhi_results[index[i]:index[i+1]], xerr=phi_d_2H_WPhi_Phi_width[index[i]:index[i+1]], yerr=phi_d_2H_WPhi_results_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
+#     axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_WPhi_energy_low[index[i]], phi_d_2H_WPhi_energy_high[index[i]], phi_d_2H_WPhi_minust_low[index[i]], phi_d_2H_WPhi_minust_high[index[i]]))
+#     curve_fit_params, curve_fit_cov = curve_fit(Wphi_func, phi_d_2H_WPhi_Phi_center[index[i]:index[i+1]], phi_d_2H_WPhi_results[index[i]:index[i+1]], p0=[0.0])
+#     curve_fit_residuals = phi_d_2H_WPhi_results[index[i]:index[i+1]] - Wphi_func(phi_d_2H_WPhi_Phi_center[index[i]:index[i+1]], curve_fit_params[0])
+#     reduced_chi2 = np.sum((curve_fit_residuals/phi_d_2H_WPhi_results_statserr[index[i]:index[i+1]])**2)/(len(phi_d_2H_WPhi_results[index[i]:index[i+1]])-1)
+#     axs[i].plot(np.linspace(-180, 180, 360), Wphi_func(np.linspace(-180, 180, 360), curve_fit_params[0]), 'b--', label='Fit')
+#     axs[i].text(-175, 1.95, r'$\rho^1_{00}=%.2f\pm%.2f$' % (2*curve_fit_params[0]/3/0.3, np.sqrt(curve_fit_cov[0])), fontsize=10, color='b', ha='left', va='top')
+#     axs[i].text(-175, 1.85, r'$\chi^2/\mathrm{dof}=%.2f$' % reduced_chi2, fontsize=10, color='b', ha='left', va='top')
+#     axs[i].plot(np.linspace(-180, 180, 360), np.ones(360), 'r--', label='SCHC+NPE')
+# axs[0].set_xlim(-180, 180)
+# axs[0].set_ylim(0, 2)
+# axs[0].set_xticks(np.arange(-120, 180, 60))
+# axs[0].set_ylabel(r'$2\pi W(\Phi)$')
+# fig.suptitle(r"$d(\gamma, \phi d')$ normalized distribution of $\Phi$")
+# fig.supxlabel(r'$\Phi\ [\mathrm{deg}]$')
+# plt.legend()
+# file_pdf.savefig()
+# plt.close()
 
-#======================================================================phi_d_2H_Wpsi======================================================================
+# #======================================================================phi_d_2H_Wpsi======================================================================
 
-# Read the bin edges
-phi_d_2H_Wpsi_energy_low            = np.loadtxt('configs/bins_phi_d_Wpsi.txt')[:,0]
-phi_d_2H_Wpsi_energy_high           = np.loadtxt('configs/bins_phi_d_Wpsi.txt')[:,1]
-phi_d_2H_Wpsi_minust_low            = np.loadtxt('configs/bins_phi_d_Wpsi.txt')[:,2]
-phi_d_2H_Wpsi_minust_high           = np.loadtxt('configs/bins_phi_d_Wpsi.txt')[:,3]
-phi_d_2H_Wpsi_psi_low               = np.loadtxt('configs/bins_phi_d_Wpsi.txt')[:,4]
-phi_d_2H_Wpsi_psi_high              = np.loadtxt('configs/bins_phi_d_Wpsi.txt')[:,5]
-phi_d_2H_Wpsi_psi_center            = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_Wpsi.txt')[:,8]
-phi_d_2H_Wpsi_psi_width             = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_Wpsi.txt')[:,9]
+# # Read the bin edges
+# phi_d_2H_Wpsi_energy_low            = np.loadtxt('configs/bins_phi_d_Wpsi.txt')[:,0]
+# phi_d_2H_Wpsi_energy_high           = np.loadtxt('configs/bins_phi_d_Wpsi.txt')[:,1]
+# phi_d_2H_Wpsi_minust_low            = np.loadtxt('configs/bins_phi_d_Wpsi.txt')[:,2]
+# phi_d_2H_Wpsi_minust_high           = np.loadtxt('configs/bins_phi_d_Wpsi.txt')[:,3]
+# phi_d_2H_Wpsi_psi_low               = np.loadtxt('configs/bins_phi_d_Wpsi.txt')[:,4]
+# phi_d_2H_Wpsi_psi_high              = np.loadtxt('configs/bins_phi_d_Wpsi.txt')[:,5]
+# phi_d_2H_Wpsi_psi_center            = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_Wpsi.txt')[:,8]
+# phi_d_2H_Wpsi_psi_width             = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_Wpsi.txt')[:,9]
 
-# Read the yield numbers
-phi_d_2H_Wpsi_yield_data            = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_Wpsi.txt')[:,12]
-phi_d_2H_Wpsi_yield_sim             = np.loadtxt('output/yield_phi_d_recon_exc_sim_2H_Wpsi.txt')[:,12]
-phi_d_2H_Wpsi_yield_tagged          = np.loadtxt('output/yield_phi_d_thrown_exc_tagged_2H_Wpsi.txt')[:,12]
-phi_d_2H_Wpsi_yield_data_statserr   = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_Wpsi.txt')[:,13]/phi_d_2H_Wpsi_yield_data
-phi_d_2H_Wpsi_yield_sim_statserr    = np.loadtxt('output/yield_phi_d_recon_exc_sim_2H_Wpsi.txt')[:,13]/phi_d_2H_Wpsi_yield_sim
-phi_d_2H_Wpsi_yield_tagged_statserr = np.loadtxt('output/yield_phi_d_thrown_exc_tagged_2H_Wpsi.txt')[:,13]/phi_d_2H_Wpsi_yield_tagged
+# # Read the yield numbers
+# phi_d_2H_Wpsi_yield_data            = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_Wpsi.txt')[:,12]
+# phi_d_2H_Wpsi_yield_sim             = np.loadtxt('output/yield_phi_d_recon_exc_sim_2H_Wpsi.txt')[:,12]
+# phi_d_2H_Wpsi_yield_tagged          = np.loadtxt('output/yield_phi_d_thrown_exc_tagged_2H_Wpsi.txt')[:,12]
+# phi_d_2H_Wpsi_yield_data_statserr   = np.loadtxt('output/yield_phi_d_recon_exc_data_2H_Wpsi.txt')[:,13]/phi_d_2H_Wpsi_yield_data
+# phi_d_2H_Wpsi_yield_sim_statserr    = np.loadtxt('output/yield_phi_d_recon_exc_sim_2H_Wpsi.txt')[:,13]/phi_d_2H_Wpsi_yield_sim
+# phi_d_2H_Wpsi_yield_tagged_statserr = np.loadtxt('output/yield_phi_d_thrown_exc_tagged_2H_Wpsi.txt')[:,13]/phi_d_2H_Wpsi_yield_tagged
 
-# Calculate the efficiency
-phi_d_2H_Wpsi_efficiency            = phi_d_2H_Wpsi_yield_sim/phi_d_2H_Wpsi_yield_tagged
-phi_d_2H_Wpsi_efficiency_statserr   = phi_d_2H_Wpsi_efficiency*np.sqrt(phi_d_2H_Wpsi_yield_sim_statserr**2 + phi_d_2H_Wpsi_yield_tagged_statserr**2)
+# # Calculate the efficiency
+# phi_d_2H_Wpsi_efficiency            = phi_d_2H_Wpsi_yield_sim/phi_d_2H_Wpsi_yield_tagged
+# phi_d_2H_Wpsi_efficiency_statserr   = phi_d_2H_Wpsi_efficiency*np.sqrt(phi_d_2H_Wpsi_yield_sim_statserr**2 + phi_d_2H_Wpsi_yield_tagged_statserr**2)
 
-# Calculate the results
-phi_d_2H_Wpsi_results               = phi_d_2H_Wpsi_yield_data/phi_d_2H_Wpsi_efficiency  # raw results
-phi_d_2H_Wpsi_results               = normalize_distribution(phi_d_2H_Wpsi_results, phi_d_2H_Wpsi_energy_low, phi_d_2H_Wpsi_minust_low) # normalize to have the sum equal to 1
-phi_d_2H_Wpsi_results               = 2*np.pi*phi_d_2H_Wpsi_results/((phi_d_2H_Wpsi_psi_high - phi_d_2H_Wpsi_psi_low)/180*np.pi)  # normalize to have the integral equal to 2pi
-phi_d_2H_Wpsi_results_statserr      = phi_d_2H_Wpsi_results*np.sqrt(phi_d_2H_Wpsi_yield_data_statserr**2 + phi_d_2H_Wpsi_efficiency_statserr**2)
+# # Calculate the results
+# phi_d_2H_Wpsi_results               = phi_d_2H_Wpsi_yield_data/phi_d_2H_Wpsi_efficiency  # raw results
+# phi_d_2H_Wpsi_results               = normalize_distribution(phi_d_2H_Wpsi_results, phi_d_2H_Wpsi_energy_low, phi_d_2H_Wpsi_minust_low) # normalize to have the sum equal to 1
+# phi_d_2H_Wpsi_results               = 2*np.pi*phi_d_2H_Wpsi_results/((phi_d_2H_Wpsi_psi_high - phi_d_2H_Wpsi_psi_low)/180*np.pi)  # normalize to have the integral equal to 2pi
+# phi_d_2H_Wpsi_results_statserr      = phi_d_2H_Wpsi_results*np.sqrt(phi_d_2H_Wpsi_yield_data_statserr**2 + phi_d_2H_Wpsi_efficiency_statserr**2)
 
-# Find the indices for the different energy and t bins
-index = []
-for i in range(len(phi_d_2H_Wpsi_results)):
-    if (i == 0):
-        index.append(i)
-    elif (i == len(phi_d_2H_Wpsi_results) - 1):
-        index.append(i+1)
-    else:
-        if (phi_d_2H_Wpsi_energy_low[i] != phi_d_2H_Wpsi_energy_low[i-1]) or (phi_d_2H_Wpsi_minust_low[i] != phi_d_2H_Wpsi_minust_low[i-1]):
-            index.append(i)
+# # Find the indices for the different energy and t bins
+# index = []
+# for i in range(len(phi_d_2H_Wpsi_results)):
+#     if (i == 0):
+#         index.append(i)
+#     elif (i == len(phi_d_2H_Wpsi_results) - 1):
+#         index.append(i+1)
+#     else:
+#         if (phi_d_2H_Wpsi_energy_low[i] != phi_d_2H_Wpsi_energy_low[i-1]) or (phi_d_2H_Wpsi_minust_low[i] != phi_d_2H_Wpsi_minust_low[i-1]):
+#             index.append(i)
 
-# Plot the data yield
-fig = plt.figure(figsize=(6*(len(index) - 1), 6), dpi=300)
-gs = fig.add_gridspec(1, len(index) - 1, wspace=0)
-axs = gs.subplots(sharex=True, sharey=True)
-for i in range(len(index) - 1):
-    axs[i].errorbar(phi_d_2H_Wpsi_psi_center[index[i]:index[i+1]], phi_d_2H_Wpsi_yield_data[index[i]:index[i+1]], xerr=phi_d_2H_Wpsi_psi_width[index[i]:index[i+1]], yerr=phi_d_2H_Wpsi_yield_data_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
-    axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wpsi_energy_low[index[i]], phi_d_2H_Wpsi_energy_high[index[i]], phi_d_2H_Wpsi_minust_low[index[i]], phi_d_2H_Wpsi_minust_high[index[i]]))
-axs[0].set_xlim(-180, 180)
-axs[0].set_ylim(0, 150)
-axs[0].set_xticks(np.arange(-120, 180, 60))
-axs[0].set_ylabel(r'$\mathrm{Yield}$')
-fig.suptitle(r"$d(\gamma, \phi d')$ yield vs $\psi$")
-fig.supxlabel(r'$\psi\ [\mathrm{deg}]$')
-plt.legend()
-file_pdf.savefig()
-plt.close()
+# # Plot the data yield
+# fig = plt.figure(figsize=(6*(len(index) - 1), 6), dpi=300)
+# gs = fig.add_gridspec(1, len(index) - 1, wspace=0)
+# axs = gs.subplots(sharex=True, sharey=True)
+# for i in range(len(index) - 1):
+#     axs[i].errorbar(phi_d_2H_Wpsi_psi_center[index[i]:index[i+1]], phi_d_2H_Wpsi_yield_data[index[i]:index[i+1]], xerr=phi_d_2H_Wpsi_psi_width[index[i]:index[i+1]], yerr=phi_d_2H_Wpsi_yield_data_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
+#     axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wpsi_energy_low[index[i]], phi_d_2H_Wpsi_energy_high[index[i]], phi_d_2H_Wpsi_minust_low[index[i]], phi_d_2H_Wpsi_minust_high[index[i]]))
+# axs[0].set_xlim(-180, 180)
+# axs[0].set_ylim(0, 150)
+# axs[0].set_xticks(np.arange(-120, 180, 60))
+# axs[0].set_ylabel(r'$\mathrm{Yield}$')
+# fig.suptitle(r"$d(\gamma, \phi d')$ yield vs $\psi$")
+# fig.supxlabel(r'$\psi\ [\mathrm{deg}]$')
+# plt.legend()
+# file_pdf.savefig()
+# plt.close()
 
-# Plot the efficiency
-fig = plt.figure(figsize=(6*(len(index) - 1), 6), dpi=300)
-gs = fig.add_gridspec(1, len(index) - 1, wspace=0)
-axs = gs.subplots(sharex=True, sharey=True)
-for i in range(len(index) - 1):
-    axs[i].errorbar(phi_d_2H_Wpsi_psi_center[index[i]:index[i+1]], phi_d_2H_Wpsi_efficiency[index[i]:index[i+1]], xerr=phi_d_2H_Wpsi_psi_width[index[i]:index[i+1]], yerr=phi_d_2H_Wpsi_efficiency_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
-    axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wpsi_energy_low[index[i]], phi_d_2H_Wpsi_energy_high[index[i]], phi_d_2H_Wpsi_minust_low[index[i]], phi_d_2H_Wpsi_minust_high[index[i]]))
-axs[0].set_xlim(-180, 180)
-axs[0].set_ylim(0, 0.1)
-axs[0].set_xticks(np.arange(-120, 180, 60))
-axs[0].set_ylabel(r'$\mathrm{Efficiency}$')
-fig.suptitle(r"$d(\gamma, \phi d')$ efficiency vs $\psi$")
-fig.supxlabel(r'$\psi\ [\mathrm{deg}]$')
-plt.legend()
-file_pdf.savefig()
-plt.close()
+# # Plot the efficiency
+# fig = plt.figure(figsize=(6*(len(index) - 1), 6), dpi=300)
+# gs = fig.add_gridspec(1, len(index) - 1, wspace=0)
+# axs = gs.subplots(sharex=True, sharey=True)
+# for i in range(len(index) - 1):
+#     axs[i].errorbar(phi_d_2H_Wpsi_psi_center[index[i]:index[i+1]], phi_d_2H_Wpsi_efficiency[index[i]:index[i+1]], xerr=phi_d_2H_Wpsi_psi_width[index[i]:index[i+1]], yerr=phi_d_2H_Wpsi_efficiency_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
+#     axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wpsi_energy_low[index[i]], phi_d_2H_Wpsi_energy_high[index[i]], phi_d_2H_Wpsi_minust_low[index[i]], phi_d_2H_Wpsi_minust_high[index[i]]))
+# axs[0].set_xlim(-180, 180)
+# axs[0].set_ylim(0, 0.1)
+# axs[0].set_xticks(np.arange(-120, 180, 60))
+# axs[0].set_ylabel(r'$\mathrm{Efficiency}$')
+# fig.suptitle(r"$d(\gamma, \phi d')$ efficiency vs $\psi$")
+# fig.supxlabel(r'$\psi\ [\mathrm{deg}]$')
+# plt.legend()
+# file_pdf.savefig()
+# plt.close()
 
-# Plot the results
-fig = plt.figure(figsize=(6*(len(index) - 1), 6), dpi=300)
-gs = fig.add_gridspec(1, len(index) - 1, wspace=0)
-axs = gs.subplots(sharex=True, sharey=True)
-for i in range(len(index) - 1):
-    axs[i].errorbar(phi_d_2H_Wpsi_psi_center[index[i]:index[i+1]], phi_d_2H_Wpsi_results[index[i]:index[i+1]], xerr=phi_d_2H_Wpsi_psi_width[index[i]:index[i+1]], yerr=phi_d_2H_Wpsi_results_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
-    axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wpsi_energy_low[index[i]], phi_d_2H_Wpsi_energy_high[index[i]], phi_d_2H_Wpsi_minust_low[index[i]], phi_d_2H_Wpsi_minust_high[index[i]]))
-    curve_fit_params, curve_fit_cov = curve_fit(Wphi_func, phi_d_2H_Wpsi_psi_center[index[i]:index[i+1]], phi_d_2H_Wpsi_results[index[i]:index[i+1]], p0=[0.0])
-    curve_fit_residuals = phi_d_2H_Wpsi_results[index[i]:index[i+1]] - Wphi_func(phi_d_2H_Wpsi_psi_center[index[i]:index[i+1]], curve_fit_params[0])
-    reduced_chi2 = np.sum((curve_fit_residuals/phi_d_2H_Wpsi_results_statserr[index[i]:index[i+1]])**2)/(len(phi_d_2H_Wpsi_results[index[i]:index[i+1]])-1)
-    axs[i].plot(np.linspace(-180, 180, 360), Wphi_func(np.linspace(-180, 180, 360), curve_fit_params[0]), 'b--', label='Fit')
-    axs[i].text(-175, 1.95, r'$\rho^1_{1-1}=%.2f\pm%.2f$' % (-curve_fit_params[0]/0.2, np.sqrt(curve_fit_cov[0])), fontsize=10, color='b', ha='left', va='top')
-    axs[i].text(-175, 1.85, r'$\chi^2/\mathrm{dof}=%.2f$' % reduced_chi2, fontsize=10, color='b', ha='left', va='top')
-    axs[i].plot(np.linspace(-180, 180, 360), np.ones(360)+0.2*np.cos(2*np.linspace(-180, 180, 360)/rad_to_deg), 'r--', label='SCHC+NPE')
-axs[0].set_xlim(-180, 180)
-axs[0].set_ylim(0, 2)
-axs[0].set_xticks(np.arange(-120, 180, 60))
-axs[0].set_ylabel(r'$2\pi W(\psi)$')
-fig.suptitle(r"$d(\gamma, \phi d')$ normalized distribution of $\psi$")
-fig.supxlabel(r'$\psi\ [\mathrm{deg}]$')
-plt.legend()
-file_pdf.savefig()
-plt.close()
+# # Plot the results
+# fig = plt.figure(figsize=(6*(len(index) - 1), 6), dpi=300)
+# gs = fig.add_gridspec(1, len(index) - 1, wspace=0)
+# axs = gs.subplots(sharex=True, sharey=True)
+# for i in range(len(index) - 1):
+#     axs[i].errorbar(phi_d_2H_Wpsi_psi_center[index[i]:index[i+1]], phi_d_2H_Wpsi_results[index[i]:index[i+1]], xerr=phi_d_2H_Wpsi_psi_width[index[i]:index[i+1]], yerr=phi_d_2H_Wpsi_results_statserr[index[i]:index[i+1]], fmt='k.', label='This work')
+#     axs[i].set_title(r'$%.1f<\mathrm{E}_{\gamma}<%.1f\ \mathrm{GeV},\  %.1f<-t<%.1f\ \mathrm{GeV}^2$' % (phi_d_2H_Wpsi_energy_low[index[i]], phi_d_2H_Wpsi_energy_high[index[i]], phi_d_2H_Wpsi_minust_low[index[i]], phi_d_2H_Wpsi_minust_high[index[i]]))
+#     curve_fit_params, curve_fit_cov = curve_fit(Wphi_func, phi_d_2H_Wpsi_psi_center[index[i]:index[i+1]], phi_d_2H_Wpsi_results[index[i]:index[i+1]], p0=[0.0])
+#     curve_fit_residuals = phi_d_2H_Wpsi_results[index[i]:index[i+1]] - Wphi_func(phi_d_2H_Wpsi_psi_center[index[i]:index[i+1]], curve_fit_params[0])
+#     reduced_chi2 = np.sum((curve_fit_residuals/phi_d_2H_Wpsi_results_statserr[index[i]:index[i+1]])**2)/(len(phi_d_2H_Wpsi_results[index[i]:index[i+1]])-1)
+#     axs[i].plot(np.linspace(-180, 180, 360), Wphi_func(np.linspace(-180, 180, 360), curve_fit_params[0]), 'b--', label='Fit')
+#     axs[i].text(-175, 1.95, r'$\rho^1_{1-1}=%.2f\pm%.2f$' % (-curve_fit_params[0]/0.2, np.sqrt(curve_fit_cov[0])), fontsize=10, color='b', ha='left', va='top')
+#     axs[i].text(-175, 1.85, r'$\chi^2/\mathrm{dof}=%.2f$' % reduced_chi2, fontsize=10, color='b', ha='left', va='top')
+#     axs[i].plot(np.linspace(-180, 180, 360), np.ones(360)+0.2*np.cos(2*np.linspace(-180, 180, 360)/rad_to_deg), 'r--', label='SCHC+NPE')
+# axs[0].set_xlim(-180, 180)
+# axs[0].set_ylim(0, 2)
+# axs[0].set_xticks(np.arange(-120, 180, 60))
+# axs[0].set_ylabel(r'$2\pi W(\psi)$')
+# fig.suptitle(r"$d(\gamma, \phi d')$ normalized distribution of $\psi$")
+# fig.supxlabel(r'$\psi\ [\mathrm{deg}]$')
+# plt.legend()
+# file_pdf.savefig()
+# plt.close()
 
 # #======================================================================rho_d_2H_dsdt======================================================================
 
