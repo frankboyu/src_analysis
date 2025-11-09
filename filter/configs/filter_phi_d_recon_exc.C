@@ -213,12 +213,15 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
     ;
 
     cout << "Filtering events...\n";
-    string KinematicsCut    = "kp_momentum_meas > 0.4 && km_momentum_meas > 0.4 && d_momentum_meas > 0.4 && kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
-    string dEdxCut          = "(d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-29.68353898*d_momentum_meas+13.50623694)+17.88279645*d_momentum_meas*d_momentum_meas-42.15473796*d_momentum_meas+28.83200736)) && (d_dedx_cdc_keV_per_cm_meas < (TMath::Exp(-26.69276323*d_momentum_meas+15.92466317)+17.1164272*d_momentum_meas*d_momentum_meas-48.7542903*d_momentum_meas+40.25692313))";
-    // string dEdxCut          = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.3*d_momentum_meas+4.1)+2.3) && d_dedx_st_keV_per_cm_meas > (TMath::Exp(-1.9*d_momentum_meas+2.8)+0.6)";
+    string KinematicsCut    = "kp_momentum_meas > 0.40 && km_momentum_meas > 0.40 && d_momentum_meas > 0.40 && kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
+    string KinematicsSyst   = "kp_momentum_meas > 0.35 && km_momentum_meas > 0.35 && d_momentum_meas > 0.35 && kp_theta_meas > 1.0 && km_theta_meas > 1.0 && d_theta_meas > 1.0";
+    string dEdxCut          = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.43*d_momentum_meas+4.18) + TMath::Exp(-33.56*d_momentum_meas+14.12) + 2.38)";
+    string dEdxSyst         = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.43*d_momentum_meas+4.18) + TMath::Exp(-33.56*d_momentum_meas+14.12) + 2.38)";
     string VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.0";
+    string VertexSyst       = "TMath::Abs(vertex_z_kin - 65.0) < 15.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.5";
     string KinFitChiSqCut   = "chisq_per_ndf_kin < 5.0";
-    string PhiMassCut       = "phi_mass_kin > 1.005 && phi_mass_kin < 1.04";
+    string KinFitChiSqSyst  = "chisq_per_ndf_kin < 7.0";
+    string PhiMassCut       = "phi_mass_kin < 1.10";
     auto rdf_NoCut          = rdf_input;
     auto rdf_KinematicsCut  = rdf_input.Filter(dEdxCut.c_str()).Filter(VertexCut.c_str()).Filter(KinFitChiSqCut.c_str());
     auto rdf_dEdxCut        = rdf_input.Filter(KinematicsCut.c_str()).Filter(VertexCut.c_str()).Filter(KinFitChiSqCut.c_str());
@@ -226,6 +229,7 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
     auto rdf_KinFitChiSqCut = rdf_input.Filter(KinematicsCut.c_str()).Filter(dEdxCut.c_str()).Filter(VertexCut.c_str());
     auto rdf_NominalCut     = rdf_input.Filter(KinematicsCut.c_str()).Filter(dEdxCut.c_str()).Filter(VertexCut.c_str()).Filter(KinFitChiSqCut.c_str());
     auto rdf_AllCut         = rdf_input.Filter(KinematicsCut.c_str()).Filter(dEdxCut.c_str()).Filter(VertexCut.c_str()).Filter(KinFitChiSqCut.c_str()).Filter(PhiMassCut.c_str());
+    auto rdf_SystCut        = rdf_input.Filter(KinematicsSyst.c_str()).Filter(dEdxSyst.c_str()).Filter(VertexSyst.c_str()).Filter(KinFitChiSqSyst.c_str()).Filter(PhiMassCut.c_str());
     RNode rdfs []           = {rdf_NoCut,   rdf_KinematicsCut,  rdf_dEdxCut,    rdf_VertexCut,  rdf_KinFitChiSqCut, rdf_NominalCut, rdf_AllCut};
     string labels []        = {"NoCut",     "KinematicsCut",    "dEdxCut",      "VertexCut",    "KinFitChiSqCut",   "NominalCut",   "AllCut"};
     int N_filters           = sizeof(labels) / sizeof(labels[0]);
@@ -235,7 +239,7 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
         cout << "Saving to new tree...\n";
         string output_treefile_name = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_phi_d_recon_exc_%s.root",reaction.c_str());
         string output_tree_name = "filteredtree_phi_d_recon";
-        rdf_AllCut.Snapshot(output_tree_name.c_str(), output_treefile_name.c_str());
+        rdf_SystCut.Snapshot(output_tree_name.c_str(), output_treefile_name.c_str());
     }
 
     if (output_mode == "hist" || output_mode == "both")
@@ -349,6 +353,8 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
             hist_phi_mass_kin.Write();
             TH2D hist_phi_mass_chisq_kin                    = *rdf.Histo2D({("phi_mass_chisq_kin_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);KinFit #Chi^2/NDF", 300, 0.9, 1.5, 100, 0.0, 10.0},"phi_mass_kin","chisq_per_ndf_kin","event_weight");
             hist_phi_mass_chisq_kin.Write();
+            TH2D hist_phi_mass_minust_kin                   = *rdf.Histo2D({("phi_mass_minust_kin_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);-t (GeV^{2}/c^{2})", 300, 0.9, 1.5, 100, 0.0, 2.0},"phi_mass_kin","minust_kin","event_weight");
+            hist_phi_mass_minust_kin.Write();
             TH2D hist_phi_kinematics_kin                    = *rdf.Histo2D({("phi_kinematics_kin_"+ label).c_str(), ";p (GeV/c);#theta (deg)", 110, 0.0, 11.0, 180, 0.0, 180.0},"phi_momentum_kin","phi_theta_kin","event_weight");
             hist_phi_kinematics_kin.Write();
 
