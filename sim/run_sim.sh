@@ -2,7 +2,7 @@
 
 REACTION=$1
 EVENTS=$2
-WRAPPER_VERSION=gluex_MCwrapper_srcct-v2.10.1.1
+WRAPPER_VERSION=gluex_MCwrapper_srcct-v2.11.0
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
 gxenv $HALLD_VERSIONS/version.xml
