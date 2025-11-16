@@ -15,11 +15,11 @@ OBSERVABLE_LIST+=("dsdt" "Wcostheta" "Wphi" "WPhi" "Wpsi")
 # OBSERVABLE_LIST+=("dsdt")
 
 TAG_LIST=()
-TAG_LIST+=("nominal")
+# TAG_LIST+=("nominal")
 # TAG_LIST+=("chisquared_3" "chisquared_4" "chisquared_6" "chisquared_7")
 # TAG_LIST+=("momentum_0.35" "momentum_0.45" "theta_1.0" "theta_3.0")
 # TAG_LIST+=("vertexZ_13" "vertexZ_15" "vertexR_0.5" "vertexR_1.5")
-# TAG_LIST+=("fitfunc_quadratic" "fitfunc_none")
+TAG_LIST+=("fitfunc_quadratic" "fitfunc_none")
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
 gxenv $HALLD_VERSIONS/version.xml
