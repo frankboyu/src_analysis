@@ -356,8 +356,8 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
             hist_phi_mass_chisq_kin.Write();
             TH2D hist_phi_mass_minust_kin                   = *rdf.Histo2D({("phi_mass_minust_kin_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);-t (GeV^{2}/c^{2})", 300, 0.9, 1.5, 100, 0.0, 2.0},"phi_mass_kin","minust_kin","event_weight");
             hist_phi_mass_minust_kin.Write();
-            TH2D hist_phi_mass_miss_pminus_kin              = *rdf.Histo2D({("phi_mass_miss_pminus_kin_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);P_{miss}^{-} (GeV/c)", 300, 0.9, 1.5, 400, -0.2, 0.2},"phi_mass_kin","miss_pminus_kin","event_weight");
-            hist_phi_mass_miss_pminus_kin.Write();
+            TH2D hist_phi_mass_miss_pminus_meas             = *rdf.Histo2D({("phi_mass_miss_pminus_meas_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);P_{miss}^{-} (GeV/c)", 300, 0.9, 1.5, 400, -0.2, 0.2},"phi_mass_kin","miss_pminus_meas","event_weight");
+            hist_phi_mass_miss_pminus_meas.Write();
             TH2D hist_phi_kinematics_kin                    = *rdf.Histo2D({("phi_kinematics_kin_"+ label).c_str(), ";p (GeV/c);#theta (deg)", 110, 0.0, 11.0, 180, 0.0, 180.0},"phi_momentum_kin","phi_theta_kin","event_weight");
             hist_phi_kinematics_kin.Write();
 
