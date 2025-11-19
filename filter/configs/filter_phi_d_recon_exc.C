@@ -331,8 +331,10 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
             hist_d_dEdx_fdc_meas.Write();
             TH2D hist_d_dEdx_tof_meas                       = *rdf.Histo2D({("d_dEdx_tof_meas_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 200, 0.0, 2.0, 100, 0.0, 40},"d_momentum_meas","d_dedx_tof_keV_per_cm_meas","event_weight");
             hist_d_dEdx_tof_meas.Write();
-            TH2D hist_d_dEdx_st_meas                        = *rdf.Histo2D({("d_dEdx_st_meas_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 200, 0.0, 2.0, 100, 0.0, 20},"d_momentum_meas","d_dedx_st_keV_per_cm_meas","event_weight");
+            TH2D hist_d_dEdx_st_meas                        = *rdf.Histo2D({("d_dEdx_st_meas_"+ label).c_str(), ";p (GeV/c);dE/dx (keV/cm)", 200, 0.0, 2.0, 100, 0.0, 40},"d_momentum_meas","d_dedx_st_keV_per_cm_meas","event_weight");
             hist_d_dEdx_st_meas.Write();
+            TH2D hist_d_dEdx_cdc_st_meas                    = *rdf.Histo2D({("d_dEdx_cdc_st_meas_"+ label).c_str(), ";dE/dx CDC (keV/cm);dE/dx ST (keV/cm)", 200, 0.0, 2.0, 100, 0.0, 40},"d_dedx_cdc_keV_per_cm_meas","d_dedx_st_keV_per_cm_meas","event_weight");
+            hist_d_dEdx_cdc_st_meas.Write();
             TH2D hist_d_kinematics_meas                     = *rdf.Histo2D({("d_kinematics_meas_"+ label).c_str(), ";P_{d} (GeV/c);#theta_{d} (deg)", 200, 0.0, 2.0, 180, 0.0, 180.0},"d_momentum_meas","d_theta_meas","event_weight");
             hist_d_kinematics_meas.Write();
 
