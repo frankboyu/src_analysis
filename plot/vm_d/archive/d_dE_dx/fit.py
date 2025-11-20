@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.optimize import curve_fit
 import ROOT
+from matplotlib.backends.backend_pdf import PdfPages
 
 ROOT.gROOT.SetBatch(True)
 nObj = 0
@@ -33,14 +34,14 @@ class File:
             return h.plotPoints(**kwargs)
         else:
             raise ValueError("This is not a 1D histogram and cannot be plotted with this method")
-        
+
     def plotBand(self,name,rebin=1,scale=1,**kwargs):
         h = self.get(name,rebin=rebin,scale=scale)
         if (isinstance(h,Hist1D)):
             return h.plotBand(**kwargs)
         else:
             raise ValueError("This is not a 1D histogram and cannot be plotted with this method")
-        
+
     def plotBar(self,name,rebin=1,scale=1,**kwargs):
         h = self.get(name,rebin=rebin,scale=scale)
         if (isinstance(h,Hist1D)):
@@ -60,10 +61,10 @@ class Hist1D:
         global nObj
         self.TH1 = hist.Clone(str(nObj))
         nObj = nObj + 1
-        
+
         if (rebin != 1):
             self.TH1.Rebin(rebin)
-            
+
         g = ROOT.TGraphAsymmErrors(self.TH1)
         self.x = np.array(g.GetX())
         self.y = np.array(g.GetY())*scale
@@ -97,7 +98,7 @@ class Hist1D:
         factor = np.sum(reference.y)/np.sum(self.y)
         self.scale(factor)
         return factor
-        
+
     def plotPoints(self,**kwargs):
         return plt.errorbar(self.x,self.y,yerr=self.yerr,**kwargs)
 
@@ -110,7 +111,7 @@ class Hist1D:
 
     def plotBar(self,shift=0,**kwargs):
         bar = plt.bar(self.x+shift, self.y, **kwargs)
-        
+
         return bar
 
 class Hist2D:
@@ -118,7 +119,7 @@ class Hist2D:
         global nObj
         self.TH2 = hist.Clone(str(nObj))
         nObj = nObj + 1
-        
+
         if (rebinx != 1):
             self.TH2.RebinX(rebinx)
         if (rebiny != 1):
@@ -126,16 +127,16 @@ class Hist2D:
 
         NX = self.TH2.GetNbinsX()
         NY = self.TH2.GetNbinsY()
-    
+
         xedge = []
         yedge = []
         z = []
         zerr = []
-        
+
         for j in range(NX):
             xedge.append(self.TH2.GetXaxis().GetBinLowEdge(j+1))
         xedge.append(self.TH2.GetXaxis().GetBinUpEdge(NX))
-    
+
         for i in range(NY):
             yedge.append(self.TH2.GetYaxis().GetBinLowEdge(i+1))
             zcol = []
@@ -147,17 +148,20 @@ class Hist2D:
             z.append(zcol)
             zerr.append(zerrcol)
         yedge.append(self.TH2.GetYaxis().GetBinUpEdge(NY))
-            
+
         self.xedge = np.array(xedge)
         self.yedge = np.array(yedge)
         self.z = np.array(z)
         self.zerr = np.array(zerr)
-    
-    def plotHeatmap(self,kill_zeros=True,**kwargs):
+
+    def plotHeatmap(self,kill_zeros=True,log_scale=False,**kwargs):
         z = self.z
         if (kill_zeros):
             z[z==0] = np.nan
-        return plt.pcolormesh(self.xedge,self.yedge,self.z,**kwargs)
+        if (log_scale):
+            return plt.pcolormesh(self.xedge,self.yedge,np.log10(self.z),**kwargs)
+        else:
+            return plt.pcolormesh(self.xedge,self.yedge,self.z,**kwargs)
 
     def projectionX(self,**kwargs):
         return Hist1D(self.TH2.ProjectionX(),**kwargs)
@@ -165,60 +169,128 @@ class Hist2D:
     def projectionY(self,**kwargs):
         return Hist1D(self.TH2.ProjectionY(),**kwargs)
 
-
-# def exponential(x, a, b, c, d, e):
-#     return np.exp(a*x+b)+c*x*x+d*x+e
-
 def exponential(x, a, b, c):
     return np.exp(a*x+b)+c
 
-points = np.loadtxt('points_cdc.txt', delimiter=',', skiprows=1)
+def double_exponential(x, a, b, c, d, e):
+    return np.exp(a*x+b)+np.exp(c*x+d)+e
 
-popt, pcov = curve_fit(exponential, points[:,0], points[:,1])
-print(popt)
+def gaussian(x, a, b, c):
+    return a*np.exp(-0.5*((x-b)/c)**2)
 
-file_data = File("../../../filter/output/filteredhist_phi_d_recon_exc_data_2H.root")
 
-hist_data = file_data.get('NoCut/d_dEdx_cdc_meas_NoCut')
-hist_data.plotHeatmap(label="CDC", vmin=0, vmax=100)
+file_data = File("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_recon_exc_data_2H_ver12_nocut.root")
+hist_data = file_data.get('NominalCut/d_dEdx_cdc_meas_NominalCut')
+pdf = PdfPages('fit_cdc.pdf')
+
+dedx_points = np.arange(0, 40, 0.01)
+dedx_p_edges = np.array([45, 50, 52.5, 55, 60, 65, 70, 75, 80, 90, 100, 120, 140, 200], dtype=int)
+dedx_p_low = dedx_p_edges[:-1]
+dedx_p_high = dedx_p_edges[1:]
+dedx_p_centers = (dedx_p_low + dedx_p_high)/2
+dedx_p_mean = np.array([])
+dedx_p_sigma = np.array([])
+
+for i in range(len(dedx_p_edges)-1):
+    plt.figure(figsize=(8,6))
+    hist_slice = Hist1D(hist_data.TH2.ProjectionY("_px",int(dedx_p_edges[i]),int(dedx_p_edges[i+1])))
+    if (i < 1):
+        hist_slice.rebin(4)
+    elif (i < 8):
+        hist_slice.rebin(2)
+    hist_slice.plotPoints()
+    p0_count = hist_slice.y.max()
+    p0_mean = np.average(hist_slice.x , weights=hist_slice.y)
+    popt, pcov = curve_fit(gaussian, hist_slice.x, hist_slice.y, p0=[p0_count+4,p0_mean,4])
+    dedx_p_mean = np.append(dedx_p_mean, popt[1])
+    dedx_p_sigma = np.append(dedx_p_sigma, abs(popt[2]))
+    plt.plot(dedx_points, gaussian(dedx_points, *popt), label="Gaussian Fit", color='red')
+    plt.xlabel(r'$dE/dx$ (keV/cm)')
+    plt.ylabel('Counts')
+    plt.legend()
+    pdf.savefig()
+    plt.close()
+
+hist_data = file_data.get('dEdxCut/d_dEdx_cdc_meas_dEdxCut')
+
+plt.figure(figsize=(8,6))
+hist_data.plotHeatmap(log_scale=True, vmin=0, vmax=5, cmap='jet')
+popt, pcov = curve_fit(exponential, dedx_p_centers/100, dedx_p_mean-2.0*dedx_p_sigma)
 p_points = np.arange(0.25, 3, 0.01)
-
 dE_points = exponential(p_points, *popt)
-plt.plot(p_points, dE_points, label="Fit")
-
-dE_points = np.exp(-3.3*p_points+4.1)+2.3
-plt.plot(p_points, dE_points, label="-3.3, 4.1, 2.3")
-
+# plt.plot(p_points, dE_points, label="Fit", color='red')
+# plt.errorbar(dedx_p_centers/100, dedx_p_mean, yerr=2.0*dedx_p_sigma, xerr=(dedx_p_high-dedx_p_low)/200, fmt='ro', label='Mean', markersize=5)
+plt.title('2.0 Sigma Band Fit')
 plt.xlim(0,2)
 plt.ylim(0,40)
 plt.xlabel(r'$p$ (GeV/c)')
 plt.ylabel(r'$dE/dx$ (keV/cm)')
-plt.legend(loc='upper right')
-plt.savefig("fit_cdc.png")
+pdf.savefig()
+plt.close()
+
+para_list = []
+popt, pcov = curve_fit(exponential, dedx_p_centers/100, dedx_p_mean-1.0*dedx_p_sigma)
+para_list.append(popt)
+popt, pcov = curve_fit(exponential, dedx_p_centers/100, dedx_p_mean-1.5*dedx_p_sigma)
+para_list.append(popt)
+popt, pcov = curve_fit(exponential, dedx_p_centers/100, dedx_p_mean-2.0*dedx_p_sigma)
+para_list.append(popt)
+popt, pcov = curve_fit(exponential, dedx_p_centers/100, dedx_p_mean-2.5*dedx_p_sigma)
+para_list.append(popt)
+popt, pcov = curve_fit(exponential, dedx_p_centers/100, dedx_p_mean-3.0*dedx_p_sigma)
+para_list.append(popt)
+
+plt.figure(figsize=(8,6))
+hist_data.plotHeatmap(log_scale=True, vmin=0, vmax=5, cmap='jet')
+p_points = np.arange(0.25, 3, 0.01)
+dE_points = exponential(p_points, *para_list[0])
+plt.plot(p_points, dE_points, label=r'$1.0 \sigma, p_1=%.2f, p_2=%.2f, p_3=%.2f$' % (para_list[0][0], np.sqrt(para_list[0][1]), para_list[0][2]), color='green')
+plt.scatter(dedx_p_centers/100, dedx_p_mean-dedx_p_sigma, color='green', marker='o', s=10)
+dE_points = exponential(p_points, *para_list[1])
+plt.plot(p_points, dE_points, label=r'$1.5 \sigma, p_1=%.2f, p_2=%.2f, p_3=%.2f$' % (para_list[1][0], np.sqrt(para_list[1][1]), para_list[1][2]), color='cyan')
+plt.scatter(dedx_p_centers/100, dedx_p_mean-1.5*dedx_p_sigma, color='cyan', marker='o', s=10)
+dE_points = exponential(p_points, *para_list[2])
+plt.plot(p_points, dE_points, label=r'$2.0 \sigma, p_1=%.2f, p_2=%.2f, p_3=%.2f$' % (para_list[2][0], np.sqrt(para_list[2][1]), para_list[2][2]), color='red')
+plt.scatter(dedx_p_centers/100, dedx_p_mean-2.0*dedx_p_sigma, color='red', marker='o', s=10)
+dE_points = exponential(p_points, *para_list[3])
+plt.plot(p_points, dE_points, label=r'$2.5 \sigma, p_1=%.2f, p_2=%.2f, p_3=%.2f$' % (para_list[3][0], np.sqrt(para_list[3][1]), para_list[3][2]), color='orange')
+plt.scatter(dedx_p_centers/100, dedx_p_mean-2.5*dedx_p_sigma, color='orange', marker='o', s=10)
+dE_points = exponential(p_points, *para_list[4])
+plt.plot(p_points, dE_points, label=r'$3.0 \sigma, p_1=%.2f, p_2=%.2f, p_3=%.2f$' % (para_list[4][0], np.sqrt(para_list[4][1]), para_list[4][2]), color='yellow')
+plt.scatter(dedx_p_centers/100, dedx_p_mean-3.0*dedx_p_sigma, color='yellow', marker='o', s=10)
+plt.xlim(0,2)
+plt.ylim(0,40)
+plt.xlabel(r'$p$ (GeV/c)')
+plt.ylabel(r'$dE/dx$ (keV/cm)')
+plt.legend()
+pdf.savefig()
 plt.close()
 
 
-points = np.loadtxt('points_st.txt', delimiter=',', skiprows=1)
 
-popt, pcov = curve_fit(exponential, points[:,0], points[:,1])
-print(popt)
+# points = np.loadtxt('points_st.txt', delimiter=',', skiprows=1)
 
-file_data = File("../../../filter/output/filteredhist_phi_d_recon_exc_data_2H.root")
+# popt, pcov = curve_fit(exponential, points[:,0], points[:,1])
+# print(popt)
 
-hist_data = file_data.get('NoCut/d_dEdx_st_meas_NoCut')
-hist_data.plotHeatmap(label="ST", vmin=0, vmax=100)
-p_points = np.arange(0.25, 3, 0.01)
+# hist_data = file_data.get('DeuterondEdxST_After')
+# hist_data.plotHeatmap(label="ST", vmin=0, vmax=500)
+# p_points = np.arange(0.25, 3, 0.01)
 
-dE_points = exponential(p_points, *popt)
-plt.plot(p_points, dE_points, label="Fit")
+# dE_points = exponential(p_points, *popt)
+# plt.plot(p_points, dE_points, label="Fit")
 
-dE_points = np.exp(-1.9*p_points+2.8)+0.6
-plt.plot(p_points, dE_points, label="-1.9, 2.8, 0.6")
+# dE_points = np.exp(-1.9*p_points+2.8)+0.6
+# plt.plot(p_points, dE_points, label="-1.9, 2.8, 0.6")
 
-plt.xlim(0,2)
-plt.ylim(0,20)
-plt.xlabel(r'$p$ (GeV/c)')
-plt.ylabel(r'$dE/dx$ (keV/cm)')
-plt.legend(loc='upper right')
+# plt.plot([0.4, 0.4], [0, 40], 'r-', label='p cut')
 
-plt.savefig("fit_st.png")
+# plt.xlim(0,2)
+# plt.ylim(0,20)
+# plt.xlabel(r'$p$ (GeV/c)')
+# plt.ylabel(r'$dE/dx$ (keV/cm)')
+# plt.legend(loc='upper right')
+
+# plt.savefig("fit_st.png", dpi=300)
+
+pdf.close()
