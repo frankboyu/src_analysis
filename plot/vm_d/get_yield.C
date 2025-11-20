@@ -13,10 +13,16 @@ using namespace ROOT::Detail::RDF;
 double mass_kaon = 0.493677;
 
 Double_t rel_bw_plus_linear(Double_t *x, Double_t *par);
+Double_t rel_bw_plus_fulllinear(Double_t *x, Double_t *par);
 Double_t rel_bw_plus_quadratic(Double_t *x, Double_t *par);
+Double_t rel_bw_plus_fullquadratic(Double_t *x, Double_t *par);
+Double_t rel_bw_plus_phenomenological(Double_t *x, Double_t *par);
 Double_t rel_bw(Double_t *x, Double_t *par);
 Double_t linear(Double_t *x, Double_t *par);
+Double_t fulllinear(Double_t *x, Double_t *par);
 Double_t quadratic(Double_t *x, Double_t *par);
+Double_t fullquadratic(Double_t *x, Double_t *par);
+Double_t phenomenological(Double_t *x, Double_t *par);
 
 int get_yield(string channel, string reaction, string observable, string tag)
 {
@@ -35,13 +41,29 @@ int get_yield(string channel, string reaction, string observable, string tag)
     auto rdf_input = RNode(rdf_raw);
     if (reaction.find("recon") != string::npos)
     {
-        string KinematicsCut    = "kp_momentum_meas > 0.40 && km_momentum_meas > 0.40 && d_momentum_meas > 0.40 && kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
-        string dEdxCut          = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.43*d_momentum_meas+4.18) + TMath::Exp(-33.56*d_momentum_meas+14.12) + 2.38)";
-        string VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.0";
+        string dEdxCut          = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.65*d_momentum_meas+2.12) + 2.57)";
+        string MissPMinusCut    = "miss_pminus_meas > -0.02";
         string KinFitChiSqCut   = "chisq_per_ndf_kin < 5.0";
-        string PhiMassCut       = "phi_mass_kin < 1.10";
+        string KinematicsCut    = "kp_momentum_meas > 0.45 && km_momentum_meas > 0.45 && d_momentum_meas > 0.45 && kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
+        string VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.0";
 
-        if (tag == "chisquared_3")
+        if      (tag == "dEdx_1.0")
+            dEdxCut         = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-4.01*d_momentum_meas+4.88) + 3.26)";
+        else if (tag == "dEdx_1.5")
+            dEdxCut         = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.85*d_momentum_meas+4.69) + 2.92)";
+        else if (tag == "dEdx_2.5")
+            dEdxCut         = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.41*d_momentum_meas+4.21) + 2.21)";
+        else if (tag == "dEdx_3.0")
+            dEdxCut         = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.11*d_momentum_meas+3.90) + 1.83)";
+        else if (tag == "misspminus_0.010")
+            MissPMinusCut   = "miss_pminus_meas > -0.010";
+        else if (tag == "misspminus_0.015")
+            MissPMinusCut   = "miss_pminus_meas > -0.015";
+        else if (tag == "misspminus_0.025")
+            MissPMinusCut   = "miss_pminus_meas > -0.025";
+        else if (tag == "misspminus_0.030")
+            MissPMinusCut   = "miss_pminus_meas > -0.030";
+        else if (tag == "chisquared_3")
             KinFitChiSqCut   = "chisq_per_ndf_kin < 3.0";
         else if (tag == "chisquared_4")
             KinFitChiSqCut   = "chisq_per_ndf_kin < 4.0";
@@ -49,22 +71,38 @@ int get_yield(string channel, string reaction, string observable, string tag)
             KinFitChiSqCut   = "chisq_per_ndf_kin < 6.0";
         else if (tag == "chisquared_7")
             KinFitChiSqCut   = "chisq_per_ndf_kin < 7.0";
-        else if (tag == "momentum_0.35")
-            KinematicsCut    = "kp_momentum_meas > 0.35 && km_momentum_meas > 0.35 && d_momentum_meas > 0.35 && kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
-        else if (tag == "momentum_0.45")
-            KinematicsCut    = "kp_momentum_meas > 0.45 && km_momentum_meas > 0.45 && d_momentum_meas > 0.45 && kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
+        else if (tag == "momentum_0.400")
+            KinematicsCut    = "kp_momentum_meas > 0.400 && km_momentum_meas > 0.400 && d_momentum_meas > 0.400 && kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
+        else if (tag == "momentum_0.425")
+            KinematicsCut    = "kp_momentum_meas > 0.425 && km_momentum_meas > 0.425 && d_momentum_meas > 0.425 && kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
+        else if (tag == "momentum_0.475")
+            KinematicsCut    = "kp_momentum_meas > 0.475 && km_momentum_meas > 0.475 && d_momentum_meas > 0.475 && kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
+        else if (tag == "momentum_0.500")
+            KinematicsCut    = "kp_momentum_meas > 0.500 && km_momentum_meas > 0.500 && d_momentum_meas > 0.500 && kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
         else if (tag == "theta_1.0")
             KinematicsCut    = "kp_momentum_meas > 0.40 && km_momentum_meas > 0.40 && d_momentum_meas > 0.40 && kp_theta_meas > 1.0 && km_theta_meas > 1.0 && d_theta_meas > 1.0";
+        else if (tag == "theta_1.5")
+            KinematicsCut    = "kp_momentum_meas > 0.40 && km_momentum_meas > 0.40 && d_momentum_meas > 0.40 && kp_theta_meas > 1.5 && km_theta_meas > 1.5 && d_theta_meas > 1.5";
+        else if (tag == "theta_2.5")
+            KinematicsCut    = "kp_momentum_meas > 0.40 && km_momentum_meas > 0.40 && d_momentum_meas > 0.40 && kp_theta_meas > 2.5 && km_theta_meas > 2.5 && d_theta_meas > 2.5";
         else if (tag == "theta_3.0")
             KinematicsCut    = "kp_momentum_meas > 0.40 && km_momentum_meas > 0.40 && d_momentum_meas > 0.40 && kp_theta_meas > 3.0 && km_theta_meas > 3.0 && d_theta_meas > 3.0";
-        else if (tag == "vertexZ_13")
+        else if (tag == "vertexZ_13.0")
             VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 13.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.0";
-        else if (tag == "vertexZ_15")
+        else if (tag == "vertexZ_13.5")
+            VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 13.5 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.0";
+        else if (tag == "vertexZ_14.5")
+            VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.5 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.0";
+        else if (tag == "vertexZ_15.0")
             VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 15.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.0";
-        else if (tag == "vertexR_0.5")
-            VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 0.5";
-        else if (tag == "vertexR_1.5")
-            VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.5";
+        else if (tag == "vertexR_0.50")
+            VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 0.50";
+        else if (tag == "vertexR_0.75")
+            VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 0.75";
+        else if (tag == "vertexR_1.25")
+            VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.25";
+        else if (tag == "vertexR_1.50")
+            VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.50";
 
         rdf_input = rdf_input.Filter(KinematicsCut.c_str()).Filter(dEdxCut.c_str()).Filter(VertexCut.c_str()).Filter(KinFitChiSqCut.c_str()).Filter(PhiMassCut.c_str()).Define("event_weight_squared", "event_weight*event_weight");
     }
@@ -320,6 +358,50 @@ Double_t rel_bw_plus_linear(Double_t *x, Double_t *par)
     return par[0] * convol_sum + slope * (x[0] - 2*mass_kaon);
 }
 
+Double_t rel_bw_plus_fulllinear(Double_t *x, Double_t *par)
+{
+    // Relativistic Breit-Wigner with Blatt-Weisskopf factor, plus a linear background function
+    // par[0] = BW amplitude, par[1] = BW pole mass, par[2] = BW pole width, par[3] = Gaussian width, par[4] = linear slope
+
+    Double_t M0 = par[1];
+    Double_t Gamma0 = par[2];
+    Double_t sigma = par[3];
+    Double_t slope = par[4];
+    Double_t intercept = par[5];
+    Int_t L = 1;
+    Double_t convol_sum = 0.0;
+    Double_t convol_range = 10.0;
+    Double_t convol_step = 0.001;
+
+    for (double xprime = x[0]-convol_range; xprime < x[0]+convol_range; xprime += convol_step)
+    {
+        if (xprime < 2*mass_kaon)
+            continue;
+
+        // Kaon mass and momentum calculations
+        Double_t mk = mass_kaon;
+        Double_t q = sqrt((xprime*xprime - 4*mk*mk)/4); // momentum of kaon in phi rest frame
+        Double_t q0 = sqrt((M0*M0 - 4*mk*mk)/4);     // momentum at pole mass
+
+        // Blatt-Weisskopf barrier factor squared
+        Double_t R0 = 5.0677; // interaction radius in GeV^-1
+        Double_t z = q * R0;
+        Double_t z0 = q0 * R0;
+        Double_t BL = (1 + z0*z0) / (1 + z*z);
+
+        // Mass-dependent width
+        Double_t Gamma = Gamma0 * (q/q0) * (q/q0) * (q/q0) * (M0/xprime) * BL;
+
+        // Relativistic Breit-Wigner
+        Double_t denominator = (xprime*xprime - M0*M0)*(xprime*xprime - M0*M0) + M0*M0*Gamma*Gamma;
+
+        convol_sum += (2 / TMath::Pi()) * xprime * M0 * Gamma / denominator * TMath::Gaus(x[0]-xprime, 0, sigma, true) * convol_step;
+    }
+
+    // return par[0] * convol_sum + slope * (x[0] - 2*mass_kaon);
+    return par[0] * convol_sum + slope*x[0] + intercept;
+}
+
 Double_t rel_bw_plus_quadratic(Double_t *x, Double_t *par)
 {
     // Relativistic Breit-Wigner with Blatt-Weisskopf factor, plus a quadratic background function
@@ -361,6 +443,91 @@ Double_t rel_bw_plus_quadratic(Double_t *x, Double_t *par)
 
     // return par[0] * convol_sum + slope * (x[0] - 2*mass_kaon);
     return par[0] * convol_sum + par[4] * (x[0]*x[0] - 4*mass_kaon*mass_kaon);
+}
+
+Double_t rel_bw_plus_fullquadratic(Double_t *x, Double_t *par)
+{
+    // Relativistic Breit-Wigner with Blatt-Weisskopf factor, plus a quadratic background function
+    // par[0] = BW amplitude, par[1] = BW pole mass, par[2] = BW pole width, par[3] = Gaussian width, par[4] = linear slope, par[5] = quadratic coefficient
+
+    Double_t M0 = par[1];
+    Double_t Gamma0 = par[2];
+    Double_t sigma = par[3];
+
+    Int_t L = 1;
+    Double_t convol_sum = 0.0;
+    Double_t convol_range = 10.0;
+    Double_t convol_step = 0.001;
+
+    for (double xprime = x[0]-convol_range; xprime < x[0]+convol_range; xprime += convol_step)
+    {
+        if (xprime < 2*mass_kaon)
+            continue;
+
+        // Kaon mass and momentum calculations
+        Double_t mk = mass_kaon;
+        Double_t q = sqrt((xprime*xprime - 4*mk*mk)/4); // momentum of kaon in phi rest frame
+        Double_t q0 = sqrt((M0*M0 - 4*mk*mk)/4);     // momentum at pole mass
+
+        // Blatt-Weisskopf barrier factor squared
+        Double_t R0 = 5.0677; // interaction radius in GeV^-1
+        Double_t z = q * R0;
+        Double_t z0 = q0 * R0;
+        Double_t BL = (1 + z0*z0) / (1 + z*z);
+
+        // Mass-dependent width
+        Double_t Gamma = Gamma0 * (q/q0) * (q/q0) * (q/q0) * (M0/xprime) * BL;
+
+        // Relativistic Breit-Wigner
+        Double_t denominator = (xprime*xprime - M0*M0)*(xprime*xprime - M0*M0) + M0*M0*Gamma*Gamma;
+
+        convol_sum += (2 / TMath::Pi()) * xprime * M0 * Gamma / denominator * TMath::Gaus(x[0]-xprime, 0, sigma, true) * convol_step;
+    }
+
+    // return par[0] * convol_sum + slope * (x[0] - 2*mass_kaon);
+    return par[0] * convol_sum + par[4]*x[0]*x[0] + par[5]*x[0] + par[6];
+}
+
+Double_t rel_bw_plus_phenomenological(Double_t *x, Double_t *par)
+{
+    // Relativistic Breit-Wigner with Blatt-Weisskopf factor, plus a quadratic background function
+    // par[0] = BW amplitude, par[1] = BW pole mass, par[2] = BW pole width, par[3] = Gaussian width, par[4] = nonlinear coefficient, par[5] = quadratic coefficient
+
+    Double_t M0 = par[1];
+    Double_t Gamma0 = par[2];
+    Double_t sigma = par[3];
+
+    Int_t L = 1;
+    Double_t convol_sum = 0.0;
+    Double_t convol_range = 10.0;
+    Double_t convol_step = 0.001;
+
+    for (double xprime = x[0]-convol_range; xprime < x[0]+convol_range; xprime += convol_step)
+    {
+        if (xprime < 2*mass_kaon)
+            continue;
+
+        // Kaon mass and momentum calculations
+        Double_t mk = mass_kaon;
+        Double_t q = sqrt((xprime*xprime - 4*mk*mk)/4); // momentum of kaon in phi rest frame
+        Double_t q0 = sqrt((M0*M0 - 4*mk*mk)/4);     // momentum at pole mass
+
+        // Blatt-Weisskopf barrier factor squared
+        Double_t R0 = 5.0677; // interaction radius in GeV^-1
+        Double_t z = q * R0;
+        Double_t z0 = q0 * R0;
+        Double_t BL = (1 + z0*z0) / (1 + z*z);
+
+        // Mass-dependent width
+        Double_t Gamma = Gamma0 * (q/q0) * (q/q0) * (q/q0) * (M0/xprime) * BL;
+
+        // Relativistic Breit-Wigner
+        Double_t denominator = (xprime*xprime - M0*M0)*(xprime*xprime - M0*M0) + M0*M0*Gamma*Gamma;
+
+        convol_sum += (2 / TMath::Pi()) * xprime * M0 * Gamma / denominator * TMath::Gaus(x[0]-xprime, 0, sigma, true) * convol_step;
+    }
+
+    return par[0] * convol_sum + par[4] * sqrt(x[0]*x[0] - 4*mass_kaon*mass_kaon) + par[5] * (x[0]*x[0] - 4*mass_kaon*mass_kaon);
 }
 
 Double_t rel_bw(Double_t *x, Double_t *par)
@@ -410,10 +577,43 @@ Double_t linear(Double_t *x, Double_t *par)
     return par[0] * (x[0] - 2*mass_kaon);
 }
 
-Double_t quadratic(Double_t *x, Double_t *par)
+Double_t fulllinear(Double_t *x, Double_t *par)
 {
     // par[0] = linear slope
     // par[1] = linear intercept
+    return par[0] * x[0] + par[1];
+}
+
+Double_t quadratic(Double_t *x, Double_t *par)
+{
+    // par[0] = quadratic coefficient
+    double mass_kaon = 0.493677;
+    Double_t quadratic;
+    if (x[0] < 2*mass_kaon)
+        quadratic = 0.0;
+    else
+        quadratic = par[0] * (x[0]*x[0] - 4*mass_kaon*mass_kaon);
+    return quadratic;
+}
+
+Double_t fullquadratic(Double_t *x, Double_t *par)
+{
+    // par[0] = quadratic coefficient
+    // par[1] = linear coefficient
+    // par[2] = constant term
+    double mass_kaon = 0.493677;
+    Double_t quadratic;
+    if (x[0] < 2*mass_kaon)
+        quadratic = 0.0;
+    else
+        quadratic = par[0]*x[0]*x[0] + par[1]*x[0] + par[2];
+    return quadratic;
+}
+
+Double_t phenomenological(Double_t *x, Double_t *par)
+{
+    // par[0] = nonlinear coefficient
+    // par[1] = quadratic coefficient
     double mass_kaon = 0.493677;
     Double_t quadratic;
     if (x[0] < 2*mass_kaon)
