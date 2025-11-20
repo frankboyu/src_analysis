@@ -7,19 +7,23 @@ CHANNEL_LIST+=("phi_d")
 # CHANNEL_LIST+=("rho_d")
 
 REACTION_LIST=()
-# REACTION_LIST+=("recon_exc_data_2H" "recon_exc_sim_2H" "thrown_exc_tagged_2H")
-REACTION_LIST+=("recon_exc_data_2H")
+REACTION_LIST+=("recon_exc_data_2H" "recon_exc_sim_2H" "thrown_exc_tagged_2H")
+# REACTION_LIST+=("recon_exc_data_2H")
 
 OBSERVABLE_LIST=()
-OBSERVABLE_LIST+=("dsdt" "Wcostheta" "Wphi" "WPhi" "Wpsi")
-# OBSERVABLE_LIST+=("dsdt")
+# OBSERVABLE_LIST+=("dsdt" "Wcostheta" "Wphi" "WPhi" "Wpsi")
+OBSERVABLE_LIST+=("dsdt")
 
 TAG_LIST=()
 # TAG_LIST+=("nominal")
+# TAG_LIST+=("dEdx_1.0" "dEdx_1.5" "dEdx_2.5" "dEdx_3.0")
+# TAG_LIST+=("misspminus_0.010" "misspminus_0.015" "misspminus_0.025" "misspminus_0.030")
 # TAG_LIST+=("chisquared_3" "chisquared_4" "chisquared_6" "chisquared_7")
-# TAG_LIST+=("momentum_0.35" "momentum_0.45" "theta_1.0" "theta_3.0")
-# TAG_LIST+=("vertexZ_13" "vertexZ_15" "vertexR_0.5" "vertexR_1.5")
-TAG_LIST+=("fitfunc_quadratic" "fitfunc_none")
+# TAG_LIST+=("momentum_0.400" "momentum_0.425" "momentum_0.475" "momentum_0.500")
+# TAG_LIST+=("theta_1.0" "theta_1.5" "theta_2.5" "theta_3.0")
+# TAG_LIST+=("vertexZ_13.0" "vertexZ_13.5" "vertexZ_14.5" "vertexZ_15.0")
+TAG_LIST+=("vertexR_0.50" "vertexR_0.75" "vertexR_1.25" "vertexR_1.50")
+TAG_LIST+=("fitfunc_quadratic")
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
 gxenv $HALLD_VERSIONS/version.xml
@@ -37,7 +41,7 @@ do
                 if [[ "$REACTION" == *"sim"* && "$TAG" == *"fitfunc"* ]]; then
                     continue
                 fi
-                echo "Processing CHANNEL: $CHANNEL, REACTION: $REACTION, OBSERVABLE: $OBSERVABLE, TAG: $TAG"
+                # echo "Processing CHANNEL: $CHANNEL, REACTION: $REACTION, OBSERVABLE: $OBSERVABLE, TAG: $TAG"
                 root -b -q -l "get_yield.C(\"$CHANNEL\", \"$REACTION\", \"$OBSERVABLE\", \"$TAG\")"
             done
         done
