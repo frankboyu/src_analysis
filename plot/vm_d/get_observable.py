@@ -46,23 +46,12 @@ phi_d_2H_dsdt_energy_low            = np.loadtxt('output/yield_phi_d/yield_phi_d
 phi_d_2H_dsdt_energy_high           = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,3]
 phi_d_2H_dsdt_energy_center         = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,0]
 phi_d_2H_dsdt_energy_width          = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,1]
-phi_d_2H_dsdt_energy_middle         = (phi_d_2H_dsdt_energy_high + phi_d_2H_dsdt_energy_low)/2
-phi_d_2H_dsdt_energy_size           = (phi_d_2H_dsdt_energy_high - phi_d_2H_dsdt_energy_low)/2
 phi_d_2H_dsdt_minust_low            = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,6]
 phi_d_2H_dsdt_minust_high           = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,7]
 phi_d_2H_dsdt_minust_center         = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,4]
 phi_d_2H_dsdt_minust_width          = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,5]
-phi_d_2H_dsdt_minust_middle         = (phi_d_2H_dsdt_minust_high + phi_d_2H_dsdt_minust_low)/2
-phi_d_2H_dsdt_minust_size           = (phi_d_2H_dsdt_minust_high - phi_d_2H_dsdt_minust_low)/2
 
 # Read the yield numbers
-# phi_d_2H_dsdt_yield_data            = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt.txt')[:,8]
-# phi_d_2H_dsdt_yield_sim             = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_dsdt.txt')[:,8]
-# phi_d_2H_dsdt_yield_tagged          = np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_dsdt.txt')[:,8]
-# phi_d_2H_dsdt_yield_data_statserr   = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt.txt')[:,9]/phi_d_2H_dsdt_yield_data
-# phi_d_2H_dsdt_yield_sim_statserr    = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_dsdt.txt')[:,9]/phi_d_2H_dsdt_yield_sim
-# phi_d_2H_dsdt_yield_tagged_statserr = np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_dsdt.txt')[:,9]/phi_d_2H_dsdt_yield_tagged
-
 phi_d_2H_dsdt_yield_data            = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,8]
 phi_d_2H_dsdt_yield_sim             = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_dsdt_nominal.txt')[:,8]
 phi_d_2H_dsdt_yield_tagged          = np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_dsdt_nominal.txt')[:,8]
@@ -73,7 +62,8 @@ phi_d_2H_dsdt_efficiency            = phi_d_2H_dsdt_yield_sim/phi_d_2H_dsdt_yiel
 phi_d_2H_dsdt_efficiency_statserr   = np.sqrt(phi_d_2H_dsdt_yield_sim_statserr**2 + phi_d_2H_dsdt_yield_tagged_statserr**2)
 phi_d_2H_dsdt_results               = phi_d_2H_dsdt_yield_data/phi_d_2H_dsdt_efficiency/lumi(phi_d_2H_dsdt_energy_low, phi_d_2H_dsdt_energy_high, 28)/(phi_d_2H_dsdt_minust_high-phi_d_2H_dsdt_minust_low)/0.489/1000
 phi_d_2H_dsdt_results_statserr      = phi_d_2H_dsdt_results*np.sqrt(phi_d_2H_dsdt_yield_data_statserr**2 + phi_d_2H_dsdt_efficiency_statserr**2)
-for tag in ['chisquared_3', 'chisquared_4', 'chisquared_6', 'chisquared_7', 'momentum_0.35', 'momentum_0.45', 'theta_1.0', 'theta_3.0', 'vertexZ_13', 'vertexZ_15', 'vertexR_0.5', 'vertexR_1.5', 'fitfunc_quadratic', 'fitfunc_none']:
+tag_list = ['chisquared_3', 'chisquared_4', 'chisquared_6', 'chisquared_7', 'momentum_0.35', 'momentum_0.45', 'theta_1.0', 'theta_3.0', 'vertexZ_13', 'vertexZ_15', 'vertexR_0.5', 'vertexR_1.5', 'fitfunc_quadratic', 'fitfunc_none']
+for tag in tag_list:
     phi_d_2H_dsdt_yield_data                = np.vstack((phi_d_2H_dsdt_yield_data,              np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_'+tag+'.txt')[:,8]))
     phi_d_2H_dsdt_yield_data_statserr       = np.vstack((phi_d_2H_dsdt_yield_data_statserr,     np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_'+tag+'.txt')[:,9]/phi_d_2H_dsdt_yield_data[-1,:]))
     if tag == 'fitfunc_quadratic' or tag == 'fitfunc_none':
@@ -97,11 +87,6 @@ for tag in ['chisquared_3', 'chisquared_4', 'chisquared_6', 'chisquared_7', 'mom
 
     phi_d_2H_dsdt_results_statserr          = np.vstack((phi_d_2H_dsdt_results_statserr,        phi_d_2H_dsdt_results[-1,:]*np.sqrt(phi_d_2H_dsdt_yield_data_statserr[-1,:]**2 + phi_d_2H_dsdt_efficiency_statserr[-1,:]**2)))
 
-# phi_d_2H_dsdt_minust_center_none         = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_none.txt')[:,4]
-# phi_d_2H_dsdt_yield_data_none            = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_none.txt')[:,8]
-# phi_d_2H_dsdt_yield_data_linear            = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_linear.txt')[:,8]
-# phi_d_2H_dsdt_yield_data_quadratic            = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_quadratic.txt')[:,8]
-
 # Find the indices for the different energy and t bins
 index = []
 for i in range(len(phi_d_2H_dsdt_results[0,:])):
@@ -112,7 +97,6 @@ for i in range(len(phi_d_2H_dsdt_results[0,:])):
     else:
         if (phi_d_2H_dsdt_energy_low[i] != phi_d_2H_dsdt_energy_low[i-1]):
             index.append(i)
-
 print(index)
 
 # Data points from CLAS
@@ -156,32 +140,10 @@ plt.title(r"$d(\gamma, \phi d')$ yield vs $-t$")
 plt.xlabel(r'$-t[GeV^2/c]$')
 plt.ylabel(r'$\mathrm{Yield}$')
 plt.xlim(0, 2)
-plt.ylim(0, 200)
+plt.ylim(0, 300)
 plt.legend()
 file_pdf.savefig()
 plt.close()
-
-# fig = plt.figure(figsize=(8, 6), dpi=300)
-# plt.errorbar(phi_d_2H_dsdt_minust_center_none, (phi_d_2H_dsdt_yield_data_none - phi_d_2H_dsdt_yield_data_linear)/phi_d_2H_dsdt_yield_data_none, fmt='b.')
-# plt.title("Background contamination in signal region")
-# plt.xlabel(r'$-t[GeV^2/c]$')
-# plt.ylabel('Background/All')
-# plt.xlim(0, 2)
-# plt.ylim(0, 0.2)
-# plt.legend()
-# file_pdf.savefig()
-# plt.close()
-
-# fig = plt.figure(figsize=(8, 6), dpi=300)
-# plt.errorbar(phi_d_2H_dsdt_minust_center_none, 100*(phi_d_2H_dsdt_yield_data_quadratic - phi_d_2H_dsdt_yield_data_linear)/phi_d_2H_dsdt_yield_data_quadratic, fmt='r.')
-# plt.title("Yield difference between linear and quadratic background function")
-# plt.xlabel(r'$-t[GeV^2/c]$')
-# plt.ylabel('Relative difference (%)')
-# plt.xlim(0, 2)
-# plt.ylim(-1.0, 1.0)
-# plt.legend()
-# file_pdf.savefig()
-# plt.close()
 
 # Plot the efficiency
 fig = plt.figure(figsize=(8, 6), dpi=300)
@@ -222,12 +184,39 @@ plt.legend()
 file_pdf.savefig()
 plt.close()
 
-fig = plt.figure(figsize=(8, 6), dpi=300)
+fig = plt.figure(figsize=(12, 12), dpi=300)
+gs = fig.add_gridspec(2, 2)
+axs = gs.subplots()
+color_list = ['r', 'g', 'b', 'c', 'm', 'y', 'k', 'orange', 'purple', 'brown', 'pink', 'gray', 'olive', 'lime']
+label_list = [r'$\chi^2$/NDF < 3', r'$\chi^2$/NDF < 4', r'$\chi^2$/NDF < 6', r'$\chi^2$/NDF < 7', r'$p$ > 0.35 GeV', r'$p$ > 0.45 GeV', r'$\theta$ > 1.0 deg', r'$\theta$ > 3.0 deg', r'|$Z-Z_{center}$| < 13 cm', r'|$Z-Z_{center}$| < 15 cm', r'$R$ < 0.5 cm', r'$R$ < 1.5 cm', r'Fit function: quadratic', r'Fit function: none']
+title_list = [r'Kinematic fitting $\chi^2$/NDF ', 'Particle kinematics', 'Vertex', 'Fitting function']
 for i in range(1, phi_d_2H_dsdt_yield_data_statserr.shape[0]):
-    for j in range(3):
-        plt.scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], (phi_d_2H_dsdt_results[0,index[j]:index[j+1]]-phi_d_2H_dsdt_results[i,index[j]:index[j+1]])/(0.000000001+np.sqrt(np.abs(phi_d_2H_dsdt_results_statserr[0,index[j]:index[j+1]]**2-phi_d_2H_dsdt_results_statserr[i,index[j]:index[j+1]]**2))))
-plt.plot([0, 2], [4, 4], 'r--')
-plt.plot([0, 2], [-4, -4], 'r--')
+    if (i < 5):
+        subplot_row, subplot_col = 0, 0
+    elif (i < 9):
+        subplot_row, subplot_col = 0, 1
+    elif (i < 13):
+        subplot_row, subplot_col = 1, 0
+    else:
+        subplot_row, subplot_col = 1, 1
+    for j in range(len(index)-1):
+        if j == 0:
+            axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], (phi_d_2H_dsdt_results[0,index[j]:index[j+1]]-phi_d_2H_dsdt_results[i,index[j]:index[j+1]])/(0.000000001+np.sqrt(np.abs(phi_d_2H_dsdt_results_statserr[0,index[j]:index[j+1]]**2-phi_d_2H_dsdt_results_statserr[i,index[j]:index[j+1]]**2))), label=label_list[i-1], color=color_list[i-1])
+            # axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], (phi_d_2H_dsdt_results[0,index[j]:index[j+1]]-phi_d_2H_dsdt_results[i,index[j]:index[j+1]])/(phi_d_2H_dsdt_results[0,index[j]:index[j+1]]), label=label_list[i-1], color=color_list[i-1])
+        else:
+            axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], (phi_d_2H_dsdt_results[0,index[j]:index[j+1]]-phi_d_2H_dsdt_results[i,index[j]:index[j+1]])/(0.000000001+np.sqrt(np.abs(phi_d_2H_dsdt_results_statserr[0,index[j]:index[j+1]]**2-phi_d_2H_dsdt_results_statserr[i,index[j]:index[j+1]]**2))), color=color_list[i-1])
+            # axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], (phi_d_2H_dsdt_results[0,index[j]:index[j+1]]-phi_d_2H_dsdt_results[i,index[j]:index[j+1]])/(phi_d_2H_dsdt_results[0,index[j]:index[j+1]]), color=color_list[i-1])
+    axs[subplot_row, subplot_col].legend()
+    axs[subplot_row, subplot_col].plot([0, 2], [4, 4], 'r--')
+    axs[subplot_row, subplot_col].plot([0, 2], [-4, -4], 'r--')
+    axs[subplot_row, subplot_col].plot([0, 2], [1, 1], 'r--')
+    axs[subplot_row, subplot_col].plot([0, 2], [-1, -1], 'r--')
+    axs[subplot_row, subplot_col].set_xlabel(r'$-t[GeV^2/c]$')
+    axs[subplot_row, subplot_col].set_ylabel(r'Barlow score')
+    axs[subplot_row, subplot_col].set_xlim(0, 2)
+    axs[subplot_row, subplot_col].set_ylim(-10, 10)
+    axs[subplot_row, subplot_col].set_title(title_list[subplot_row*2+subplot_col])
+plt.suptitle('Barlow score for different systematic checks')
 file_pdf.savefig()
 plt.close()
 
