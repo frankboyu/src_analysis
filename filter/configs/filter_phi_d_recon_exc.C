@@ -213,8 +213,8 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
     ;
 
     cout << "Filtering events...\n";
-    string dEdxCut              = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.65*d_momentum_meas+2.12) + 2.57)";
-    string dEdxCutSyst          = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.11*d_momentum_meas+1.98) + 1.83)";
+    string dEdxCut              = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.65*d_momentum_meas+4.47) + 2.57)";
+    string dEdxCutSyst          = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.11*d_momentum_meas+3.90) + 1.83)";
     string MissPMinusCut        = "miss_pminus_meas > -0.02";
     string MissPMinusCutSyst    = "miss_pminus_meas > -0.04";
     string KinFitChiSqCut       = "chisq_per_ndf_kin < 5.0";
