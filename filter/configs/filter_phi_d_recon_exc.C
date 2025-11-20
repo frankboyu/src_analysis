@@ -213,13 +213,13 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
     ;
 
     cout << "Filtering events...\n";
-    string dEdxCut              = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.43*d_momentum_meas+4.18) + TMath::Exp(-33.56*d_momentum_meas+14.12) + 2.38)";
-    string dEdxCutSyst          = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.43*d_momentum_meas+4.18) + TMath::Exp(-33.56*d_momentum_meas+14.12) + 2.38)";
-    string MissPMinusCut        = "miss_pminus_meas > -0.2";
-    string MissPMinusCutSyst    = "miss_pminus_meas > -0.3";
+    string dEdxCut              = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.65*d_momentum_meas+2.12) + 2.57)";
+    string dEdxCutSyst          = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.11*d_momentum_meas+1.98) + 1.83)";
+    string MissPMinusCut        = "miss_pminus_meas > -0.02";
+    string MissPMinusCutSyst    = "miss_pminus_meas > -0.04";
     string KinFitChiSqCut       = "chisq_per_ndf_kin < 5.0";
     string KinFitChiSqCutSyst   = "chisq_per_ndf_kin < 7.0";
-    string KinematicsCut        = "kp_momentum_meas > 0.40 && km_momentum_meas > 0.40 && d_momentum_meas > 0.40 && kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
+    string KinematicsCut        = "kp_momentum_meas > 0.45 && km_momentum_meas > 0.45 && d_momentum_meas > 0.45 && kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
     string KinematicsCutSyst    = "kp_momentum_meas > 0.35 && km_momentum_meas > 0.35 && d_momentum_meas > 0.35 && kp_theta_meas > 1.0 && km_theta_meas > 1.0 && d_theta_meas > 1.0";
     string VertexCut            = "TMath::Abs(vertex_z_kin - 65.0) < 14.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.0";
     string VertexCutSyst        = "TMath::Abs(vertex_z_kin - 65.0) < 15.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.5";
