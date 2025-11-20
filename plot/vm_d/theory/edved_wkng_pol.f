@@ -195,8 +195,22 @@
 
 ********************************************************************
         gn_scale = 1.0
-        icase    =   3
-        b_g      =   10.0 !relevant only for icase=3
+        icase    =   5
+        block
+          implicit none
+          character(len=64) :: arg
+          integer :: iarg
+          sigma_gn = 4.5   ! default microbarn/GeV^2 (used if no CLI arg)
+          iarg = command_argument_count()
+          if(iarg >= 1) then
+            call get_command_argument(1,arg)
+            if(len_trim(arg) > 0) then
+            read(arg,*,err=99) sigma_gn
+    99          continue
+            endif
+          endif
+        end block
+        b_g      =   5.0 !relevant only for icase=3,4,5
         alpha_g  =  -0.5
 ********************************************************************
 *         Parameters of cross section, slope  factor and real part
@@ -207,8 +221,8 @@
 *  b_vn      - slope factor of the amplitude
 *  al_vn     - real part of the amplitude
 ********************************************************************
-        sigma_vn = 30.0
-        b_vn     = 10.0
+        sigma_vn = 20.0
+        b_vn     = 6.5
         al_vn    = -0.5
 ********************************************************************
 
@@ -826,6 +840,8 @@
                     dsdt = 0.0              
       !if(tpr.le.0.0)
        dsdt = dsdt_tmin(eg)*exp(b_gn(s,kvm)*tpr)
+       elseif(icase.eq.5)then
+       dsdt = sigma_gn*exp(b_gn(s,kvm)*t)
        endif
 ************************************************************************
 
