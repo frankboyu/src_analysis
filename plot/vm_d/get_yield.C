@@ -11,13 +11,14 @@ using namespace ROOT::RDF;
 using namespace ROOT::Detail::RDF;
 
 double mass_kaon = 0.493677;
+double sim_weight_func_pass1(double beam_energy_truth, double minust_truth);
 
+Double_t rel_bw(Double_t *x, Double_t *par);
 Double_t rel_bw_plus_linear(Double_t *x, Double_t *par);
 Double_t rel_bw_plus_fulllinear(Double_t *x, Double_t *par);
 Double_t rel_bw_plus_quadratic(Double_t *x, Double_t *par);
 Double_t rel_bw_plus_fullquadratic(Double_t *x, Double_t *par);
 Double_t rel_bw_plus_phenomenological(Double_t *x, Double_t *par);
-Double_t rel_bw(Double_t *x, Double_t *par);
 Double_t linear(Double_t *x, Double_t *par);
 Double_t fulllinear(Double_t *x, Double_t *par);
 Double_t quadratic(Double_t *x, Double_t *par);
@@ -30,7 +31,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
     string input_treefile_name  = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_%s_%s.root", channel.c_str(), reaction.c_str());
     string input_tree_name;
     if (reaction.find("recon") != string::npos)
-        input_tree_name = Form("filteredtree_%s_recon_syst", channel.c_str());
+        input_tree_name = Form("filteredtree_%s_recon", channel.c_str());
     else if (reaction.find("thrown") != string::npos)
         input_tree_name = Form("filteredtree_%s_thrown", channel.c_str());
     cout << "Input tree file: " << input_treefile_name << endl;
@@ -41,11 +42,12 @@ int get_yield(string channel, string reaction, string observable, string tag)
     auto rdf_input = RNode(rdf_raw);
     if (reaction.find("recon") != string::npos)
     {
-        string dEdxCut          = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.65*d_momentum_meas+2.12) + 2.57)";
+        string dEdxCut          = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.65*d_momentum_meas+4.47) + 2.57)";
         string MissPMinusCut    = "miss_pminus_meas > -0.02";
         string KinFitChiSqCut   = "chisq_per_ndf_kin < 5.0";
         string KinematicsCut    = "kp_momentum_meas > 0.45 && km_momentum_meas > 0.45 && d_momentum_meas > 0.45 && kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
         string VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.0";
+        string BeamAccidCut     = "TMath::Abs(beam_DeltaT_meas) < 18.0";
 
         if      (tag == "dEdx_1.0")
             dEdxCut         = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-4.01*d_momentum_meas+4.88) + 3.26)";
@@ -103,12 +105,55 @@ int get_yield(string channel, string reaction, string observable, string tag)
             VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.25";
         else if (tag == "vertexR_1.50")
             VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.50";
+        else if (tag == "beamaccid_5")
+            BeamAccidCut     = "TMath::Abs(beam_DeltaT_meas) < 22.0";
+        else if (tag == "beamaccid_3")
+            BeamAccidCut     = "TMath::Abs(beam_DeltaT_meas) < 14.0";
+        else if (tag == "beamaccid_4out")
+            BeamAccidCut     = "TMath::Abs(beam_DeltaT_meas) > 2.0 && TMath::Abs(beam_DeltaT_meas) < 22.0";
 
-        rdf_input = rdf_input.Filter(KinematicsCut.c_str()).Filter(dEdxCut.c_str()).Filter(VertexCut.c_str()).Filter(KinFitChiSqCut.c_str()).Filter(PhiMassCut.c_str()).Define("event_weight_squared", "event_weight*event_weight");
+        rdf_input = rdf_input   .Filter(dEdxCut.c_str())
+                                .Filter(MissPMinusCut.c_str())
+                                .Filter(KinFitChiSqCut.c_str())
+                                .Filter(KinematicsCut.c_str())
+                                .Filter(VertexCut.c_str())
+                                .Filter(BeamAccidCut.c_str());
+
+        if      (tag == "beamaccid_3")
+            rdf_input = rdf_input   .Define("beamaccid_weight_syst",    "TMath::Abs(beam_DeltaT_meas) < 2.0 ? 1.0 : -1.0/6.0");
+        else if (tag == "beamaccid_5")
+            rdf_input = rdf_input   .Define("beamaccid_weight_syst",    "TMath::Abs(beam_DeltaT_meas) < 2.0 ? 1.0 : -1.0/10.0");
+        else
+            rdf_input = rdf_input   .Define("beamaccid_weight_syst",    "TMath::Abs(beam_DeltaT_meas) < 2.0 ? 1.0 : -1.0/8.0");
+
+        if      (tag == "comboaccid_1")
+            rdf_input = rdf_input   .Define("combo_accid_weight_syst",  "combo_accid_weight == 1.0 ? 1.0 : 1.0");
+        else if (tag == "comboaccid_-1")
+            rdf_input = rdf_input   .Define("combo_accid_weight_syst",  "combo_accid_weight == 1.0 ? 1.0 : -1.0");
+        else
+            rdf_input = rdf_input   .Define("combo_accid_weight_syst",  "combo_accid_weight");
+
+        if      (tag == "simweight_pass0")
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "1.0");
+        else if (tag == "simweight_pass1")
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass1(beam_energy_truth, minust_truth)");
+        else
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "1.0");
+
+        rdf_input = rdf_input       .Define("yield_weight",             "beamaccid_weight_syst*combo_accid_weight_syst*sim_weight_syst")
+                                    .Define("yield_weight_squared",     "yield_weight*yield_weight");
     }
     else if (reaction.find("thrown") != string::npos)
     {
-        rdf_input = rdf_input.Define("event_weight_squared", "event_weight*event_weight");
+        if      (tag == "simweight_pass0")
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "1.0");
+        else if (tag == "simweight_pass1")
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass1(beam_energy_truth, minust_truth)");
+        else
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "1.0");
+
+        rdf_input = rdf_input       .Define("yield_weight",             "sim_weight_syst")
+                                    .Define("yield_weight_squared",     "yield_weight*yield_weight");
     }
 
     // Read bin edges from input text file
@@ -129,8 +174,8 @@ int get_yield(string channel, string reaction, string observable, string tag)
     input_txt.close();
 
     // Prepare output files
-    string output_textfile_name = Form("output/yield_phi_d/yield_%s_%s_%s_%s.txt", channel.c_str(), reaction.c_str(), observable.c_str(), tag.c_str());
-    string output_pdffile_name = Form("output/yield_phi_d/yield_%s_%s_%s_%s.pdf", channel.c_str(), reaction.c_str(), observable.c_str(), tag.c_str());
+    string output_textfile_name = Form("/work/halld2/home/boyu/src_analysis/plot/vm_d/output/yield_phi_d/yield_%s_%s_%s_%s.txt", channel.c_str(), reaction.c_str(), observable.c_str(), tag.c_str());
+    string output_pdffile_name = Form("/work/halld2/home/boyu/src_analysis/plot/vm_d/output/yield_phi_d/yield_%s_%s_%s_%s.pdf", channel.c_str(), reaction.c_str(), observable.c_str(), tag.c_str());
     cout << "Output text file: " << output_textfile_name << endl;
     cout << "Output PDF file: " << output_pdffile_name << endl;
     FILE *output_textfile = fopen(output_textfile_name.c_str(),"w");
@@ -143,6 +188,16 @@ int get_yield(string channel, string reaction, string observable, string tag)
     double yield, yield_err, energy_center, energy_width, t_center, t_width, angle_center, angle_width;
     string energy_cut, t_cut, angle_cut;
     string variable;
+
+    double fit_max = 1.08;
+    if (tag == "fitmax_1.06")
+        fit_max = 1.06;
+    else if (tag == "fitmax_1.07")
+        fit_max = 1.07;
+    else if (tag == "fitmax_1.09")
+        fit_max = 1.09;
+    else if (tag == "fitmax_1.10")
+        fit_max = 1.10;
 
     for (int i = 0; i < bins.size(); i++)
     {
@@ -175,7 +230,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
             if (observable == "dsdt")
             {
                 cout << energy_cut << " && " << t_cut << endl;
-                hist_bin = *rdf_bin.Histo1D({Form("hist_%.1f_%.1f_%.3f_%.3f", bins[i][0], bins[i][1], bins[i][2], bins[i][3]), ";m_{K^{+}K^{-}} (GeV/c);Counts", 24, 0.9825, 1.1025},"phi_mass_kin","event_weight");
+                hist_bin = *rdf_bin.Histo1D({Form("hist_%.1f_%.1f_%.3f_%.3f", bins[i][0], bins[i][1], bins[i][2], bins[i][3]), ";m_{K^{+}K^{-}} (GeV/c);Counts", 24, 0.9825, 1.1025},"phi_mass_kin","yield_weight");
             }
             else
             {
@@ -195,7 +250,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
                     angle_width  = rdf_bin.StdDev(variable.c_str()).GetValue();
                 }
                 cout << energy_cut << " && " << t_cut << " && " << angle_cut << endl;
-                hist_bin = *rdf_bin.Histo1D({Form("hist_%.1f_%.1f_%.3f_%.3f_%.2f_%.2f", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]), ";m_{K^{+}K^{-}} (GeV/c);Counts", 24, 0.9825, 1.1025},"phi_mass_kin","event_weight");
+                hist_bin = *rdf_bin.Histo1D({Form("hist_%.1f_%.1f_%.3f_%.3f_%.2f_%.2f", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]), ";m_{K^{+}K^{-}} (GeV/c);Counts", 24, 0.9825, 1.1025},"phi_mass_kin","yield_weight");
             }
 
             for (int i = 0; i < hist_bin.GetNbinsX(); i++)
@@ -206,15 +261,16 @@ int get_yield(string channel, string reaction, string observable, string tag)
                     hist_bin.SetBinError(i, 1);
                 }
             }
+
             if (tag == "fitfunc_none" || reaction.find("sim") != string::npos)
             {
-                yield = rdf_bin.Sum("event_weight").GetValue();
-                yield_err = sqrt(rdf_bin.Sum("event_weight_squared").GetValue());
+                yield = rdf_bin.Sum("yield_weight").GetValue();
+                yield_err = sqrt(rdf_bin.Sum("yield_weight_squared").GetValue());
                 hist_bin.Draw();
             }
             else if (tag == "fitfunc_quadratic")
             {
-                TF1 fit_func("fit_func", rel_bw_plus_quadratic, 0.99, 1.08, 5);
+                TF1 fit_func("fit_func", rel_bw_plus_quadratic, 0.99, fit_max, 5);
                 fit_func.SetParameters(1.00, 1.02, 0.0035, 0.004, 20);
                 fit_func.SetParLimits(0, 0.01, 200);
                 fit_func.FixParameter(1, 1.019456);
@@ -224,45 +280,41 @@ int get_yield(string channel, string reaction, string observable, string tag)
                 auto fit_results = hist_bin.Fit(&fit_func, "SLR");
                 hist_bin.GetFunction("fit_func")->SetLineColor(kBlack);
                 hist_bin.Draw("same");
-                TF1 *rel_bw_func = new TF1("rel_bw_func", rel_bw, 0.99, 1.08, 4);
+                TF1 *rel_bw_func = new TF1("rel_bw_func", rel_bw, 0.99, fit_max, 4);
                 rel_bw_func->SetParameters(fit_func.GetParameter(0), fit_func.GetParameter(1), fit_func.GetParameter(2), fit_func.GetParameter(3));
                 rel_bw_func->SetLineColor(kRed);
                 rel_bw_func->Draw("same");
-                TF1 *quadratic_function = new TF1("quadratic_function", quadratic, 0.99, 1.08, 1);
+                TF1 *quadratic_function = new TF1("quadratic_function", quadratic, 0.99, fit_max, 1);
                 quadratic_function->SetParameter(0, fit_func.GetParameter(4));
                 quadratic_function->SetLineColor(kBlue);
                 quadratic_function->Draw("same");
                 yield = fit_func.GetParameter(0)/0.005;
                 yield_err = fit_func.GetParError(0)/0.005;
-                // yield = rel_bw_func->Integral(1.00, 1.04)/0.005;
-                // yield_err = rel_bw_func->IntegralError(1.00, 1.04, fit_results->GetParams(), fit_results->GetCovarianceMatrix().GetMatrixArray())/0.005;
             }
             else
             {
-                TF1 fit_func("fit_func", rel_bw_plus_linear, 0.99, 1.08, 5);
+                TF1 fit_func("fit_func", rel_bw_plus_linear, 0.99, fit_max, 5);
                 fit_func.SetParameters(1.00, 1.02, 0.0035, 0.004, 20);
                 fit_func.SetParLimits(0, 0.01, 200);
                 fit_func.FixParameter(1, 1.019456);
                 fit_func.FixParameter(2, 0.00425);
                 // fit_func.FixParameter(3, 0.0035);
-                fit_func.SetParLimits(4, 0.5, 50.0);
+                fit_func.SetParLimits(4, 0.5, 150.0);
                 auto fit_results = hist_bin.Fit(&fit_func, "SLR");
                 hist_bin.GetFunction("fit_func")->SetLineColor(kBlack);
                 hist_bin.Draw("same");
                 yield = 1;
                 yield_err = 1;
-                TF1 *rel_bw_func = new TF1("rel_bw_func", rel_bw, 0.99, 1.08, 4);
+                TF1 *rel_bw_func = new TF1("rel_bw_func", rel_bw, 0.99, fit_max, 4);
                 rel_bw_func->SetParameters(fit_func.GetParameter(0), fit_func.GetParameter(1), fit_func.GetParameter(2), fit_func.GetParameter(3));
                 rel_bw_func->SetLineColor(kRed);
                 rel_bw_func->Draw("same");
-                TF1 *linear_function = new TF1("linear_function", linear, 0.99, 1.08, 1);
+                TF1 *linear_function = new TF1("linear_function", linear, 0.99, fit_max, 1);
                 linear_function->SetParameter(0, fit_func.GetParameter(4));
                 linear_function->SetLineColor(kBlue);
                 linear_function->Draw("same");
                 yield = fit_func.GetParameter(0)/0.005;
                 yield_err = fit_func.GetParError(0)/0.005;
-                // yield = rel_bw_func->Integral(1.00, 1.04)/0.005;
-                // yield_err = rel_bw_func->IntegralError(1.00, 1.04, fit_results->GetParams(), fit_results->GetCovarianceMatrix().GetMatrixArray())/0.005;
             }
             canvas->Update();
             canvas->Print((output_pdffile_name+"(").c_str());
@@ -277,7 +329,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
             if (observable == "dsdt")
             {
                 cout << energy_cut << " && " << t_cut << endl;
-                hist_bin = *rdf_bin.Histo1D({Form("hist_%.1f_%.1f_%.3f_%.3f", bins[i][0], bins[i][1], bins[i][2], bins[i][3]), ";m_{K^{+}K^{-}} (GeV/c);Counts", 24, 0.9825, 1.1025},"phi_mass_truth","event_weight");
+                hist_bin = *rdf_bin.Histo1D({Form("hist_%.1f_%.1f_%.3f_%.3f", bins[i][0], bins[i][1], bins[i][2], bins[i][3]), ";m_{K^{+}K^{-}} (GeV/c);Counts", 24, 0.9825, 1.1025},"phi_mass_truth","yield_weight");
             }
             else
             {
@@ -293,11 +345,11 @@ int get_yield(string channel, string reaction, string observable, string tag)
                 rdf_bin = rdf_bin.Filter(angle_cut.c_str());
 
                 cout << energy_cut << " && " << t_cut << " && " << angle_cut << endl;
-                hist_bin = *rdf_bin.Histo1D({Form("hist_%.1f_%.1f_%.3f_%.3f_%.2f_%.2f", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]), ";m_{K^{+}K^{-}} (GeV/c);Counts", 24, 0.9825, 1.1025},"phi_mass_truth","event_weight");
+                hist_bin = *rdf_bin.Histo1D({Form("hist_%.1f_%.1f_%.3f_%.3f_%.2f_%.2f", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]), ";m_{K^{+}K^{-}} (GeV/c);Counts", 24, 0.9825, 1.1025},"phi_mass_truth","yield_weight");
             }
 
-            yield           = rdf_bin.Sum("event_weight").GetValue();
-            yield_err       = sqrt(rdf_bin.Sum("event_weight_squared").GetValue());
+            yield           = rdf_bin.Sum("yield_weight").GetValue();
+            yield_err       = sqrt(rdf_bin.Sum("yield_weight_squared").GetValue());
             hist_bin.Draw();
             canvas->Update();
             canvas->Print((output_pdffile_name+"(").c_str());
@@ -621,4 +673,17 @@ Double_t phenomenological(Double_t *x, Double_t *par)
     else
         quadratic = par[0] * (x[0]*x[0] - 4*mass_kaon*mass_kaon);
     return quadratic;
+}
+
+double sim_weight_func_pass1(double beam_energy_truth, double minust_truth)
+{
+    double a1 = 2813.72894997;
+    double b1 = 15.13997936;
+    double a2 = 17.88792021;
+    double b2 = 2.98839991;
+    double normalization = 10;
+    if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
+        return 1.0;
+    else                            // simulation, weighted by the measured cross section
+        return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
 }
