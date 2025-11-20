@@ -264,7 +264,7 @@ tpolToGo_t makePolValsTmp2021(int year,int part,int userSet,int radTh,bool mixMo
   setMask1d(hMaskUser,&vecUser);
 
   
-  //hMaskAll->Add(hMaskAmo,hMask0);
+  hMaskAll->Add(hMaskAmo,hMask0);
   hMaskAll->Add(hMaskAll,hMask45);
   hMaskAll->Add(hMaskAll,hMask90);
   hMaskAll->Add(hMaskAll,hMask135);
@@ -332,13 +332,13 @@ tpolToGo_t makePolValsTmp2021(int year,int part,int userSet,int radTh,bool mixMo
     TH2D *hPhiCutVsRunAtEg10100; hFile1->GetObject("hPhiCutVsRunAtEg22",hPhiCutVsRunAtEg10100);
     TH2D *hPhiCutVsRunAtEg10300; hFile1->GetObject("hPhiCutVsRunAtEg23",hPhiCutVsRunAtEg10300);
     TH2D *hPhiCutVsRunAtEg10500; hFile1->GetObject("hPhiCutVsRunAtEg24",hPhiCutVsRunAtEg10500);
-    TH2D *hPhiCutVsRunAtEg10700; hFile1->GetObject("hPhiCutVsRunAtEg25",hPhiCutVsRunAtEg10700);
-    TH2D *hPhiCutVsRunAtEg10900; hFile1->GetObject("hPhiCutVsRunAtEg26",hPhiCutVsRunAtEg10900);
+    // TH2D *hPhiCutVsRunAtEg10700; hFile1->GetObject("hPhiCutVsRunAtEg25",hPhiCutVsRunAtEg10700);
+    // TH2D *hPhiCutVsRunAtEg10900; hFile1->GetObject("hPhiCutVsRunAtEg26",hPhiCutVsRunAtEg10900);
 
-    TH2D *hPhiCutVsRunAtEg11100; hFile1->GetObject("hPhiCutVsRunAtEg27",hPhiCutVsRunAtEg11100);
-    TH2D *hPhiCutVsRunAtEg11300; hFile1->GetObject("hPhiCutVsRunAtEg28",hPhiCutVsRunAtEg11300);
-    TH2D *hPhiCutVsRunAtEg11500; hFile1->GetObject("hPhiCutVsRunAtEg29",hPhiCutVsRunAtEg11500);
-    TH2D *hPhiCutVsRunAtEg11700; hFile1->GetObject("hPhiCutVsRunAtEg30",hPhiCutVsRunAtEg11700);
+    // TH2D *hPhiCutVsRunAtEg11100; hFile1->GetObject("hPhiCutVsRunAtEg27",hPhiCutVsRunAtEg11100);
+    // TH2D *hPhiCutVsRunAtEg11300; hFile1->GetObject("hPhiCutVsRunAtEg28",hPhiCutVsRunAtEg11300);
+    // TH2D *hPhiCutVsRunAtEg11500; hFile1->GetObject("hPhiCutVsRunAtEg29",hPhiCutVsRunAtEg11500);
+    // TH2D *hPhiCutVsRunAtEg11700; hFile1->GetObject("hPhiCutVsRunAtEg30",hPhiCutVsRunAtEg11700);
 
 
 
@@ -598,32 +598,32 @@ tpolToGo_t makePolValsTmp2021(int year,int part,int userSet,int radTh,bool mixMo
     par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
     hPol0->SetBinContent(18,fabs(par1)); 
     hPol0->SetBinError(18,err1);
-    sprintf(hString,"hPhiCut0AtEg10700");
-    TH1D *hPhiCut0AtEg10700 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut0AtEg10700->Sumw2();
-    phi1D(hPhiCutVsRunAtEg10700,hMask2dE0,hPhiCut0AtEg10700,hString,fitFun,true);
-    par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
-    hPol0->SetBinContent(19,fabs(par1)); 
-    hPol0->SetBinError(19,err1);
-    sprintf(hString,"hPhiCut0AtEg10900");
-    TH1D *hPhiCut0AtEg10900 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut0AtEg10900->Sumw2();
-    phi1D(hPhiCutVsRunAtEg10900,hMask2dE0,hPhiCut0AtEg10900,hString,fitFun,true);
-    par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
-    hPol0->SetBinContent(20,fabs(par1)); 
-    hPol0->SetBinError(20,err1);
+    // sprintf(hString,"hPhiCut0AtEg10700");
+    // TH1D *hPhiCut0AtEg10700 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut0AtEg10700->Sumw2();
+    // phi1D(hPhiCutVsRunAtEg10700,hMask2dE0,hPhiCut0AtEg10700,hString,fitFun,true);
+    // par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
+    // hPol0->SetBinContent(19,fabs(par1)); 
+    // hPol0->SetBinError(19,err1);
+    // sprintf(hString,"hPhiCut0AtEg10900");
+    // TH1D *hPhiCut0AtEg10900 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut0AtEg10900->Sumw2();
+    // phi1D(hPhiCutVsRunAtEg10900,hMask2dE0,hPhiCut0AtEg10900,hString,fitFun,true);
+    // par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
+    // hPol0->SetBinContent(20,fabs(par1)); 
+    // hPol0->SetBinError(20,err1);
     
-    sprintf(hString,"hPhiCut0AtEg11100");
-    TH1D *hPhiCut0AtEg11100 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut0AtEg11100->Sumw2();
-    phi1D(hPhiCutVsRunAtEg11100,hMask2dE0,hPhiCut0AtEg11100,hString,fitFun,true);
-    par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
-    hPol0->SetBinContent(21,fabs(par1)); 
-    hPol0->SetBinError(21,err1);
-    sprintf(hString,"hPhiCut0AtEg11300");
-    TH1D *hPhiCut0AtEg11300 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut0AtEg11300->Sumw2();
-    phi1D(hPhiCutVsRunAtEg11300,hMask2dE0,hPhiCut0AtEg11300,hString,fitFun,true);
-    par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
-    hPol0->SetBinContent(22,fabs(par1)); 
-    hPol0->SetBinError(22,err1);
-    hPol0->GetXaxis()->SetRangeUser(7.8,11.4);
+    // sprintf(hString,"hPhiCut0AtEg11100");
+    // TH1D *hPhiCut0AtEg11100 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut0AtEg11100->Sumw2();
+    // phi1D(hPhiCutVsRunAtEg11100,hMask2dE0,hPhiCut0AtEg11100,hString,fitFun,true);
+    // par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
+    // hPol0->SetBinContent(21,fabs(par1)); 
+    // hPol0->SetBinError(21,err1);
+    // sprintf(hString,"hPhiCut0AtEg11300");
+    // TH1D *hPhiCut0AtEg11300 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut0AtEg11300->Sumw2();
+    // phi1D(hPhiCutVsRunAtEg11300,hMask2dE0,hPhiCut0AtEg11300,hString,fitFun,true);
+    // par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
+    // hPol0->SetBinContent(22,fabs(par1)); 
+    // hPol0->SetBinError(22,err1);
+    // hPol0->GetXaxis()->SetRangeUser(7.8,11.4);
     
       
     //START 45
@@ -739,33 +739,33 @@ tpolToGo_t makePolValsTmp2021(int year,int part,int userSet,int radTh,bool mixMo
     par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
     hPol45->SetBinContent(18,fabs(par1)); 
     hPol45->SetBinError(18,err1);
-    sprintf(hString,"hPhiCut45AtEg10700");
-    TH1D *hPhiCut45AtEg10700 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut45AtEg10700->Sumw2();
-    phi1D(hPhiCutVsRunAtEg10700,hMask2dE45,hPhiCut45AtEg10700,hString,fitFun,true);
-    par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
-    hPol45->SetBinContent(19,fabs(par1)); 
-    hPol45->SetBinError(19,err1);
-    sprintf(hString,"hPhiCut45AtEg10900");
-    TH1D *hPhiCut45AtEg10900 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut45AtEg10900->Sumw2();
-    phi1D(hPhiCutVsRunAtEg10900,hMask2dE45,hPhiCut45AtEg10900,hString,fitFun,true);
-    par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
-    hPol45->SetBinContent(20,fabs(par1)); 
-    hPol45->SetBinError(20,err1);
+    // sprintf(hString,"hPhiCut45AtEg10700");
+    // TH1D *hPhiCut45AtEg10700 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut45AtEg10700->Sumw2();
+    // phi1D(hPhiCutVsRunAtEg10700,hMask2dE45,hPhiCut45AtEg10700,hString,fitFun,true);
+    // par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
+    // hPol45->SetBinContent(19,fabs(par1)); 
+    // hPol45->SetBinError(19,err1);
+    // sprintf(hString,"hPhiCut45AtEg10900");
+    // TH1D *hPhiCut45AtEg10900 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut45AtEg10900->Sumw2();
+    // phi1D(hPhiCutVsRunAtEg10900,hMask2dE45,hPhiCut45AtEg10900,hString,fitFun,true);
+    // par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
+    // hPol45->SetBinContent(20,fabs(par1)); 
+    // hPol45->SetBinError(20,err1);
     
-    sprintf(hString,"hPhiCut45AtEg11100");
-    TH1D *hPhiCut45AtEg11100 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut45AtEg11100->Sumw2();
-    phi1D(hPhiCutVsRunAtEg11100,hMask2dE45,hPhiCut45AtEg11100,hString,fitFun,true);
-    par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
-    hPol45->SetBinContent(21,fabs(par1)); 
-    hPol45->SetBinError(21,err1);
-    sprintf(hString,"hPhiCut45AtEg11300");
-    TH1D *hPhiCut45AtEg11300 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut45AtEg11300->Sumw2();
-    phi1D(hPhiCutVsRunAtEg11300,hMask2dE45,hPhiCut45AtEg11300,hString,fitFun,true);
-    par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
-    hPol45->SetBinContent(22,fabs(par1)); 
-    hPol45->SetBinError(22,err1);
+    // sprintf(hString,"hPhiCut45AtEg11100");
+    // TH1D *hPhiCut45AtEg11100 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut45AtEg11100->Sumw2();
+    // phi1D(hPhiCutVsRunAtEg11100,hMask2dE45,hPhiCut45AtEg11100,hString,fitFun,true);
+    // par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
+    // hPol45->SetBinContent(21,fabs(par1)); 
+    // hPol45->SetBinError(21,err1);
+    // sprintf(hString,"hPhiCut45AtEg11300");
+    // TH1D *hPhiCut45AtEg11300 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut45AtEg11300->Sumw2();
+    // phi1D(hPhiCutVsRunAtEg11300,hMask2dE45,hPhiCut45AtEg11300,hString,fitFun,true);
+    // par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
+    // hPol45->SetBinContent(22,fabs(par1)); 
+    // hPol45->SetBinError(22,err1);
     
-    hPol45->GetXaxis()->SetRangeUser(7.5,11.4);
+    // hPol45->GetXaxis()->SetRangeUser(7.5,11.4);
     
     //START 90
     if (simFit == true)fitFun->FixParameter(2,phiPars.offset+90);  
@@ -799,7 +799,7 @@ tpolToGo_t makePolValsTmp2021(int year,int part,int userSet,int radTh,bool mixMo
     par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
     hPol90->SetBinContent(5,fabs(par1)); 
     hPol90->SetBinError(5,err1);
-    hPol90->GetXaxis()->SetRangeUser(7.6,11.4);
+    // hPol90->GetXaxis()->SetRangeUser(7.6,11.4);
     
     sprintf(hString,"hPhiCut90AtEg8100");
     TH1D *hPhiCut90AtEg8100 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut90AtEg8100->Sumw2();
@@ -881,32 +881,32 @@ tpolToGo_t makePolValsTmp2021(int year,int part,int userSet,int radTh,bool mixMo
     par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
     hPol90->SetBinContent(18,fabs(par1)); 
     hPol90->SetBinError(18,err1);
-    sprintf(hString,"hPhiCut90AtEg10700");
-    TH1D *hPhiCut90AtEg10700 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut90AtEg10700->Sumw2();
-    phi1D(hPhiCutVsRunAtEg10700,hMask2dE90,hPhiCut90AtEg10700,hString,fitFun,true);
-    par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
-    hPol90->SetBinContent(19,fabs(par1)); 
-    hPol90->SetBinError(19,err1);
-    sprintf(hString,"hPhiCut90AtEg10900");
-    TH1D *hPhiCut90AtEg10900 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut90AtEg10900->Sumw2();
-    phi1D(hPhiCutVsRunAtEg10900,hMask2dE90,hPhiCut90AtEg10900,hString,fitFun,true);
-    par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
-    hPol90->SetBinContent(20,fabs(par1)); 
-    hPol90->SetBinError(20,err1);
+    // sprintf(hString,"hPhiCut90AtEg10700");
+    // TH1D *hPhiCut90AtEg10700 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut90AtEg10700->Sumw2();
+    // phi1D(hPhiCutVsRunAtEg10700,hMask2dE90,hPhiCut90AtEg10700,hString,fitFun,true);
+    // par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
+    // hPol90->SetBinContent(19,fabs(par1)); 
+    // hPol90->SetBinError(19,err1);
+    // sprintf(hString,"hPhiCut90AtEg10900");
+    // TH1D *hPhiCut90AtEg10900 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut90AtEg10900->Sumw2();
+    // phi1D(hPhiCutVsRunAtEg10900,hMask2dE90,hPhiCut90AtEg10900,hString,fitFun,true);
+    // par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
+    // hPol90->SetBinContent(20,fabs(par1)); 
+    // hPol90->SetBinError(20,err1);
     
-    sprintf(hString,"hPhiCut90AtEg11100");
-    TH1D *hPhiCut90AtEg11100 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut90AtEg11100->Sumw2();
-    phi1D(hPhiCutVsRunAtEg11100,hMask2dE90,hPhiCut90AtEg11100,hString,fitFun,true);
-    par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
-    hPol90->SetBinContent(21,fabs(par1)); 
-    hPol90->SetBinError(21,err1);
-    sprintf(hString,"hPhiCut90AtEg11300");
-    TH1D *hPhiCut90AtEg11300 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut90AtEg11300->Sumw2();
-    phi1D(hPhiCutVsRunAtEg11300,hMask2dE90,hPhiCut90AtEg11300,hString,fitFun,true);
-    par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
-    hPol90->SetBinContent(22,fabs(par1)); 
-    hPol90->SetBinError(22,err1);
-    hPol90->GetXaxis()->SetRangeUser(7.6,11.4);
+    // sprintf(hString,"hPhiCut90AtEg11100");
+    // TH1D *hPhiCut90AtEg11100 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut90AtEg11100->Sumw2();
+    // phi1D(hPhiCutVsRunAtEg11100,hMask2dE90,hPhiCut90AtEg11100,hString,fitFun,true);
+    // par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
+    // hPol90->SetBinContent(21,fabs(par1)); 
+    // hPol90->SetBinError(21,err1);
+    // sprintf(hString,"hPhiCut90AtEg11300");
+    // TH1D *hPhiCut90AtEg11300 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut90AtEg11300->Sumw2();
+    // phi1D(hPhiCutVsRunAtEg11300,hMask2dE90,hPhiCut90AtEg11300,hString,fitFun,true);
+    // par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
+    // hPol90->SetBinContent(22,fabs(par1)); 
+    // hPol90->SetBinError(22,err1);
+    // hPol90->GetXaxis()->SetRangeUser(7.6,11.4);
     
     //START 135
     if (simFit == true)fitFun->FixParameter(2,phiPars.offset+135);   
@@ -1021,32 +1021,32 @@ tpolToGo_t makePolValsTmp2021(int year,int part,int userSet,int radTh,bool mixMo
     par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
     hPol135->SetBinContent(18,fabs(par1)); 
     hPol135->SetBinError(18,err1);
-    sprintf(hString,"hPhiCut135AtEg10700");
-    TH1D *hPhiCut135AtEg10700 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut135AtEg10700->Sumw2();
-    phi1D(hPhiCutVsRunAtEg10700,hMask2dE135,hPhiCut135AtEg10700,hString,fitFun,true);
-    par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
-    hPol135->SetBinContent(19,fabs(par1)); 
-    hPol135->SetBinError(19,err1);
-    sprintf(hString,"hPhiCut135AtEg10900");
-    TH1D *hPhiCut135AtEg10900 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut135AtEg10900->Sumw2();
-    phi1D(hPhiCutVsRunAtEg10900,hMask2dE135,hPhiCut135AtEg10900,hString,fitFun,true);
-    par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
-    hPol135->SetBinContent(20,fabs(par1)); 
-    hPol135->SetBinError(20,err1);
+    // sprintf(hString,"hPhiCut135AtEg10700");
+    // TH1D *hPhiCut135AtEg10700 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut135AtEg10700->Sumw2();
+    // phi1D(hPhiCutVsRunAtEg10700,hMask2dE135,hPhiCut135AtEg10700,hString,fitFun,true);
+    // par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
+    // hPol135->SetBinContent(19,fabs(par1)); 
+    // hPol135->SetBinError(19,err1);
+    // sprintf(hString,"hPhiCut135AtEg10900");
+    // TH1D *hPhiCut135AtEg10900 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut135AtEg10900->Sumw2();
+    // phi1D(hPhiCutVsRunAtEg10900,hMask2dE135,hPhiCut135AtEg10900,hString,fitFun,true);
+    // par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
+    // hPol135->SetBinContent(20,fabs(par1)); 
+    // hPol135->SetBinError(20,err1);
     
-    sprintf(hString,"hPhiCut135AtEg11100");
-    TH1D *hPhiCut135AtEg11100 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut135AtEg11100->Sumw2();
-    phi1D(hPhiCutVsRunAtEg11100,hMask2dE135,hPhiCut135AtEg11100,hString,fitFun,true);
-    par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
-    hPol135->SetBinContent(21,fabs(par1)); 
-    hPol135->SetBinError(21,err1);
-    sprintf(hString,"hPhiCut135AtEg11300");
-    TH1D *hPhiCut135AtEg11300 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut135AtEg11300->Sumw2();
-    phi1D(hPhiCutVsRunAtEg11300,hMask2dE135,hPhiCut135AtEg11300,hString,fitFun,true);
-    par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
-    hPol135->SetBinContent(22,fabs(par1)); 
-    hPol135->SetBinError(22,err1);
-    hPol135->GetXaxis()->SetRangeUser(7.6,11.4);
+    // sprintf(hString,"hPhiCut135AtEg11100");
+    // TH1D *hPhiCut135AtEg11100 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut135AtEg11100->Sumw2();
+    // phi1D(hPhiCutVsRunAtEg11100,hMask2dE135,hPhiCut135AtEg11100,hString,fitFun,true);
+    // par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
+    // hPol135->SetBinContent(21,fabs(par1)); 
+    // hPol135->SetBinError(21,err1);
+    // sprintf(hString,"hPhiCut135AtEg11300");
+    // TH1D *hPhiCut135AtEg11300 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut135AtEg11300->Sumw2();
+    // phi1D(hPhiCutVsRunAtEg11300,hMask2dE135,hPhiCut135AtEg11300,hString,fitFun,true);
+    // par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
+    // hPol135->SetBinContent(22,fabs(par1)); 
+    // hPol135->SetBinError(22,err1);
+    // hPol135->GetXaxis()->SetRangeUser(7.6,11.4);
     //TH2D *hZo135 = (TH2D*)hZVal->Clone("hZo135");
     //hZAmo->Multiply(hZAmo,hMask2dEAmo);
 
@@ -1166,15 +1166,15 @@ tpolToGo_t makePolValsTmp2021(int year,int part,int userSet,int radTh,bool mixMo
       setHistoParsE(hPol45);
       setHistoParsE(hPol90);
       setHistoParsE(hPol135);
-      hPol0->GetXaxis()->SetRangeUser(7.6,10.6);
-      hPol45->GetXaxis()->SetRangeUser(7.6,10.6);
-      hPol90->GetXaxis()->SetRangeUser(7.6,10.6);
-      hPol135->GetXaxis()->SetRangeUser(7.6,10.6);
+    //   hPol0->GetXaxis()->SetRangeUser(7.6,10.6);
+    //   hPol45->GetXaxis()->SetRangeUser(7.6,10.6);
+    //   hPol90->GetXaxis()->SetRangeUser(7.6,10.6);
+    //   hPol135->GetXaxis()->SetRangeUser(7.6,10.6);
 
-      hPol0->GetXaxis()->SetRangeUser(7.5,10.6);
-      hPol45->GetXaxis()->SetRangeUser(7.5,10.6);
-      hPol90->GetXaxis()->SetRangeUser(7.5,10.6);
-      hPol135->GetXaxis()->SetRangeUser(7.5,10.6);
+    //   hPol0->GetXaxis()->SetRangeUser(7.5,10.6);
+    //   hPol45->GetXaxis()->SetRangeUser(7.5,10.6);
+    //   hPol90->GetXaxis()->SetRangeUser(7.5,10.6);
+    //   hPol135->GetXaxis()->SetRangeUser(7.5,10.6);
 
       c1->cd(1); hPol0->Draw("e1"); t1->DrawLatex(0.75,0.8,"0^{o}");
       c1->cd(2); hPol45->Draw("e1"); t1->DrawLatex(0.75,0.8,"45^{o}");
@@ -1219,7 +1219,7 @@ void setHistoParsE(TH1D *histo){
   histo->GetYaxis()->SetTitleOffset(0.65);
   histo->GetXaxis()->SetLabelSize(0.05);
   histo->GetYaxis()->SetLabelSize(0.05);
-  histo->GetXaxis()->SetRangeUser(7.5,11.4);
+//   histo->GetXaxis()->SetRangeUser(7.5,11.4);
 
 }
 
