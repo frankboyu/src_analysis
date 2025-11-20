@@ -268,7 +268,7 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
 
             TH1D hist_beam_energy_meas                      = *rdf.Histo1D({("beam_energy_"+ label).c_str(), ";E_{beam} (GeV);Counts", 60, 5.0, 11.0},"beam_energy_meas","event_weight");
             hist_beam_energy_meas.Write();
-            TH1D hist_beam_DeltaT_meas                      = *rdf.Histo1D({("beam_DeltaT_"+ label).c_str(), ";#Delta t_{beam} (ns);Counts", 100, -20.0, 20.0},"beam_DeltaT_meas","beam_accid_weight");
+            TH1D hist_beam_DeltaT_meas                      = *rdf.Histo1D({("beam_DeltaT_"+ label).c_str(), ";#Delta t_{beam} (ns);Counts", 100, -25.0, 25.0},"beam_DeltaT_meas","beam_accid_weight");
             hist_beam_DeltaT_meas.Write();
 
             TH1D hist_kp_pidfom                             = *rdf.Histo1D({("kp_pidfom_"+ label).c_str(), ";kp_pidfom;Counts", 100, 0.0, 1.0},"kp_pidfom","event_weight");
