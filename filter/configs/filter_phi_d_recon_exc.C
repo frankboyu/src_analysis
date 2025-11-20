@@ -263,6 +263,8 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
             hist_num_unused_tracks_meas.Write();
             TH1D hist_num_unused_showers_meas               = *rdf.Histo1D({("num_unused_showers_meas_"+ label).c_str(), ";Number of unused showers;Counts", 10, 0.0, 10.0},"num_unused_showers","event_weight");
             hist_num_unused_showers_meas.Write();
+            TH1D hist_beam_accid_weight                     = *rdf.Histo1D({("beam_accid_weight_"+ label).c_str(), ";Beam Accidental Weight;Counts", 20, -0.5, 1.5},"beam_accid_weight");
+            hist_beam_accid_weight.Write();
             TH1D hist_combo_accid_weight                    = *rdf.Histo1D({("combo_accid_weight_"+ label).c_str(), ";Combo Accidental Weight;Counts", 2, -0.5, 1.5},"combo_accid_weight");
             hist_combo_accid_weight.Write();
 
