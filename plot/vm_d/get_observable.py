@@ -62,7 +62,14 @@ phi_d_2H_dsdt_efficiency            = phi_d_2H_dsdt_yield_sim/phi_d_2H_dsdt_yiel
 phi_d_2H_dsdt_efficiency_statserr   = np.sqrt(phi_d_2H_dsdt_yield_sim_statserr**2 + phi_d_2H_dsdt_yield_tagged_statserr**2)
 phi_d_2H_dsdt_results               = phi_d_2H_dsdt_yield_data/phi_d_2H_dsdt_efficiency/lumi(phi_d_2H_dsdt_energy_low, phi_d_2H_dsdt_energy_high, 28)/(phi_d_2H_dsdt_minust_high-phi_d_2H_dsdt_minust_low)/0.489/1000
 phi_d_2H_dsdt_results_statserr      = phi_d_2H_dsdt_results*np.sqrt(phi_d_2H_dsdt_yield_data_statserr**2 + phi_d_2H_dsdt_efficiency_statserr**2)
-tag_list = ['chisquared_3', 'chisquared_4', 'chisquared_6', 'chisquared_7', 'momentum_0.35', 'momentum_0.45', 'theta_1.0', 'theta_3.0', 'vertexZ_13', 'vertexZ_15', 'vertexR_0.5', 'vertexR_1.5', 'fitfunc_quadratic', 'fitfunc_none']
+tag_list = []
+tag_list += (['dEdx_1.0', 'dEdx_1.5', 'dEdx_2.5', 'dEdx_3.0'])
+tag_list += (['misspminus_0.010', 'misspminus_0.015', 'misspminus_0.025', 'misspminus_0.030'])
+tag_list += (['chisquared_3', 'chisquared_4', 'chisquared_6', 'chisquared_7'])
+tag_list += (['momentum_0.400', 'momentum_0.425', 'momentum_0.475', 'momentum_0.500'])
+tag_list += (['theta_1.0', 'theta_1.5', 'theta_2.5', 'theta_3.0'])
+tag_list += (['vertexZ_13.0', 'vertexZ_13.5', 'vertexZ_14.5', 'vertexZ_15.0'])
+tag_list += (['vertexR_0.50', 'vertexR_0.75', 'vertexR_1.25', 'vertexR_1.50'])
 for tag in tag_list:
     phi_d_2H_dsdt_yield_data                = np.vstack((phi_d_2H_dsdt_yield_data,              np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_'+tag+'.txt')[:,8]))
     phi_d_2H_dsdt_yield_data_statserr       = np.vstack((phi_d_2H_dsdt_yield_data_statserr,     np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_'+tag+'.txt')[:,9]/phi_d_2H_dsdt_yield_data[-1,:]))
@@ -78,9 +85,13 @@ for tag in tag_list:
     phi_d_2H_dsdt_efficiency                = np.vstack((phi_d_2H_dsdt_efficiency,              phi_d_2H_dsdt_yield_sim[-1,:]/phi_d_2H_dsdt_yield_tagged[-1,:]))
     phi_d_2H_dsdt_efficiency_statserr       = np.vstack((phi_d_2H_dsdt_efficiency_statserr,     np.sqrt(phi_d_2H_dsdt_yield_sim_statserr[-1,:]**2 + phi_d_2H_dsdt_yield_tagged_statserr[-1,:]**2)))
 
-    if tag == 'vertexZ_13':
+    if tag == 'vertexZ_13.0':
         phi_d_2H_dsdt_results               = np.vstack((phi_d_2H_dsdt_results,                 phi_d_2H_dsdt_yield_data[-1,:]/phi_d_2H_dsdt_efficiency[-1,:]/lumi(phi_d_2H_dsdt_energy_low, phi_d_2H_dsdt_energy_high, 26)/(phi_d_2H_dsdt_minust_high-phi_d_2H_dsdt_minust_low)/0.489/1000))
-    elif tag == 'vertexZ_15':
+    elif tag == 'vertexZ_13.5':
+        phi_d_2H_dsdt_results               = np.vstack((phi_d_2H_dsdt_results,                 phi_d_2H_dsdt_yield_data[-1,:]/phi_d_2H_dsdt_efficiency[-1,:]/lumi(phi_d_2H_dsdt_energy_low, phi_d_2H_dsdt_energy_high, 27)/(phi_d_2H_dsdt_minust_high-phi_d_2H_dsdt_minust_low)/0.489/1000))
+    elif tag == 'vertexZ_14.5':
+        phi_d_2H_dsdt_results               = np.vstack((phi_d_2H_dsdt_results,                 phi_d_2H_dsdt_yield_data[-1,:]/phi_d_2H_dsdt_efficiency[-1,:]/lumi(phi_d_2H_dsdt_energy_low, phi_d_2H_dsdt_energy_high, 29)/(phi_d_2H_dsdt_minust_high-phi_d_2H_dsdt_minust_low)/0.489/1000))
+    elif tag == 'vertexZ_15.0':
         phi_d_2H_dsdt_results               = np.vstack((phi_d_2H_dsdt_results,                 phi_d_2H_dsdt_yield_data[-1,:]/phi_d_2H_dsdt_efficiency[-1,:]/lumi(phi_d_2H_dsdt_energy_low, phi_d_2H_dsdt_energy_high, 30)/(phi_d_2H_dsdt_minust_high-phi_d_2H_dsdt_minust_low)/0.489/1000))
     else:
         phi_d_2H_dsdt_results               = np.vstack((phi_d_2H_dsdt_results,                 phi_d_2H_dsdt_yield_data[-1,:]/phi_d_2H_dsdt_efficiency[-1,:]/lumi(phi_d_2H_dsdt_energy_low, phi_d_2H_dsdt_energy_high, 28)/(phi_d_2H_dsdt_minust_high-phi_d_2H_dsdt_minust_low)/0.489/1000))
@@ -97,7 +108,6 @@ for i in range(len(phi_d_2H_dsdt_results[0,:])):
     else:
         if (phi_d_2H_dsdt_energy_low[i] != phi_d_2H_dsdt_energy_low[i-1]):
             index.append(i)
-print(index)
 
 # Data points from CLAS
 phi_d_2H_dsdt_clas_minust_low           = np.array([0.350, 0.375, 0.400, 0.425, 0.450, 0.500, 0.550, 0.600, 0.700, 0.800, 1.000, 1.200, 1.400])
@@ -184,41 +194,155 @@ plt.legend()
 file_pdf.savefig()
 plt.close()
 
-fig = plt.figure(figsize=(12, 12), dpi=300)
-gs = fig.add_gridspec(2, 2)
+
+# Systematics header
+legend_list = ['6-8 GeV', '8-9 GeV', '9-11 GeV']
+title_list = (['dEdx cut', 'Missing p- cut', 'Chi2/NDF cut', 'Momentum cut', 'Theta cut', 'Vertex Z cut', 'Vertex R cut'])
+label_list = []
+label_list += ([r'$dE/dx < 1.0 \sigma$', r'$dE/dx < 1.5 \sigma$', r'$dE/dx < 2.5 \sigma$', r'$dE/dx < 3.0 \sigma$'])
+label_list += ([r'$p^{-}_{miss}$ > -0.010 GeV/c', r'$p^{-}_{miss}$ > -0.015 GeV/c', r'$p^{-}_{miss}$ > -0.025 GeV/c', r'$p^{-}_{miss}$ > -0.030 GeV/c'])
+label_list += ([r'$\chi^2$/NDF < 3', r'$\chi^2$/NDF < 4', r'$\chi^2$/NDF < 6', r'$\chi^2$/NDF < 7'])
+label_list += ([r'$p$ > 0.40 GeV', r'$p$ > 0.425 GeV', r'$p$ > 0.475 GeV', r'$p$ > 0.50 GeV'])
+label_list += ([r'$\theta$ > 1.0 deg', r'$\theta$ > 1.5 deg', r'$\theta$ > 2.5 deg', r'$\theta$ > 3.0 deg'])
+label_list += ([r'|$Z-Z_{center}$| < 13 cm', r'|$Z-Z_{center}$| < 13.5 cm', r'|$Z-Z_{center}$| < 14.5 cm', r'|$Z-Z_{center}$| < 15 cm'])
+label_list += ([r'$R$ < 0.5 cm', r'$R$ < 0.75 cm', r'$R$ < 1.25 cm', r'$R$ < 1.5 cm'])
+color_list = []
+for i in range(7):
+    color_list += (['r', 'orange', 'c', 'b'])
+
+
+fig = plt.figure(figsize=(18, 18), dpi=300)
+gs = fig.add_gridspec(3, 3)
 axs = gs.subplots()
-color_list = ['r', 'g', 'b', 'c', 'm', 'y', 'k', 'orange', 'purple', 'brown', 'pink', 'gray', 'olive', 'lime']
-label_list = [r'$\chi^2$/NDF < 3', r'$\chi^2$/NDF < 4', r'$\chi^2$/NDF < 6', r'$\chi^2$/NDF < 7', r'$p$ > 0.35 GeV', r'$p$ > 0.45 GeV', r'$\theta$ > 1.0 deg', r'$\theta$ > 3.0 deg', r'|$Z-Z_{center}$| < 13 cm', r'|$Z-Z_{center}$| < 15 cm', r'$R$ < 0.5 cm', r'$R$ < 1.5 cm', r'Fit function: quadratic', r'Fit function: none']
-title_list = [r'Kinematic fitting $\chi^2$/NDF ', 'Particle kinematics', 'Vertex', 'Fitting function']
 for i in range(1, phi_d_2H_dsdt_yield_data_statserr.shape[0]):
-    if (i < 5):
-        subplot_row, subplot_col = 0, 0
-    elif (i < 9):
-        subplot_row, subplot_col = 0, 1
-    elif (i < 13):
-        subplot_row, subplot_col = 1, 0
-    else:
-        subplot_row, subplot_col = 1, 1
+    subplot_row = (i-1)//4//3
+    subplot_col = (i-1)//4%3
     for j in range(len(index)-1):
         if j == 0:
-            axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], (phi_d_2H_dsdt_results[0,index[j]:index[j+1]]-phi_d_2H_dsdt_results[i,index[j]:index[j+1]])/(0.000000001+np.sqrt(np.abs(phi_d_2H_dsdt_results_statserr[0,index[j]:index[j+1]]**2-phi_d_2H_dsdt_results_statserr[i,index[j]:index[j+1]]**2))), label=label_list[i-1], color=color_list[i-1])
-            # axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], (phi_d_2H_dsdt_results[0,index[j]:index[j+1]]-phi_d_2H_dsdt_results[i,index[j]:index[j+1]])/(phi_d_2H_dsdt_results[0,index[j]:index[j+1]]), label=label_list[i-1], color=color_list[i-1])
+            axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], (phi_d_2H_dsdt_yield_data[0,index[j]:index[j+1]]-phi_d_2H_dsdt_yield_data[i,index[j]:index[j+1]])/(phi_d_2H_dsdt_yield_data[0,index[j]:index[j+1]]), label=label_list[i-1], color=color_list[i-1])
         else:
-            axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], (phi_d_2H_dsdt_results[0,index[j]:index[j+1]]-phi_d_2H_dsdt_results[i,index[j]:index[j+1]])/(0.000000001+np.sqrt(np.abs(phi_d_2H_dsdt_results_statserr[0,index[j]:index[j+1]]**2-phi_d_2H_dsdt_results_statserr[i,index[j]:index[j+1]]**2))), color=color_list[i-1])
-            # axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], (phi_d_2H_dsdt_results[0,index[j]:index[j+1]]-phi_d_2H_dsdt_results[i,index[j]:index[j+1]])/(phi_d_2H_dsdt_results[0,index[j]:index[j+1]]), color=color_list[i-1])
+            axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], (phi_d_2H_dsdt_yield_data[0,index[j]:index[j+1]]-phi_d_2H_dsdt_yield_data[i,index[j]:index[j+1]])/(phi_d_2H_dsdt_yield_data[0,index[j]:index[j+1]]), color=color_list[i-1])
     axs[subplot_row, subplot_col].legend()
-    axs[subplot_row, subplot_col].plot([0, 2], [4, 4], 'r--')
-    axs[subplot_row, subplot_col].plot([0, 2], [-4, -4], 'r--')
-    axs[subplot_row, subplot_col].plot([0, 2], [1, 1], 'r--')
-    axs[subplot_row, subplot_col].plot([0, 2], [-1, -1], 'r--')
+    axs[subplot_row, subplot_col].plot([0, 2], [0.1, 0.1], 'r--')
+    axs[subplot_row, subplot_col].plot([0, 2], [-0.1, -0.1], 'r--')
+    axs[subplot_row, subplot_col].set_xlabel(r'$-t[GeV^2/c]$')
+    axs[subplot_row, subplot_col].set_ylabel(r'$(Y^\prime - Y)/Y$')
+    axs[subplot_row, subplot_col].set_xlim(0, 2)
+    axs[subplot_row, subplot_col].set_ylim(-1, 1)
+    axs[subplot_row, subplot_col].set_title(title_list[subplot_row*3+subplot_col])
+plt.suptitle('Data yield differences')
+file_pdf.savefig()
+plt.close()
+
+fig = plt.figure(figsize=(18, 18), dpi=300)
+gs = fig.add_gridspec(3, 3)
+axs = gs.subplots()
+for i in range(1, phi_d_2H_dsdt_yield_data_statserr.shape[0]):
+    subplot_row = (i-1)//4//3
+    subplot_col = (i-1)//4%3
+    for j in range(len(index)-1):
+        if j == 0:
+            axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], (phi_d_2H_dsdt_yield_sim[0,index[j]:index[j+1]]-phi_d_2H_dsdt_yield_sim[i,index[j]:index[j+1]])/(phi_d_2H_dsdt_yield_sim[0,index[j]:index[j+1]]), label=label_list[i-1], color=color_list[i-1])
+        else:
+            axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], (phi_d_2H_dsdt_yield_sim[0,index[j]:index[j+1]]-phi_d_2H_dsdt_yield_sim[i,index[j]:index[j+1]])/(phi_d_2H_dsdt_yield_sim[0,index[j]:index[j+1]]), color=color_list[i-1])
+    axs[subplot_row, subplot_col].legend()
+    axs[subplot_row, subplot_col].plot([0, 2], [0.1, 0.1], 'r--')
+    axs[subplot_row, subplot_col].plot([0, 2], [-0.1, -0.1], 'r--')
+    axs[subplot_row, subplot_col].set_xlabel(r'$-t[GeV^2/c]$')
+    axs[subplot_row, subplot_col].set_ylabel(r'$(Y^\prime - Y)/Y$')
+    axs[subplot_row, subplot_col].set_xlim(0, 2)
+    axs[subplot_row, subplot_col].set_ylim(-1, 1)
+    axs[subplot_row, subplot_col].set_title(title_list[subplot_row*3+subplot_col])
+plt.suptitle('Sim yield differences')
+file_pdf.savefig()
+plt.close()
+
+# Observable relative difference
+fig = plt.figure(figsize=(18, 18), dpi=300)
+gs = fig.add_gridspec(3, 3)
+axs = gs.subplots()
+for i in range(1, phi_d_2H_dsdt_yield_data_statserr.shape[0]):
+    subplot_row = (i-1)//4//3
+    subplot_col = (i-1)//4%3
+    for j in range(len(index)-1):
+        if j == 0:
+            axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[i,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]], label=label_list[i-1], color=color_list[i-1])
+        else:
+            axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[i,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]], color=color_list[i-1])
+    axs[subplot_row, subplot_col].legend()
+    axs[subplot_row, subplot_col].set_xlabel(r'$-t[GeV^2/c]$')
+    axs[subplot_row, subplot_col].set_ylabel(r'$(\sigma^\prime - \sigma)/\sigma$')
+    axs[subplot_row, subplot_col].set_xlim(0, 2)
+    axs[subplot_row, subplot_col].set_ylim(-0.2, 0.2)
+    axs[subplot_row, subplot_col].set_title(title_list[subplot_row*3+subplot_col])
+plt.suptitle('Observable relative differences')
+file_pdf.savefig()
+plt.close()
+
+# Barlow score
+fig = plt.figure(figsize=(18, 18), dpi=300)
+gs = fig.add_gridspec(3, 3)
+axs = gs.subplots()
+for i in range(1, phi_d_2H_dsdt_yield_data_statserr.shape[0]):
+    subplot_row = (i-1)//4//3
+    subplot_col = (i-1)//4%3
+    for j in range(len(index)-1):
+        if j == 0:
+            axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[i,index[j]:index[j+1]])/(1E-40+np.sqrt(np.abs(phi_d_2H_dsdt_results_statserr[0,index[j]:index[j+1]]**2 - phi_d_2H_dsdt_results_statserr[i,index[j]:index[j+1]]**2))), label=label_list[i-1], color=color_list[i-1])
+        else:
+            axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[i,index[j]:index[j+1]])/(1E-40+np.sqrt(np.abs(phi_d_2H_dsdt_results_statserr[0,index[j]:index[j+1]]**2 - phi_d_2H_dsdt_results_statserr[i,index[j]:index[j+1]]**2))), color=color_list[i-1])
+    axs[subplot_row, subplot_col].legend()
+    axs[subplot_row, subplot_col].fill_between([0, 2], [1, 1], [-1, -1], color='green', alpha=0.03)
+    axs[subplot_row, subplot_col].fill_between([0, 2], [4, 4], [1, 1], color='yellow', alpha=0.03)
+    axs[subplot_row, subplot_col].fill_between([0, 2], [15, 15], [4, 4], color='red', alpha=0.03)
+    axs[subplot_row, subplot_col].fill_between([0, 2], [-1, -1], [-4, -4], color='yellow', alpha=0.03)
+    axs[subplot_row, subplot_col].fill_between([0, 2], [-4, -4], [-15, -15], color='red', alpha=0.03)
     axs[subplot_row, subplot_col].set_xlabel(r'$-t[GeV^2/c]$')
     axs[subplot_row, subplot_col].set_ylabel(r'Barlow score')
     axs[subplot_row, subplot_col].set_xlim(0, 2)
-    axs[subplot_row, subplot_col].set_ylim(-10, 10)
-    axs[subplot_row, subplot_col].set_title(title_list[subplot_row*2+subplot_col])
-plt.suptitle('Barlow score for different systematic checks')
+    axs[subplot_row, subplot_col].set_ylim(-15, 15)
+    axs[subplot_row, subplot_col].set_title(title_list[subplot_row*3+subplot_col])
+plt.suptitle('Barlow scores')
 file_pdf.savefig()
 plt.close()
+
+# Uncertainties
+fig = plt.figure(figsize=(18, 18), dpi=300)
+gs = fig.add_gridspec(3, 3)
+axs = gs.subplots()
+total_uncertainties = [np.zeros_like(phi_d_2H_dsdt_results[0,index[j]:index[j+1]]) for j in range(len(index)-1)]
+for i in range(7):
+    subplot_row = i//3
+    subplot_col = i%3
+    for j in range(len(index)-1):
+        temp_array = (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[4*i+4,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]
+        temp_array = np.vstack((temp_array, (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[4*i+3,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]))
+        temp_array = np.vstack((temp_array, (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[4*i+2,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]))
+        if (i > 2):
+            temp_array = np.vstack((temp_array, (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[4*i+1,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]))
+        temp_array = np.vstack((temp_array, np.zeros_like(phi_d_2H_dsdt_results[0,index[j]:index[j+1]])))
+        temp_std = np.std(temp_array, axis=0)
+        axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], temp_std, label=legend_list[j])
+        total_uncertainties[j] += temp_std**2
+    axs[subplot_row, subplot_col].legend()
+    axs[subplot_row, subplot_col].set_xlabel(r'$-t[GeV^2/c]$')
+    axs[subplot_row, subplot_col].set_ylabel(r'$\delta\sigma/\sigma$')
+    axs[subplot_row, subplot_col].set_xlim(0, 2)
+    axs[subplot_row, subplot_col].set_ylim(0, 0.2)
+    axs[subplot_row, subplot_col].set_title(title_list[i])
+for j in range(len(index)-1):
+    total_uncertainties[j] = np.sqrt(total_uncertainties[j])
+    axs[2, 1].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], total_uncertainties[j], label=legend_list[j])
+    axs[2, 1].legend()
+    axs[2, 1].set_xlabel(r'$-t[GeV^2/c]$')
+    axs[2, 1].set_ylabel(r'$\delta\sigma/\sigma$')
+    axs[2, 1].set_xlim(0, 2)
+    axs[2, 1].set_ylim(0, 0.2)
+    axs[2, 1].set_title('Total uncertainty')
+plt.suptitle('Observable uncertainties')
+file_pdf.savefig()
+plt.close()
+
 
 # fig = plt.figure(figsize=(8, 6), dpi=300)
 # color_code = ['b', 'k', 'r']
