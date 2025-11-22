@@ -262,6 +262,8 @@ fig = plt.figure(figsize=(18, 18), dpi=300)
 gs = fig.add_gridspec(3, 3)
 axs = gs.subplots()
 for i in range(1, phi_d_2H_dsdt_yield_data_statserr.shape[0]):
+    if (i == 1 or i == 5 or i == 9):
+        continue
     subplot_row = (i-1)//4//3
     subplot_col = (i-1)//4%3
     for j in range(len(index)-1):
