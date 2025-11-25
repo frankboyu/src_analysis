@@ -23,7 +23,7 @@ TAG_LIST=()
 TAG_LIST+=("theta_1.0" "theta_1.5" "theta_2.5" "theta_3.0")
 TAG_LIST+=("vertexZ_13.0" "vertexZ_13.5" "vertexZ_14.5" "vertexZ_15.0")
 # TAG_LIST+=("vertexR_0.50" "vertexR_0.75" "vertexR_1.25" "vertexR_1.50")
-# TAG_LIST+=("fitfunc_quadratic")
+# TAG_LIST+=("fitfunc_quadratic" "fitfunc_phenomenological" "fitfunc_fulllinear" "fitfunc_fullquadratic")
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
 gxenv $HALLD_VERSIONS/version.xml
