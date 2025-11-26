@@ -49,67 +49,67 @@ int get_yield(string channel, string reaction, string observable, string tag)
         string VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.0";
         string BeamAccidCut     = "TMath::Abs(beam_DeltaT_meas) < 18.0";
 
-        if      (tag == "dEdx_1.0")
+        if      (tag.find("dEdx_1.0") != string::npos)
             dEdxCut         = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-4.01*d_momentum_meas+4.88) + 3.26)";
-        else if (tag == "dEdx_1.5")
+        else if (tag.find("dEdx_1.5") != string::npos)
             dEdxCut         = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.85*d_momentum_meas+4.69) + 2.92)";
-        else if (tag == "dEdx_2.5")
+        else if (tag.find("dEdx_2.5") != string::npos)
             dEdxCut         = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.41*d_momentum_meas+4.21) + 2.21)";
-        else if (tag == "dEdx_3.0")
+        else if (tag.find("dEdx_3.0") != string::npos)
             dEdxCut         = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.11*d_momentum_meas+3.90) + 1.83)";
-        else if (tag == "misspminus_0.010")
+        else if (tag.find("misspminus_0.010") != string::npos)
             MissPMinusCut   = "miss_pminus_meas > -0.010";
-        else if (tag == "misspminus_0.015")
+        else if (tag.find("misspminus_0.015") != string::npos)
             MissPMinusCut   = "miss_pminus_meas > -0.015";
-        else if (tag == "misspminus_0.025")
+        else if (tag.find("misspminus_0.025") != string::npos)
             MissPMinusCut   = "miss_pminus_meas > -0.025";
-        else if (tag == "misspminus_0.030")
+        else if (tag.find("misspminus_0.030") != string::npos)
             MissPMinusCut   = "miss_pminus_meas > -0.030";
-        else if (tag == "chisquared_3")
-            KinFitChiSqCut   = "chisq_per_ndf_kin < 3.0";
-        else if (tag == "chisquared_4")
+        else if (tag.find("chisquared_3.5") != string::npos)
+            KinFitChiSqCut   = "chisq_per_ndf_kin < 3.5";
+        else if (tag.find("chisquared_4.0") != string::npos)
             KinFitChiSqCut   = "chisq_per_ndf_kin < 4.0";
-        else if (tag == "chisquared_6")
+        else if (tag.find("chisquared_6.0") != string::npos)
             KinFitChiSqCut   = "chisq_per_ndf_kin < 6.0";
-        else if (tag == "chisquared_7")
+        else if (tag.find("chisquared_7.0") != string::npos)
             KinFitChiSqCut   = "chisq_per_ndf_kin < 7.0";
-        else if (tag == "momentum_0.400")
+        else if (tag.find("momentum_0.400") != string::npos)
             KinematicsCut    = "kp_momentum_meas > 0.400 && km_momentum_meas > 0.400 && d_momentum_meas > 0.400 && kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
-        else if (tag == "momentum_0.425")
+        else if (tag.find("momentum_0.425") != string::npos)
             KinematicsCut    = "kp_momentum_meas > 0.425 && km_momentum_meas > 0.425 && d_momentum_meas > 0.425 && kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
-        else if (tag == "momentum_0.475")
+        else if (tag.find("momentum_0.475") != string::npos)
             KinematicsCut    = "kp_momentum_meas > 0.475 && km_momentum_meas > 0.475 && d_momentum_meas > 0.475 && kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
-        else if (tag == "momentum_0.500")
+        else if (tag.find("momentum_0.500") != string::npos)
             KinematicsCut    = "kp_momentum_meas > 0.500 && km_momentum_meas > 0.500 && d_momentum_meas > 0.500 && kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
-        else if (tag == "theta_1.0")
+        else if (tag.find("theta_1.0") != string::npos)
             KinematicsCut    = "kp_momentum_meas > 0.40 && km_momentum_meas > 0.40 && d_momentum_meas > 0.40 && kp_theta_meas > 1.0 && km_theta_meas > 1.0 && d_theta_meas > 1.0";
-        else if (tag == "theta_1.5")
+        else if (tag.find("theta_1.5") != string::npos)
             KinematicsCut    = "kp_momentum_meas > 0.40 && km_momentum_meas > 0.40 && d_momentum_meas > 0.40 && kp_theta_meas > 1.5 && km_theta_meas > 1.5 && d_theta_meas > 1.5";
-        else if (tag == "theta_2.5")
+        else if (tag.find("theta_2.5") != string::npos)
             KinematicsCut    = "kp_momentum_meas > 0.40 && km_momentum_meas > 0.40 && d_momentum_meas > 0.40 && kp_theta_meas > 2.5 && km_theta_meas > 2.5 && d_theta_meas > 2.5";
-        else if (tag == "theta_3.0")
+        else if (tag.find("theta_3.0") != string::npos)
             KinematicsCut    = "kp_momentum_meas > 0.40 && km_momentum_meas > 0.40 && d_momentum_meas > 0.40 && kp_theta_meas > 3.0 && km_theta_meas > 3.0 && d_theta_meas > 3.0";
-        else if (tag == "vertexZ_13.0")
+        else if (tag.find("vertexZ_13.0") != string::npos)
             VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 13.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.0";
-        else if (tag == "vertexZ_13.5")
+        else if (tag.find("vertexZ_13.5") != string::npos)
             VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 13.5 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.0";
-        else if (tag == "vertexZ_14.5")
+        else if (tag.find("vertexZ_14.5") != string::npos)
             VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.5 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.0";
-        else if (tag == "vertexZ_15.0")
+        else if (tag.find("vertexZ_15.0") != string::npos)
             VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 15.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.0";
-        else if (tag == "vertexR_0.50")
+        else if (tag.find("vertexR_0.50") != string::npos)
             VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 0.50";
-        else if (tag == "vertexR_0.75")
+        else if (tag.find("vertexR_0.75") != string::npos)
             VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 0.75";
-        else if (tag == "vertexR_1.25")
+        else if (tag.find("vertexR_1.25") != string::npos)
             VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.25";
-        else if (tag == "vertexR_1.50")
+        else if (tag.find("vertexR_1.50") != string::npos)
             VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.50";
-        else if (tag == "beamaccid_5")
+        else if (tag.find("beamaccid_5") != string::npos)
             BeamAccidCut     = "TMath::Abs(beam_DeltaT_meas) < 22.0";
-        else if (tag == "beamaccid_3")
+        else if (tag.find("beamaccid_3") != string::npos)
             BeamAccidCut     = "TMath::Abs(beam_DeltaT_meas) < 14.0";
-        else if (tag == "beamaccid_4out")
+        else if (tag.find("beamaccid_4out") != string::npos)
             BeamAccidCut     = "TMath::Abs(beam_DeltaT_meas) > 2.0 && TMath::Abs(beam_DeltaT_meas) < 22.0";
 
         rdf_input = rdf_input   .Filter(dEdxCut.c_str())
@@ -119,23 +119,23 @@ int get_yield(string channel, string reaction, string observable, string tag)
                                 .Filter(VertexCut.c_str())
                                 .Filter(BeamAccidCut.c_str());
 
-        if      (tag == "beamaccid_3")
+        if      (tag.find("beamaccid_3") != string::npos)
             rdf_input = rdf_input   .Define("beamaccid_weight_syst",    "TMath::Abs(beam_DeltaT_meas) < 2.0 ? 1.0 : -1.0/6.0");
-        else if (tag == "beamaccid_5")
+        else if (tag.find("beamaccid_5") != string::npos)
             rdf_input = rdf_input   .Define("beamaccid_weight_syst",    "TMath::Abs(beam_DeltaT_meas) < 2.0 ? 1.0 : -1.0/10.0");
         else
             rdf_input = rdf_input   .Define("beamaccid_weight_syst",    "TMath::Abs(beam_DeltaT_meas) < 2.0 ? 1.0 : -1.0/8.0");
 
-        if      (tag == "comboaccid_1")
+        if      (tag.find("comboaccid_1") != string::npos)
             rdf_input = rdf_input   .Define("combo_accid_weight_syst",  "combo_accid_weight == 1.0 ? 1.0 : 1.0");
-        else if (tag == "comboaccid_-1")
+        else if (tag.find("comboaccid_-1") != string::npos)
             rdf_input = rdf_input   .Define("combo_accid_weight_syst",  "combo_accid_weight == 1.0 ? 1.0 : -1.0");
         else
             rdf_input = rdf_input   .Define("combo_accid_weight_syst",  "combo_accid_weight");
 
-        if      (tag == "simweight_pass0")
+        if      (tag.find("simweight_pass0") != string::npos)
             rdf_input = rdf_input   .Define("sim_weight_syst",          "1.0");
-        else if (tag == "simweight_pass1")
+        else if (tag.find("simweight_pass1") != string::npos)
             rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass1(beam_energy_truth, minust_truth)");
         else
             rdf_input = rdf_input   .Define("sim_weight_syst",          "1.0");
