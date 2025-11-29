@@ -180,8 +180,7 @@ def gaussian(x, a, b, c):
 
 
 file_data = File("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_recon_exc_data_2H_ver12.root")
-hist_data = file_data.get('NominalCut/d_dEdx_cdc_meas_NominalCut')
-# hist_data = file_data.get('dEdxCut/d_dEdx_cdc_meas_dEdxCut')
+hist_data = file_data.get('dEdxCut/d_dEdx_cdc_meas_dEdxCut')
 pdf = PdfPages('fit_cdc.pdf')
 
 dedx_points = np.arange(0, 40, 0.01)
@@ -203,15 +202,13 @@ for i in range(len(dedx_p_edges)-1):
     elif (i < 8):
         hist_slice.rebin(2)
     hist_slice.plotPoints(fmt='o', label='Data')
-    p0_count = hist_slice.y.max()
-    p0_mean = np.average(hist_slice.x , weights=hist_slice.y)
-    p0_sigma = np.sqrt(np.average((hist_slice.x - p0_mean)**2 , weights=hist_slice.y))
-    # p0_mean = np.exp(-4.26*(dedx_p_centers[i]/100)+5.20)+3.92
-    fit_mask = (hist_slice.x > p0_mean - 2.0*p0_sigma) & (hist_slice.x < p0_mean + 2.0*p0_sigma) & (hist_slice.y > 0)
+    fit_low = np.exp(-3.67*(dedx_p_centers[i]/100)+4.48)+2.57
+    fit_high = np.exp(-4.58*(dedx_p_centers[i]/100)+5.66)+5.22
+    fit_mask = (hist_slice.x > fit_low) & (hist_slice.x < fit_high)
     hist_slice.x = hist_slice.x[fit_mask]
     hist_slice.y = hist_slice.y[fit_mask]
     hist_slice.yerr = hist_slice.yerr[fit_mask]
-    popt, pcov = curve_fit(gaussian, hist_slice.x, hist_slice.y, p0=[p0_count,p0_mean,p0_sigma])
+    popt, pcov = curve_fit(gaussian, hist_slice.x, hist_slice.y, p0=[hist_slice.y.max(),(fit_low+fit_high)/2,(fit_high-fit_low)/4])
     mean_value = np.append(mean_value, popt[1])
     mean_err = np.append(mean_err, np.sqrt(pcov[1][1]))
     sigma_value = np.append(sigma_value, abs(popt[2]))
@@ -219,7 +216,7 @@ for i in range(len(dedx_p_edges)-1):
     residuals = hist_slice.y - gaussian(hist_slice.x, *popt)
     chisq = np.sum((residuals**2) / gaussian(hist_slice.x, *popt))
     chisquared = np.append(chisquared, chisq)
-    plt.plot(dedx_points[(dedx_points > p0_mean - 2.0*p0_sigma) & (dedx_points < p0_mean + 2.0*p0_sigma)], gaussian(dedx_points[(dedx_points > p0_mean - 2.0*p0_sigma) & (dedx_points < p0_mean + 2.0*p0_sigma)], *popt), label="Gaussian Fit", color='red')
+    plt.plot(dedx_points[(dedx_points > fit_low) & (dedx_points < fit_high)], gaussian(dedx_points[(dedx_points > fit_low) & (dedx_points < fit_high)], *popt), label="Gaussian Fit", color='red')
     plt.text(0.02, 0.95, r'$\mu=%.3f \pm %.3f$ keV/cm' % (popt[1], np.sqrt(pcov[1][1])), transform=plt.gca().transAxes)
     plt.text(0.02, 0.90, r'$\sigma=%.3f \pm %.3f$ keV/cm' % (abs(popt[2]), np.sqrt(pcov[2][2])), transform=plt.gca().transAxes)
     plt.text(0.02, 0.85, r'$\chi^2/ndf=%.2f$' % (chisq/(len(hist_slice.x)-3)), transform=plt.gca().transAxes)
@@ -240,16 +237,13 @@ for N in variation_list:
     para_list.append(popt)
 
 plt.figure(figsize=(8,6))
-# popt, pcov = curve_fit(exponential, dedx_p_centers/100, mean_value-2.0*sigma_value)
-# p_points = np.arange(0.25, 3, 0.01)
-# dE_points = exponential(p_points, *popt)
-plt.scatter(dedx_p_centers/100, mean_value, color='k', marker='o', s=20, label=r'Data points of $\mu-2\sigma$')
-plt.scatter(dedx_p_centers/100, sigma_value, color='b', marker='o', s=20, label=r'test')
-# plt.title('2.0 Sigma Band Fit')
+plt.errorbar(dedx_p_centers/100, mean_value, xerr=(dedx_p_high-dedx_p_low)/200, yerr=mean_err, fmt='k.', label=r'$\mu$')
+plt.errorbar(dedx_p_centers/100, sigma_value, xerr=(dedx_p_high-dedx_p_low)/200, yerr=sigma_err, fmt='b.', label=r'$\sigma$')
 plt.xlim(0,2)
 plt.ylim(0,40)
 plt.xlabel(r'$p$ (GeV/c)')
-# plt.ylabel(r'$dE/dx$ (keV/cm)')
+plt.ylabel(r'$dE/dx$ (keV/cm)')
+plt.legend()
 pdf.savefig()
 plt.close()
 
