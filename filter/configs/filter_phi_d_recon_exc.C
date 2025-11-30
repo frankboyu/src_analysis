@@ -342,7 +342,7 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
 
             TH1D hist_miss_energy_meas                      = *rdf.Histo1D({("miss_energy_meas_"+ label).c_str(), ";E_{miss} (GeV);Counts", 300, -3.0, 3.0},"miss_energy_meas","event_weight");
             hist_miss_energy_meas.Write();
-            TH1D hist_miss_masssquared_meas                 = *rdf.Histo1D({("miss_masssquared_meas_"+ label).c_str(), ";m_{miss}^{2} (GeV^{2}/c^{4});Counts", 100, -0.1, 0.1},"miss_masssquared_meas","event_weight");
+            TH1D hist_miss_masssquared_meas                 = *rdf.Histo1D({("miss_masssquared_meas_"+ label).c_str(), ";m_{miss}^{2} (GeV^{2}/c^{4});Counts", 100, -0.2, 0.2},"miss_masssquared_meas","event_weight");
             hist_miss_masssquared_meas.Write();
             TH1D hist_miss_pminus_meas                      = *rdf.Histo1D({("miss_pminus_meas_"+ label).c_str(), ";P_{miss}^{-} (GeV/c);Counts", 400, -0.2, 0.2},"miss_pminus_meas","event_weight");
             hist_miss_pminus_meas.Write();
