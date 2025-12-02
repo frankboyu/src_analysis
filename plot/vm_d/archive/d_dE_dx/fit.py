@@ -202,6 +202,8 @@ for i in range(len(dedx_p_edges)-1):
     elif (i < 8):
         hist_slice.rebin(2)
     hist_slice.plotPoints(fmt='o', label='Data')
+    plt.ylim(0, hist_slice.y.max()*1.2)
+    plt.xlim(0, 40)
     fit_low = np.exp(-3.67*(dedx_p_centers[i]/100)+4.48)+2.57
     fit_high = np.exp(-4.58*(dedx_p_centers[i]/100)+5.66)+5.22
     fit_mask = (hist_slice.x > fit_low) & (hist_slice.x < fit_high)
