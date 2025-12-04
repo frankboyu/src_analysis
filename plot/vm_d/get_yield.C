@@ -110,7 +110,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
         else if (tag.find("beamaccid_3") != string::npos)
             BeamAccidCut     = "TMath::Abs(beam_DeltaT_meas) < 14.0";
         else if (tag.find("beamaccid_4out") != string::npos)
-            BeamAccidCut     = "TMath::Abs(beam_DeltaT_meas) > 2.0 && TMath::Abs(beam_DeltaT_meas) < 22.0";
+            BeamAccidCut     = "TMath::Abs(beam_DeltaT_meas) < 2.0 || (TMath::Abs(beam_DeltaT_meas) > 6.0 && TMath::Abs(beam_DeltaT_meas) < 22.0)";
 
         rdf_input = rdf_input   .Filter(dEdxCut.c_str())
                                 .Filter(MissPMinusCut.c_str())
