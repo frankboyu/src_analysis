@@ -15,7 +15,7 @@ OBSERVABLE_LIST=()
 OBSERVABLE_LIST+=("dsdt")
 
 TAG_LIST=()
-TAG_LIST+=("nominal")
+# TAG_LIST+=("nominal")
 # TAG_LIST+=("dEdx_1.0" "dEdx_1.5" "dEdx_2.5" "dEdx_3.0")
 # TAG_LIST+=("misspminus_0.010_chisquared_3.5" "misspminus_0.015_chisquared_3.5" "misspminus_0.020_chisquared_3.5" "misspminus_0.025_chisquared_3.5" "misspminus_0.030_chisquared_3.5")
 # TAG_LIST+=("misspminus_0.010_chisquared_4.0" "misspminus_0.015_chisquared_4.0" "misspminus_0.020_chisquared_4.0" "misspminus_0.025_chisquared_4.0" "misspminus_0.030_chisquared_4.0")
@@ -27,6 +27,10 @@ TAG_LIST+=("nominal")
 # TAG_LIST+=("vertexZ_13.0" "vertexZ_13.5" "vertexZ_14.5" "vertexZ_15.0")
 # TAG_LIST+=("vertexR_0.50" "vertexR_0.75" "vertexR_1.25" "vertexR_1.50")
 # TAG_LIST+=("fitfunc_quadratic" "fitfunc_phenomenological" "fitfunc_fulllinear" "fitfunc_fullquadratic")
+TAG_LIST+=("beamaccid_3" "beamaccid_5" "beamaccid_4out")
+TAG_LIST+=("comboaccid_1" "comboaccid_-1")
+TAG_LIST+=("fitmax_1.06" "fitmax_1.07" "fitmax_1.09" "fitmax_1.10")
+
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
 gxenv $HALLD_VERSIONS/version.xml
