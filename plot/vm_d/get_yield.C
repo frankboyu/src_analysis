@@ -268,6 +268,31 @@ int get_yield(string channel, string reaction, string observable, string tag)
                 yield_err = sqrt(rdf_bin.Sum("yield_weight_squared").GetValue());
                 hist_bin.Draw();
             }
+            else if (tag == "fitfunc_fulllinear")
+            {
+                TF1 fit_func("fit_func", rel_bw_plus_fulllinear, 0.99, fit_max, 6);
+                fit_func.SetParameters(1.00, 1.02, 0.0035, 0.004, 0.0, 20);
+                fit_func.SetParLimits(0, 0.01, 200);
+                fit_func.FixParameter(1, 1.019456);
+                fit_func.FixParameter(2, 0.00425);
+                // fit_func.FixParameter(3, 0.0035);
+                fit_func.SetParLimits(4, -5.0, 5.0);
+                fit_func.SetParLimits(5, 0.01, 100.0);
+                auto fit_results = hist_bin.Fit(&fit_func, "SLR");
+                hist_bin.GetFunction("fit_func")->SetLineColor(kBlack);
+                hist_bin.Draw("same");
+                TF1 *rel_bw_func = new TF1("rel_bw_func", rel_bw, 0.99, fit_max, 4);
+                rel_bw_func->SetParameters(fit_func.GetParameter(0), fit_func.GetParameter(1), fit_func.GetParameter(2), fit_func.GetParameter(3));
+                rel_bw_func->SetLineColor(kRed);
+                rel_bw_func->Draw("same");
+                TF1 *fulllinear_function = new TF1("fulllinear_function", fulllinear, 0.99, fit_max, 2);
+                fulllinear_function->SetParameter(0, fit_func.GetParameter(4));
+                fulllinear_function->SetParameter(1, fit_func.GetParameter(5));
+                fulllinear_function->SetLineColor(kBlue);
+                fulllinear_function->Draw("same");
+                yield = fit_func.GetParameter(0)/0.005;
+                yield_err = fit_func.GetParError(0)/0.005;
+            }
             else if (tag == "fitfunc_quadratic")
             {
                 TF1 fit_func("fit_func", rel_bw_plus_quadratic, 0.99, fit_max, 5);
@@ -288,6 +313,31 @@ int get_yield(string channel, string reaction, string observable, string tag)
                 quadratic_function->SetParameter(0, fit_func.GetParameter(4));
                 quadratic_function->SetLineColor(kBlue);
                 quadratic_function->Draw("same");
+                yield = fit_func.GetParameter(0)/0.005;
+                yield_err = fit_func.GetParError(0)/0.005;
+            }
+            else if (tag == "fitfunc_fullquadratic")
+            {
+                TF1 fit_func("fit_func", rel_bw_plus_fullquadratic, 0.99, fit_max, 6);
+                fit_func.SetParameters(1.00, 1.02, 0.0035, 0.004, 0.0, 20);
+                fit_func.SetParLimits(0, 0.01, 200);
+                fit_func.FixParameter(1, 1.019456);
+                fit_func.FixParameter(2, 0.00425);
+                // fit_func.FixParameter(3, 0.0035);
+                fit_func.SetParLimits(4, -5.0, 5.0);
+                fit_func.SetParLimits(5, 0.01, 100.0);
+                auto fit_results = hist_bin.Fit(&fit_func, "SLR");
+                hist_bin.GetFunction("fit_func")->SetLineColor(kBlack);
+                hist_bin.Draw("same");
+                TF1 *rel_bw_func = new TF1("rel_bw_func", rel_bw, 0.99, fit_max, 4);
+                rel_bw_func->SetParameters(fit_func.GetParameter(0), fit_func.GetParameter(1), fit_func.GetParameter(2), fit_func.GetParameter(3));
+                rel_bw_func->SetLineColor(kRed);
+                rel_bw_func->Draw("same");
+                TF1 *fullquadratic_function = new TF1("fullquadratic_function", fullquadratic, 0.99, fit_max, 2);
+                fullquadratic_function->SetParameter(0, fit_func.GetParameter(4));
+                fullquadratic_function->SetParameter(1, fit_func.GetParameter(5));
+                fullquadratic_function->SetLineColor(kBlue);
+                fullquadratic_function->Draw("same");
                 yield = fit_func.GetParameter(0)/0.005;
                 yield_err = fit_func.GetParError(0)/0.005;
             }
@@ -618,6 +668,67 @@ Double_t rel_bw(Double_t *x, Double_t *par)
         Double_t denominator = (xprime*xprime - M0*M0)*(xprime*xprime - M0*M0) + M0*M0*Gamma*Gamma;
 
         convol_sum += (2 / TMath::Pi()) * xprime * M0 * Gamma / denominator * TMath::Gaus(x[0]-xprime, 0, sigma, true) * convol_step;
+    }
+
+    return par[0] * convol_sum;
+}
+
+Double_t rel_bw_noBL(Double_t *x, Double_t *par)
+{
+    // Relativistic Breit-Wigner without Blatt-Weisskopf factor
+    // par[0] = BW amplitude, par[1] = BW pole mass, par[2] = BW pole width, par[3] = Gaussian width
+
+    Double_t M0 = par[1];
+    Double_t Gamma0 = par[2];
+    Double_t sigma = par[3];
+    Int_t L = 1;
+    Double_t convol_sum = 0.0;
+    Double_t convol_range = 10.0;
+    Double_t convol_step = 0.001;
+
+    for (double xprime = x[0]-convol_range; xprime < x[0]+convol_range; xprime += convol_step)
+    {
+        if (xprime < 2*mass_kaon)
+            continue;
+
+        // Kaon mass and momentum calculations
+        Double_t mk = mass_kaon;
+        Double_t q = sqrt((xprime*xprime - 4*mk*mk)/4); // momentum of kaon in phi rest frame
+        Double_t q0 = sqrt((M0*M0 - 4*mk*mk)/4);     // momentum at pole mass
+
+        // Mass-dependent width without Blatt-Weisskopf factor
+        Double_t Gamma = Gamma0 * (q/q0) * (q/q0) * (q/q0) * (M0/xprime);
+
+        // Relativistic Breit-Wigner
+        Double_t denominator = (xprime*xprime - M0*M0)*(xprime*xprime - M0*M0) + M0*M0*Gamma*Gamma;
+
+        convol_sum += (2 / TMath::Pi()) * xprime * M0 * Gamma / denominator * TMath::Gaus(x[0]-xprime, 0, sigma, true) * convol_step;
+    }
+
+    return par[0] * convol_sum;
+}
+
+Double_t nonrel_bw(Double_t *x, Double_t *par)
+{
+    // Non-relativistic Breit-Wigner
+    // par[0] = BW amplitude, par[1] = BW pole mass, par[2] = BW pole width, par[3] = Gaussian width
+
+    Double_t M0 = par[1];
+    Double_t Gamma0 = par[2];
+    Double_t sigma = par[3];
+    Double_t convol_sum = 0.0;
+    Double_t convol_range = 10.0;
+    Double_t convol_step = 0.001;
+
+    for (double xprime = x[0]-convol_range; xprime < x[0]+convol_range; xprime += convol_step)
+    {
+        if (xprime < 2*mass_kaon)
+            continue;
+
+        // Non-relativistic Breit-Wigner
+        Double_t denominator = (xprime - M0)*(xprime - M0) + (Gamma0*Gamma0)/4;
+
+        convol_sum += (1 / TMath::Pi()) * (Gamma0 / denominator) * TMath::Gaus(x[0]-xprime, 0, sigma, true) * convol_step;
     }
 
     return par[0] * convol_sum;
