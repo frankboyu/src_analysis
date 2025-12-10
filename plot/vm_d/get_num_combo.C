@@ -6,7 +6,7 @@
 #include <algorithm>
 using namespace std;
 
-int get_test()
+int get_num_combo()
 {
     // TFile *input_treefile = new TFile("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_phi_d_recon_exc_data_2H.root", "UPDATE");
     TFile *input_treefile = new TFile("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_phi_d_recon_exc_sim_2H.root", "UPDATE");

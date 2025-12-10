@@ -34,6 +34,9 @@ TAG_LIST+=("fitmax_1.06" "fitmax_1.07" "fitmax_1.09" "fitmax_1.10")
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
 gxenv $HALLD_VERSIONS/version.xml
+
+# root -b -q -l get_num_combo.C
+
 for OBSERVABLE in "${OBSERVABLE_LIST[@]}"
 do
     for CHANNEL in "${CHANNEL_LIST[@]}"
