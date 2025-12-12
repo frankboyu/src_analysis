@@ -39,6 +39,11 @@ def normalize_distribution(results, energy_bins, t_bins):
                 index = i
     return results
 
+def legend_without_duplicate_labels(ax):
+    handles, labels = ax.get_legend_handles_labels()
+    unique = [(h, l) for i, (h, l) in enumerate(zip(handles, labels)) if l not in labels[:i]]
+    ax.legend(*zip(*unique))
+
 #======================================================================phi_d_2H_dsdt======================================================================
 
 # Read the bin edges
@@ -75,10 +80,14 @@ tag_list += (['vertexZ_13.0', 'vertexZ_13.5', 'vertexZ_14.5', 'vertexZ_15.0'])
 tag_list += (['vertexR_0.50', 'vertexR_0.75', 'vertexR_1.25', 'vertexR_1.50'])
 tag_list += (['beamaccid_3', 'beamaccid_4out', 'beamaccid_5'])
 tag_list += (['comboaccid_1', 'comboaccid_-1'])
+tag_list += (['fitmax_1.06', 'fitmax_1.07', 'fitmax_1.09', 'fitmax_1.10'])
+tag_list += (['fitwidth_0.0040', 'fitwidth_0.0048', 'fitwidth_0.0060', 'fitwidth_0.0075'])
+tag_list += (['fitbkg_fulllinear', 'fitbkg_quadratic', 'fitbkg_fullquadratic', 'fitbkg_phenomenological'])
+tag_list += (['fitsig_noBL', 'fitsig_nonrel'])
 for tag in tag_list:
     phi_d_2H_dsdt_yield_data                = np.vstack((phi_d_2H_dsdt_yield_data,              np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_'+tag+'.txt')[:,8]))
     phi_d_2H_dsdt_yield_data_statserr       = np.vstack((phi_d_2H_dsdt_yield_data_statserr,     np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_'+tag+'.txt')[:,9]/phi_d_2H_dsdt_yield_data[-1,:]))
-    if tag == 'fitfunc_quadratic' or tag == 'fitfunc_none':
+    if tag.find('fit') != -1:
         phi_d_2H_dsdt_yield_sim             = np.vstack((phi_d_2H_dsdt_yield_sim,               np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_dsdt_nominal.txt')[:,8]))
         phi_d_2H_dsdt_yield_sim_statserr    = np.vstack((phi_d_2H_dsdt_yield_sim_statserr,      np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_dsdt_nominal.txt')[:,9]/phi_d_2H_dsdt_yield_sim[-1,:]))
     else:
@@ -192,47 +201,58 @@ plt.close()
 
 # Systematics header
 legend_list = ['6-8 GeV', '8-9 GeV', '9-11 GeV']
-title_list = (['dEdx cut', 'Missing p- and Chi2/NDF cut', 'Momentum cut', 'Theta cut', 'Vertex Z cut', 'Vertex R cut', 'Beam accid subtraction', 'Combo accid subtraction', 'Total'])
+title_list = (['dEdx cut', 'Missing p- and Chi2/NDF cut', 'Momentum cut', 'Theta cut', 'Vertex Z cut', 'Vertex R cut', 'Beam accid subtraction', 'Combo accid subtraction', 'Fit max', 'Fit width', 'Fit background model', 'Fit signal model'])
 label_list = []
 label_list += ([r'$dE/dx < 1.0 \sigma$', r'$dE/dx < 1.5 \sigma$', r'$dE/dx < 2.5 \sigma$', r'$dE/dx < 3.0 \sigma$'])
-label_list += ([r'$p^{-}_{miss}$ > -0.010 GeV/c, \chi^2$/NDF < 3.0', r'$p^{-}_{miss}$ > -0.015 GeV/c, \chi^2$/NDF < 3.0', r'$p^{-}_{miss}$ > -0.020 GeV/c, \chi^2$/NDF < 3.0', r'$p^{-}_{miss}$ > -0.025 GeV/c, \chi^2$/NDF < 3.0', r'$p^{-}_{miss}$ > -0.030 GeV/c, \chi^2$/NDF < 3.0'])
-label_list += ([r'$p^{-}_{miss}$ > -0.010 GeV/c, \chi^2$/NDF < 4.0', r'$p^{-}_{miss}$ > -0.015 GeV/c, \chi^2$/NDF < 4.0', r'$p^{-}_{miss}$ > -0.020 GeV/c, \chi^2$/NDF < 4.0', r'$p^{-}_{miss}$ > -0.025 GeV/c, \chi^2$/NDF < 4.0', r'$p^{-}_{miss}$ > -0.030 GeV/c, \chi^2$/NDF < 4.0'])
-label_list += ([r'$p^{-}_{miss}$ > -0.010 GeV/c, \chi^2$/NDF < 5.0', r'$p^{-}_{miss}$ > -0.015 GeV/c, \chi^2$/NDF < 5.0', r'$p^{-}_{miss}$ > -0.020 GeV/c, \chi^2$/NDF < 5.0', r'$p^{-}_{miss}$ > -0.025 GeV/c, \chi^2$/NDF < 5.0', r'$p^{-}_{miss}$ > -0.030 GeV/c, \chi^2$/NDF < 5.0'])
-label_list += ([r'$p^{-}_{miss}$ > -0.010 GeV/c, \chi^2$/NDF < 6.0', r'$p^{-}_{miss}$ > -0.015 GeV/c, \chi^2$/NDF < 6.0', r'$p^{-}_{miss}$ > -0.020 GeV/c, \chi^2$/NDF < 6.0', r'$p^{-}_{miss}$ > -0.025 GeV/c, \chi^2$/NDF < 6.0', r'$p^{-}_{miss}$ > -0.030 GeV/c, \chi^2$/NDF < 6.0'])
-label_list += ([r'$p^{-}_{miss}$ > -0.010 GeV/c, \chi^2$/NDF < 7.0', r'$p^{-}_{miss}$ > -0.015 GeV/c, \chi^2$/NDF < 7.0', r'$p^{-}_{miss}$ > -0.020 GeV/c, \chi^2$/NDF < 7.0', r'$p^{-}_{miss}$ > -0.025 GeV/c, \chi^2$/NDF < 7.0', r'$p^{-}_{miss}$ > -0.030 GeV/c, \chi^2$/NDF < 7.0'])
+for i in range(5):
+    label_list += ([r'$p^{-}_{miss}$ > -0.010 GeV/c, \chi^2$/NDF < 3/4/5/6/7', r'$p^{-}_{miss}$ > -0.015 GeV/c, \chi^2$/NDF < 3/4/5/6/7', r'$p^{-}_{miss}$ > -0.020 GeV/c, \chi^2$/NDF < 3/4/5/6/7', r'$p^{-}_{miss}$ > -0.025 GeV/c, \chi^2$/NDF < 3/4/5/6/7', r'$p^{-}_{miss}$ > -0.030 GeV/c, \chi^2$/NDF < 3/4/5/6/7'])
 label_list += ([r'$p$ > 0.40 GeV', r'$p$ > 0.425 GeV', r'$p$ > 0.475 GeV', r'$p$ > 0.50 GeV'])
 label_list += ([r'$\theta$ > 1.0 deg', r'$\theta$ > 1.5 deg', r'$\theta$ > 2.5 deg', r'$\theta$ > 3.0 deg'])
 label_list += ([r'|$Z-Z_{center}$| < 13 cm', r'|$Z-Z_{center}$| < 13.5 cm', r'|$Z-Z_{center}$| < 14.5 cm', r'|$Z-Z_{center}$| < 15 cm'])
 label_list += ([r'$R$ < 0.5 cm', r'$R$ < 0.75 cm', r'$R$ < 1.25 cm', r'$R$ < 1.5 cm'])
 label_list += ([r'beamaccid_3', r'beamaccid_4out', r'beamaccid_5'])
 label_list += ([r'comboaccid_1', r'comboaccid_-1'])
+label_list += ([r'fitmax_1.06', r'fitmax_1.07', r'fitmax_1.09', r'fitmax_1.10'])
+label_list += ([r'fitwidth_0.0040', r'fitwidth_0.0048', r'fitwidth_0.0060', r'fitwidth_0.0075'])
+label_list += ([r'fitbkg_fulllinear', r'fitbkg_quadratic', r'fitbkg_fullquadratic', r'fitbkg_phenomenological'])
+label_list += ([r'fitsig_noBL', r'fitsig_nonrel'])
 color_list = []
-for i in range(10):
+for i in range(15):
     color_list += (['r', 'orange', 'k', 'c', 'b'])
-
-
-fig = plt.figure(figsize=(18, 18), dpi=300)
-gs = fig.add_gridspec(3, 3)
-axs = gs.subplots()
+subplot_list = []
 for i in range(1, phi_d_2H_dsdt_yield_data_statserr.shape[0]):
     if (i <= 4):
-        subplot_row, subplot_col = 0, 0
+        subplot_list.append(0)
     elif (i <= 29):
-        subplot_row, subplot_col = 0, 1
+        subplot_list.append(1)
     elif (i <= 33):
-        subplot_row, subplot_col = 0, 2
+        subplot_list.append(2)
     elif (i <= 37):
-        subplot_row, subplot_col = 1, 0
+        subplot_list.append(3)
     elif (i <= 41):
-        subplot_row, subplot_col = 1, 1
+        subplot_list.append(4)
     elif (i <= 45):
-        subplot_row, subplot_col = 1, 2
+        subplot_list.append(5)
     elif (i <= 48):
-        subplot_row, subplot_col = 2, 0
-    elif (i <= 52):
-        subplot_row, subplot_col = 2, 1
-    else:
-        subplot_row, subplot_col = 2, 2
+        subplot_list.append(6)
+    elif (i <= 50):
+        subplot_list.append(7)
+    elif (i <= 54):
+        subplot_list.append(8)
+    elif (i <= 58):
+        subplot_list.append(9)
+    elif (i <= 62):
+        subplot_list.append(10)
+    elif (i <= 64):
+        subplot_list.append(11)
+
+num_row, num_col = 4, 3
+fig = plt.figure(figsize=(6*num_col, 6*num_row), dpi=300)
+gs = fig.add_gridspec(num_row, num_col)
+axs = gs.subplots()
+for i in range(1, phi_d_2H_dsdt_yield_data_statserr.shape[0]):
+    subplot_row = subplot_list[i-1]//num_col
+    subplot_col = subplot_list[i-1]%num_col
     for j in range(len(index)-1):
         if j == 0:
             axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], (phi_d_2H_dsdt_yield_data[0,index[j]:index[j+1]]-phi_d_2H_dsdt_yield_data[i,index[j]:index[j+1]])/(phi_d_2H_dsdt_yield_data[0,index[j]:index[j+1]]), label=label_list[i-1], color=color_list[i-1])
@@ -251,28 +271,12 @@ plt.suptitle('Data yield differences')
 file_pdf.savefig()
 plt.close()
 
-fig = plt.figure(figsize=(18, 18), dpi=300)
-gs = fig.add_gridspec(3, 3)
+fig = plt.figure(figsize=(6*num_col, 6*num_row), dpi=300)
+gs = fig.add_gridspec(num_row, num_col)
 axs = gs.subplots()
 for i in range(1, phi_d_2H_dsdt_yield_data_statserr.shape[0]):
-    if (i <= 4):
-        subplot_row, subplot_col = 0, 0
-    elif (i <= 29):
-        subplot_row, subplot_col = 0, 1
-    elif (i <= 33):
-        subplot_row, subplot_col = 0, 2
-    elif (i <= 37):
-        subplot_row, subplot_col = 1, 0
-    elif (i <= 41):
-        subplot_row, subplot_col = 1, 1
-    elif (i <= 45):
-        subplot_row, subplot_col = 1, 2
-    elif (i <= 48):
-        subplot_row, subplot_col = 2, 0
-    elif (i <= 52):
-        subplot_row, subplot_col = 2, 1
-    else:
-        subplot_row, subplot_col = 2, 2
+    subplot_row = subplot_list[i-1]//num_col
+    subplot_col = subplot_list[i-1]%num_col
     for j in range(len(index)-1):
         if j == 0:
             axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], (phi_d_2H_dsdt_yield_sim[0,index[j]:index[j+1]]-phi_d_2H_dsdt_yield_sim[i,index[j]:index[j+1]])/(phi_d_2H_dsdt_yield_sim[0,index[j]:index[j+1]]), label=label_list[i-1], color=color_list[i-1])
@@ -291,28 +295,12 @@ file_pdf.savefig()
 plt.close()
 
 # Observable relative difference
-fig = plt.figure(figsize=(18, 18), dpi=300)
-gs = fig.add_gridspec(3, 3)
+fig = plt.figure(figsize=(6*num_col, 6*num_row), dpi=300)
+gs = fig.add_gridspec(num_row, num_col)
 axs = gs.subplots()
 for i in range(1, phi_d_2H_dsdt_yield_data_statserr.shape[0]):
-    if (i <= 4):
-        subplot_row, subplot_col = 0, 0
-    elif (i <= 29):
-        subplot_row, subplot_col = 0, 1
-    elif (i <= 33):
-        subplot_row, subplot_col = 0, 2
-    elif (i <= 37):
-        subplot_row, subplot_col = 1, 0
-    elif (i <= 41):
-        subplot_row, subplot_col = 1, 1
-    elif (i <= 45):
-        subplot_row, subplot_col = 1, 2
-    elif (i <= 48):
-        subplot_row, subplot_col = 2, 0
-    elif (i <= 52):
-        subplot_row, subplot_col = 2, 1
-    else:
-        subplot_row, subplot_col = 2, 2
+    subplot_row = subplot_list[i-1]//num_col
+    subplot_col = subplot_list[i-1]%num_col
     for j in range(len(index)-1):
         if j == 0:
             axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[i,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]], label=label_list[i-1], color=color_list[i-1])
@@ -329,36 +317,21 @@ file_pdf.savefig()
 plt.close()
 
 # Barlow score
-fig = plt.figure(figsize=(18, 18), dpi=300)
-gs = fig.add_gridspec(3, 3)
+fig = plt.figure(figsize=(6*num_col, 6*num_row), dpi=300)
+gs = fig.add_gridspec(num_row, num_col)
 axs = gs.subplots()
 for i in range(1, phi_d_2H_dsdt_yield_data_statserr.shape[0]):
-    if (i <= 4):
-        subplot_row, subplot_col = 0, 0
-    elif (i <= 29):
-        subplot_row, subplot_col = 0, 1
-    elif (i <= 33):
-        subplot_row, subplot_col = 0, 2
-    elif (i <= 37):
-        subplot_row, subplot_col = 1, 0
-    elif (i <= 41):
-        subplot_row, subplot_col = 1, 1
-    elif (i <= 45):
-        subplot_row, subplot_col = 1, 2
-    elif (i <= 48):
-        subplot_row, subplot_col = 2, 0
-    elif (i <= 52):
-        subplot_row, subplot_col = 2, 1
-    else:
-        subplot_row, subplot_col = 2, 2
+    subplot_row = subplot_list[i-1]//num_col
+    subplot_col = subplot_list[i-1]%num_col
     for j in range(len(index)-1):
         if j == 0:
             axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[i,index[j]:index[j+1]])/(1E-40+np.sqrt(np.abs(phi_d_2H_dsdt_results_statserr[0,index[j]:index[j+1]]**2 - phi_d_2H_dsdt_results_statserr[i,index[j]:index[j+1]]**2))), label=label_list[i-1], color=color_list[i-1])
         else:
             axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[i,index[j]:index[j+1]])/(1E-40+np.sqrt(np.abs(phi_d_2H_dsdt_results_statserr[0,index[j]:index[j+1]]**2 - phi_d_2H_dsdt_results_statserr[i,index[j]:index[j+1]]**2))), color=color_list[i-1])
-for subplot_row in range(3):
-    for subplot_col in range(3):
-        # axs[subplot_row, subplot_col].legend()
+    legend_without_duplicate_labels(axs[subplot_row, subplot_col])
+for subplot_row in range(num_row):
+    for subplot_col in range(num_col):
+        axs[subplot_row, subplot_col].legend()
         axs[subplot_row, subplot_col].fill_between([0, 2], [1, 1], [-1, -1], color='green', alpha=0.1)
         axs[subplot_row, subplot_col].fill_between([0, 2], [4, 4], [1, 1], color='yellow', alpha=0.1)
         axs[subplot_row, subplot_col].fill_between([0, 2], [15, 15], [4, 4], color='red', alpha=0.1)
@@ -374,59 +347,103 @@ file_pdf.savefig()
 plt.close()
 
 # Uncertainties
-fig = plt.figure(figsize=(18, 18), dpi=300)
-gs = fig.add_gridspec(3, 3)
+fig = plt.figure(figsize=(6*num_col, 6*(num_row+1)), dpi=300)
+gs = fig.add_gridspec(num_row+1, num_col)
 axs = gs.subplots()
 total_uncertainties = [np.zeros_like(phi_d_2H_dsdt_results[0,index[j]:index[j+1]]) for j in range(len(index)-1)]
-for i in range(8):
-    subplot_row = i//3
-    subplot_col = i%3
-    for j in range(len(index)-1):
-        if (i == 0):
+for j in range(len(index)-1):
+    for i in range(1, phi_d_2H_dsdt_yield_data_statserr.shape[0]):
+        if i == 1:
             temp_array = (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[2,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]
-            temp_array = np.vstack((temp_array, (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[3,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]))
-            temp_array = np.vstack((temp_array, (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[4,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]))
-            temp_array = np.vstack((temp_array, np.zeros_like(phi_d_2H_dsdt_results[0,index[j]:index[j+1]])))
-        elif (i == 1):
-            temp_array = (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[5,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]
-            for k in range(1,25):
-                temp_array = np.vstack((temp_array, (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[5+k,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]))
-        elif (i == 6):
-            temp_array = (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[46,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]
-            temp_array = np.vstack((temp_array, (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[47,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]))
-            temp_array = np.vstack((temp_array, (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[48,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]))
-            temp_array = np.vstack((temp_array, np.zeros_like(phi_d_2H_dsdt_results[0,index[j]:index[j+1]])))
-        elif (i == 7):
-            temp_array = (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[49,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]
-            # temp_array = np.vstack((temp_array, (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[50,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]))
-            temp_array = np.vstack((temp_array, np.zeros_like(phi_d_2H_dsdt_results[0,index[j]:index[j+1]])))
-        else:
-            temp_array = (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[30+(i-2)*4+0,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]
-            temp_array = np.vstack((temp_array, (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[30+(i-2)*4+1,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]))
-            temp_array = np.vstack((temp_array, (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[30+(i-2)*4+2,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]))
-            temp_array = np.vstack((temp_array, (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[30+(i-2)*4+3,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]))
-            temp_array = np.vstack((temp_array, np.zeros_like(phi_d_2H_dsdt_results[0,index[j]:index[j+1]])))
-        temp_std = np.std(temp_array, axis=0)
-        axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], temp_std, label=legend_list[j])
-        total_uncertainties[j] += temp_std**2
-    # axs[subplot_row, subplot_col].legend()
-    axs[subplot_row, subplot_col].set_xlabel(r'$-t[GeV^2/c]$')
-    axs[subplot_row, subplot_col].set_ylabel(r'$\delta\sigma/\sigma$')
-    axs[subplot_row, subplot_col].set_xlim(0, 2)
-    axs[subplot_row, subplot_col].set_ylim(0, 0.2)
-    axs[subplot_row, subplot_col].set_title(title_list[i])
+        elif subplot_list[i-1] != subplot_list[i-2]:
+            subplot_row = subplot_list[i-2]//num_col
+            subplot_col = subplot_list[i-2]%num_col
+            temp_std = np.std(temp_array, axis=0)
+            axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], temp_std, label=legend_list[j])
+            # if (subplot_list[i-2] >= 8):
+            total_uncertainties[j] += temp_std**2
+            temp_array = (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[2,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]
+        if i == 1:
+            continue
+        temp_array = np.vstack((temp_array, (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[i,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]))
+        if i == phi_d_2H_dsdt_yield_data_statserr.shape[0]-1:
+            subplot_row = subplot_list[i-1]//num_col
+            subplot_col = subplot_list[i-1]%num_col
+            temp_std = np.std(temp_array, axis=0)
+            axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], temp_std, label=legend_list[j])
+            total_uncertainties[j] += temp_std**2
 for j in range(len(index)-1):
     total_uncertainties[j] = np.sqrt(total_uncertainties[j])
-    axs[2, 2].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], total_uncertainties[j], label=legend_list[j])
-    axs[2, 2].legend()
-    axs[2, 2].set_xlabel(r'$-t[GeV^2/c]$')
-    axs[2, 2].set_ylabel(r'$\delta\sigma/\sigma$')
-    axs[2, 2].set_xlim(0, 2)
-    axs[2, 2].set_ylim(0, 0.2)
-    axs[2, 2].set_title('Total uncertainty')
+    axs[4, 0].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], total_uncertainties[j])
+    axs[4, 0].legend()
+    axs[4, 0].set_xlabel(r'$-t[GeV^2/c]$')
+    axs[4, 0].set_ylabel(r'$\delta\sigma/\sigma$')
+    axs[4, 0].set_xlim(0, 2)
+    axs[4, 0].set_ylim(0, 0.2)
+    axs[4, 0].set_title('Total point-to-point uncertainty')
+
+for subplot_row in range(num_row):
+    for subplot_col in range(num_col):
+        axs[subplot_row, subplot_col].legend()
+        axs[subplot_row, subplot_col].set_xlabel(r'$-t[GeV^2/c]$')
+        axs[subplot_row, subplot_col].set_ylabel(r'$\delta\sigma/\sigma$')
+        axs[subplot_row, subplot_col].set_xlim(0, 2)
+        axs[subplot_row, subplot_col].set_ylim(0, 0.1)
+        axs[subplot_row, subplot_col].set_title(title_list[subplot_row*3+subplot_col])
 plt.suptitle('Observable uncertainties')
 file_pdf.savefig()
 plt.close()
+
+
+
+
+# for i in range(8):
+#     subplot_row = i//num_col
+#     subplot_col = i%num_col
+#     for j in range(len(index)-1):
+#         if (i == 0):
+#             temp_array = (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[2,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]
+#             temp_array = np.vstack((temp_array, (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[3,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]))
+#             temp_array = np.vstack((temp_array, (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[4,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]))
+#             temp_array = np.vstack((temp_array, np.zeros_like(phi_d_2H_dsdt_results[0,index[j]:index[j+1]])))
+#         elif (i == 1):
+#             temp_array = (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[5,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]
+#             for k in range(1,25):
+#                 temp_array = np.vstack((temp_array, (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[5+k,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]))
+#         elif (i == 6):
+#             temp_array = (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[46,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]
+#             temp_array = np.vstack((temp_array, (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[47,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]))
+#             temp_array = np.vstack((temp_array, (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[48,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]))
+#             temp_array = np.vstack((temp_array, np.zeros_like(phi_d_2H_dsdt_results[0,index[j]:index[j+1]])))
+#         elif (i == 7):
+#             temp_array = (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[49,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]
+#             # temp_array = np.vstack((temp_array, (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[50,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]))
+#             temp_array = np.vstack((temp_array, np.zeros_like(phi_d_2H_dsdt_results[0,index[j]:index[j+1]])))
+#         else:
+#             temp_array = (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[30+(i-2)*4+0,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]
+#             temp_array = np.vstack((temp_array, (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[30+(i-2)*4+1,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]))
+#             temp_array = np.vstack((temp_array, (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[30+(i-2)*4+2,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]))
+#             temp_array = np.vstack((temp_array, (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[30+(i-2)*4+3,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]))
+#             temp_array = np.vstack((temp_array, np.zeros_like(phi_d_2H_dsdt_results[0,index[j]:index[j+1]])))
+#         temp_std = np.std(temp_array, axis=0)
+#         axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], temp_std, label=legend_list[j])
+#         total_uncertainties[j] += temp_std**2
+#     # axs[subplot_row, subplot_col].legend()
+#     axs[subplot_row, subplot_col].set_xlabel(r'$-t[GeV^2/c]$')
+#     axs[subplot_row, subplot_col].set_ylabel(r'$\delta\sigma/\sigma$')
+#     axs[subplot_row, subplot_col].set_xlim(0, 2)
+#     axs[subplot_row, subplot_col].set_ylim(0, 0.2)
+#     axs[subplot_row, subplot_col].set_title(title_list[i])
+# for j in range(len(index)-1):
+#     total_uncertainties[j] = np.sqrt(total_uncertainties[j])
+#     axs[2, 2].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], total_uncertainties[j], label=legend_list[j])
+#     axs[2, 2].legend()
+#     axs[2, 2].set_xlabel(r'$-t[GeV^2/c]$')
+#     axs[2, 2].set_ylabel(r'$\delta\sigma/\sigma$')
+#     axs[2, 2].set_xlim(0, 2)
+#     axs[2, 2].set_ylim(0, 0.2)
+#     axs[2, 2].set_title('Total uncertainty')
+
 
 
 # fig = plt.figure(figsize=(8, 6), dpi=300)
