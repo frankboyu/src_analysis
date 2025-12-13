@@ -27,6 +27,24 @@ def lumi(energy_min, energy_max, length):
 
     return integrated_lumi/length_total * length
 
+def flux_systematic(energy_low, energy_high):
+    region1 = 0
+    region2 = 125
+    region3 = 227
+
+    bin_edges = np.loadtxt('/work/halld2/home/boyu/src_analysis/flux/output/2H/lumi_summed_2H.txt')
+    tagh_flux_error = np.loadtxt('/work/halld2/home/boyu/src_analysis/flux/systematic/tagh_flux_syst.txt')
+    tagm_flux_error = np.loadtxt('/work/halld2/home/boyu/src_analysis/flux/systematic/tagm_flux_syst.txt')
+
+    for i in range(len(bin_edges[:,0])):
+        if i < region2 or i >= region3:
+            bin_edges[i,6] = tagh_flux_error[int(bin_edges[i,1])-1,2]
+        elif i >= region2 and i < region3:
+            bin_edges[i,6] = tagm_flux_error[int(bin_edges[i,1])-1,2]
+
+    flux_error = np.average(bin_edges[:,6][(bin_edges[:,3] >= energy_low) & (bin_edges[:,3] < energy_high)], weights=bin_edges[:,5][(bin_edges[:,3] >= energy_low) & (bin_edges[:,3] < energy_high)])
+    return flux_error/100
+
 def normalize_distribution(results, energy_bins, t_bins):
     for i in range(len(results)):
         if (i == 0):
@@ -360,7 +378,6 @@ for j in range(len(index)-1):
             subplot_col = subplot_list[i-2]%num_col
             temp_std = np.std(temp_array, axis=0)
             axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], temp_std, label=legend_list[j])
-            # if (subplot_list[i-2] >= 8):
             total_uncertainties[j] += temp_std**2
             temp_array = (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[2,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]
         if i == 1:
