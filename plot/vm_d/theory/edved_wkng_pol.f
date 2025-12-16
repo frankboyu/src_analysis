@@ -1,10 +1,10 @@
         program test
         common/par/pi,pm,dm,vmm
         common/input/ephin,sphin,bphin
-        open(11,file='input.txt')
-        read(11,*)ephin
-        read(11,*)sphin
-        read(11,*)bphin
+        open(12,file='input.txt')
+        read(12,*)ephin
+        read(12,*)sphin
+        read(12,*)bphin
         write(6,*)'ephin=',ephin,' sphin=',sphin,' bphin=',bphin
         pi = acos(-1.0)
         pm    = 0.938279
