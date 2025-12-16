@@ -1,12 +1,18 @@
         program test
         common/par/pi,pm,dm,vmm
+        common/input/ephin,sphin,bphin
+        open(11,file='input.txt')
+        read(11,*)ephin
+        read(11,*)sphin
+        read(11,*)bphin
+        write(6,*)'ephin=',ephin,' sphin=',sphin,' bphin=',bphin
         pi = acos(-1.0)
         pm    = 0.938279
         kvm  = 3 ! 1-rho meson ! 3 phi meson  ! 4 J/Psi meson
         in   = 1 ! initialize
         call 
      & edved(in,kvm,ei,q2,q0,epsl,t,crs0,crs,tcrs0,tcrs,pd,thd,pvm,thvm, !initialization
-     & crs0_m1,crs0_0,crs0_1,crs_m1,crs_0,crs_1)
+     & crs0_m1,crs0_0,crs0_1,crs_m1,crs_0,crs_1,bphin,sphin)
        
  
         ei = 0.0 ! electron energy (for ed--> evd)
@@ -17,7 +23,7 @@
         q2 =  0.0  !(if q2=0 - real photoproduction)
         epsl = 0.0
 
-        q0 = 8.5                                    ! photon energy
+        q0 = ephin                                    ! photon energy
         s = -q2 + 2.0*pm*q0 + pm**2
         w = sqrt(s)
         t_min = t_minimum(q2,s)
@@ -29,7 +35,7 @@
         in = 0
         call 
      & edved(in,kvm,ei,q2,q0,epsl,t,crs0,crs,tcrs0,tcrs,pd,thd,pvm,thvm,
-     & crs0_m1,crs0_0,crs0_1,crs_m1,crs_0,crs_1)
+     & crs0_m1,crs0_0,crs0_1,crs_m1,crs_0,crs_1,bphin,sphin)
 
         pdt  = pd*sin(thd)          !transverse momentum of deuteron
         pvmt = pvm*sin(thvm)        !transverse momentum of vmeson
@@ -49,7 +55,7 @@
        
         
         write(6,*)"       ",-t,crs0,crs,tcrs0,tcrs
-*        write(6,*)"checkig",-t,crs0_chk,crs_chk,tcrs0_chk,tcrs_chk1
+*        write(6,*)"checkig",-t,crs0_chk,crs_chk,tcrs0_chk,tcrs_chk
 *        write(12,12)abs(t),crs0,crs
  12     format(2x,f6.3,2(2x,e10.3))
  1      continue
@@ -61,7 +67,7 @@
 
        subroutine 
      & edved(in,ivm,ei,q2,q0,epsl,t,crs0,crs,tcrs0,tcrs,pd,thd,pvm,thvm,
-     & crs0_m1,crs0_0,crs0_1,crs_m1,crs_0,crs_1)
+     & crs0_m1,crs0_0,crs0_1,crs_m1,crs_0,crs_1,bphin,sphin)
 **************************************************************************
 *  in   - parameter for initialization (1)-initialize (0)-compute - input
 *  ivm  - 1 - rho meson,  3- phi meson
@@ -195,21 +201,7 @@
 
 ********************************************************************
         gn_scale = 1.0
-        icase    =   5
-        block
-          implicit none
-          character(len=64) :: arg
-          integer :: iarg
-          sigma_gn = 4.5   ! default microbarn/GeV^2 (used if no CLI arg)
-          iarg = command_argument_count()
-          if(iarg >= 1) then
-            call get_command_argument(1,arg)
-            if(len_trim(arg) > 0) then
-            read(arg,*,err=99) sigma_gn
-    99          continue
-            endif
-          endif
-        end block
+        icase    =   1
         b_g      =   5.0 !relevant only for icase=3,4,5
         alpha_g  =  -0.5
 ********************************************************************
@@ -221,9 +213,10 @@
 *  b_vn      - slope factor of the amplitude
 *  al_vn     - real part of the amplitude
 ********************************************************************
-        sigma_vn = 20.0
-        b_vn     = 6.5
+        sigma_vn = sphin
+        b_vn     = bphin
         al_vn    = -0.5
+        write(6,*)'phi-N parameters: sigma_vn=',sigma_vn,' b_vn=',b_vn
 ********************************************************************
 
 ************* J/PSI ************************************************
