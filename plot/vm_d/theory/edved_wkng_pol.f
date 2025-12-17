@@ -5,7 +5,6 @@
         read(12,*)ephin
         read(12,*)sphin
         read(12,*)bphin
-        write(6,*)'ephin=',ephin,' sphin=',sphin,' bphin=',bphin
         pi = acos(-1.0)
         pm    = 0.938279
         kvm  = 3 ! 1-rho meson ! 3 phi meson  ! 4 J/Psi meson
@@ -200,8 +199,9 @@
 *   alpha_g - real part of the amplitude - relevant for all icases
 
 ********************************************************************
-        gn_scale = 1.0
-        icase    =   1
+        gn_scale =   1.0
+        icase    =   5
+        sigma_gn =   4.5
         b_g      =   5.0 !relevant only for icase=3,4,5
         alpha_g  =  -0.5
 ********************************************************************
@@ -216,7 +216,6 @@
         sigma_vn = sphin
         b_vn     = bphin
         al_vn    = -0.5
-        write(6,*)'phi-N parameters: sigma_vn=',sigma_vn,' b_vn=',b_vn
 ********************************************************************
 
 ************* J/PSI ************************************************

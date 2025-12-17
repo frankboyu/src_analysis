@@ -2,7 +2,12 @@
 
 start=`date +%s`
 
-for EPHIN in 7.0 8.5 10.0
+LABEL=case5_4.5_5.0
+mkdir output/${LABEL}/
+
+gfortran edved_wkng_pol.f
+
+for EPHIN in 8.5
 do
     for SPHIN in {20..40..1}
     do
@@ -12,7 +17,7 @@ do
             echo "$EPHIN" > input.txt
             echo "$SPHIN" >> input.txt
             echo "$BPHIN" >> input.txt
-            # ./a.out > output/theory_${EPHIN}_${SPHIN}_${BPHIN}.txt
+            ./a.out > output/${LABEL}/E_${EPHIN}_sigma_${SPHIN}_b_${BPHIN}.txt
         done
     done
 done
