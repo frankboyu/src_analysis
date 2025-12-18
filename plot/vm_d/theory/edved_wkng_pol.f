@@ -200,9 +200,9 @@
 
 ********************************************************************
         gn_scale =   1.0
-        icase    =   5
-        sigma_gn =   4.5
-        b_g      =   5.0 !relevant only for icase=3,4,5
+        icase    =   3
+        sigma_gn =   4.5 !relevant only for icase=5
+        b_g      =   6.0 !relevant only for icase=3,4,5
         alpha_g  =  -0.5
 ********************************************************************
 *         Parameters of cross section, slope  factor and real part
