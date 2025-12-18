@@ -466,15 +466,15 @@ plt.close()
 # fig = plt.figure(figsize=(8, 6), dpi=300)
 # color_code = ['b', 'k', 'r']
 # # plt.errorbar(phi_d_2H_dsdt_minust_center[index[0]:index[1]],       phi_d_2H_dsdt_results[index[0]:index[1]],          xerr=phi_d_2H_dsdt_minust_width[index[0]:index[1]],        yerr=phi_d_2H_dsdt_results_statserr[index[0]:index[1]],            fmt='b.', label='This work (6-8 GeV)')
-# plt.errorbar(phi_d_2H_dsdt_minust_center[index[1]:index[2]],       phi_d_2H_dsdt_results[index[1]:index[2]],          xerr=phi_d_2H_dsdt_minust_width[index[1]:index[2]],        yerr=phi_d_2H_dsdt_results_statserr[index[1]:index[2]],            fmt='k.', label='This work (8-9 GeV)')
+# plt.errorbar(phi_d_2H_dsdt_minust_center[index[1]:index[2]],       phi_d_2H_dsdt_results[0,index[1]:index[2]],          xerr=phi_d_2H_dsdt_minust_width[index[1]:index[2]],        yerr=phi_d_2H_dsdt_results_statserr[0,index[1]:index[2]],            fmt='k.', label='This work (8-9 GeV)')
 # # plt.errorbar(phi_d_2H_dsdt_minust_center[index[2]:index[3]],       phi_d_2H_dsdt_results[index[2]:index[3]],          xerr=phi_d_2H_dsdt_minust_width[index[2]:index[3]],        yerr=phi_d_2H_dsdt_results_statserr[index[2]:index[3]],            fmt='r.', label='This work (9-11 GeV)')
-# plt.errorbar(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/temp_sigma20_b6.5_2.22.txt')[:,2], fmt='-', color = 'y', label=r'$\sigma_{\phi N}=$20 mb, $b_{\phi N}=6.5 \rm \ GeV^{-2}, \chi^2/NDF=2.22$')
-# plt.errorbar(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/temp_sigma25_b8.5_1.61.txt')[:,2], fmt='-', color = 'g', label=r'$\sigma_{\phi N}=$25 mb, $b_{\phi N}=8.5 \rm \ GeV^{-2}, \chi^2/NDF=1.61$')
-# plt.errorbar(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/temp_sigma30_b10.0_1.44.txt')[:,2], fmt='-', color = 'r', label=r'$\sigma_{\phi N}=$30 mb, $b_{\phi N}=10.0 \rm \ GeV^{-2}, \chi^2/NDF=1.44$')
-# plt.errorbar(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/temp_sigma35_b11.5_1.51.txt')[:,2], fmt='-', color = 'b', label=r'$\sigma_{\phi N}=$35 mb, $b_{\phi N}=11.5 \rm \ GeV^{-2}, \chi^2/NDF=1.51$')
-# plt.errorbar(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/temp_sigma40_b13.0_1.69.txt')[:,2], fmt='-', color = 'c', label=r'$\sigma_{\phi N}=$40 mb, $b_{\phi N}=13.0 \rm \ GeV^{-2}, \chi^2/NDF=1.69$')
-# plt.errorbar(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/temp_sigma45_b14.5_1.95.txt')[:,2], fmt='-', color = 'm', label=r'$\sigma_{\phi N}=$45 mb, $b_{\phi N}=14.5 \rm \ GeV^{-2}, \chi^2/NDF=1.95$')
-# plt.fill_between(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/temp_sigma30_b10.0_1.44.txt')[:,2]-0.2*(np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/temp_sigma30_b10.0_1.44.txt')[:,2]), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/temp_sigma30_b10.0_1.44.txt')[:,2]+0.2*(np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/temp_sigma30_b10.0_1.44.txt')[:,2]), color='r', alpha=0.2)
+# plt.errorbar(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/temp/temp_sigma20_b6.5_2.22.txt')[:,2], fmt='-', color = 'y', label=r'$\sigma_{\phi N}=$20 mb, $b_{\phi N}=6.5 \rm \ GeV^{-2}, \chi^2/NDF=2.22$')
+# plt.errorbar(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/temp/temp_sigma25_b8.5_1.61.txt')[:,2], fmt='-', color = 'g', label=r'$\sigma_{\phi N}=$25 mb, $b_{\phi N}=8.5 \rm \ GeV^{-2}, \chi^2/NDF=1.61$')
+# plt.errorbar(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/temp/temp_sigma30_b10.0_1.44.txt')[:,2], fmt='-', color = 'r', label=r'$\sigma_{\phi N}=$30 mb, $b_{\phi N}=10.0 \rm \ GeV^{-2}, \chi^2/NDF=1.44$')
+# plt.errorbar(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/temp/temp_sigma35_b11.5_1.51.txt')[:,2], fmt='-', color = 'b', label=r'$\sigma_{\phi N}=$35 mb, $b_{\phi N}=11.5 \rm \ GeV^{-2}, \chi^2/NDF=1.51$')
+# plt.errorbar(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/temp/temp_sigma40_b13.0_1.69.txt')[:,2], fmt='-', color = 'c', label=r'$\sigma_{\phi N}=$40 mb, $b_{\phi N}=13.0 \rm \ GeV^{-2}, \chi^2/NDF=1.69$')
+# plt.errorbar(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/temp/temp_sigma45_b14.5_1.95.txt')[:,2], fmt='-', color = 'm', label=r'$\sigma_{\phi N}=$45 mb, $b_{\phi N}=14.5 \rm \ GeV^{-2}, \chi^2/NDF=1.95$')
+# plt.fill_between(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/temp/temp_sigma30_b10.0_1.44.txt')[:,2]-0.2*(np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/temp/temp_sigma30_b10.0_1.44.txt')[:,2]), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/temp/temp_sigma30_b10.0_1.44.txt')[:,2]+0.2*(np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/temp/temp_sigma30_b10.0_1.44.txt')[:,2]), color='r', alpha=0.2)
 # plt.text(0.3, 0.15, 'preliminary', fontsize=15, color='r', style='italic', ha='center', va='center')
 # plt.title(r"$d(\gamma, \phi d')$ differential cross section vs $-t$")
 # plt.xlabel(r'$-t\ [GeV^2/c]$')
@@ -485,6 +485,52 @@ plt.close()
 # plt.legend()
 # file_pdf.savefig()
 # plt.close()
+
+fig = plt.figure(figsize=(8, 6), dpi=300)
+color_code = ['b', 'k', 'r']
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[1]:index[2]],       phi_d_2H_dsdt_results[0,index[1]:index[2]],          xerr=phi_d_2H_dsdt_minust_width[index[1]:index[2]],        yerr=phi_d_2H_dsdt_results_statserr[0,index[1]:index[2]],            fmt='k.', label='This work (8-9 GeV)')
+plt.errorbar(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/case3_6.0/E_8.5_sigma_30_b_10.txt')[:,2], fmt='-', color = 'y', label=r'$\sigma_{\phi N}=$20 mb, $b_{\phi N}=6.5 \rm \ GeV^{-2}, \chi^2/NDF=2.22$')
+plt.text(0.3, 0.15, 'preliminary', fontsize=15, color='r', style='italic', ha='center', va='center')
+plt.title(r"$d(\gamma, \phi d')$ differential cross section vs $-t$")
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$')
+plt.xlim(0, 2)
+plt.ylim(1e-1, 1e3)
+plt.yscale('log')
+plt.legend()
+file_pdf.savefig()
+plt.close()
+
+chi2_array = np.zeros((5, 5))
+for sphin in range(20,45,5):
+    for bphin in range(5,30,5):
+        # print(f'/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/case5_4.5_5.0/E_8.5_sigma_{sphin}_b_{bphin}.txt')
+        theory_results = np.loadtxt(f'/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/case3_6.0/E_8.5_sigma_{sphin}_b_{bphin}.txt')
+        chi2 = 0
+        ndf = 0
+        for i in range(index[1], index[2]):
+            t_val = phi_d_2H_dsdt_minust_center[i]
+            data_val = phi_d_2H_dsdt_results[0,i]
+            data_err = phi_d_2H_dsdt_results_statserr[0,i]
+            # Find the closest theory point
+            theory_idx = (np.abs(theory_results[:,0] - t_val)).argmin()
+            theory_val = theory_results[theory_idx, 2]
+            if data_err > 0 and data_val > 0 and theory_val > 0:
+                chi2 += ((data_val - theory_val)**2)/(data_err**2)
+                ndf += 1
+        ndf -= 2  # two fit parameters
+        chi2_array[(sphin-20)//5, (bphin-5)//5] = np.log10(chi2/ndf)
+        print(f'sigma_phiN={sphin} mb, b_phiN={bphin} GeV^-2: chi2/NDF={chi2/ndf}')
+
+fig = plt.figure(figsize=(8, 6), dpi=300)
+plt.imshow(chi2_array, extent=[5,25,20,40], origin='lower', aspect='auto', cmap='jet')
+plt.colorbar(label=r'$\chi^2/NDF$')
+plt.xlabel(r'$\rm b_{\phi N}\ [GeV^{-2}]$')
+plt.ylabel(r'$\sigma_{\phi N}\ [mb]$')
+plt.title(r'$\chi^2/NDF$ map for $\phi-D$ scattering parameters')
+file_pdf.savefig()
+plt.close()
+
 
 # fig = plt.figure(figsize=(8, 6), dpi=300)
 # color_code = ['b', 'k', 'r']
