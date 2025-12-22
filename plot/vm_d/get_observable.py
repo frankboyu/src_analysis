@@ -65,66 +65,61 @@ def legend_without_duplicate_labels(ax):
 #======================================================================phi_d_2H_dsdt======================================================================
 
 # Read the bin edges
-phi_d_2H_dsdt_energy_low            = np.loadtxt('output/yield_phi_d_20251117/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,2]
-phi_d_2H_dsdt_energy_high           = np.loadtxt('output/yield_phi_d_20251117/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,3]
-phi_d_2H_dsdt_energy_center         = np.loadtxt('output/yield_phi_d_20251117/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,0]
-phi_d_2H_dsdt_energy_width          = np.loadtxt('output/yield_phi_d_20251117/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,1]
-phi_d_2H_dsdt_minust_low            = np.loadtxt('output/yield_phi_d_20251117/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,6]
-phi_d_2H_dsdt_minust_high           = np.loadtxt('output/yield_phi_d_20251117/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,7]
-phi_d_2H_dsdt_minust_center         = np.loadtxt('output/yield_phi_d_20251117/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,4]
-phi_d_2H_dsdt_minust_width          = np.loadtxt('output/yield_phi_d_20251117/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,5]
+phi_d_2H_dsdt_energy_low            = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,2]
+phi_d_2H_dsdt_energy_high           = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,3]
+phi_d_2H_dsdt_energy_center         = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,0]
+phi_d_2H_dsdt_energy_width          = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,1]
+phi_d_2H_dsdt_minust_low            = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,6]
+phi_d_2H_dsdt_minust_high           = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,7]
+phi_d_2H_dsdt_minust_center         = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,4]
+phi_d_2H_dsdt_minust_width          = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,5]
 
 # Read the yield numbers
-phi_d_2H_dsdt_yield_data            = np.loadtxt('output/yield_phi_d_20251117/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,8]
-phi_d_2H_dsdt_yield_sim             = np.loadtxt('output/yield_phi_d_20251117/yield_phi_d_recon_exc_sim_2H_dsdt_nominal.txt')[:,8]
-phi_d_2H_dsdt_yield_tagged          = np.loadtxt('output/yield_phi_d_20251117/yield_phi_d_thrown_exc_tagged_2H_dsdt_nominal.txt')[:,8]
-phi_d_2H_dsdt_yield_data_statserr   = np.loadtxt('output/yield_phi_d_20251117/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,9]/phi_d_2H_dsdt_yield_data
-phi_d_2H_dsdt_yield_sim_statserr    = np.loadtxt('output/yield_phi_d_20251117/yield_phi_d_recon_exc_sim_2H_dsdt_nominal.txt')[:,9]/phi_d_2H_dsdt_yield_sim
-phi_d_2H_dsdt_yield_tagged_statserr = np.loadtxt('output/yield_phi_d_20251117/yield_phi_d_thrown_exc_tagged_2H_dsdt_nominal.txt')[:,9]/phi_d_2H_dsdt_yield_tagged
+phi_d_2H_dsdt_yield_data            = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,8]
+phi_d_2H_dsdt_yield_sim             = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_dsdt_nominal.txt')[:,8]
+phi_d_2H_dsdt_yield_tagged          = np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_dsdt_nominal.txt')[:,8]
+phi_d_2H_dsdt_yield_data_statserr   = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,9]/phi_d_2H_dsdt_yield_data
+phi_d_2H_dsdt_yield_sim_statserr    = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_dsdt_nominal.txt')[:,9]/phi_d_2H_dsdt_yield_sim
+phi_d_2H_dsdt_yield_tagged_statserr = np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_dsdt_nominal.txt')[:,9]/phi_d_2H_dsdt_yield_tagged
 phi_d_2H_dsdt_efficiency            = phi_d_2H_dsdt_yield_sim/phi_d_2H_dsdt_yield_tagged
 phi_d_2H_dsdt_efficiency_statserr   = np.sqrt(phi_d_2H_dsdt_yield_sim_statserr**2 + phi_d_2H_dsdt_yield_tagged_statserr**2)
-print(phi_d_2H_dsdt_yield_data.shape)
-print(phi_d_2H_dsdt_efficiency.shape)
-print(phi_d_2H_dsdt_minust_high.shape)
 phi_d_2H_dsdt_results               = phi_d_2H_dsdt_yield_data/phi_d_2H_dsdt_efficiency/lumi(phi_d_2H_dsdt_energy_low, phi_d_2H_dsdt_energy_high, 28)/(phi_d_2H_dsdt_minust_high-phi_d_2H_dsdt_minust_low)/0.489/1000
 phi_d_2H_dsdt_results_statserr      = phi_d_2H_dsdt_results*np.sqrt(phi_d_2H_dsdt_yield_data_statserr**2 + phi_d_2H_dsdt_efficiency_statserr**2)
 
-phi_d_2H_dsdt_results = np.vstack((phi_d_2H_dsdt_results, phi_d_2H_dsdt_results))
-phi_d_2H_dsdt_results_statserr = np.vstack((phi_d_2H_dsdt_results_statserr, phi_d_2H_dsdt_results_statserr))
-# tag_list = []
-# tag_list += (['dEdx_1.0', 'dEdx_1.5', 'dEdx_2.5', 'dEdx_3.0'])
-# tag_list += (['misspminus_0.010_chisquared_3.5', 'misspminus_0.015_chisquared_3.5', 'misspminus_0.020_chisquared_3.5', 'misspminus_0.025_chisquared_3.5', 'misspminus_0.030_chisquared_3.5'])
-# tag_list += (['misspminus_0.010_chisquared_4.0', 'misspminus_0.015_chisquared_4.0', 'misspminus_0.020_chisquared_4.0', 'misspminus_0.025_chisquared_4.0', 'misspminus_0.030_chisquared_4.0'])
-# tag_list += (['misspminus_0.010_chisquared_5.0', 'misspminus_0.015_chisquared_5.0', 'misspminus_0.020_chisquared_5.0', 'misspminus_0.025_chisquared_5.0', 'misspminus_0.030_chisquared_5.0'])
-# tag_list += (['misspminus_0.010_chisquared_6.0', 'misspminus_0.015_chisquared_6.0', 'misspminus_0.020_chisquared_6.0', 'misspminus_0.025_chisquared_6.0', 'misspminus_0.030_chisquared_6.0'])
-# tag_list += (['misspminus_0.010_chisquared_7.0', 'misspminus_0.015_chisquared_7.0', 'misspminus_0.020_chisquared_7.0', 'misspminus_0.025_chisquared_7.0', 'misspminus_0.030_chisquared_7.0'])
-# tag_list += (['momentum_0.400', 'momentum_0.425', 'momentum_0.475', 'momentum_0.500'])
-# tag_list += (['theta_1.0', 'theta_1.5', 'theta_2.5', 'theta_3.0'])
-# tag_list += (['vertexZ_13.0', 'vertexZ_13.5', 'vertexZ_14.5', 'vertexZ_15.0'])
-# tag_list += (['vertexR_0.50', 'vertexR_0.75', 'vertexR_1.25', 'vertexR_1.50'])
-# tag_list += (['beamaccid_3', 'beamaccid_4out', 'beamaccid_5'])
-# tag_list += (['comboaccid_1', 'comboaccid_-1'])
-# tag_list += (['fitmax_1.06', 'fitmax_1.07', 'fitmax_1.09', 'fitmax_1.10'])
-# tag_list += (['fitwidth_0.0040', 'fitwidth_0.0048', 'fitwidth_0.0060', 'fitwidth_0.0075'])
-# tag_list += (['fitbkg_fulllinear', 'fitbkg_quadratic', 'fitbkg_fullquadratic', 'fitbkg_phenomenological'])
-# tag_list += (['fitsig_noBL', 'fitsig_nonrel'])
-# for tag in tag_list:
-#     phi_d_2H_dsdt_yield_data                = np.vstack((phi_d_2H_dsdt_yield_data,              np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_'+tag+'.txt')[:,8]))
-#     phi_d_2H_dsdt_yield_data_statserr       = np.vstack((phi_d_2H_dsdt_yield_data_statserr,     np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_'+tag+'.txt')[:,9]/phi_d_2H_dsdt_yield_data[-1,:]))
-#     if tag.find('fit') != -1:
-#         phi_d_2H_dsdt_yield_sim             = np.vstack((phi_d_2H_dsdt_yield_sim,               np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_dsdt_nominal.txt')[:,8]))
-#         phi_d_2H_dsdt_yield_sim_statserr    = np.vstack((phi_d_2H_dsdt_yield_sim_statserr,      np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_dsdt_nominal.txt')[:,9]/phi_d_2H_dsdt_yield_sim[-1,:]))
-#     else:
-#         phi_d_2H_dsdt_yield_sim             = np.vstack((phi_d_2H_dsdt_yield_sim,               np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_dsdt_'+tag+'.txt')[:,8]))
-#         phi_d_2H_dsdt_yield_sim_statserr    = np.vstack((phi_d_2H_dsdt_yield_sim_statserr,      np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_dsdt_'+tag+'.txt')[:,9]/phi_d_2H_dsdt_yield_sim[-1,:]))
-#     phi_d_2H_dsdt_yield_tagged              = np.vstack((phi_d_2H_dsdt_yield_tagged,            np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_dsdt_nominal.txt')[:,8]))
-#     phi_d_2H_dsdt_yield_tagged_statserr     = np.vstack((phi_d_2H_dsdt_yield_tagged_statserr,   np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_dsdt_nominal.txt')[:,9]/phi_d_2H_dsdt_yield_tagged[-1,:]))
+tag_list = []
+tag_list += (['dEdx_1.0', 'dEdx_1.5', 'dEdx_2.5', 'dEdx_3.0'])
+tag_list += (['misspminus_0.010_chisquared_3.5', 'misspminus_0.015_chisquared_3.5', 'misspminus_0.020_chisquared_3.5', 'misspminus_0.025_chisquared_3.5', 'misspminus_0.030_chisquared_3.5'])
+tag_list += (['misspminus_0.010_chisquared_4.0', 'misspminus_0.015_chisquared_4.0', 'misspminus_0.020_chisquared_4.0', 'misspminus_0.025_chisquared_4.0', 'misspminus_0.030_chisquared_4.0'])
+tag_list += (['misspminus_0.010_chisquared_5.0', 'misspminus_0.015_chisquared_5.0', 'misspminus_0.020_chisquared_5.0', 'misspminus_0.025_chisquared_5.0', 'misspminus_0.030_chisquared_5.0'])
+tag_list += (['misspminus_0.010_chisquared_6.0', 'misspminus_0.015_chisquared_6.0', 'misspminus_0.020_chisquared_6.0', 'misspminus_0.025_chisquared_6.0', 'misspminus_0.030_chisquared_6.0'])
+tag_list += (['misspminus_0.010_chisquared_7.0', 'misspminus_0.015_chisquared_7.0', 'misspminus_0.020_chisquared_7.0', 'misspminus_0.025_chisquared_7.0', 'misspminus_0.030_chisquared_7.0'])
+tag_list += (['momentum_0.400', 'momentum_0.425', 'momentum_0.475', 'momentum_0.500'])
+tag_list += (['theta_1.0', 'theta_1.5', 'theta_2.5', 'theta_3.0'])
+tag_list += (['vertexZ_13.0', 'vertexZ_13.5', 'vertexZ_14.5', 'vertexZ_15.0'])
+tag_list += (['vertexR_0.50', 'vertexR_0.75', 'vertexR_1.25', 'vertexR_1.50'])
+tag_list += (['beamaccid_3', 'beamaccid_4out', 'beamaccid_5'])
+tag_list += (['comboaccid_1', 'comboaccid_-1'])
+tag_list += (['fitmax_1.06', 'fitmax_1.07', 'fitmax_1.09', 'fitmax_1.10'])
+tag_list += (['fitwidth_0.0040', 'fitwidth_0.0048', 'fitwidth_0.0060', 'fitwidth_0.0075'])
+tag_list += (['fitbkg_fulllinear', 'fitbkg_quadratic', 'fitbkg_fullquadratic', 'fitbkg_phenomenological'])
+tag_list += (['fitsig_noBL', 'fitsig_nonrel'])
+for tag in tag_list:
+    phi_d_2H_dsdt_yield_data                = np.vstack((phi_d_2H_dsdt_yield_data,              np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_'+tag+'.txt')[:,8]))
+    phi_d_2H_dsdt_yield_data_statserr       = np.vstack((phi_d_2H_dsdt_yield_data_statserr,     np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_'+tag+'.txt')[:,9]/phi_d_2H_dsdt_yield_data[-1,:]))
+    if tag.find('fit') != -1:
+        phi_d_2H_dsdt_yield_sim             = np.vstack((phi_d_2H_dsdt_yield_sim,               np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_dsdt_nominal.txt')[:,8]))
+        phi_d_2H_dsdt_yield_sim_statserr    = np.vstack((phi_d_2H_dsdt_yield_sim_statserr,      np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_dsdt_nominal.txt')[:,9]/phi_d_2H_dsdt_yield_sim[-1,:]))
+    else:
+        phi_d_2H_dsdt_yield_sim             = np.vstack((phi_d_2H_dsdt_yield_sim,               np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_dsdt_'+tag+'.txt')[:,8]))
+        phi_d_2H_dsdt_yield_sim_statserr    = np.vstack((phi_d_2H_dsdt_yield_sim_statserr,      np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_dsdt_'+tag+'.txt')[:,9]/phi_d_2H_dsdt_yield_sim[-1,:]))
+    phi_d_2H_dsdt_yield_tagged              = np.vstack((phi_d_2H_dsdt_yield_tagged,            np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_dsdt_nominal.txt')[:,8]))
+    phi_d_2H_dsdt_yield_tagged_statserr     = np.vstack((phi_d_2H_dsdt_yield_tagged_statserr,   np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_dsdt_nominal.txt')[:,9]/phi_d_2H_dsdt_yield_tagged[-1,:]))
 
-#     phi_d_2H_dsdt_efficiency                = np.vstack((phi_d_2H_dsdt_efficiency,              phi_d_2H_dsdt_yield_sim[-1,:]/phi_d_2H_dsdt_yield_tagged[-1,:]))
-#     phi_d_2H_dsdt_efficiency_statserr       = np.vstack((phi_d_2H_dsdt_efficiency_statserr,     np.sqrt(phi_d_2H_dsdt_yield_sim_statserr[-1,:]**2 + phi_d_2H_dsdt_yield_tagged_statserr[-1,:]**2)))
+    phi_d_2H_dsdt_efficiency                = np.vstack((phi_d_2H_dsdt_efficiency,              phi_d_2H_dsdt_yield_sim[-1,:]/phi_d_2H_dsdt_yield_tagged[-1,:]))
+    phi_d_2H_dsdt_efficiency_statserr       = np.vstack((phi_d_2H_dsdt_efficiency_statserr,     np.sqrt(phi_d_2H_dsdt_yield_sim_statserr[-1,:]**2 + phi_d_2H_dsdt_yield_tagged_statserr[-1,:]**2)))
 
-#     phi_d_2H_dsdt_results                   = np.vstack((phi_d_2H_dsdt_results,                 phi_d_2H_dsdt_yield_data[-1,:]/phi_d_2H_dsdt_efficiency[-1,:]/lumi(phi_d_2H_dsdt_energy_low, phi_d_2H_dsdt_energy_high, 28)/(phi_d_2H_dsdt_minust_high-phi_d_2H_dsdt_minust_low)/0.489/1000))
-#     phi_d_2H_dsdt_results_statserr          = np.vstack((phi_d_2H_dsdt_results_statserr,        phi_d_2H_dsdt_results[-1,:]*np.sqrt(phi_d_2H_dsdt_yield_data_statserr[-1,:]**2 + phi_d_2H_dsdt_efficiency_statserr[-1,:]**2)))
+    phi_d_2H_dsdt_results                   = np.vstack((phi_d_2H_dsdt_results,                 phi_d_2H_dsdt_yield_data[-1,:]/phi_d_2H_dsdt_efficiency[-1,:]/lumi(phi_d_2H_dsdt_energy_low, phi_d_2H_dsdt_energy_high, 28)/(phi_d_2H_dsdt_minust_high-phi_d_2H_dsdt_minust_low)/0.489/1000))
+    phi_d_2H_dsdt_results_statserr          = np.vstack((phi_d_2H_dsdt_results_statserr,        phi_d_2H_dsdt_results[-1,:]*np.sqrt(phi_d_2H_dsdt_yield_data_statserr[-1,:]**2 + phi_d_2H_dsdt_efficiency_statserr[-1,:]**2)))
 
 # Find the indices for the different energy and t bins
 index = []
@@ -137,28 +132,28 @@ for i in range(len(phi_d_2H_dsdt_results[0,:])):
         if (phi_d_2H_dsdt_energy_low[i] != phi_d_2H_dsdt_energy_low[i-1]):
             index.append(i)
 
-# # Data points from CLAS
-# phi_d_2H_dsdt_clas_minust_low           = np.array([0.350, 0.375, 0.400, 0.425, 0.450, 0.500, 0.550, 0.600, 0.700, 0.800, 1.000, 1.200, 1.400])
-# phi_d_2H_dsdt_clas_minust_high          = np.array([0.375, 0.400, 0.425, 0.450, 0.500, 0.550, 0.600, 0.700, 0.800, 1.000, 1.200, 1.400, 2.000])
-# phi_d_2H_dsdt_clas_minust_middle        = (phi_d_2H_dsdt_clas_minust_high + phi_d_2H_dsdt_clas_minust_low) / 2
-# phi_d_2H_dsdt_clas_minust_size          = (phi_d_2H_dsdt_clas_minust_high - phi_d_2H_dsdt_clas_minust_low) / 2
-# phi_d_2H_dsdt_clas_minust_center        = np.array([0.360, 0.385, 0.410, 0.435, 0.474, 0.524, 0.574, 0.646, 0.746, 0.888, 1.091, 1.292, 1.637])
-# phi_d_2H_dsdt_clas_results_16           = np.array([10.21, 8.85, 7.32, 6.16, 4.73, 3.52, 2.66, 2.17, 1.40, 0.94, 0.57, 0.28, 0.19])
-# phi_d_2H_dsdt_clas_results_16_statserr  = np.array([0.82, 0.75, 0.59, 0.55, 0.34, 0.28, 0.24, 0.15, 0.12, 0.07, 0.06, 0.05, 0.02])
-# phi_d_2H_dsdt_clas_results_16_systerr   = np.array([1.70, 1.11, 0.94, 0.81, 0.60, 0.51, 0.38, 0.26, 0.16, 0.11, 0.07, 0.04, 0.03])
-# phi_d_2H_dsdt_clas_results_16_totalerr  = np.sqrt(phi_d_2H_dsdt_clas_results_16_statserr**2 + phi_d_2H_dsdt_clas_results_16_systerr**2)
-# phi_d_2H_dsdt_clas_results_26           = np.array([8.63, 6.80, 4.57, 5.76, 3.99, 3.59, 2.11, 1.83, 1.32, 0.96, 0.57, 0.36, 0.15])
-# phi_d_2H_dsdt_clas_results_26_statserr  = np.array([0.80, 0.69, 0.53, 0.56, 0.33, 0.29, 0.22, 0.14, 0.12, 0.07, 0.05, 0.04, 0.02])
-# phi_d_2H_dsdt_clas_results_26_systerr   = np.array([1.04, 1.07, 0.74, 0.65, 0.55, 0.55, 0.28, 0.24, 0.20, 0.11, 0.06, 0.05, 0.02])
-# phi_d_2H_dsdt_clas_results_26_totalerr  = np.sqrt(phi_d_2H_dsdt_clas_results_26_statserr**2 + phi_d_2H_dsdt_clas_results_26_systerr**2)
+# Data points from CLAS
+phi_d_2H_dsdt_clas_minust_low           = np.array([0.350, 0.375, 0.400, 0.425, 0.450, 0.500, 0.550, 0.600, 0.700, 0.800, 1.000, 1.200, 1.400])
+phi_d_2H_dsdt_clas_minust_high          = np.array([0.375, 0.400, 0.425, 0.450, 0.500, 0.550, 0.600, 0.700, 0.800, 1.000, 1.200, 1.400, 2.000])
+phi_d_2H_dsdt_clas_minust_middle        = (phi_d_2H_dsdt_clas_minust_high + phi_d_2H_dsdt_clas_minust_low) / 2
+phi_d_2H_dsdt_clas_minust_size          = (phi_d_2H_dsdt_clas_minust_high - phi_d_2H_dsdt_clas_minust_low) / 2
+phi_d_2H_dsdt_clas_minust_center        = np.array([0.360, 0.385, 0.410, 0.435, 0.474, 0.524, 0.574, 0.646, 0.746, 0.888, 1.091, 1.292, 1.637])
+phi_d_2H_dsdt_clas_results_16           = np.array([10.21, 8.85, 7.32, 6.16, 4.73, 3.52, 2.66, 2.17, 1.40, 0.94, 0.57, 0.28, 0.19])
+phi_d_2H_dsdt_clas_results_16_statserr  = np.array([0.82, 0.75, 0.59, 0.55, 0.34, 0.28, 0.24, 0.15, 0.12, 0.07, 0.06, 0.05, 0.02])
+phi_d_2H_dsdt_clas_results_16_systerr   = np.array([1.70, 1.11, 0.94, 0.81, 0.60, 0.51, 0.38, 0.26, 0.16, 0.11, 0.07, 0.04, 0.03])
+phi_d_2H_dsdt_clas_results_16_totalerr  = np.sqrt(phi_d_2H_dsdt_clas_results_16_statserr**2 + phi_d_2H_dsdt_clas_results_16_systerr**2)
+phi_d_2H_dsdt_clas_results_26           = np.array([8.63, 6.80, 4.57, 5.76, 3.99, 3.59, 2.11, 1.83, 1.32, 0.96, 0.57, 0.36, 0.15])
+phi_d_2H_dsdt_clas_results_26_statserr  = np.array([0.80, 0.69, 0.53, 0.56, 0.33, 0.29, 0.22, 0.14, 0.12, 0.07, 0.05, 0.04, 0.02])
+phi_d_2H_dsdt_clas_results_26_systerr   = np.array([1.04, 1.07, 0.74, 0.65, 0.55, 0.55, 0.28, 0.24, 0.20, 0.11, 0.06, 0.05, 0.02])
+phi_d_2H_dsdt_clas_results_26_totalerr  = np.sqrt(phi_d_2H_dsdt_clas_results_26_statserr**2 + phi_d_2H_dsdt_clas_results_26_systerr**2)
 
-# # Data points from LEPS
-# phi_d_2H_dsdt_leps_minust_low           = np.array([0.38, 0.36, 0.34, 0.32, 0.30, 0.28, 0.26, 0.24, 0.22, 0.20, 0.18, 0.16, 0.14, 0.12, 0.10])
-# phi_d_2H_dsdt_leps_minust_high          = np.array([0.4, 0.38, 0.36, 0.34, 0.32, 0.30, 0.28, 0.26, 0.24, 0.22, 0.20, 0.18, 0.16, 0.14, 0.12])
-# phi_d_2H_dsdt_leps_minust_center        = (phi_d_2H_dsdt_leps_minust_high + phi_d_2H_dsdt_leps_minust_low) / 2
-# phi_d_2H_dsdt_leps_minust_width         = (phi_d_2H_dsdt_leps_minust_high - phi_d_2H_dsdt_leps_minust_low) / 2
-# phi_d_2H_dsdt_leps_results_157          = np.array([0.0005, 0.004, 0.0087, 0.0068, 0.0238, 0.0317, 0.0567, 0.0722, 0.092, 0.1186, 0.1749, 0.2033, 0.2544, 0.3101, 0.3396])*1000
-# phi_d_2H_dsdt_leps_results_157_statserr = np.array([0.0005, 0.002, 0.0035, 0.0028, 0.007, 0.0076, 0.0102, 0.0118, 0.0142, 0.0137, 0.0159, 0.0148, 0.0166, 0.0152, 0.0143])*1000
+# Data points from LEPS
+phi_d_2H_dsdt_leps_minust_low           = np.array([0.38, 0.36, 0.34, 0.32, 0.30, 0.28, 0.26, 0.24, 0.22, 0.20, 0.18, 0.16, 0.14, 0.12, 0.10])
+phi_d_2H_dsdt_leps_minust_high          = np.array([0.4, 0.38, 0.36, 0.34, 0.32, 0.30, 0.28, 0.26, 0.24, 0.22, 0.20, 0.18, 0.16, 0.14, 0.12])
+phi_d_2H_dsdt_leps_minust_center        = (phi_d_2H_dsdt_leps_minust_high + phi_d_2H_dsdt_leps_minust_low) / 2
+phi_d_2H_dsdt_leps_minust_width         = (phi_d_2H_dsdt_leps_minust_high - phi_d_2H_dsdt_leps_minust_low) / 2
+phi_d_2H_dsdt_leps_results_157          = np.array([0.0005, 0.004, 0.0087, 0.0068, 0.0238, 0.0317, 0.0567, 0.0722, 0.092, 0.1186, 0.1749, 0.2033, 0.2544, 0.3101, 0.3396])*1000
+phi_d_2H_dsdt_leps_results_157_statserr = np.array([0.0005, 0.002, 0.0035, 0.0028, 0.007, 0.0076, 0.0102, 0.0118, 0.0142, 0.0137, 0.0159, 0.0148, 0.0166, 0.0152, 0.0143])*1000
 
 # # Theoretical prediction
 # # phi_d_2H_dsdt_theory_minust = np.loadtxt('ds_dt_theory/10mb_8gev_m0.csv', delimiter=',')[:,0]
@@ -197,30 +192,30 @@ for i in range(len(phi_d_2H_dsdt_results[0,:])):
 # file_pdf.savefig()
 # plt.close()
 
-# # Plot the results
-# fig = plt.figure(figsize=(8, 6), dpi=300)
-# plt.errorbar(phi_d_2H_dsdt_clas_minust_center,  phi_d_2H_dsdt_clas_results_16,  yerr=phi_d_2H_dsdt_clas_results_16_statserr,    fmt='ys', markerfacecolor='white', markersize=3, capsize=2, capthick=1)
-# plt.errorbar(phi_d_2H_dsdt_clas_minust_center,  phi_d_2H_dsdt_clas_results_16,  yerr=phi_d_2H_dsdt_clas_results_16_totalerr,    fmt='ys', markerfacecolor='white', markersize=3, label='CLAS (1.6-2.6 GeV)')
-# plt.errorbar(phi_d_2H_dsdt_clas_minust_center,  phi_d_2H_dsdt_clas_results_26,  yerr=phi_d_2H_dsdt_clas_results_26_statserr,    fmt='cs', markerfacecolor='white', markersize=3, capsize=2, capthick=1)
-# plt.errorbar(phi_d_2H_dsdt_clas_minust_center,  phi_d_2H_dsdt_clas_results_26,  yerr=phi_d_2H_dsdt_clas_results_26_totalerr,    fmt='cs', markerfacecolor='white', markersize=3, label='CLAS (2.6-3.6 GeV)')
-# plt.errorbar(phi_d_2H_dsdt_leps_minust_center,  phi_d_2H_dsdt_leps_results_157, yerr=phi_d_2H_dsdt_leps_results_157_statserr,   fmt='g^', markerfacecolor='white', markersize=3, capsize=2, capthick=1)
-# plt.errorbar(phi_d_2H_dsdt_leps_minust_center,  phi_d_2H_dsdt_leps_results_157, yerr=phi_d_2H_dsdt_leps_results_157_statserr,   fmt='g^', markerfacecolor='white', markersize=3, label='LEPS (1.57-2.37 GeV)')
-# plt.errorbar(phi_d_2H_dsdt_minust_center[index[0]:index[1]], phi_d_2H_dsdt_results[0,index[0]:index[1]], yerr=phi_d_2H_dsdt_results_statserr[0,index[0]:index[1]], fmt='bo', markersize=3, capsize=2, capthick=1)
-# plt.errorbar(phi_d_2H_dsdt_minust_center[index[0]:index[1]], phi_d_2H_dsdt_results[0,index[0]:index[1]], yerr=phi_d_2H_dsdt_results_statserr[0,index[0]:index[1]], fmt='bo', markersize=3, label='This work (6-8 GeV)')
-# plt.errorbar(phi_d_2H_dsdt_minust_center[index[1]:index[2]], phi_d_2H_dsdt_results[0,index[1]:index[2]], yerr=phi_d_2H_dsdt_results_statserr[0,index[1]:index[2]], fmt='ko', markersize=3, capsize=2, capthick=1)
-# plt.errorbar(phi_d_2H_dsdt_minust_center[index[1]:index[2]], phi_d_2H_dsdt_results[0,index[1]:index[2]], yerr=phi_d_2H_dsdt_results_statserr[0,index[1]:index[2]], fmt='ko', markersize=3, label='This work (8-9 GeV)')
-# plt.errorbar(phi_d_2H_dsdt_minust_center[index[2]:index[3]], phi_d_2H_dsdt_results[0,index[2]:index[3]], yerr=phi_d_2H_dsdt_results_statserr[0,index[2]:index[3]], fmt='ro', markersize=3, capsize=2, capthick=1)
-# plt.errorbar(phi_d_2H_dsdt_minust_center[index[2]:index[3]], phi_d_2H_dsdt_results[0,index[2]:index[3]], yerr=phi_d_2H_dsdt_results_statserr[0,index[2]:index[3]], fmt='ro', markersize=3, label='This work (9-11 GeV)')
-# plt.text(0.3, 0.15, 'preliminary', fontsize=15, color='r', style='italic', ha='center', va='center')
-# plt.title(r"$d(\gamma, \phi d')$ differential cross section vs $-t$")
-# plt.xlabel(r'$-t\ [GeV^2/c]$')
-# plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$')
-# plt.xlim(0, 2)
-# plt.ylim(1e-1, 1e3)
-# plt.yscale('log')
-# plt.legend()
-# file_pdf.savefig()
-# plt.close()
+# Plot the results
+fig = plt.figure(figsize=(8, 6), dpi=300)
+plt.errorbar(phi_d_2H_dsdt_clas_minust_center,  phi_d_2H_dsdt_clas_results_16,  yerr=phi_d_2H_dsdt_clas_results_16_statserr,    fmt='ys', markerfacecolor='white', markersize=3, capsize=2, capthick=1)
+plt.errorbar(phi_d_2H_dsdt_clas_minust_center,  phi_d_2H_dsdt_clas_results_16,  yerr=phi_d_2H_dsdt_clas_results_16_totalerr,    fmt='ys', markerfacecolor='white', markersize=3, label='CLAS (1.6-2.6 GeV)')
+plt.errorbar(phi_d_2H_dsdt_clas_minust_center,  phi_d_2H_dsdt_clas_results_26,  yerr=phi_d_2H_dsdt_clas_results_26_statserr,    fmt='cs', markerfacecolor='white', markersize=3, capsize=2, capthick=1)
+plt.errorbar(phi_d_2H_dsdt_clas_minust_center,  phi_d_2H_dsdt_clas_results_26,  yerr=phi_d_2H_dsdt_clas_results_26_totalerr,    fmt='cs', markerfacecolor='white', markersize=3, label='CLAS (2.6-3.6 GeV)')
+plt.errorbar(phi_d_2H_dsdt_leps_minust_center,  phi_d_2H_dsdt_leps_results_157, yerr=phi_d_2H_dsdt_leps_results_157_statserr,   fmt='g^', markerfacecolor='white', markersize=3, capsize=2, capthick=1)
+plt.errorbar(phi_d_2H_dsdt_leps_minust_center,  phi_d_2H_dsdt_leps_results_157, yerr=phi_d_2H_dsdt_leps_results_157_statserr,   fmt='g^', markerfacecolor='white', markersize=3, label='LEPS (1.57-2.37 GeV)')
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[0]:index[1]], phi_d_2H_dsdt_results[0,index[0]:index[1]], yerr=phi_d_2H_dsdt_results_statserr[0,index[0]:index[1]], fmt='bo', markersize=3, capsize=2, capthick=1)
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[0]:index[1]], phi_d_2H_dsdt_results[0,index[0]:index[1]], yerr=phi_d_2H_dsdt_results_statserr[0,index[0]:index[1]], fmt='bo', markersize=3, label='This work (6-8 GeV)')
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[1]:index[2]], phi_d_2H_dsdt_results[0,index[1]:index[2]], yerr=phi_d_2H_dsdt_results_statserr[0,index[1]:index[2]], fmt='ko', markersize=3, capsize=2, capthick=1)
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[1]:index[2]], phi_d_2H_dsdt_results[0,index[1]:index[2]], yerr=phi_d_2H_dsdt_results_statserr[0,index[1]:index[2]], fmt='ko', markersize=3, label='This work (8-9 GeV)')
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[2]:index[3]], phi_d_2H_dsdt_results[0,index[2]:index[3]], yerr=phi_d_2H_dsdt_results_statserr[0,index[2]:index[3]], fmt='ro', markersize=3, capsize=2, capthick=1)
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[2]:index[3]], phi_d_2H_dsdt_results[0,index[2]:index[3]], yerr=phi_d_2H_dsdt_results_statserr[0,index[2]:index[3]], fmt='ro', markersize=3, label='This work (9-11 GeV)')
+plt.text(0.3, 0.15, 'preliminary', fontsize=15, color='r', style='italic', ha='center', va='center')
+plt.title(r"$d(\gamma, \phi d')$ differential cross section vs $-t$")
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$')
+plt.xlim(0, 2)
+plt.ylim(1e-1, 1e3)
+plt.yscale('log')
+plt.legend()
+file_pdf.savefig()
+plt.close()
 
 
 # # Systematics header
@@ -492,60 +487,60 @@ for i in range(len(phi_d_2H_dsdt_results[0,:])):
 # file_pdf.savefig()
 # plt.close()
 
-fig = plt.figure(figsize=(8, 6), dpi=300)
-color_code = ['b', 'k', 'r']
-plt.errorbar(phi_d_2H_dsdt_minust_center[index[1]:index[2]],       phi_d_2H_dsdt_results[0,index[1]:index[2]],          xerr=phi_d_2H_dsdt_minust_width[index[1]:index[2]],        yerr=phi_d_2H_dsdt_results_statserr[0,index[1]:index[2]],            fmt='k.', label='This work (8-9 GeV)')
-plt.errorbar(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/case3_6.0/E_8.5_sigma_30_b_10.txt')[:,2], fmt='-', color = 'y', label=r'$\sigma_{\phi N}=$20 mb, $b_{\phi N}=6.5 \rm \ GeV^{-2}, \chi^2/NDF=2.22$')
-plt.text(0.3, 0.15, 'preliminary', fontsize=15, color='r', style='italic', ha='center', va='center')
-plt.title(r"$d(\gamma, \phi d')$ differential cross section vs $-t$")
-plt.xlabel(r'$-t\ [GeV^2/c]$')
-plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$')
-plt.xlim(0, 2)
-plt.ylim(1e-1, 1e3)
-plt.yscale('log')
-plt.legend()
-file_pdf.savefig()
-plt.close()
+# fig = plt.figure(figsize=(8, 6), dpi=300)
+# color_code = ['b', 'k', 'r']
+# plt.errorbar(phi_d_2H_dsdt_minust_center[index[1]:index[2]],       phi_d_2H_dsdt_results[0,index[1]:index[2]],          xerr=phi_d_2H_dsdt_minust_width[index[1]:index[2]],        yerr=phi_d_2H_dsdt_results_statserr[0,index[1]:index[2]],            fmt='k.', label='This work (8-9 GeV)')
+# plt.errorbar(np.linspace(0.1,2,191), np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/case3_6.0/E_8.5_sigma_30_b_10.txt')[:,2], fmt='-', color = 'y', label=r'$\sigma_{\phi N}=$20 mb, $b_{\phi N}=6.5 \rm \ GeV^{-2}, \chi^2/NDF=2.22$')
+# plt.text(0.3, 0.15, 'preliminary', fontsize=15, color='r', style='italic', ha='center', va='center')
+# plt.title(r"$d(\gamma, \phi d')$ differential cross section vs $-t$")
+# plt.xlabel(r'$-t\ [GeV^2/c]$')
+# plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$')
+# plt.xlim(0, 2)
+# plt.ylim(1e-1, 1e3)
+# plt.yscale('log')
+# plt.legend()
+# file_pdf.savefig()
+# plt.close()
 
-sphin_list = np.arange(20,40,0.5)
-bphin_list = np.arange(5,25,0.5)
+# sphin_list = np.arange(20,40,0.5)
+# bphin_list = np.arange(5,25,0.5)
 
-chi2_array = np.zeros((len(bphin_list), len(sphin_list)))
-for i,sphin in enumerate(sphin_list):
-    for j,bphin in enumerate(bphin_list):
-        # theory_results = np.loadtxt(f'/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/case3_6.0/E_8.5_sigma_{sphin}_b_{bphin}.txt')
-        theory_results = np.loadtxt(f'/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/case3_6.0/E_8.5_sigma_%.1f_b_%.1f.txt' % (sphin, bphin))
-        chi2 = 0
-        ndf = 0
-        for k in range(index[1], index[2]):
-            t_val = phi_d_2H_dsdt_minust_center[k]
-            data_val = phi_d_2H_dsdt_results[0,k]
-            data_err = phi_d_2H_dsdt_results_statserr[0,k]
-            # Find the closest theory point
-            theory_idx = (np.abs(theory_results[:,0] - t_val)).argmin()
-            theory_val = theory_results[theory_idx, 2]
-            if data_err > 0 and data_val > 0 and theory_val > 0:
-                chi2 += ((data_val - theory_val)**2)/(data_err**2)
-                ndf += 1
-        ndf -= 2  # two fit parameters
-        chi2_array[j, i] = np.log(chi2/ndf)
+# chi2_array = np.zeros((len(bphin_list), len(sphin_list)))
+# for i,sphin in enumerate(sphin_list):
+#     for j,bphin in enumerate(bphin_list):
+#         # theory_results = np.loadtxt(f'/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/case3_6.0/E_8.5_sigma_{sphin}_b_{bphin}.txt')
+#         theory_results = np.loadtxt(f'/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/case3_6.0/E_8.5_sigma_%.1f_b_%.1f.txt' % (sphin, bphin))
+#         chi2 = 0
+#         ndf = 0
+#         for k in range(index[1], index[2]):
+#             t_val = phi_d_2H_dsdt_minust_center[k]
+#             data_val = phi_d_2H_dsdt_results[0,k]
+#             data_err = phi_d_2H_dsdt_results_statserr[0,k]
+#             # Find the closest theory point
+#             theory_idx = (np.abs(theory_results[:,0] - t_val)).argmin()
+#             theory_val = theory_results[theory_idx, 2]
+#             if data_err > 0 and data_val > 0 and theory_val > 0:
+#                 chi2 += ((data_val - theory_val)**2)/(data_err**2)
+#                 ndf += 1
+#         ndf -= 2  # two fit parameters
+#         chi2_array[j, i] = np.log(chi2/ndf)
 
-fig = plt.figure(figsize=(8, 6), dpi=300)
-# plt.contourf(sphin_list, bphin_list, chi2_array, levels=50, cmap='viridis')
-# cbar = plt.colorbar()
-# cbar.set_label(r'$\chi^2/NDF$')
-confidence_levels = [2.30, 6.18, 11.83]  # 68%, 95%, 99.7% for 2 parameters
-best_fit_idx = np.unravel_index(np.argmin(chi2_array), chi2_array.shape)
-best_chi2 = chi2_array[best_fit_idx]
-for level in confidence_levels:
-    contour_level = best_chi2 + level/ndf
-    plt.contour(sphin_list, bphin_list, chi2_array, levels=[contour_level], colors='black', linestyles='dashed')
-    # plt.text(best_fit_idx[1]*5 + 5, best_fit_idx[0]*5 + 20 + level, f'{int(level*100)/100}', color='black')
-plt.xlabel(r'$\sigma_{\phi N}\ [mb]$')
-plt.ylabel(r'$\rm b_{\phi N}\ [GeV^{-2}]$')
-plt.title(r'$\chi^2/NDF$ map for $\phi-D$ scattering parameters')
-file_pdf.savefig()
-plt.close()
+# fig = plt.figure(figsize=(8, 6), dpi=300)
+# # plt.contourf(sphin_list, bphin_list, chi2_array, levels=50, cmap='viridis')
+# # cbar = plt.colorbar()
+# # cbar.set_label(r'$\chi^2/NDF$')
+# confidence_levels = [2.30, 6.18, 11.83]  # 68%, 95%, 99.7% for 2 parameters
+# best_fit_idx = np.unravel_index(np.argmin(chi2_array), chi2_array.shape)
+# best_chi2 = chi2_array[best_fit_idx]
+# for level in confidence_levels:
+#     contour_level = best_chi2 + level/ndf
+#     plt.contour(sphin_list, bphin_list, chi2_array, levels=[contour_level], colors='black', linestyles='dashed')
+#     # plt.text(best_fit_idx[1]*5 + 5, best_fit_idx[0]*5 + 20 + level, f'{int(level*100)/100}', color='black')
+# plt.xlabel(r'$\sigma_{\phi N}\ [mb]$')
+# plt.ylabel(r'$\rm b_{\phi N}\ [GeV^{-2}]$')
+# plt.title(r'$\chi^2/NDF$ map for $\phi-D$ scattering parameters')
+# file_pdf.savefig()
+# plt.close()
 
 
 # fig = plt.figure(figsize=(8, 6), dpi=300)
@@ -589,26 +584,26 @@ plt.close()
 # file_pdf.savefig()
 # plt.close()
 
-# fig = plt.figure(figsize=(8, 6), dpi=300)
-# color_code = ['b', 'k', 'r']
-# plt.errorbar(phi_d_2H_dsdt_minust_center[index[0]:index[1]],       phi_d_2H_dsdt_results[index[0]:index[1]],          xerr=phi_d_2H_dsdt_minust_width[index[0]:index[1]],        yerr=phi_d_2H_dsdt_results_statserr[index[0]:index[1]],            fmt='b.', label='6-8 GeV')
-# plt.errorbar(phi_d_2H_dsdt_minust_center[index[1]:index[2]],       phi_d_2H_dsdt_results[index[1]:index[2]],          xerr=phi_d_2H_dsdt_minust_width[index[1]:index[2]],        yerr=phi_d_2H_dsdt_results_statserr[index[1]:index[2]],            fmt='k.', label='8-9 GeV')
-# plt.errorbar(phi_d_2H_dsdt_minust_center[index[2]:index[3]],       phi_d_2H_dsdt_results[index[2]:index[3]],          xerr=phi_d_2H_dsdt_minust_width[index[2]:index[3]],        yerr=phi_d_2H_dsdt_results_statserr[index[2]:index[3]],            fmt='r.', label='9-11 GeV')
-# for i in range(3):
-#     curve_fit_params, curve_fit_cov = curve_fit(dsdt_func, phi_d_2H_dsdt_minust_center[index[i]:index[i+1]], phi_d_2H_dsdt_results[index[i]:index[i+1]], p0=[0, 0, 0, 0])
-#     curve_fit_residuals = phi_d_2H_dsdt_results[index[i]:index[i+1]] - dsdt_func(phi_d_2H_dsdt_minust_center[index[i]:index[i+1]], curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3])
-#     reduced_chi2 = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr[index[i]:index[i+1]])**2)/(len(phi_d_2H_dsdt_results[index[i]:index[i+1]])-4)
-#     plt.plot(np.linspace(0, 2, 100), dsdt_func(np.linspace(0, 2, 100), curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3]), '--', color = color_code[i], label='Paras: %.2f, %.2f, %.2f, %.2f, $\chi^2$/ndf = %.2f' % (curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3], reduced_chi2))
-# plt.text(0.3, 0.15, 'preliminary', fontsize=15, color='r', style='italic', ha='center', va='center')
-# plt.title(r"$d(\gamma, \phi d')$ differential cross section vs $-t$")
-# plt.xlabel(r'$-t\ [GeV^2/c]$')
-# plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$')
-# plt.xlim(0, 2)
-# plt.ylim(1e-1, 1e3)
-# plt.yscale('log')
-# plt.legend()
-# file_pdf.savefig()
-# plt.close()
+fig = plt.figure(figsize=(8, 6), dpi=300)
+color_code = ['b', 'k', 'r']
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[0]:index[1]],       phi_d_2H_dsdt_results[0, index[0]:index[1]],          xerr=phi_d_2H_dsdt_minust_width[index[0]:index[1]],        yerr=phi_d_2H_dsdt_results_statserr[0, index[0]:index[1]],            fmt='b.', label='6-8 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[1]:index[2]],       phi_d_2H_dsdt_results[0, index[1]:index[2]],          xerr=phi_d_2H_dsdt_minust_width[index[1]:index[2]],        yerr=phi_d_2H_dsdt_results_statserr[0, index[1]:index[2]],            fmt='k.', label='8-9 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[2]:index[3]],       phi_d_2H_dsdt_results[0, index[2]:index[3]],          xerr=phi_d_2H_dsdt_minust_width[index[2]:index[3]],        yerr=phi_d_2H_dsdt_results_statserr[0, index[2]:index[3]],            fmt='r.', label='9-11 GeV')
+for i in range(3):
+    curve_fit_params, curve_fit_cov = curve_fit(dsdt_func, phi_d_2H_dsdt_minust_center[index[i]:index[i+1]], phi_d_2H_dsdt_results[0, index[i]:index[i+1]], p0=[3000, 15, 20, 3])
+    curve_fit_residuals = phi_d_2H_dsdt_results[0, index[i]:index[i+1]] - dsdt_func(phi_d_2H_dsdt_minust_center[index[i]:index[i+1]], curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3])
+    reduced_chi2 = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr[0, index[i]:index[i+1]])**2)/(len(phi_d_2H_dsdt_results[0, index[i]:index[i+1]])-4)
+    plt.plot(np.linspace(0, 2, 100), dsdt_func(np.linspace(0, 2, 100), curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3]), '--', color = color_code[i], label='Paras: %.2f, %.2f, %.2f, %.2f, $\chi^2$/ndf = %.2f' % (curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3], reduced_chi2))
+plt.text(0.3, 0.15, 'preliminary', fontsize=15, color='r', style='italic', ha='center', va='center')
+plt.title(r"$d(\gamma, \phi d')$ differential cross section vs $-t$")
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$')
+plt.xlim(0, 2)
+plt.ylim(1e-1, 1e3)
+plt.yscale('log')
+plt.legend()
+file_pdf.savefig()
+plt.close()
 
 # fig = plt.figure(figsize=(8, 6), dpi=300)
 # color_code = ['b', 'k', 'r']

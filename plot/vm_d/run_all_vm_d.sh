@@ -7,8 +7,8 @@ CHANNEL_LIST+=("phi_d")
 # CHANNEL_LIST+=("rho_d")
 
 REACTION_LIST=()
-# REACTION_LIST+=("recon_exc_data_2H" "recon_exc_sim_2H" "thrown_exc_tagged_2H")
-REACTION_LIST+=("recon_exc_data_2H")
+REACTION_LIST+=("recon_exc_data_2H" "recon_exc_sim_2H" "thrown_exc_tagged_2H")
+# REACTION_LIST+=("recon_exc_data_2H")
 
 OBSERVABLE_LIST=()
 # OBSERVABLE_LIST+=("dsdt" "Wcostheta" "Wphi" "WPhi" "Wpsi")
@@ -32,27 +32,34 @@ TAG_LIST=()
 # TAG_LIST+=("fitmax_1.06" "fitmax_1.07" "fitmax_1.09" "fitmax_1.10")
 # TAG_LIST+=("fitwidth_0.0040" "fitwidth_0.0048" "fitwidth_0.0060" "fitwidth_0.0075")
 # TAG_LIST+=("fitbkg_fulllinear" "fitbkg_quadratic" "fitbkg_fullquadratic" "fitbkg_phenomenological")
-TAG_LIST+=("fitsig_noBL" "fitsig_nonrel" "fitsig_relBWsim")
+# TAG_LIST+=("fitsig_noBL" "fitsig_nonrel" "fitsig_relBWsim")
+# TAG_LIST+=("simweight_pass0" "simweight_pass1" "simweight_pass2" "simweight_pass3")
+TAG_LIST+=("simweight_pass0")
+
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
 gxenv $HALLD_VERSIONS/version.xml
 
 # root -b -q -l get_num_combo.C
 
-for OBSERVABLE in "${OBSERVABLE_LIST[@]}"
+for CHANNEL in "${CHANNEL_LIST[@]}"
 do
-    for CHANNEL in "${CHANNEL_LIST[@]}"
+    for REACTION in "${REACTION_LIST[@]}"
     do
-        for REACTION in "${REACTION_LIST[@]}"
+        for OBSERVABLE in "${OBSERVABLE_LIST[@]}"
         do
             for TAG in "${TAG_LIST[@]}"
             do
-                if [[ "$REACTION" == *"thrown"* && "$TAG" != "nominal" ]]; then
+                if [[ "$REACTION" == *"thrown"* && "$TAG" != "nominal" && "$TAG" != *"simweight"* ]]; then
                     continue
                 fi
                 if [[ "$REACTION" == *"sim"* && "$TAG" == *"fit"* ]]; then
                     continue
                 fi
+                if [[ "$REACTION" == *"data"* && "$TAG" == *"simweight"* ]]; then
+                    continue
+                fi
+                # echo "Processing: CHANNEL=$CHANNEL, REACTION=$REACTION, OBSERVABLE=$OBSERVABLE, TAG=$TAG"
                 root -b -q -l "get_yield.C(\"$CHANNEL\", \"$REACTION\", \"$OBSERVABLE\", \"$TAG\")"
             done
         done

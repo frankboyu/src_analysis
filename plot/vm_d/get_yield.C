@@ -204,7 +204,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
     double  fit_min     = 0.99;
     double  fit_max     = 1.08;
     double  bin_width   = 0.005;
-    
+
     if (tag == "fitmax_1.06")
         fit_max = 1.06;
     else if (tag == "fitmax_1.07")
