@@ -942,13 +942,30 @@ Double_t nonrel_bw(Double_t *x, Double_t *par)
 
 double sim_weight_func_pass1(double beam_energy_truth, double minust_truth)
 {
-    double a1 = 2813.72894997;
-    double b1 = 15.13997936;
-    double a2 = 17.88792021;
-    double b2 = 2.98839991;
+    double a1, b1, a2, b2 = 0;
     double normalization = 10;
     if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
         return 1.0;
-    else                            // simulation, weighted by the measured cross section
-        return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
+    else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
+    {
+        a1 = 3632.01;
+        b1 = 15.82;
+        a2 = 12.19;
+        b2 = 2.49;
+    }
+    else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
+    {
+        a1 = 4842.04;
+        b1 = 17.22;
+        a2 = 17.43;
+        b2 = 3.13;
+    }
+    else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
+    {
+        a1 = 2882.53;
+        b1 = 15.54;
+        a2 = 12.54;
+        b2 = 2.90;
+    }
+    return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
 }
