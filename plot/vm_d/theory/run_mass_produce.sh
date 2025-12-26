@@ -9,7 +9,7 @@ gfortran edved_wkng_pol.f
 
 for EPHIN in 8.5
 do
-    for SPHIN in $(seq 0 0.5 20)
+    for SPHIN in $(seq 0 0.5 40)
     do
         for BPHIN in $(seq 0 0.5 15)
         do
