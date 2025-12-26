@@ -42,35 +42,35 @@ private:
     // CUSTOM HISTOGRAMS
     TH1D* dHist_NumUnusedTracks_Before;
     TH1D* dHist_NumUnusedShowers_Before;
-    TH1F* dHist_PhotonEnergy_Before;
-    TH1F* dHist_VertexZ_Before;
-    TH2F* dHist_VertexXY_Before;
-    TH2F* dHist_KPlusKinematics_Before;
-    TH2F* dHist_KMinusKinematics_Before;
-    TH2F* dHist_DeuteronKinematics_Before;
-    TH1F* dHist_KPlusPIDFOM_Before;
-    TH1F* dHist_KMinusPIDFOM_Before;
-    TH2F* dHist_DeuterondEdxCDC_Before;
-    TH2F* dHist_DeuterondEdxST_Before;
-    TH1F* dHist_InvariantMassPhi_Before;
-    TH2F* dHist_ChiSqPerNDF_Before;
-    TH1F* dHist_ThrownTopology_Before;
+    TH1D* dHist_PhotonEnergy_Before;
+    TH1D* dHist_VertexZ_Before;
+    TH2D* dHist_VertexXY_Before;
+    TH2D* dHist_KPlusKinematics_Before;
+    TH2D* dHist_KMinusKinematics_Before;
+    TH2D* dHist_DeuteronKinematics_Before;
+    TH1D* dHist_KPlusPIDFOM_Before;
+    TH1D* dHist_KMinusPIDFOM_Before;
+    TH2D* dHist_DeuterondEdxCDC_Before;
+    TH2D* dHist_DeuterondEdxST_Before;
+    TH1D* dHist_InvariantMassPhi_Before;
+    TH2D* dHist_ChiSqPerNDF_Before;
+    TH1D* dHist_ThrownTopology_Before;
 
     TH1D* dHist_NumUnusedTracks_After;
     TH1D* dHist_NumUnusedShowers_After;
-    TH1F* dHist_PhotonEnergy_After;
-    TH1F* dHist_VertexZ_After;
-    TH2F* dHist_VertexXY_After;
-    TH2F* dHist_KPlusKinematics_After;
-    TH2F* dHist_KMinusKinematics_After;
-    TH2F* dHist_DeuteronKinematics_After;
-    TH1F* dHist_KPlusPIDFOM_After;
-    TH1F* dHist_KMinusPIDFOM_After;
-    TH2F* dHist_DeuterondEdxCDC_After;
-    TH2F* dHist_DeuterondEdxST_After;
-    TH1F* dHist_InvariantMassPhi_After;
-    TH2F* dHist_ChiSqPerNDF_After;
-    TH1F* dHist_ThrownTopology_After;
+    TH1D* dHist_PhotonEnergy_After;
+    TH1D* dHist_VertexZ_After;
+    TH2D* dHist_VertexXY_After;
+    TH2D* dHist_KPlusKinematics_After;
+    TH2D* dHist_KMinusKinematics_After;
+    TH2D* dHist_DeuteronKinematics_After;
+    TH1D* dHist_KPlusPIDFOM_After;
+    TH1D* dHist_KMinusPIDFOM_After;
+    TH2D* dHist_DeuterondEdxCDC_After;
+    TH2D* dHist_DeuterondEdxST_After;
+    TH1D* dHist_InvariantMassPhi_After;
+    TH2D* dHist_ChiSqPerNDF_After;
+    TH1D* dHist_ThrownTopology_After;
 
     ClassDef(DSelector_phi_d_recon, 0);
 };
@@ -124,35 +124,35 @@ void DSelector_phi_d_recon::Init(TTree *locTree)
     // CUSTOM HISTOGRAMS
     dHist_NumUnusedTracks_Before    = new TH1D("NumUnusedTracks_Before",    ";Unused Tracks             ;Events/1",             10,     0.0,    10.0);
     dHist_NumUnusedShowers_Before   = new TH1D("NumUnusedShowers_Before",   ";Unused Showers            ;Events/1",             10,     0.0,    10.0);
-    dHist_PhotonEnergy_Before       = new TH1F("PhotonEnergy_Before",       ";Photon Energy (GeV)       ;Events/0.01 GeV",      900,    3.0,    12.0);
-    dHist_VertexZ_Before            = new TH1F("VertexZ_Before",            ";Vertex Z (cm)             ;Events/1 cm",          200,    0.0,    200.0);
-    dHist_VertexXY_Before           = new TH2F("VertexXY_Before",           ";Vertex X (cm)             ;Vertex Y (cm)",        100,    -5.0,   5.0,    100,    -5.0,   5.0);
-    dHist_KPlusKinematics_Before    = new TH2F("KPlusKinematics_Before",    ";P (GeV/c)                 ;#theta (deg)",         100,    0.0,    10.0,   180,    0.0,    180.0);
-    dHist_KMinusKinematics_Before   = new TH2F("KMinusKinematics_Before",   ";P (GeV/c)                 ;#theta (deg)",         100,    0.0,    10.0,   180,    0.0,    180.0);
-    dHist_DeuteronKinematics_Before = new TH2F("DeuteronKinematics_Before", ";P (GeV/c)                 ;#theta (deg)",         100,    0.0,    10.0,   180,    0.0,    180.0);
-    dHist_KPlusPIDFOM_Before        = new TH1F("KPlusPIDFOM_Before",        ";log(PIDFOM)               ;Events/1",             50,     -50.0,  0);
-    dHist_KMinusPIDFOM_Before       = new TH1F("KMinusPIDFOM_Before",       ";log(PIDFOM)               ;Events/1",             50,     -50.0,  0);
-    dHist_DeuterondEdxCDC_Before    = new TH2F("DeuterondEdxCDC_Before",    ";P (GeV/c)                 ;dE/dx_{CDC} (keV/cm)", 200,    0.0,     2.0,   100,    0.0,    40.0);
-    dHist_DeuterondEdxST_Before     = new TH2F("DeuterondEdxST_Before",     ";P (GeV/c)                 ;dE/dx_{ST} (keV/cm)",  200,    0.0,     2.0,   100,    0.0,    40.0);
-    dHist_InvariantMassPhi_Before   = new TH1F("InvariantMassPhi_Before",	";M_{K^{+}K^{-}} (GeV)      ;Events/0.01 GeV",      500,    0.0,    5.0);
-    dHist_ChiSqPerNDF_Before        = new TH2F("ChiSqPerNDF_Before",        ";M_{K^{+}K^{-}} (GeV)      ;log(#chi^{2}/NDF)",    400,    0.9,    4.9,    100,    0.0,    5);
-    dHist_ThrownTopology_Before     = new TH1F("ThrownTopology_Before",     ";Thrown Topology           ;Events/1",             20,     0.5,    20.5);
+    dHist_PhotonEnergy_Before       = new TH1D("PhotonEnergy_Before",       ";Photon Energy (GeV)       ;Events/0.01 GeV",      900,    3.0,    12.0);
+    dHist_VertexZ_Before            = new TH1D("VertexZ_Before",            ";Vertex Z (cm)             ;Events/1 cm",          200,    0.0,    200.0);
+    dHist_VertexXY_Before           = new TH2D("VertexXY_Before",           ";Vertex X (cm)             ;Vertex Y (cm)",        100,    -5.0,   5.0,    100,    -5.0,   5.0);
+    dHist_KPlusKinematics_Before    = new TH2D("KPlusKinematics_Before",    ";P (GeV/c)                 ;#theta (deg)",         100,    0.0,    10.0,   180,    0.0,    180.0);
+    dHist_KMinusKinematics_Before   = new TH2D("KMinusKinematics_Before",   ";P (GeV/c)                 ;#theta (deg)",         100,    0.0,    10.0,   180,    0.0,    180.0);
+    dHist_DeuteronKinematics_Before = new TH2D("DeuteronKinematics_Before", ";P (GeV/c)                 ;#theta (deg)",         100,    0.0,    10.0,   180,    0.0,    180.0);
+    dHist_KPlusPIDFOM_Before        = new TH1D("KPlusPIDFOM_Before",        ";log(PIDFOM)               ;Events/1",             50,     -50.0,  0);
+    dHist_KMinusPIDFOM_Before       = new TH1D("KMinusPIDFOM_Before",       ";log(PIDFOM)               ;Events/1",             50,     -50.0,  0);
+    dHist_DeuterondEdxCDC_Before    = new TH2D("DeuterondEdxCDC_Before",    ";P (GeV/c)                 ;dE/dx_{CDC} (keV/cm)", 200,    0.0,     2.0,   100,    0.0,    40.0);
+    dHist_DeuterondEdxST_Before     = new TH2D("DeuterondEdxST_Before",     ";P (GeV/c)                 ;dE/dx_{ST} (keV/cm)",  200,    0.0,     2.0,   100,    0.0,    40.0);
+    dHist_InvariantMassPhi_Before   = new TH1D("InvariantMassPhi_Before",	";M_{K^{+}K^{-}} (GeV)      ;Events/0.01 GeV",      500,    0.0,    5.0);
+    dHist_ChiSqPerNDF_Before        = new TH2D("ChiSqPerNDF_Before",        ";M_{K^{+}K^{-}} (GeV)      ;log(#chi^{2}/NDF)",    400,    0.9,    4.9,    100,    0.0,    5);
+    dHist_ThrownTopology_Before     = new TH1D("ThrownTopology_Before",     ";Thrown Topology           ;Events/1",             20,     0.5,    20.5);
 
     dHist_NumUnusedTracks_After     = new TH1D("NumUnusedTracks_After",     ";Unused Tracks             ;Events/1",             10,     0.0,    10.0);
     dHist_NumUnusedShowers_After    = new TH1D("NumUnusedShowers_After",    ";Unused Showers            ;Events/1",             10,     0.0,    10.0);
-    dHist_PhotonEnergy_After        = new TH1F("PhotonEnergy_After",        ";Photon Energy (GeV)       ;Events/0.01 GeV",      900,    3.0,    12.0);
-    dHist_VertexZ_After             = new TH1F("VertexZ_After",             ";Vertex Z (cm)             ;Events/1 cm",          200,    0.0,    200.0);
-    dHist_VertexXY_After            = new TH2F("VertexXY_After",            ";Vertex X (cm)             ;Vertex Y (cm)",        100,    -5.0,   5.0,    100,    -5.0,   5.0);
-    dHist_KPlusKinematics_After     = new TH2F("KPlusKinematics_After",     ";P (GeV/c)                 ;#theta (deg)",         100,    0.0,    10.0,   180,    0.0,    180.0);
-    dHist_KMinusKinematics_After    = new TH2F("KMinusKinematics_After",    ";P (GeV/c)                 ;#theta (deg)",         100,    0.0,    10.0,   180,    0.0,    180.0);
-    dHist_DeuteronKinematics_After  = new TH2F("DeuteronKinematics_After",  ";P (GeV/c)                 ;#theta (deg)",         100,    0.0,    10.0,   180,    0.0,    180.0);
-    dHist_KPlusPIDFOM_After         = new TH1F("KPlusPIDFOM_After",         ";log(PIDFOM)               ;Events/1",             50,     -50.0,  0);
-    dHist_KMinusPIDFOM_After        = new TH1F("KMinusPIDFOM_After",        ";log(PIDFOM)               ;Events/1",             50,     -50.0,  0);
-    dHist_DeuterondEdxCDC_After     = new TH2F("DeuterondEdxCDC_After",     ";P (GeV/c)                 ;dE/dx_{CDC} (keV/cm)", 200,    0.0,     2.0,   100,    0.0,    40.0);
-    dHist_DeuterondEdxST_After      = new TH2F("DeuterondEdxST_After",      ";P (GeV/c)                 ;dE/dx_{ST} (keV/cm)",  200,    0.0,     2.0,   100,    0.0,    40.0);
-    dHist_InvariantMassPhi_After    = new TH1F("InvariantMassPhi_After",	";M_{K^{+}K^{-}} (GeV)      ;Events/0.01 GeV",      500,    0.0,    5.0);
-    dHist_ChiSqPerNDF_After         = new TH2F("ChiSqPerNDF_After",         ";M_{K^{+}K^{-}} (GeV)      ;log(#chi^{2}/NDF)",    400,    0.9,    4.9,    100,     0.0,   5);
-    dHist_ThrownTopology_After      = new TH1F("ThrownTopology_After",      ";Thrown Topology           ;Events/1",             20,     0.5,    20.5);
+    dHist_PhotonEnergy_After        = new TH1D("PhotonEnergy_After",        ";Photon Energy (GeV)       ;Events/0.01 GeV",      900,    3.0,    12.0);
+    dHist_VertexZ_After             = new TH1D("VertexZ_After",             ";Vertex Z (cm)             ;Events/1 cm",          200,    20.0,   120.0);
+    dHist_VertexXY_After            = new TH2D("VertexXY_After",            ";Vertex X (cm)             ;Vertex Y (cm)",        100,    -3.0,   3.0,    100,    -3.0,   3.0);
+    dHist_KPlusKinematics_After     = new TH2D("KPlusKinematics_After",     ";P (GeV/c)                 ;#theta (deg)",         100,    0.0,    10.0,   180,    0.0,    180.0);
+    dHist_KMinusKinematics_After    = new TH2D("KMinusKinematics_After",    ";P (GeV/c)                 ;#theta (deg)",         100,    0.0,    10.0,   180,    0.0,    180.0);
+    dHist_DeuteronKinematics_After  = new TH2D("DeuteronKinematics_After",  ";P (GeV/c)                 ;#theta (deg)",         100,    0.0,    10.0,   180,    0.0,    180.0);
+    dHist_KPlusPIDFOM_After         = new TH1D("KPlusPIDFOM_After",         ";log(PIDFOM)               ;Events/1",             50,     -50.0,  0);
+    dHist_KMinusPIDFOM_After        = new TH1D("KMinusPIDFOM_After",        ";log(PIDFOM)               ;Events/1",             50,     -50.0,  0);
+    dHist_DeuterondEdxCDC_After     = new TH2D("DeuterondEdxCDC_After",     ";P (GeV/c)                 ;dE/dx_{CDC} (keV/cm)", 200,    0.0,     2.0,   100,    0.0,    40.0);
+    dHist_DeuterondEdxST_After      = new TH2D("DeuterondEdxST_After",      ";P (GeV/c)                 ;dE/dx_{ST} (keV/cm)",  200,    0.0,     2.0,   100,    0.0,    40.0);
+    dHist_InvariantMassPhi_After    = new TH1D("InvariantMassPhi_After",	";M_{K^{+}K^{-}} (GeV)      ;Events/0.01 GeV",      500,    0.9,    1.1);
+    dHist_ChiSqPerNDF_After         = new TH2D("ChiSqPerNDF_After",         ";M_{K^{+}K^{-}} (GeV)      ;log(#chi^{2}/NDF)",    100,    0.9,    1.1,    100,     0.0,   1);
+    dHist_ThrownTopology_After      = new TH1D("ThrownTopology_After",      ";Thrown Topology           ;Events/1",             20,     0.5,    20.5);
 
     // CUSTOM OUTPUT BRACHES: FLAT TREE
     dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("num_unused_tracks");
@@ -291,13 +291,10 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
         dHist_ThrownTopology_Before     ->Fill(locThrownTopology.Data(), 1);
 
         // PERFORM CUTS
-        if(locBeamP4_Measured.E()               < 5.84)                                                         dComboWrapper->Set_IsComboCut(true);
-        // if(locKPlusP4_Measured.P()              < 0.4   || locKPlusP4_Measured.Theta()*rad_to_deg       < 2)    dComboWrapper->Set_IsComboCut(true);
-        // if(locKMinusP4_Measured.P()             < 0.4   || locKMinusP4_Measured.Theta()*rad_to_deg      < 2)    dComboWrapper->Set_IsComboCut(true);
-        // if(locDeuteronP4_Measured.P()           < 0.4   || locDeuteronP4_Measured.Theta()*rad_to_deg    < 2)    dComboWrapper->Set_IsComboCut(true);
-        if(dDeuteronWrapper->Get_dEdx_CDC()     == 0.0  || dDeuteronWrapper->Get_dEdx_ST()              == 0.0) dComboWrapper->Set_IsComboCut(true);
-        if((locKPlusP4+locKMinusP4).M()         > 1.1)                                                          dComboWrapper->Set_IsComboCut(true);
-        if(dComboWrapper->Get_ChiSq_KinFit()/dComboWrapper->Get_NDF_KinFit()                            > 10)   dComboWrapper->Set_IsComboCut(true);
+        if(locBeamP4_Measured.E()               < 5.84)                                             dComboWrapper->Set_IsComboCut(true);
+        if(dDeuteronWrapper->Get_dEdx_CDC()     == 0.0  || dDeuteronWrapper->Get_dEdx_ST()  == 0.0) dComboWrapper->Set_IsComboCut(true);
+        if((locKPlusP4+locKMinusP4).M()         > 1.1)                                              dComboWrapper->Set_IsComboCut(true);
+        if(dComboWrapper->Get_ChiSq_KinFit()/dComboWrapper->Get_NDF_KinFit()                > 10)   dComboWrapper->Set_IsComboCut(true);
 
         if(dComboWrapper->Get_IsComboCut())  continue;
 
@@ -329,12 +326,10 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
 		Double_t       locAccidentalScalingFactor      = dAnalysisUtilities.Get_AccidentalScalingFactor(Get_RunNumber(), locBeamP4.E(), dIsMC);         // ideal value would be 1, but deviations require added factor, which is different for data and MC.
 		Double_t       locAccidentalScalingFactorError = dAnalysisUtilities.Get_AccidentalScalingFactorError(Get_RunNumber(), locBeamP4.E());           // ideal value would be 1, but deviations observed, need added factor.
 		Double_t       locHistAccidWeightFactor        = locRelBeamBucket==0 ? 1 : -locAccidentalScalingFactor/(2*locNumOutOfTimeBunchesToUse) ;        // weight by 1 for in-time events, ScalingFactor*(1/NBunches) for out-of-time
-
-        if(locSkipNearestOutOfTimeBunch && abs(locRelBeamBucket)==1)                                                                                    // skip nearest out-of-time bunch: tails of in-time distribution also leak in
-        {
-            dComboWrapper->Set_IsComboCut(true);
-			continue;
-        }
+        if(locSkipNearestOutOfTimeBunch && abs(locRelBeamBucket)==1)    // skip nearest out-of-time bunch: tails of in-time distribution also leak in
+            locHistAccidWeightFactor = 0.0;
+        if(abs(locRelBeamBucket)==5)    // skip the 5th off-time bunch, still saved for systematics studies
+            locHistAccidWeightFactor = 0.0;
 
         // GET THE COMBO ACCIDENTAL WEIGHT FACTOR
         Double_t locComboAccidWeightFactor = 0.0; // default value
