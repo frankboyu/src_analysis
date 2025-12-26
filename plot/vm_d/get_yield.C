@@ -38,6 +38,13 @@ double sim_weight_func_pass1(double beam_energy_truth, double minust_truth);
 double sim_weight_func_pass2(double beam_energy_truth, double minust_truth);
 double sim_weight_func_pass3(double beam_energy_truth, double minust_truth);
 double sim_weight_func_pass4(double beam_energy_truth, double minust_truth);
+double sim_weight_func_pass5(double beam_energy_truth, double minust_truth);
+double sim_weight_func_pass6(double beam_energy_truth, double minust_truth);
+double sim_weight_func_pass7(double beam_energy_truth, double minust_truth);
+double sim_weight_func_pass8(double beam_energy_truth, double minust_truth);
+double sim_weight_func_pass9(double beam_energy_truth, double minust_truth);
+double sim_weight_func_pass10(double beam_energy_truth, double minust_truth);
+double sim_weight_func_nominal(double beam_energy_truth, double minust_truth);
 
 int get_yield(string channel, string reaction, string observable, string tag)
 {
@@ -157,8 +164,20 @@ int get_yield(string channel, string reaction, string observable, string tag)
             rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass3(beam_energy_truth, minust_truth)");
         else if (tag.find("simweight_pass4") != string::npos)
             rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass4(beam_energy_truth, minust_truth)");
+        else if (tag.find("simweight_pass5") != string::npos)
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass5(beam_energy_truth, minust_truth)");
+        else if (tag.find("simweight_pass6") != string::npos)
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass6(beam_energy_truth, minust_truth)");
+        else if (tag.find("simweight_pass7") != string::npos)
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass7(beam_energy_truth, minust_truth)");
+        else if (tag.find("simweight_pass8") != string::npos)
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass8(beam_energy_truth, minust_truth)");
+        else if (tag.find("simweight_pass9") != string::npos)
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass9(beam_energy_truth, minust_truth)");
+        else if (tag.find("simweight_pass10") != string::npos)
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass10(beam_energy_truth, minust_truth)");
         else
-            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass1(beam_energy_truth, minust_truth)");
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_nominal(beam_energy_truth, minust_truth)");
 
         rdf_input = rdf_input       .Define("yield_weight",             "beamaccid_weight_syst*combo_accid_weight_syst*sim_weight_syst")
                                     .Define("yield_weight_squared",     "yield_weight*yield_weight");
@@ -169,8 +188,26 @@ int get_yield(string channel, string reaction, string observable, string tag)
             rdf_input = rdf_input   .Define("sim_weight_syst",          "1.0");
         else if (tag == "simweight_pass1")
             rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass1(beam_energy_truth, minust_truth)");
+        else if (tag == "simweight_pass2")
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass2(beam_energy_truth, minust_truth)");
+        else if (tag == "simweight_pass3")
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass3(beam_energy_truth, minust_truth)");
+        else if (tag == "simweight_pass4")
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass4(beam_energy_truth, minust_truth)");
+        else if (tag == "simweight_pass5")
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass5(beam_energy_truth, minust_truth)");
+        else if (tag == "simweight_pass6")
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass6(beam_energy_truth, minust_truth)");
+        else if (tag == "simweight_pass7")
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass7(beam_energy_truth, minust_truth)");
+        else if (tag == "simweight_pass8")
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass8(beam_energy_truth, minust_truth)");
+        else if (tag == "simweight_pass9")
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass9(beam_energy_truth, minust_truth)");
+        else if (tag == "simweight_pass10")
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass10(beam_energy_truth, minust_truth)");
         else
-            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass1(beam_energy_truth, minust_truth)");
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_nominal(beam_energy_truth, minust_truth)");
 
         rdf_input = rdf_input       .Define("yield_weight",             "sim_weight_syst")
                                     .Define("yield_weight_squared",     "yield_weight*yield_weight");
@@ -1046,24 +1083,24 @@ double sim_weight_func_pass4(double beam_energy_truth, double minust_truth)
         return 1.0;
     else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
     {
-        a1 = 3632.01;
-        b1 = 15.82;
-        a2 = 12.19;
-        b2 = 2.49;
+        a1 = 5803.78;
+        b1 = 16.92;
+        a2 = 11.97;
+        b2 = 2.46;
     }
     else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
     {
-        a1 = 4842.04;
-        b1 = 17.22;
-        a2 = 17.43;
-        b2 = 3.13;
+        a1 = 10994.71;
+        b1 = 19.70;
+        a2 = 24.49;
+        b2 = 3.61;
     }
     else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
     {
-        a1 = 2882.53;
-        b1 = 15.54;
-        a2 = 12.54;
-        b2 = 2.90;
+        a1 = 4474.24;
+        b1 = 16.61;
+        a2 = 13.10;
+        b2 = 2.94;
     }
     return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
 }
