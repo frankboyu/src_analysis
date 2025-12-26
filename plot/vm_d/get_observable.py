@@ -65,6 +65,73 @@ def legend_without_duplicate_labels(ax):
 #======================================================================phi_d_2H_dsdt======================================================================
 
 # Read the bin edges
+phi_d_2H_dsdt_energy_low_simweight          = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,2]
+phi_d_2H_dsdt_energy_high_simweight         = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,3]
+phi_d_2H_dsdt_energy_center_simweight       = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,0]
+phi_d_2H_dsdt_energy_width_simweight        = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,1]
+phi_d_2H_dsdt_minust_low_simweight          = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,6]
+phi_d_2H_dsdt_minust_high_simweight         = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,7]
+phi_d_2H_dsdt_minust_center_simweight       = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,4]
+phi_d_2H_dsdt_minust_width_simweight        = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,5]
+
+# Read the yield numbers
+phi_d_2H_dsdt_yield_data_simweight            = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,8]
+phi_d_2H_dsdt_yield_sim_simweight             = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_dsdt_simweight_pass3.txt')[:,8]
+phi_d_2H_dsdt_yield_tagged_simweight          = np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_dsdt_simweight_pass3.txt')[:,8]
+phi_d_2H_dsdt_yield_data_statserr_simweight   = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,9]/phi_d_2H_dsdt_yield_data_simweight
+phi_d_2H_dsdt_yield_sim_statser_simweight     = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_dsdt_simweight_pass3.txt')[:,9]/phi_d_2H_dsdt_yield_sim_simweight
+phi_d_2H_dsdt_yield_tagged_statserr_simweight = np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_dsdt_simweight_pass3.txt')[:,9]/phi_d_2H_dsdt_yield_tagged_simweight
+phi_d_2H_dsdt_efficiency_simweight            = phi_d_2H_dsdt_yield_sim_simweight/phi_d_2H_dsdt_yield_tagged_simweight
+phi_d_2H_dsdt_efficiency_statserr_simweight   = np.sqrt(phi_d_2H_dsdt_yield_sim_statser_simweight**2 + phi_d_2H_dsdt_yield_tagged_statserr_simweight**2)
+phi_d_2H_dsdt_results_simweight               = phi_d_2H_dsdt_yield_data_simweight/phi_d_2H_dsdt_efficiency_simweight/lumi(phi_d_2H_dsdt_energy_low_simweight, phi_d_2H_dsdt_energy_high_simweight, 28)/(phi_d_2H_dsdt_minust_high_simweight-phi_d_2H_dsdt_minust_low_simweight)/0.489/1000
+phi_d_2H_dsdt_results_statserr_simweight      = phi_d_2H_dsdt_results_simweight*np.sqrt(phi_d_2H_dsdt_yield_data_statserr_simweight**2 + phi_d_2H_dsdt_efficiency_statserr_simweight**2)
+
+# Find the indices for the different energy and t bins
+index = []
+for i in range(len(phi_d_2H_dsdt_results_simweight)):
+    if (i == 0):
+        index.append(i)
+    elif (i == len(phi_d_2H_dsdt_results_simweight) - 1):
+        index.append(i+1)
+    else:
+        if (phi_d_2H_dsdt_energy_low_simweight[i] != phi_d_2H_dsdt_energy_low_simweight[i-1]):
+            index.append(i)
+
+fig = plt.figure(figsize=(8, 6), dpi=300)
+color_code = ['b', 'k', 'r']
+plt.errorbar(phi_d_2H_dsdt_minust_center_simweight[index[0]:index[1]],       phi_d_2H_dsdt_results_simweight[index[0]:index[1]],          xerr=phi_d_2H_dsdt_minust_width_simweight[index[0]:index[1]],        yerr=phi_d_2H_dsdt_results_statserr_simweight[index[0]:index[1]],            fmt='b.', label='6-8 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center_simweight[index[1]:index[2]],       phi_d_2H_dsdt_results_simweight[index[1]:index[2]],          xerr=phi_d_2H_dsdt_minust_width_simweight[index[1]:index[2]],        yerr=phi_d_2H_dsdt_results_statserr_simweight[index[1]:index[2]],            fmt='k.', label='8-9 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center_simweight[index[2]:index[3]],       phi_d_2H_dsdt_results_simweight[index[2]:index[3]],          xerr=phi_d_2H_dsdt_minust_width_simweight[index[2]:index[3]],        yerr=phi_d_2H_dsdt_results_statserr_simweight[index[2]:index[3]],            fmt='r.', label='9-11 GeV')
+for i in range(3):
+    curve_fit_params, curve_fit_cov = curve_fit(dsdt_func, phi_d_2H_dsdt_minust_center_simweight[index[i]:index[i+1]], phi_d_2H_dsdt_results_simweight[index[i]:index[i+1]], p0=[3000, 15, 20, 3])
+    curve_fit_residuals = phi_d_2H_dsdt_results_simweight[index[i]:index[i+1]] - dsdt_func(phi_d_2H_dsdt_minust_center_simweight[index[i]:index[i+1]], curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3])
+    reduced_chi2 = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr_simweight[index[i]:index[i+1]])**2)/(len(phi_d_2H_dsdt_results_simweight[index[i]:index[i+1]])-4)
+    plt.plot(np.linspace(0, 2, 100), dsdt_func(np.linspace(0, 2, 100), curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3]), '--', color = color_code[i], label='Paras: %.2f, %.2f, %.2f, %.2f, $\chi^2$/ndf = %.2f' % (curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3], reduced_chi2))
+plt.text(0.3, 0.15, 'preliminary', fontsize=15, color='r', style='italic', ha='center', va='center')
+plt.title(r"$d(\gamma, \phi d')$ differential cross section vs $-t$")
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$')
+plt.xlim(0, 2)
+plt.ylim(1e-1, 1e3)
+plt.yscale('log')
+plt.legend()
+file_pdf.savefig()
+plt.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Read the bin edges
 phi_d_2H_dsdt_energy_low            = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,2]
 phi_d_2H_dsdt_energy_high           = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,3]
 phi_d_2H_dsdt_energy_center         = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,0]
@@ -502,45 +569,45 @@ plt.close()
 # file_pdf.savefig()
 # plt.close()
 
-# sphin_list = np.arange(20,40,0.5)
-# bphin_list = np.arange(5,25,0.5)
+sphin_list = np.arange(0,40,0.5)
+bphin_list = np.arange(0,15,0.5)
 
-# chi2_array = np.zeros((len(bphin_list), len(sphin_list)))
-# for i,sphin in enumerate(sphin_list):
-#     for j,bphin in enumerate(bphin_list):
-#         # theory_results = np.loadtxt(f'/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/case3_6.0/E_8.5_sigma_{sphin}_b_{bphin}.txt')
-#         theory_results = np.loadtxt(f'/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/case3_6.0/E_8.5_sigma_%.1f_b_%.1f.txt' % (sphin, bphin))
-#         chi2 = 0
-#         ndf = 0
-#         for k in range(index[1], index[2]):
-#             t_val = phi_d_2H_dsdt_minust_center[k]
-#             data_val = phi_d_2H_dsdt_results[0,k]
-#             data_err = phi_d_2H_dsdt_results_statserr[0,k]
-#             # Find the closest theory point
-#             theory_idx = (np.abs(theory_results[:,0] - t_val)).argmin()
-#             theory_val = theory_results[theory_idx, 2]
-#             if data_err > 0 and data_val > 0 and theory_val > 0:
-#                 chi2 += ((data_val - theory_val)**2)/(data_err**2)
-#                 ndf += 1
-#         ndf -= 2  # two fit parameters
-#         chi2_array[j, i] = np.log(chi2/ndf)
+chi2_array = np.zeros((len(bphin_list), len(sphin_list)))
+for i,sphin in enumerate(sphin_list):
+    for j,bphin in enumerate(bphin_list):
+        # theory_results = np.loadtxt(f'/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/case3_6.0/E_8.5_sigma_{sphin}_b_{bphin}.txt')
+        theory_results = np.loadtxt(f'/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/case3_6.0/E_8.5_sigma_%.1f_b_%.1f.txt' % (sphin, bphin))
+        chi2 = 0
+        ndf = 0
+        for k in range(index[1], index[2]):
+            t_val = phi_d_2H_dsdt_minust_center[k]
+            data_val = phi_d_2H_dsdt_results[0,k]
+            data_err = phi_d_2H_dsdt_results_statserr[0,k]
+            # Find the closest theory point
+            theory_idx = (np.abs(theory_results[:,0] - t_val)).argmin()
+            theory_val = theory_results[theory_idx, 2]
+            if data_err > 0 and data_val > 0 and theory_val > 0:
+                chi2 += ((data_val - theory_val)**2)/(data_err**2)
+                ndf += 1
+        ndf -= 2  # two fit parameters
+        chi2_array[j, i] = np.log(chi2/ndf)
 
-# fig = plt.figure(figsize=(8, 6), dpi=300)
-# # plt.contourf(sphin_list, bphin_list, chi2_array, levels=50, cmap='viridis')
-# # cbar = plt.colorbar()
-# # cbar.set_label(r'$\chi^2/NDF$')
-# confidence_levels = [2.30, 6.18, 11.83]  # 68%, 95%, 99.7% for 2 parameters
-# best_fit_idx = np.unravel_index(np.argmin(chi2_array), chi2_array.shape)
-# best_chi2 = chi2_array[best_fit_idx]
-# for level in confidence_levels:
-#     contour_level = best_chi2 + level/ndf
-#     plt.contour(sphin_list, bphin_list, chi2_array, levels=[contour_level], colors='black', linestyles='dashed')
-#     # plt.text(best_fit_idx[1]*5 + 5, best_fit_idx[0]*5 + 20 + level, f'{int(level*100)/100}', color='black')
-# plt.xlabel(r'$\sigma_{\phi N}\ [mb]$')
-# plt.ylabel(r'$\rm b_{\phi N}\ [GeV^{-2}]$')
-# plt.title(r'$\chi^2/NDF$ map for $\phi-D$ scattering parameters')
-# file_pdf.savefig()
-# plt.close()
+fig = plt.figure(figsize=(8, 6), dpi=300)
+# plt.contourf(sphin_list, bphin_list, chi2_array, levels=50, cmap='viridis')
+# cbar = plt.colorbar()
+# cbar.set_label(r'$\chi^2/NDF$')
+confidence_levels = [2.30, 6.18, 11.83]  # 68%, 95%, 99.7% for 2 parameters
+best_fit_idx = np.unravel_index(np.argmin(chi2_array), chi2_array.shape)
+best_chi2 = chi2_array[best_fit_idx]
+for level in confidence_levels:
+    contour_level = best_chi2 + level/ndf
+    plt.contour(sphin_list, bphin_list, chi2_array, levels=[contour_level], colors='black', linestyles='dashed')
+    # plt.text(best_fit_idx[1]*5 + 5, best_fit_idx[0]*5 + 20 + level, f'{int(level*100)/100}', color='black')
+plt.xlabel(r'$\sigma_{\phi N}\ [mb]$')
+plt.ylabel(r'$\rm b_{\phi N}\ [GeV^{-2}]$')
+plt.title(r'$\chi^2/NDF$ map for $\phi-D$ scattering parameters')
+file_pdf.savefig()
+plt.close()
 
 
 # fig = plt.figure(figsize=(8, 6), dpi=300)

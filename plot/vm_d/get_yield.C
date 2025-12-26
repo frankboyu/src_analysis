@@ -36,6 +36,8 @@ Double_t nonrel_bw(Double_t *x, Double_t *par);
 // Simulation weight functions
 double sim_weight_func_pass1(double beam_energy_truth, double minust_truth);
 double sim_weight_func_pass2(double beam_energy_truth, double minust_truth);
+double sim_weight_func_pass3(double beam_energy_truth, double minust_truth);
+double sim_weight_func_pass4(double beam_energy_truth, double minust_truth);
 
 int get_yield(string channel, string reaction, string observable, string tag)
 {
@@ -149,6 +151,12 @@ int get_yield(string channel, string reaction, string observable, string tag)
             rdf_input = rdf_input   .Define("sim_weight_syst",          "1.0");
         else if (tag.find("simweight_pass1") != string::npos)
             rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass1(beam_energy_truth, minust_truth)");
+        else if (tag.find("simweight_pass2") != string::npos)
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass2(beam_energy_truth, minust_truth)");
+        else if (tag.find("simweight_pass3") != string::npos)
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass3(beam_energy_truth, minust_truth)");
+        else if (tag.find("simweight_pass4") != string::npos)
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass4(beam_energy_truth, minust_truth)");
         else
             rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass1(beam_energy_truth, minust_truth)");
 
@@ -941,6 +949,96 @@ Double_t nonrel_bw(Double_t *x, Double_t *par)
 }
 
 double sim_weight_func_pass1(double beam_energy_truth, double minust_truth)
+{
+    double a1, b1, a2, b2 = 0;
+    double normalization = 10;
+    if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
+        return 1.0;
+    else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
+    {
+        a1 = 3632.01;
+        b1 = 15.82;
+        a2 = 12.19;
+        b2 = 2.49;
+    }
+    else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
+    {
+        a1 = 4842.04;
+        b1 = 17.22;
+        a2 = 17.43;
+        b2 = 3.13;
+    }
+    else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
+    {
+        a1 = 2882.53;
+        b1 = 15.54;
+        a2 = 12.54;
+        b2 = 2.90;
+    }
+    return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
+}
+
+double sim_weight_func_pass2(double beam_energy_truth, double minust_truth)
+{
+    double a1, b1, a2, b2 = 0;
+    double normalization = 10;
+    if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
+        return 1.0;
+    else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
+    {
+        a1 = 6127.78;
+        b1 = 17.10;
+        a2 = 12.43;
+        b2 = 2.50;
+    }
+    else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
+    {
+        a1 = 11328.73;
+        b1 = 19.75;
+        a2 = 23.50;
+        b2 = 3.54;
+    }
+    else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
+    {
+        a1 = 4602.99;
+        b1 = 16.69;
+        a2 = 13.21;
+        b2 = 2.95;
+    }
+    return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
+}
+
+double sim_weight_func_pass3(double beam_energy_truth, double minust_truth)
+{
+    double a1, b1, a2, b2 = 0;
+    double normalization = 10;
+    if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
+        return 1.0;
+    else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
+    {
+        a1 = 3888.14;
+        b1 = 16.05;
+        a2 = 12.92;
+        b2 = 2.56;
+    }
+    else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
+    {
+        a1 = 5052.91;
+        b1 = 17.32;
+        a2 = 16.90;
+        b2 = 3.07;
+    }
+    else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
+    {
+        a1 = 2975.15;
+        b1 = 15.63;
+        a2 = 12.68;
+        b2 = 2.91;
+    }
+    return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
+}
+
+double sim_weight_func_pass4(double beam_energy_truth, double minust_truth)
 {
     double a1, b1, a2, b2 = 0;
     double normalization = 10;

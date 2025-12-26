@@ -34,7 +34,7 @@ TAG_LIST=()
 # TAG_LIST+=("fitbkg_fulllinear" "fitbkg_quadratic" "fitbkg_fullquadratic" "fitbkg_phenomenological")
 # TAG_LIST+=("fitsig_noBL" "fitsig_nonrel" "fitsig_relBWsim")
 # TAG_LIST+=("simweight_pass0" "simweight_pass1" "simweight_pass2" "simweight_pass3")
-TAG_LIST+=("simweight_pass1")
+TAG_LIST+=("simweight_pass4")
 
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
