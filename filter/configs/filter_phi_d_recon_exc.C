@@ -223,6 +223,7 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
     string KinematicsCutSyst    = "kp_momentum_meas > 0.35 && km_momentum_meas > 0.35 && d_momentum_meas > 0.35 && kp_theta_meas > 1.0 && km_theta_meas > 1.0 && d_theta_meas > 1.0";
     string VertexCut            = "TMath::Abs(vertex_z_kin - 65.0) < 14.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.0";
     string VertexCutSyst        = "TMath::Abs(vertex_z_kin - 65.0) < 15.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.5";
+    string PhiMassCut           = "phi_mass_kin > 1.00 && phi_mass_kin < 1.04";
 
     auto rdf_NoCut          = rdf_input;
     auto rdf_dEdxCut        = rdf_input.Filter(MissPMinusCut.c_str()).Filter(KinFitChiSqCut.c_str()).Filter(KinematicsCut.c_str()).Filter(VertexCut.c_str());
@@ -231,9 +232,10 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
     auto rdf_KinematicsCut  = rdf_input.Filter(dEdxCut.c_str()).Filter(MissPMinusCut.c_str()).Filter(KinFitChiSqCut.c_str()).Filter(VertexCut.c_str());
     auto rdf_VertexCut      = rdf_input.Filter(dEdxCut.c_str()).Filter(MissPMinusCut.c_str()).Filter(KinFitChiSqCut.c_str()).Filter(KinematicsCut.c_str());
     auto rdf_NominalCut     = rdf_input.Filter(dEdxCut.c_str()).Filter(MissPMinusCut.c_str()).Filter(KinFitChiSqCut.c_str()).Filter(KinematicsCut.c_str()).Filter(VertexCut.c_str());
+    auto rdf_PlotCut        = rdf_input.Filter(dEdxCut.c_str()).Filter(MissPMinusCut.c_str()).Filter(KinFitChiSqCut.c_str()).Filter(KinematicsCut.c_str()).Filter(VertexCut.c_str()).Filter(PhiMassCut.c_str());
     auto rdf_SystCut        = rdf_input.Filter(dEdxCutSyst.c_str()).Filter(MissPMinusCutSyst.c_str()).Filter(KinFitChiSqCutSyst.c_str()).Filter(KinematicsCutSyst.c_str()).Filter(VertexCutSyst.c_str());
-    RNode rdfs []           = {rdf_NoCut,   rdf_dEdxCut,    rdf_MissPMinusCut,  rdf_KinFitChiSqCut, rdf_KinematicsCut,  rdf_VertexCut,  rdf_NominalCut};
-    string labels []        = {"NoCut",     "dEdxCut",      "MissPMinusCut",    "KinFitChiSqCut",   "KinematicsCut",    "VertexCut",    "NominalCut"};
+    RNode rdfs []           = {rdf_NoCut,   rdf_dEdxCut,    rdf_MissPMinusCut,  rdf_KinFitChiSqCut, rdf_KinematicsCut,  rdf_VertexCut,  rdf_NominalCut, rdf_PlotCut};
+    string labels []        = {"NoCut",     "dEdxCut",      "MissPMinusCut",    "KinFitChiSqCut",   "KinematicsCut",    "VertexCut",    "NominalCut",   "PlotCut"};
     int N_filters           = sizeof(labels) / sizeof(labels[0]);
 
     if (output_mode == "tree" || output_mode == "both")
