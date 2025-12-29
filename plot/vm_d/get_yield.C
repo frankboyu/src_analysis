@@ -1053,24 +1053,24 @@ double sim_weight_func_pass3(double beam_energy_truth, double minust_truth)
         return 1.0;
     else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
     {
-        a1 = 3888.14;
-        b1 = 16.05;
-        a2 = 12.92;
-        b2 = 2.56;
+        a1 = 6417.46;
+        b1 = 17.21;
+        a2 = 12.42;
+        b2 = 2.49;
     }
     else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
     {
-        a1 = 5052.91;
-        b1 = 17.32;
-        a2 = 16.90;
-        b2 = 3.07;
+        a1 = 12903.60;
+        b1 = 20.16;
+        a2 = 24.55;
+        b2 = 3.60;
     }
     else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
     {
-        a1 = 2975.15;
-        b1 = 15.63;
-        a2 = 12.68;
-        b2 = 2.91;
+        a1 = 4769.82;
+        b1 = 16.77;
+        a2 = 13.19;
+        b2 = 2.94;
     }
     return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
 }
@@ -1083,23 +1083,53 @@ double sim_weight_func_pass4(double beam_energy_truth, double minust_truth)
         return 1.0;
     else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
     {
-        a1 = 5803.78;
-        b1 = 16.92;
-        a2 = 11.97;
-        b2 = 2.46;
+        a1 = 6442.44;
+        b1 = 17.22;
+        a2 = 12.42;
+        b2 = 2.49;
     }
     else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
     {
-        a1 = 10994.71;
-        b1 = 19.70;
-        a2 = 24.49;
+        a1 = 13181.89;
+        b1 = 20.22;
+        a2 = 24.74;
         b2 = 3.61;
     }
     else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
     {
-        a1 = 4474.24;
-        b1 = 16.61;
-        a2 = 13.10;
+        a1 = 4781.31;
+        b1 = 16.78;
+        a2 = 13.18;
+        b2 = 2.94;
+    }
+    return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
+}
+
+double sim_weight_func_pass5(double beam_energy_truth, double minust_truth)
+{
+    double a1, b1, a2, b2 = 0;
+    double normalization = 10;
+    if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
+        return 1.0;
+    else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
+    {
+        a1 = 6444.93;
+        b1 = 17.22;
+        a2 = 12.42;
+        b2 = 2.49;
+    }
+    else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
+    {
+        a1 = 13225.39;
+        b1 = 20.23;
+        a2 = 24.77;
+        b2 = 3.61;
+    }
+    else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
+    {
+        a1 = 4782.23;
+        b1 = 16.78;
+        a2 = 13.18;
         b2 = 2.94;
     }
     return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
