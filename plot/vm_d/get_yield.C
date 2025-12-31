@@ -1134,3 +1134,63 @@ double sim_weight_func_pass5(double beam_energy_truth, double minust_truth)
     }
     return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
 }
+
+double sim_weight_func_pass6(double beam_energy_truth, double minust_truth)
+{
+    double a1, b1, a2, b2 = 0;
+    double normalization = 10;
+    if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
+        return 1.0;
+    else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
+    {
+        a1 = 6444.97;
+        b1 = 17.22;
+        a2 = 12.42;
+        b2 = 2.49;
+    }
+    else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
+    {
+        a1 = 13232.23;
+        b1 = 20.23;
+        a2 = 24.78;
+        b2 = 3.61;
+    }
+    else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
+    {
+        a1 = 4782.18;
+        b1 = 16.78;
+        a2 = 13.18;
+        b2 = 2.94;
+    }
+    return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
+}
+
+double sim_weight_func_pass7(double beam_energy_truth, double minust_truth)
+{
+    double a1, b1, a2, b2 = 0;
+    double normalization = 10;
+    if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
+        return 1.0;
+    else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
+    {
+        a1 = 6445.03;
+        b1 = 17.22;
+        a2 = 12.42;
+        b2 = 2.49;
+    }
+    else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
+    {
+        a1 = 13232.54;
+        b1 = 20.23;
+        a2 = 24.78;
+        b2 = 3.61;
+    }
+    else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
+    {
+        a1 = 4782.12;
+        b1 = 16.78;
+        a2 = 13.18;
+        b2 = 2.94;
+    }
+    return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
+}
