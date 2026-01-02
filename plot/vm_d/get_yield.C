@@ -13,38 +13,37 @@ using namespace ROOT::Detail::RDF;
 double mass_kaon = 0.493677;
 
 // Nominal fitting function
-Double_t rel_bw_plus_linear(Double_t *x, Double_t *par);
-Double_t rel_bw(Double_t *x, Double_t *par);
-Double_t linear(Double_t *x, Double_t *par);
+Double_t rel_bw_plus_linear             (Double_t *x, Double_t *par);
+Double_t rel_bw                         (Double_t *x, Double_t *par);
+Double_t linear                         (Double_t *x, Double_t *par);
 
 // Alternative background functions
-Double_t rel_bw_plus_fulllinear(Double_t *x, Double_t *par);
-Double_t rel_bw_plus_quadratic(Double_t *x, Double_t *par);
-Double_t rel_bw_plus_fullquadratic(Double_t *x, Double_t *par);
-Double_t rel_bw_plus_phenomenological(Double_t *x, Double_t *par);
-Double_t fulllinear(Double_t *x, Double_t *par);
-Double_t quadratic(Double_t *x, Double_t *par);
-Double_t fullquadratic(Double_t *x, Double_t *par);
-Double_t phenomenological(Double_t *x, Double_t *par);
+Double_t rel_bw_plus_fulllinear         (Double_t *x, Double_t *par);
+Double_t rel_bw_plus_quadratic          (Double_t *x, Double_t *par);
+Double_t rel_bw_plus_fullquadratic      (Double_t *x, Double_t *par);
+Double_t rel_bw_plus_phenomenological   (Double_t *x, Double_t *par);
+Double_t fulllinear                     (Double_t *x, Double_t *par);
+Double_t quadratic                      (Double_t *x, Double_t *par);
+Double_t fullquadratic                  (Double_t *x, Double_t *par);
+Double_t phenomenological               (Double_t *x, Double_t *par);
 
 // Alternative signal functions
-Double_t rel_bw_noBL_plus_linear(Double_t *x, Double_t *par);
-Double_t nonrel_bw_plus_linear(Double_t *x, Double_t *par);
-Double_t rel_bw_noBL(Double_t *x, Double_t *par);
-Double_t nonrel_bw(Double_t *x, Double_t *par);
+Double_t rel_bw_noBL_plus_linear        (Double_t *x, Double_t *par);
+Double_t nonrel_bw_plus_linear          (Double_t *x, Double_t *par);
+Double_t rel_bw_noBL                    (Double_t *x, Double_t *par);
+Double_t nonrel_bw                      (Double_t *x, Double_t *par);
 
 // Simulation weight functions
-double sim_weight_func_pass1(double beam_energy_truth, double minust_truth);
-double sim_weight_func_pass2(double beam_energy_truth, double minust_truth);
-double sim_weight_func_pass3(double beam_energy_truth, double minust_truth);
-double sim_weight_func_pass4(double beam_energy_truth, double minust_truth);
-double sim_weight_func_pass5(double beam_energy_truth, double minust_truth);
-double sim_weight_func_pass6(double beam_energy_truth, double minust_truth);
-double sim_weight_func_pass7(double beam_energy_truth, double minust_truth);
-double sim_weight_func_pass8(double beam_energy_truth, double minust_truth);
-double sim_weight_func_pass9(double beam_energy_truth, double minust_truth);
-double sim_weight_func_pass10(double beam_energy_truth, double minust_truth);
-double sim_weight_func_nominal(double beam_energy_truth, double minust_truth);
+double sim_weight_func_pass1        (double beam_energy_truth, double minust_truth);
+double sim_weight_func_pass2        (double beam_energy_truth, double minust_truth);
+double sim_weight_func_pass3        (double beam_energy_truth, double minust_truth);
+double sim_weight_func_pass4        (double beam_energy_truth, double minust_truth);
+double sim_weight_func_pass5        (double beam_energy_truth, double minust_truth);
+double sim_weight_func_pass6        (double beam_energy_truth, double minust_truth);
+double sim_weight_func_pass7        (double beam_energy_truth, double minust_truth);
+double sim_weight_func_nominal      (double beam_energy_truth, double minust_truth);
+double sim_weight_func_iterations   (double beam_energy_truth, double minust_truth, string iteration);
+double sim_weight_func_systematic   (double beam_energy_truth, double minust_truth, string variation);
 
 int get_yield(string channel, string reaction, string observable, string tag)
 {
@@ -103,21 +102,21 @@ int get_yield(string channel, string reaction, string observable, string tag)
         else if (tag.find("momentum_0.500") != string::npos)
             KinematicsCut    = "kp_momentum_meas > 0.500 && km_momentum_meas > 0.500 && d_momentum_meas > 0.500 && kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
         else if (tag.find("theta_1.0") != string::npos)
-            KinematicsCut    = "kp_momentum_meas > 0.40 && km_momentum_meas > 0.40 && d_momentum_meas > 0.40 && kp_theta_meas > 1.0 && km_theta_meas > 1.0 && d_theta_meas > 1.0";
+            KinematicsCut    = "kp_momentum_meas > 0.400 && km_momentum_meas > 0.400 && d_momentum_meas > 0.400 && kp_theta_meas > 1.0 && km_theta_meas > 1.0 && d_theta_meas > 1.0";
         else if (tag.find("theta_1.5") != string::npos)
-            KinematicsCut    = "kp_momentum_meas > 0.40 && km_momentum_meas > 0.40 && d_momentum_meas > 0.40 && kp_theta_meas > 1.5 && km_theta_meas > 1.5 && d_theta_meas > 1.5";
+            KinematicsCut    = "kp_momentum_meas > 0.400 && km_momentum_meas > 0.400 && d_momentum_meas > 0.400 && kp_theta_meas > 1.5 && km_theta_meas > 1.5 && d_theta_meas > 1.5";
         else if (tag.find("theta_2.5") != string::npos)
-            KinematicsCut    = "kp_momentum_meas > 0.40 && km_momentum_meas > 0.40 && d_momentum_meas > 0.40 && kp_theta_meas > 2.5 && km_theta_meas > 2.5 && d_theta_meas > 2.5";
+            KinematicsCut    = "kp_momentum_meas > 0.400 && km_momentum_meas > 0.400 && d_momentum_meas > 0.400 && kp_theta_meas > 2.5 && km_theta_meas > 2.5 && d_theta_meas > 2.5";
         else if (tag.find("theta_3.0") != string::npos)
-            KinematicsCut    = "kp_momentum_meas > 0.40 && km_momentum_meas > 0.40 && d_momentum_meas > 0.40 && kp_theta_meas > 3.0 && km_theta_meas > 3.0 && d_theta_meas > 3.0";
+            KinematicsCut    = "kp_momentum_meas > 0.400 && km_momentum_meas > 0.400 && d_momentum_meas > 0.400 && kp_theta_meas > 3.0 && km_theta_meas > 3.0 && d_theta_meas > 3.0";
         else if (tag.find("vertexZ_13.0") != string::npos)
-            VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 13.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.0";
+            VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 13.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.00";
         else if (tag.find("vertexZ_13.5") != string::npos)
-            VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 13.5 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.0";
+            VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 13.5 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.00";
         else if (tag.find("vertexZ_14.5") != string::npos)
-            VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.5 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.0";
+            VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.5 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.00";
         else if (tag.find("vertexZ_15.0") != string::npos)
-            VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 15.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.0";
+            VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 15.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.00";
         else if (tag.find("vertexR_0.50") != string::npos)
             VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 0.50";
         else if (tag.find("vertexR_0.75") != string::npos)
@@ -154,28 +153,26 @@ int get_yield(string channel, string reaction, string observable, string tag)
         else
             rdf_input = rdf_input   .Define("combo_accid_weight_syst",  "combo_accid_weight");
 
-        if      (tag.find("simweight_pass0") != string::npos)
-            rdf_input = rdf_input   .Define("sim_weight_syst",          "1.0");
-        else if (tag.find("simweight_pass1") != string::npos)
-            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass1(beam_energy_truth, minust_truth)");
-        else if (tag.find("simweight_pass2") != string::npos)
-            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass2(beam_energy_truth, minust_truth)");
-        else if (tag.find("simweight_pass3") != string::npos)
-            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass3(beam_energy_truth, minust_truth)");
-        else if (tag.find("simweight_pass4") != string::npos)
-            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass4(beam_energy_truth, minust_truth)");
-        else if (tag.find("simweight_pass5") != string::npos)
-            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass5(beam_energy_truth, minust_truth)");
-        else if (tag.find("simweight_pass6") != string::npos)
-            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass6(beam_energy_truth, minust_truth)");
-        else if (tag.find("simweight_pass7") != string::npos)
-            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass7(beam_energy_truth, minust_truth)");
-        else if (tag.find("simweight_pass8") != string::npos)
-            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass8(beam_energy_truth, minust_truth)");
-        else if (tag.find("simweight_pass9") != string::npos)
-            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass9(beam_energy_truth, minust_truth)");
-        else if (tag.find("simweight_pass10") != string::npos)
-            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass10(beam_energy_truth, minust_truth)");
+        // if      (tag.find("simweight_pass0") != string::npos)
+        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "1.0");
+        // else if (tag.find("simweight_pass1") != string::npos)
+        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass1(beam_energy_truth, minust_truth)");
+        // else if (tag.find("simweight_pass2") != string::npos)
+        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass2(beam_energy_truth, minust_truth)");
+        // else if (tag.find("simweight_pass3") != string::npos)
+        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass3(beam_energy_truth, minust_truth)");
+        // else if (tag.find("simweight_pass4") != string::npos)
+        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass4(beam_energy_truth, minust_truth)");
+        // else if (tag.find("simweight_pass5") != string::npos)
+        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass5(beam_energy_truth, minust_truth)");
+        // else if (tag.find("simweight_pass6") != string::npos)
+        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass6(beam_energy_truth, minust_truth)");
+        // else if (tag.find("simweight_pass7") != string::npos)
+        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass7(beam_energy_truth, minust_truth)");
+        if (tag.find("simweight_iter") != string::npos)
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_iterations(beam_energy_truth, minust_truth, tag)");
+        else if (tag.find("simweight_syst") != string::npos)
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_systematic(beam_energy_truth, minust_truth, tag)");
         else
             rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_nominal(beam_energy_truth, minust_truth)");
 
@@ -184,28 +181,26 @@ int get_yield(string channel, string reaction, string observable, string tag)
     }
     else if (reaction.find("thrown") != string::npos)
     {
-        if      (tag == "simweight_pass0")
-            rdf_input = rdf_input   .Define("sim_weight_syst",          "1.0");
-        else if (tag == "simweight_pass1")
-            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass1(beam_energy_truth, minust_truth)");
-        else if (tag == "simweight_pass2")
-            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass2(beam_energy_truth, minust_truth)");
-        else if (tag == "simweight_pass3")
-            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass3(beam_energy_truth, minust_truth)");
-        else if (tag == "simweight_pass4")
-            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass4(beam_energy_truth, minust_truth)");
-        else if (tag == "simweight_pass5")
-            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass5(beam_energy_truth, minust_truth)");
-        else if (tag == "simweight_pass6")
-            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass6(beam_energy_truth, minust_truth)");
-        else if (tag == "simweight_pass7")
-            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass7(beam_energy_truth, minust_truth)");
-        else if (tag == "simweight_pass8")
-            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass8(beam_energy_truth, minust_truth)");
-        else if (tag == "simweight_pass9")
-            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass9(beam_energy_truth, minust_truth)");
-        else if (tag == "simweight_pass10")
-            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass10(beam_energy_truth, minust_truth)");
+        // if      (tag == "simweight_pass0")
+        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "1.0");
+        // else if (tag == "simweight_pass1")
+        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass1(beam_energy_truth, minust_truth)");
+        // else if (tag == "simweight_pass2")
+        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass2(beam_energy_truth, minust_truth)");
+        // else if (tag == "simweight_pass3")
+        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass3(beam_energy_truth, minust_truth)");
+        // else if (tag == "simweight_pass4")
+        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass4(beam_energy_truth, minust_truth)");
+        // else if (tag == "simweight_pass5")
+        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass5(beam_energy_truth, minust_truth)");
+        // else if (tag == "simweight_pass6")
+        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass6(beam_energy_truth, minust_truth)");
+        // else if (tag == "simweight_pass7")
+        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass7(beam_energy_truth, minust_truth)");
+        if (tag.find("simweight_iter") != string::npos)
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_iterations(beam_energy_truth, minust_truth, tag)");
+        else if (tag.find("simweight_syst") != string::npos)
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_systematic(beam_energy_truth, minust_truth, tag)");
         else
             rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_nominal(beam_energy_truth, minust_truth)");
 
@@ -325,10 +320,10 @@ int get_yield(string channel, string reaction, string observable, string tag)
 
             for (int i = 0; i < hist_bin.GetNbinsX(); i++)
             {
-                if (hist_bin.GetBinContent(i) < 0)
+                if (hist_bin.GetBinContent(i) <= 0)
                 {
-                    hist_bin.SetBinContent(i, 0);
-                    hist_bin.SetBinError(i, 1);
+                    // hist_bin.SetBinContent(i, 0);  hist_bin.SetBinError(i, 1);  // set non-positive bin content to zero, with error of 1
+                    hist_bin.SetBinError(i, sqrt(hist_bin.GetBinError(i)*hist_bin.GetBinError(i) + 1.0));  // keep the negative bin content, but add error of 1 by quadrature
                 }
             }
 
@@ -985,7 +980,217 @@ Double_t nonrel_bw(Double_t *x, Double_t *par)
     return par[0] / 2 * convol_sum;
 }
 
-double sim_weight_func_pass1(double beam_energy_truth, double minust_truth)
+// double sim_weight_func_pass1(double beam_energy_truth, double minust_truth)
+// {
+//     double a1, b1, a2, b2 = 0;
+//     double normalization = 10;
+//     if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
+//         return 1.0;
+//     else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
+//     {
+//         a1 = 3632.01;
+//         b1 = 15.82;
+//         a2 = 12.19;
+//         b2 = 2.49;
+//     }
+//     else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
+//     {
+//         a1 = 4842.04;
+//         b1 = 17.22;
+//         a2 = 17.43;
+//         b2 = 3.13;
+//     }
+//     else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
+//     {
+//         a1 = 2882.53;
+//         b1 = 15.54;
+//         a2 = 12.54;
+//         b2 = 2.90;
+//     }
+//     return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
+// }
+
+// double sim_weight_func_pass2(double beam_energy_truth, double minust_truth)
+// {
+//     double a1, b1, a2, b2 = 0;
+//     double normalization = 10;
+//     if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
+//         return 1.0;
+//     else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
+//     {
+//         a1 = 6127.78;
+//         b1 = 17.10;
+//         a2 = 12.43;
+//         b2 = 2.50;
+//     }
+//     else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
+//     {
+//         a1 = 11328.73;
+//         b1 = 19.75;
+//         a2 = 23.50;
+//         b2 = 3.54;
+//     }
+//     else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
+//     {
+//         a1 = 4602.99;
+//         b1 = 16.69;
+//         a2 = 13.21;
+//         b2 = 2.95;
+//     }
+//     return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
+// }
+
+// double sim_weight_func_pass3(double beam_energy_truth, double minust_truth)
+// {
+//     double a1, b1, a2, b2 = 0;
+//     double normalization = 10;
+//     if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
+//         return 1.0;
+//     else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
+//     {
+//         a1 = 6417.46;
+//         b1 = 17.21;
+//         a2 = 12.42;
+//         b2 = 2.49;
+//     }
+//     else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
+//     {
+//         a1 = 12903.60;
+//         b1 = 20.16;
+//         a2 = 24.55;
+//         b2 = 3.60;
+//     }
+//     else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
+//     {
+//         a1 = 4769.82;
+//         b1 = 16.77;
+//         a2 = 13.19;
+//         b2 = 2.94;
+//     }
+//     return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
+// }
+
+// double sim_weight_func_pass4(double beam_energy_truth, double minust_truth)
+// {
+//     double a1, b1, a2, b2 = 0;
+//     double normalization = 10;
+//     if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
+//         return 1.0;
+//     else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
+//     {
+//         a1 = 6442.44;
+//         b1 = 17.22;
+//         a2 = 12.42;
+//         b2 = 2.49;
+//     }
+//     else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
+//     {
+//         a1 = 13181.89;
+//         b1 = 20.22;
+//         a2 = 24.74;
+//         b2 = 3.61;
+//     }
+//     else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
+//     {
+//         a1 = 4781.31;
+//         b1 = 16.78;
+//         a2 = 13.18;
+//         b2 = 2.94;
+//     }
+//     return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
+// }
+
+// double sim_weight_func_pass5(double beam_energy_truth, double minust_truth)
+// {
+//     double a1, b1, a2, b2 = 0;
+//     double normalization = 10;
+//     if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
+//         return 1.0;
+//     else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
+//     {
+//         a1 = 6444.93;
+//         b1 = 17.22;
+//         a2 = 12.42;
+//         b2 = 2.49;
+//     }
+//     else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
+//     {
+//         a1 = 13225.39;
+//         b1 = 20.23;
+//         a2 = 24.77;
+//         b2 = 3.61;
+//     }
+//     else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
+//     {
+//         a1 = 4782.23;
+//         b1 = 16.78;
+//         a2 = 13.18;
+//         b2 = 2.94;
+//     }
+//     return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
+// }
+
+// double sim_weight_func_pass6(double beam_energy_truth, double minust_truth)
+// {
+//     double a1, b1, a2, b2 = 0;
+//     double normalization = 10;
+//     if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
+//         return 1.0;
+//     else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
+//     {
+//         a1 = 6444.97;
+//         b1 = 17.22;
+//         a2 = 12.42;
+//         b2 = 2.49;
+//     }
+//     else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
+//     {
+//         a1 = 13232.23;
+//         b1 = 20.23;
+//         a2 = 24.78;
+//         b2 = 3.61;
+//     }
+//     else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
+//     {
+//         a1 = 4782.18;
+//         b1 = 16.78;
+//         a2 = 13.18;
+//         b2 = 2.94;
+//     }
+//     return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
+// }
+
+// double sim_weight_func_pass7(double beam_energy_truth, double minust_truth)
+// {
+//     double a1, b1, a2, b2 = 0;
+//     double normalization = 10;
+//     if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
+//         return 1.0;
+//     else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
+//     {
+//         a1 = 6445.03;
+//         b1 = 17.22;
+//         a2 = 12.42;
+//         b2 = 2.49;
+//     }
+//     else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
+//     {
+//         a1 = 13232.54;
+//         b1 = 20.23;
+//         a2 = 24.78;
+//         b2 = 3.61;
+//     }
+//     else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
+//     {
+//         a1 = 4782.12;
+//         b1 = 16.78;
+//         a2 = 13.18;
+//         b2 = 2.94;
+//     }
+//     return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
+// }
+
+double sim_weight_func_nominal(double beam_energy_truth, double minust_truth)
 {
     double a1, b1, a2, b2 = 0;
     double normalization = 10;
@@ -993,204 +1198,174 @@ double sim_weight_func_pass1(double beam_energy_truth, double minust_truth)
         return 1.0;
     else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
     {
-        a1 = 3632.01;
-        b1 = 15.82;
-        a2 = 12.19;
-        b2 = 2.49;
+        a1 = 6445.03;  b1 = 17.22; a2 = 12.42; b2 = 2.49;
     }
     else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
     {
-        a1 = 4842.04;
-        b1 = 17.22;
-        a2 = 17.43;
-        b2 = 3.13;
+        a1 = 13232.54; b1 = 20.23; a2 = 24.78; b2 = 3.61;
     }
     else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
     {
-        a1 = 2882.53;
-        b1 = 15.54;
-        a2 = 12.54;
-        b2 = 2.90;
+        a1 = 4782.12;  b1 = 16.78; a2 = 13.18; b2 = 2.94;
     }
     return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
 }
 
-double sim_weight_func_pass2(double beam_energy_truth, double minust_truth)
+double sim_weight_func_iterations(double beam_energy_truth, double minust_truth, string iteration)
 {
     double a1, b1, a2, b2 = 0;
     double normalization = 10;
     if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
         return 1.0;
+    else if (iteration == "simweight_iter0")
+        return 1.0;
     else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
     {
-        a1 = 6127.78;
-        b1 = 17.10;
-        a2 = 12.43;
-        b2 = 2.50;
+        if (iteration == "simweight_iter1")
+        {
+            a1 = 3632.01; b1 = 15.82; a2 = 12.19; b2 = 2.49;
+        }
+        else if (iteration == "simweight_iter2")
+        {
+            a1 = 6127.78; b1 = 17.10; a2 = 12.43; b2 = 2.50;
+        }
+        else if (iteration == "simweight_iter3")
+        {
+            a1 = 6417.46; b1 = 17.21; a2 = 12.42; b2 = 2.49;
+        }
+        else if (iteration == "simweight_iter4")
+        {
+            a1 = 6442.44; b1 = 17.22; a2 = 12.42; b2 = 2.49;
+        }
+        else if (iteration == "simweight_iter5")
+        {
+            a1 = 6444.93; b1 = 17.22; a2 = 12.42; b2 = 2.49;
+        }
+        else if (iteration == "simweight_iter6")
+        {
+            a1 = 6444.97; b1 = 17.22; a2 = 12.42; b2 = 2.49;
+        }
+        else if (iteration == "simweight_iter7")
+        {
+            a1 = 6445.03; b1 = 17.22; a2 = 12.42; b2 = 2.49;
+        }
     }
     else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
     {
-        a1 = 11328.73;
-        b1 = 19.75;
-        a2 = 23.50;
-        b2 = 3.54;
+        if (iteration == "simweight_iter1")
+        {
+            a1 = 4842.04;  b1 = 17.22; a2 = 17.43; b2 = 3.13;
+        }
+        else if (iteration == "simweight_iter2")
+        {
+            a1 = 11328.73; b1 = 19.75; a2 = 23.50; b2 = 3.54;
+        }
+        else if (iteration == "simweight_iter3")
+        {
+            a1 = 12903.60; b1 = 20.16; a2 = 24.55; b2 = 3.60;
+        }
+        else if (iteration == "simweight_iter4")
+        {
+            a1 = 13181.89; b1 = 20.22; a2 = 24.74; b2 = 3.61;
+        }
+        else if (iteration == "simweight_iter5")
+        {
+            a1 = 13225.39; b1 = 20.23; a2 = 24.77; b2 = 3.61;
+        }
+        else if (iteration == "simweight_iter6")
+        {
+            a1 = 13232.23; b1 = 20.23; a2 = 24.78; b2 = 3.61;
+        }
+        else if (iteration == "simweight_iter7")
+        {
+            a1 = 13232.54; b1 = 20.23; a2 = 24.78; b2 = 3.61;
+        }
     }
     else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
     {
-        a1 = 4602.99;
-        b1 = 16.69;
-        a2 = 13.21;
-        b2 = 2.95;
+        if (iteration == "simweight_iter1")
+        {
+            a1 = 2882.53; b1 = 15.54; a2 = 12.54; b2 = 2.90;
+        }
+        else if (iteration == "simweight_iter2")
+        {
+            a1 = 4602.99; b1 = 16.69; a2 = 13.21; b2 = 2.95;
+        }
+        else if (iteration == "simweight_iter3")
+        {
+            a1 = 4769.82; b1 = 16.77; a2 = 13.19; b2 = 2.94;
+        }
+        else if (iteration == "simweight_iter4")
+        {
+            a1 = 4781.31; b1 = 16.78; a2 = 13.18; b2 = 2.94;
+        }
+        else if (iteration == "simweight_iter5")
+        {
+            a1 = 4782.23; b1 = 16.78; a2 = 13.18; b2 = 2.94;
+        }
+        else if (iteration == "simweight_iter6")
+        {
+            a1 = 4782.18; b1 = 16.78; a2 = 13.18; b2 = 2.94;
+        }
+        else if (iteration == "simweight_iter7")
+        {
+            a1 = 4782.12; b1 = 16.78; a2 = 13.18; b2 = 2.94;
+        }
     }
     return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
 }
 
-double sim_weight_func_pass3(double beam_energy_truth, double minust_truth)
+double sim_weight_func_systematic(double beam_energy_truth, double minust_truth, string variation)
 {
+    double a1_nominal, b1_nominal, a2_nominal, b2_nominal = 0;
+    double a1_sigma, b1_sigma, a2_sigma, b2_sigma = 0;
     double a1, b1, a2, b2 = 0;
     double normalization = 10;
     if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
         return 1.0;
     else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
     {
-        a1 = 6417.46;
-        b1 = 17.21;
-        a2 = 12.42;
-        b2 = 2.49;
+        a1_nominal = 6445.03;  b1_nominal = 17.22; a2_nominal = 12.42; b2_nominal = 2.49;
+        a1_sigma = 100.0; b1_sigma = 0.1; a2_sigma = 0.5; b2_sigma = 0.05;
     }
     else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
     {
-        a1 = 12903.60;
-        b1 = 20.16;
-        a2 = 24.55;
-        b2 = 3.60;
+        a1_nominal = 13232.54; b1_nominal = 20.23; a2_nominal = 24.78; b2_nominal = 3.61;
+        a1_sigma = 200.0; b1_sigma = 0.2; a2_sigma = 1.0; b2_sigma = 0.1;
     }
     else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
     {
-        a1 = 4769.82;
-        b1 = 16.77;
-        a2 = 13.19;
-        b2 = 2.94;
+        a1_nominal = 4782.12;  b1_nominal = 16.78; a2_nominal = 13.18; b2_nominal = 2.94;
+        a1_sigma = 150.0; b1_sigma = 0.15; a2_sigma = 0.7; b2_sigma = 0.07;
     }
-    return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
-}
 
-double sim_weight_func_pass4(double beam_energy_truth, double minust_truth)
-{
-    double a1, b1, a2, b2 = 0;
-    double normalization = 10;
-    if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
-        return 1.0;
-    else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
-    {
-        a1 = 6442.44;
-        b1 = 17.22;
-        a2 = 12.42;
-        b2 = 2.49;
-    }
-    else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
-    {
-        a1 = 13181.89;
-        b1 = 20.22;
-        a2 = 24.74;
-        b2 = 3.61;
-    }
-    else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
-    {
-        a1 = 4781.31;
-        b1 = 16.78;
-        a2 = 13.18;
-        b2 = 2.94;
-    }
-    return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
-}
+    if (variation.find("a1_+1") != string::npos)
+        a1 = a1_nominal + a1_sigma;
+    else if (variation.find("a1_-1") != string::npos)
+        a1 = a1_nominal - a1_sigma;
+    else if (variation.find("a1_0") != string::npos)
+        a1 = a1_nominal;
 
-double sim_weight_func_pass5(double beam_energy_truth, double minust_truth)
-{
-    double a1, b1, a2, b2 = 0;
-    double normalization = 10;
-    if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
-        return 1.0;
-    else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
-    {
-        a1 = 6444.93;
-        b1 = 17.22;
-        a2 = 12.42;
-        b2 = 2.49;
-    }
-    else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
-    {
-        a1 = 13225.39;
-        b1 = 20.23;
-        a2 = 24.77;
-        b2 = 3.61;
-    }
-    else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
-    {
-        a1 = 4782.23;
-        b1 = 16.78;
-        a2 = 13.18;
-        b2 = 2.94;
-    }
-    return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
-}
+    if (variation.find("b1_+1") != string::npos)
+        b1 = b1_nominal + b1_sigma;
+    else if (variation.find("b1_-1") != string::npos)
+        b1 = b1_nominal - b1_sigma;
+    else if (variation.find("b1_0") != string::npos)
+        b1 = b1_nominal;
 
-double sim_weight_func_pass6(double beam_energy_truth, double minust_truth)
-{
-    double a1, b1, a2, b2 = 0;
-    double normalization = 10;
-    if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
-        return 1.0;
-    else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
-    {
-        a1 = 6444.97;
-        b1 = 17.22;
-        a2 = 12.42;
-        b2 = 2.49;
-    }
-    else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
-    {
-        a1 = 13232.23;
-        b1 = 20.23;
-        a2 = 24.78;
-        b2 = 3.61;
-    }
-    else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
-    {
-        a1 = 4782.18;
-        b1 = 16.78;
-        a2 = 13.18;
-        b2 = 2.94;
-    }
-    return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
-}
+    if (variation.find("a2_+1") != string::npos)
+        a2 = a2_nominal + a2_sigma;
+    else if (variation.find("a2_-1") != string::npos)
+        a2 = a2_nominal - a2_sigma;
+    else if (variation.find("a2_0") != string::npos)
+        a2 = a2_nominal;
 
-double sim_weight_func_pass7(double beam_energy_truth, double minust_truth)
-{
-    double a1, b1, a2, b2 = 0;
-    double normalization = 10;
-    if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
-        return 1.0;
-    else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
-    {
-        a1 = 6445.03;
-        b1 = 17.22;
-        a2 = 12.42;
-        b2 = 2.49;
-    }
-    else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
-    {
-        a1 = 13232.54;
-        b1 = 20.23;
-        a2 = 24.78;
-        b2 = 3.61;
-    }
-    else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
-    {
-        a1 = 4782.12;
-        b1 = 16.78;
-        a2 = 13.18;
-        b2 = 2.94;
-    }
+    if (variation.find("b2_+1") != string::npos)
+        b2 = b2_nominal + b2_sigma;
+    else if (variation.find("b2_-1") != string::npos)
+        b2 = b2_nominal - b2_sigma;
+    else if (variation.find("b2_0") != string::npos)
+        b2 = b2_nominal;
+
     return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
 }
