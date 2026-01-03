@@ -82,6 +82,7 @@ do
     done
 done
 
+swif2 run src_analysis_plot
 # python get_plot.py
 
 end=`date +%s`
