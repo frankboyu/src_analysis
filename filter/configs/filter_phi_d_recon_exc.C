@@ -2,15 +2,23 @@
 
 double sim_weight_func(double beam_energy_truth, double minust_truth)
 {
-    double a1 = 2813.72894997;
-    double b1 = 15.13997936;
-    double a2 = 17.88792021;
-    double b2 = 2.98839991;
+    double a1, b1, a2, b2 = 0;
     double normalization = 10;
     if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
         return 1.0;
-    else                            // simulation, weighted by the measured cross section
-        return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
+    else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
+    {
+        a1 = 6445.03;  b1 = 17.22; a2 = 12.42; b2 = 2.49;
+    }
+    else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
+    {
+        a1 = 13232.54; b1 = 20.23; a2 = 24.78; b2 = 3.61;
+    }
+    else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
+    {
+        a1 = 4782.12;  b1 = 16.78; a2 = 13.18; b2 = 2.94;
+    }
+    return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
 }
 
 void filter_phi_d_recon_exc(string reaction, string output_mode)
@@ -225,7 +233,7 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
     string VertexCutSyst        = "TMath::Abs(vertex_z_kin - 65.0) < 15.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.5";
     string PhiMassCut           = "phi_mass_kin > 1.00 && phi_mass_kin < 1.04";
 
-    auto rdf_NoCut          = rdf_input;
+    auto rdf_NoCut          = rdf_input.Filter("run < 90225");  // no cut
     auto rdf_dEdxCut        = rdf_input.Filter(MissPMinusCut.c_str()).Filter(KinFitChiSqCut.c_str()).Filter(KinematicsCut.c_str()).Filter(VertexCut.c_str());
     auto rdf_MissPMinusCut  = rdf_input.Filter(dEdxCut.c_str()).Filter(KinFitChiSqCut.c_str()).Filter(KinematicsCut.c_str()).Filter(VertexCut.c_str());
     auto rdf_KinFitChiSqCut = rdf_input.Filter(dEdxCut.c_str()).Filter(MissPMinusCut.c_str()).Filter(KinematicsCut.c_str()).Filter(VertexCut.c_str());
