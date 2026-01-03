@@ -2,7 +2,7 @@
 
 start=`date +%s`
 
-RUN_MODE="local"
+RUN_MODE="batch"
 
 CHANNEL_LIST=()
 CHANNEL_LIST+=("phi_d")
@@ -64,9 +64,9 @@ do
 
                 if [[ "$RUN_MODE" == "echo" ]]; then
                     echo "Dry run: CHANNEL=$CHANNEL, REACTION=$REACTION, OBSERVABLE=$OBSERVABLE, TAG=$TAG"
-                else if [[ "$RUN_MODE" == "local" ]]; then
+                elif [[ "$RUN_MODE" == "local" ]]; then
                     root -b -q -l "get_yield.C(\"$CHANNEL\", \"$REACTION\", \"$OBSERVABLE\", \"$TAG\")"
-                else if [[ "$RUN_MODE" == "batch" ]]; then
+                elif [[ "$RUN_MODE" == "batch" ]]; then
                     JOB_WORKFLOW="-workflow src_analysis_plot"
                     JOB_NAME="-name yield_phi_d_${REACTION}_$(date '+%Y-%m-%d-%H-%M')"
                     JOB_RESOURCES="-account halld -partition production -os el9 -cores 1 -ram 1GB -disk 4GB -time 24hrs"
