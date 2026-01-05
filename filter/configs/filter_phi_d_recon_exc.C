@@ -163,6 +163,9 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
     .Define("rho_mass_meas",                    "(kp_as_pion_p4_meas + km_as_pion_p4_meas).M()")
     .Define("rho_mass_kin",                     "(kp_as_pion_p4_kin + km_as_pion_p4_kin).M()")
     .Define("rho_mass_truth",                   "(kp_as_pion_p4_truth + km_as_pion_p4_truth).M()")
+    .Define("rho_miss_pminus_meas",             "(beam_p4_meas + target_p4 - kp_as_pion_p4_meas - km_as_pion_p4_meas - d_p4_meas).Minus()")
+    .Define("rho_miss_pminus_kin",              "(beam_p4_kin + target_p4 - kp_as_pion_p4_kin - km_as_pion_p4_kin - d_p4_kin).Minus()")
+    .Define("rho_miss_pminus_truth",            "(beam_p4_truth + target_p4 - kp_as_pion_p4_truth - km_as_pion_p4_truth - d_p4_truth).Minus()")
     .Define("chisq_per_ndf_kin",                "kin_chisq/kin_ndf")
     .Define("kinfit_fom_kin",                   "TMath::Prob(kin_chisq,kin_ndf)")
     .Define("log10_kinfit_fom_kin",             "TMath::Log10(kinfit_fom_kin)")
@@ -386,6 +389,8 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
             hist_vertex_x_y_kin.Write();
             TH1D hist_rho_mass_kin                          = *rdf.Histo1D({("rho_mass_kin_"+ label).c_str(), ";m_{#pi^{+}#pi^{-}} (GeV/c^{2});Counts", 100, 0.0, 1.0},"rho_mass_kin","event_weight");
             hist_rho_mass_kin.Write();
+            TH1D hist_rho_miss_pminus_meas                  = *rdf.Histo1D({("rho_miss_pminus_meas_"+ label).c_str(), ";P_{miss}^{-} (GeV/c);Counts", 400, -0.2, 0.2},"rho_miss_pminus_meas","event_weight");
+            hist_rho_miss_pminus_meas.Write();
             TH1D hist_kinfit_fom_kin                        = *rdf.Histo1D({("kinfit_fom_kin_"+ label).c_str(), ";log(KinFit FOM);Counts", 30, -15.0, 0},"log10_kinfit_fom_kin","event_weight");
             hist_kinfit_fom_kin.Write();
             TH1D hist_chisq_per_ndf_kin                     = *rdf.Histo1D({("chisq_per_ndf_kin_"+ label).c_str(), ";#chi^{2}/NDF;Counts", 20, 0.0, 10.0},"chisq_per_ndf_kin","event_weight");
