@@ -209,7 +209,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
     }
 
     // Read bin edges from input text file
-    string input_txt_name = Form("configs/bins_%s_%s.txt", channel.c_str(), observable.c_str());
+    string input_txt_name = Form("/work/halld2/home/boyu/src_analysis/plot/vm_d/configs/bins_%s_%s.txt", channel.c_str(), observable.c_str());
     cout << "Input text file: " << input_txt_name << endl;
     ifstream input_txt(input_txt_name.c_str());
     vector<vector<double>> bins;
