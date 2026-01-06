@@ -7,11 +7,11 @@ mkdir output/${LABEL}/
 
 gfortran edved_wkng_pol.f
 
-for EPHIN in 8.5
+for EPHIN in 2.1
 do
-    for SPHIN in $(seq 0 0.5 40)
+    for SPHIN in $(seq 0 1 80)
     do
-        for BPHIN in $(seq 0 0.5 15)
+        for BPHIN in $(seq 0 1 20)
         do
             echo "Running with E=$EPHIN GeV, sigma=$SPHIN mb, b=$BPHIN GeV^-2"
             echo "$EPHIN" > input.txt
