@@ -1,6 +1,6 @@
         program test
         common/par/pi,pm,dm,vmm
-        common/input/ephin,sphin,bphin
+        common/input/ephin,sphin,bphin,flag
         open(12,file='input.txt')
         read(12,*)ephin
         read(12,*)sphin
@@ -27,8 +27,47 @@
         w = sqrt(s)
         t_min = t_minimum(q2,s)
 *        print *,t_min
-        do it = 10,200,1                              ! defines t
-        t = -float(it)/100.0
+        do it = 100,2000,1                              ! defines a list of t values to run through
+        t = -float(it)/1000.0
+        flag = 0
+        if((ephin.gt.1.6).and.(ephin.lt.2.6))then
+            if((((it.eq.360).or.(it.eq.385)).or.(it.eq.410)))then
+                flag = 1
+            endif
+            if((((it.eq.435).or.(it.eq.474)).or.(it.eq.524)))then
+                flag = 1
+            endif
+            if((((it.eq.574).or.(it.eq.646)).or.(it.eq.746)))then
+                flag = 1
+            endif
+            if((((it.eq.888).or.(it.eq.1091)).or.(it.eq.1292)))then
+                flag = 1
+            endif
+            if(it.eq.1637)then
+                flag = 1
+            endif
+        elseif((ephin.gt.6.0).and.(ephin.lt.8.0))then
+            if((((it.eq.360).or.(it.eq.385)).or.(it.eq.410)))then
+                flag = 1
+            endif
+            if((((it.eq.435).or.(it.eq.474)).or.(it.eq.524)))then
+                flag = 1
+            endif
+            if((((it.eq.574).or.(it.eq.646)).or.(it.eq.746)))then
+                flag = 1
+            endif
+            if((((it.eq.888).or.(it.eq.1091)).or.(it.eq.1292)))then
+                flag = 1
+            endif
+            if(it.eq.1637)then
+                flag = 1
+            endif
+        endif
+
+        if(flag.eq.0)then
+        cycle
+        endif
+
         if(t_min.lt.t)goto 1
 *        print *,t
         in = 0
