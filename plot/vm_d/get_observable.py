@@ -165,10 +165,10 @@ phi_d_2H_dsdt_minust_width          = np.loadtxt('output/yield_phi_d/yield_phi_d
 # Read the yield numbers
 phi_d_2H_dsdt_yield_data            = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,8]
 phi_d_2H_dsdt_yield_data_statserr   = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,9]/phi_d_2H_dsdt_yield_data
-phi_d_2H_dsdt_yield_sim             = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_dsdt_simweight_pass6.txt')[:,8]
-phi_d_2H_dsdt_yield_sim_statserr    = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_dsdt_simweight_pass6.txt')[:,9]/phi_d_2H_dsdt_yield_sim
-phi_d_2H_dsdt_yield_tagged          = np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_dsdt_simweight_pass6.txt')[:,8]
-phi_d_2H_dsdt_yield_tagged_statserr = np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_dsdt_simweight_pass6.txt')[:,9]/phi_d_2H_dsdt_yield_tagged
+phi_d_2H_dsdt_yield_sim             = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_dsdt_nominal.txt')[:,8]
+phi_d_2H_dsdt_yield_sim_statserr    = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_dsdt_nominal.txt')[:,9]/phi_d_2H_dsdt_yield_sim
+phi_d_2H_dsdt_yield_tagged          = np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_dsdt_nominal.txt')[:,8]
+phi_d_2H_dsdt_yield_tagged_statserr = np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_dsdt_nominal.txt')[:,9]/phi_d_2H_dsdt_yield_tagged
 phi_d_2H_dsdt_efficiency            = phi_d_2H_dsdt_yield_sim/phi_d_2H_dsdt_yield_tagged
 phi_d_2H_dsdt_efficiency_statserr   = np.sqrt(phi_d_2H_dsdt_yield_sim_statserr**2 + phi_d_2H_dsdt_yield_tagged_statserr**2)
 phi_d_2H_dsdt_results               = phi_d_2H_dsdt_yield_data/phi_d_2H_dsdt_efficiency/lumi(phi_d_2H_dsdt_energy_low, phi_d_2H_dsdt_energy_high, 28)/(phi_d_2H_dsdt_minust_high-phi_d_2H_dsdt_minust_low)/0.489/1000
@@ -191,7 +191,7 @@ tag_list += (['fitmax_1.06', 'fitmax_1.07', 'fitmax_1.09', 'fitmax_1.10'])
 tag_list += (['fitwidth_0.0040', 'fitwidth_0.0048', 'fitwidth_0.0060', 'fitwidth_0.0075'])
 tag_list += (['fitbkg_fulllinear', 'fitbkg_quadratic', 'fitbkg_fullquadratic', 'fitbkg_phenomenological'])
 tag_list += (['fitsig_noBL', 'fitsig_nonrel'])
-tag_list += (['simweight_pass0', 'simweight_pass1', 'simweight_pass2', 'simweight_pass3', 'simweight_pass4', 'simweight_pass5', 'simweight_pass6'])
+# tag_list += (['simweight_pass0', 'simweight_pass1', 'simweight_pass2', 'simweight_pass3', 'simweight_pass4', 'simweight_pass5', 'simweight_pass6'])
 for tag in tag_list:
     if tag.find('simweight') != -1:
         phi_d_2H_dsdt_yield_data                = np.vstack((phi_d_2H_dsdt_yield_data,              np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_nominal.txt')[:,8]))
@@ -200,13 +200,13 @@ for tag in tag_list:
         phi_d_2H_dsdt_yield_data                = np.vstack((phi_d_2H_dsdt_yield_data,              np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_'+tag+'.txt')[:,8]))
         phi_d_2H_dsdt_yield_data_statserr       = np.vstack((phi_d_2H_dsdt_yield_data_statserr,     np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_dsdt_'+tag+'.txt')[:,9]/phi_d_2H_dsdt_yield_data[-1,:]))
     if tag.find('fit') != -1:
-        phi_d_2H_dsdt_yield_sim             = np.vstack((phi_d_2H_dsdt_yield_sim,               np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_dsdt_simweight_pass6.txt')[:,8]))
-        phi_d_2H_dsdt_yield_sim_statserr    = np.vstack((phi_d_2H_dsdt_yield_sim_statserr,      np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_dsdt_simweight_pass6.txt')[:,9]/phi_d_2H_dsdt_yield_sim[-1,:]))
+        phi_d_2H_dsdt_yield_sim             = np.vstack((phi_d_2H_dsdt_yield_sim,               np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_dsdt_nominal.txt')[:,8]))
+        phi_d_2H_dsdt_yield_sim_statserr    = np.vstack((phi_d_2H_dsdt_yield_sim_statserr,      np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_dsdt_nominal.txt')[:,9]/phi_d_2H_dsdt_yield_sim[-1,:]))
     else:
         phi_d_2H_dsdt_yield_sim             = np.vstack((phi_d_2H_dsdt_yield_sim,               np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_dsdt_'+tag+'.txt')[:,8]))
         phi_d_2H_dsdt_yield_sim_statserr    = np.vstack((phi_d_2H_dsdt_yield_sim_statserr,      np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_dsdt_'+tag+'.txt')[:,9]/phi_d_2H_dsdt_yield_sim[-1,:]))
-    phi_d_2H_dsdt_yield_tagged              = np.vstack((phi_d_2H_dsdt_yield_tagged,            np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_dsdt_simweight_pass6.txt')[:,8]))
-    phi_d_2H_dsdt_yield_tagged_statserr     = np.vstack((phi_d_2H_dsdt_yield_tagged_statserr,   np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_dsdt_simweight_pass6.txt')[:,9]/phi_d_2H_dsdt_yield_tagged[-1,:]))
+    phi_d_2H_dsdt_yield_tagged              = np.vstack((phi_d_2H_dsdt_yield_tagged,            np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_dsdt_nominal.txt')[:,8]))
+    phi_d_2H_dsdt_yield_tagged_statserr     = np.vstack((phi_d_2H_dsdt_yield_tagged_statserr,   np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_dsdt_nominal.txt')[:,9]/phi_d_2H_dsdt_yield_tagged[-1,:]))
 
     phi_d_2H_dsdt_efficiency                = np.vstack((phi_d_2H_dsdt_efficiency,              phi_d_2H_dsdt_yield_sim[-1,:]/phi_d_2H_dsdt_yield_tagged[-1,:]))
     phi_d_2H_dsdt_efficiency_statserr       = np.vstack((phi_d_2H_dsdt_efficiency_statserr,     np.sqrt(phi_d_2H_dsdt_yield_sim_statserr[-1,:]**2 + phi_d_2H_dsdt_yield_tagged_statserr[-1,:]**2)))
@@ -357,8 +357,8 @@ for i in range(1, phi_d_2H_dsdt_yield_data_statserr.shape[0]):
         subplot_list.append(10)
     elif (i <= 64):
         subplot_list.append(11)
-    elif (i <= 71):
-        subplot_list.append(12)
+    # elif (i <= 71):
+    #     subplot_list.append(12)
 
 num_row, num_col = 5, 3
 fig = plt.figure(figsize=(6*num_col, 6*num_row), dpi=300)
@@ -460,52 +460,52 @@ plt.suptitle('Barlow scores')
 file_pdf.savefig()
 plt.close()
 
-# # Uncertainties
-# fig = plt.figure(figsize=(6*num_col, 6*(num_row+1)), dpi=300)
-# gs = fig.add_gridspec(num_row+1, num_col)
-# axs = gs.subplots()
-# total_uncertainties = [np.zeros_like(phi_d_2H_dsdt_results[0,index[j]:index[j+1]]) for j in range(len(index)-1)]
-# for j in range(len(index)-1):
-#     for i in range(1, phi_d_2H_dsdt_yield_data_statserr.shape[0]):
-#         if i == 1:
-#             temp_array = (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[2,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]
-#         elif subplot_list[i-1] != subplot_list[i-2]:
-#             subplot_row = subplot_list[i-2]//num_col
-#             subplot_col = subplot_list[i-2]%num_col
-#             temp_std = np.std(temp_array, axis=0)
-#             axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], temp_std, label=legend_list[j])
-#             total_uncertainties[j] += temp_std**2
-#             temp_array = (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[2,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]
-#         if i == 1:
-#             continue
-#         temp_array = np.vstack((temp_array, (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[i,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]))
-#         if i == phi_d_2H_dsdt_yield_data_statserr.shape[0]-1:
-#             subplot_row = subplot_list[i-1]//num_col
-#             subplot_col = subplot_list[i-1]%num_col
-#             temp_std = np.std(temp_array, axis=0)
-#             axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], temp_std, label=legend_list[j])
-#             total_uncertainties[j] += temp_std**2
-# for j in range(len(index)-1):
-#     total_uncertainties[j] = np.sqrt(total_uncertainties[j])
-#     axs[4, 0].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], total_uncertainties[j])
-#     axs[4, 0].legend()
-#     axs[4, 0].set_xlabel(r'$-t[GeV^2/c]$')
-#     axs[4, 0].set_ylabel(r'$\delta\sigma/\sigma$')
-#     axs[4, 0].set_xlim(0, 2)
-#     axs[4, 0].set_ylim(0, 0.2)
-#     axs[4, 0].set_title('Total point-to-point uncertainty')
+# Uncertainties
+fig = plt.figure(figsize=(6*num_col, 6*(num_row+1)), dpi=300)
+gs = fig.add_gridspec(num_row+1, num_col)
+axs = gs.subplots()
+total_uncertainties = [np.zeros_like(phi_d_2H_dsdt_results[0,index[j]:index[j+1]]) for j in range(len(index)-1)]
+for j in range(len(index)-1):
+    for i in range(1, phi_d_2H_dsdt_yield_data_statserr.shape[0]):
+        if i == 1:
+            temp_array = (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[2,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]
+        elif subplot_list[i] != subplot_list[i-1]:
+            subplot_row = subplot_list[i-1]//num_col
+            subplot_col = subplot_list[i-1]%num_col
+            temp_std = np.std(temp_array, axis=0)
+            axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], temp_std, label=legend_list[j])
+            total_uncertainties[j] += temp_std**2
+            temp_array = (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[2,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]
+        if i == 1:
+            continue
+        temp_array = np.vstack((temp_array, (phi_d_2H_dsdt_results[0,index[j]:index[j+1]] - phi_d_2H_dsdt_results[i,index[j]:index[j+1]])/phi_d_2H_dsdt_results[0,index[j]:index[j+1]]))
+        if i == phi_d_2H_dsdt_yield_data_statserr.shape[0]-1:
+            subplot_row = subplot_list[i-1]//num_col
+            subplot_col = subplot_list[i-1]%num_col
+            temp_std = np.std(temp_array, axis=0)
+            axs[subplot_row, subplot_col].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], temp_std, label=legend_list[j])
+            total_uncertainties[j] += temp_std**2
+for j in range(len(index)-1):
+    total_uncertainties[j] = np.sqrt(total_uncertainties[j])
+    axs[4, 0].scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], total_uncertainties[j])
+    axs[4, 0].legend()
+    axs[4, 0].set_xlabel(r'$-t[GeV^2/c]$')
+    axs[4, 0].set_ylabel(r'$\delta\sigma/\sigma$')
+    axs[4, 0].set_xlim(0, 2)
+    axs[4, 0].set_ylim(0, 0.2)
+    axs[4, 0].set_title('Total point-to-point uncertainty')
 
-# for subplot_row in range(num_row):
-#     for subplot_col in range(num_col):
-#         axs[subplot_row, subplot_col].legend()
-#         axs[subplot_row, subplot_col].set_xlabel(r'$-t[GeV^2/c]$')
-#         axs[subplot_row, subplot_col].set_ylabel(r'$\delta\sigma/\sigma$')
-#         axs[subplot_row, subplot_col].set_xlim(0, 2)
-#         axs[subplot_row, subplot_col].set_ylim(0, 0.1)
-#         axs[subplot_row, subplot_col].set_title(title_list[subplot_list[i]])
-# plt.suptitle('Observable uncertainties')
-# file_pdf.savefig()
-# plt.close()
+for subplot_row in range(num_row):
+    for subplot_col in range(num_col):
+        axs[subplot_row, subplot_col].legend()
+        axs[subplot_row, subplot_col].set_xlabel(r'$-t[GeV^2/c]$')
+        axs[subplot_row, subplot_col].set_ylabel(r'$\delta\sigma/\sigma$')
+        axs[subplot_row, subplot_col].set_xlim(0, 2)
+        axs[subplot_row, subplot_col].set_ylim(0, 0.2)
+        axs[subplot_row, subplot_col].set_title(title_list[subplot_list[i]])
+plt.suptitle('Observable uncertainties')
+file_pdf.savefig()
+plt.close()
 
 
 
@@ -557,7 +557,54 @@ plt.close()
 #     axs[2, 2].set_ylim(0, 0.2)
 #     axs[2, 2].set_title('Total uncertainty')
 
+phi_d_2H_dsdt_results_systerr = np.zeros_like(phi_d_2H_dsdt_results_statserr[0])
+phi_d_2H_dsdt_results_totalerr = np.zeros_like(phi_d_2H_dsdt_results_statserr[0])
 
+for j in range(len(index)-1):
+    phi_d_2H_dsdt_results_systerr[index[j]:index[j+1]] = total_uncertainties[j]
+    phi_d_2H_dsdt_results_systerr[index[j]:index[j+1]] = phi_d_2H_dsdt_results_systerr[index[j]:index[j+1]]**2
+
+phi_d_2H_dsdt_results_systerr += 0.0656**2  # Adding tracking efficiency
+phi_d_2H_dsdt_results_systerr += 0.002**2  # Adding target length
+phi_d_2H_dsdt_results_systerr += 0.005**2  # Adding target density
+phi_d_2H_dsdt_results_systerr += 0.01**2  # Adding braching ratio
+phi_d_2H_dsdt_results_systerr[index[0]:index[1]] += 0.0189**2  # Adding photon flux uncertainty for 6-8 GeV
+phi_d_2H_dsdt_results_systerr[index[1]:index[2]] += 0.0144**2  # Adding photon flux uncertainty for 8-9 GeV
+phi_d_2H_dsdt_results_systerr[index[2]:index[3]] += 0.0212**2  # Adding photon flux uncertainty for 9-11 GeV
+phi_d_2H_dsdt_results_systerr = np.sqrt(phi_d_2H_dsdt_results_systerr)
+
+
+for j in range(len(index)-1):
+    phi_d_2H_dsdt_results_systerr[index[j]:index[j+1]] = phi_d_2H_dsdt_results_systerr[index[j]:index[j+1]]*phi_d_2H_dsdt_results[0,index[j]:index[j+1]]
+    phi_d_2H_dsdt_results_totalerr[index[j]:index[j+1]] = np.sqrt(phi_d_2H_dsdt_results_statserr[0,index[j]:index[j+1]]**2 + phi_d_2H_dsdt_results_systerr[index[j]:index[j+1]]**2)
+    plt.scatter(phi_d_2H_dsdt_minust_center[index[j]:index[j+1]], phi_d_2H_dsdt_results_systerr[index[j]:index[j+1]]/phi_d_2H_dsdt_results[0,index[j]:index[j+1]], label=legend_list[j])
+    plt.legend()
+    plt.xlabel(r'$-t[GeV^2/c]$')
+    plt.ylabel(r'$\delta\sigma/\sigma$')
+    plt.xlim(0, 2)
+    plt.ylim(0, 0.2)
+    plt.title('Total point-to-point uncertainty')
+file_pdf.savefig()
+plt.close()
+
+fig = plt.figure(figsize=(8, 6), dpi=300)
+color_code = ['b', 'k', 'r']
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[0]:index[1]],       phi_d_2H_dsdt_results[0, index[0]:index[1]],          xerr=phi_d_2H_dsdt_minust_width[index[0]:index[1]],        yerr=phi_d_2H_dsdt_results_statserr[0, index[0]:index[1]],            fmt='b.', capsize=2, capthick=1, label='This work (6-8 GeV)')
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[1]:index[2]],       phi_d_2H_dsdt_results[0, index[1]:index[2]],          xerr=phi_d_2H_dsdt_minust_width[index[1]:index[2]],        yerr=phi_d_2H_dsdt_results_statserr[0, index[1]:index[2]],            fmt='k.', capsize=2, capthick=1, label='This work (8-9 GeV)')
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[2]:index[3]],       phi_d_2H_dsdt_results[0, index[2]:index[3]],          xerr=phi_d_2H_dsdt_minust_width[index[2]:index[3]],        yerr=phi_d_2H_dsdt_results_statserr[0, index[2]:index[3]],            fmt='r.', capsize=2, capthick=1, label='This work (9-11 GeV)')
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[0]:index[1]],       phi_d_2H_dsdt_results[0, index[0]:index[1]],          xerr=phi_d_2H_dsdt_minust_width[index[0]:index[1]],        yerr=phi_d_2H_dsdt_results_totalerr[index[0]:index[1]],            fmt='b.')
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[1]:index[2]],       phi_d_2H_dsdt_results[0, index[1]:index[2]],          xerr=phi_d_2H_dsdt_minust_width[index[1]:index[2]],        yerr=phi_d_2H_dsdt_results_totalerr[index[1]:index[2]],            fmt='k.')
+plt.errorbar(phi_d_2H_dsdt_minust_center[index[2]:index[3]],       phi_d_2H_dsdt_results[0, index[2]:index[3]],          xerr=phi_d_2H_dsdt_minust_width[index[2]:index[3]],        yerr=phi_d_2H_dsdt_results_totalerr[index[2]:index[3]],            fmt='r.')
+plt.text(0.3, 0.15, 'preliminary', fontsize=15, color='r', style='italic', ha='center', va='center')
+plt.title(r"$d(\gamma, \phi d')$ differential cross section vs $-t$")
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$')
+plt.xlim(0, 2)
+plt.ylim(1e-1, 1e3)
+plt.yscale('log')
+plt.legend()
+file_pdf.savefig()
+plt.close()
 
 # fig = plt.figure(figsize=(8, 6), dpi=300)
 # color_code = ['b', 'k', 'r']
@@ -610,7 +657,7 @@ for i,sphin in enumerate(sphin_list):
         for k in range(index[1], index[2]):
             t_val = phi_d_2H_dsdt_minust_center[k]
             data_val = phi_d_2H_dsdt_results[0,k]
-            data_err = phi_d_2H_dsdt_results_statserr[0,k]*1.5
+            data_err = phi_d_2H_dsdt_results_totalerr[k]
             # Find the closest theory point
             theory_idx = (np.abs(theory_results[:,0] - t_val)).argmin()
             theory_val = theory_results[theory_idx, 2]
@@ -637,8 +684,8 @@ plt.title(r'$\chi^2/NDF$ map for $\phi-D$ scattering parameters')
 file_pdf.savefig()
 plt.close()
 
-sphin_list = np.arange(0,80,1)
-bphin_list = np.arange(0,20,1)
+sphin_list = np.arange(0,100,1)
+bphin_list = np.arange(0,30,1)
 
 chi2_array = np.zeros((len(bphin_list), len(sphin_list)))
 for i,sphin in enumerate(sphin_list):
@@ -663,7 +710,7 @@ fig = plt.figure(figsize=(8, 6), dpi=300)
 # plt.contourf(sphin_list, bphin_list, chi2_array, levels=50, cmap='viridis')
 # cbar = plt.colorbar()
 # cbar.set_label(r'$\chi^2/NDF$')
-confidence_levels = [2.30, 6.18, 11.83]  # 68%, 95%, 99.7% for 2 parameters
+confidence_levels = [2.30, 6.18]  # 68%, 95%, 99.7% for 2 parameters
 best_fit_idx = np.unravel_index(np.argmin(chi2_array), chi2_array.shape)
 best_chi2 = chi2_array[best_fit_idx]
 for level in confidence_levels:
