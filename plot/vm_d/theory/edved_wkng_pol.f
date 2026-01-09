@@ -62,6 +62,28 @@
             if(it.eq.1637)then
                 flag = 1
             endif
+        elseif((ephin.gt.8.0).and.(ephin.lt.9.0))then
+            if((((it.eq.275).or.(it.eq.312)).or.(it.eq.337)))then
+                flag = 1
+            endif
+            if((((it.eq.362).or.(it.eq.387)).or.(it.eq.412)))then
+                flag = 1
+            endif
+            if((((it.eq.437).or.(it.eq.462)).or.(it.eq.487)))then
+                flag = 1
+            endif
+            if((((it.eq.524).or.(it.eq.573)).or.(it.eq.623)))then
+                flag = 1
+            endif
+            if((((it.eq.673).or.(it.eq.725)).or.(it.eq.775)))then
+                flag = 1
+            endif
+            if((((it.eq.847).or.(it.eq.948)).or.(it.eq.1087)))then
+                flag = 1
+            endif
+            if((((it.eq.1395).or.(it.eq.2025)).or.(it.eq.2026)))then
+                flag = 1
+            endif
         endif
 
         if(flag.eq.0)then
