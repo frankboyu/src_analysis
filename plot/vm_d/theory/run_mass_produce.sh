@@ -9,9 +9,9 @@ gfortran edved_wkng_pol.f
 
 for EPHIN in 2.1
 do
-    for SPHIN in $(seq 0 0.5 80)
+    for SPHIN in $(seq 100 1 120)
     do
-        for BPHIN in $(seq 0 20 0.5)
+        for BPHIN in $(seq 0 1 30)
         do
             echo "Running with E=$EPHIN GeV, sigma=$SPHIN mb, b=$BPHIN GeV^-2"
             echo "$EPHIN" > input.txt
