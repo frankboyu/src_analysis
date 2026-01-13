@@ -2,14 +2,14 @@
 
 start=`date +%s`
 
-LABEL=case3_6.0
+LABEL=case3_4.0_alpha0
 mkdir output/${LABEL}/
 
 gfortran edved_wkng_pol.f
 
 for EPHIN in 2.1
 do
-    for SPHIN in $(seq 100 1 120)
+    for SPHIN in $(seq 0 1 120)
     do
         for BPHIN in $(seq 0 1 30)
         do

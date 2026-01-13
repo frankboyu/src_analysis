@@ -263,8 +263,8 @@
         gn_scale =   1.0
         icase    =   3
         sigma_gn =   4.5 !relevant only for icase=5
-        b_g      =   6.0 !relevant only for icase=3,4,5
-        alpha_g  =  -0.5
+        b_g      =   4.0 !relevant only for icase=3,4,5
+        alpha_g  =  0.0
 ********************************************************************
 *         Parameters of cross section, slope  factor and real part
 ********************************************************************
@@ -276,7 +276,7 @@
 ********************************************************************
         sigma_vn = sphin
         b_vn     = bphin
-        al_vn    = -0.5
+        al_vn    = 0.0
 ********************************************************************
 
 ************* J/PSI ************************************************
@@ -883,12 +883,12 @@
 * 13-Aug-06
 * Miami
 ********************************************************************
-       if(icase.eq.1)then
-       dsdt = 2.59*exp(5.9*t+ 1.4*t**2)
-       elseif(icase.eq.2.or.icase.eq.4)then
-       alpha = 1.14 + 0.27*t
-       dsdt  = s**(2.*(alpha-1.))*1.34*exp(4.8*t + 1.7*t**2)
-       elseif(icase.eq.3)then
+      if(icase.eq.1)then
+      dsdt = 2.59*exp(5.9*t+ 1.4*t**2)
+      elseif(icase.eq.2.or.icase.eq.4)then
+      alpha = 1.14 + 0.27*t
+      dsdt  = s**(2.*(alpha-1.))*1.34*exp(4.8*t + 1.7*t**2)
+      elseif(icase.eq.3)then
                     tpr = t-tmin
                     dsdt = 0.0              
       !if(tpr.le.0.0)
@@ -904,13 +904,11 @@
 
 *       print *,"dsdt",dsdt,b_gn(s,kvm)
 
-      endif       
+      endif
       if(dsdt.le.0.0)dsdt=0.0
-
- 1     dsdt_gn = dsdt
+      dsdt_gn = dsdt
       return
       end
-
 
 
       function dsdt_tmin(eg)
