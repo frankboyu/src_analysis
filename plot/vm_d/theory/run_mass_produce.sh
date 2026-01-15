@@ -2,7 +2,7 @@
 
 start=`date +%s`
 
-LABEL=case3_4.0_alpha0
+LABEL=case3_4.0_alpha0_61237
 mkdir output/${LABEL}/
 
 gfortran edved_wkng_pol.f
