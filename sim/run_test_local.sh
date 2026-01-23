@@ -1,11 +1,11 @@
 #!/bin/bash
 
 REACTION=phi_d_2H
-XML_VERSION=recon_srcct-2021_11-ver04_0.1
+XML_VERSION=recon_srcct-2021_11-ver04_0.2
 RUN=90213
-EVENTS=1000
-OPTIONS='cleangenerate=0 cleangeant=0 cleanmcsmear=0'
-# OPTIONS=''
+EVENTS=10000
+# OPTIONS='cleangenerate=0 cleangeant=0 cleanmcsmear=0'
+OPTIONS=''
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
 gxenv /work/halld2/home/boyu/src_software_builds/halld_versions_srcct/${XML_VERSION}.xml

@@ -28,6 +28,8 @@ private:
     // FLAGS
     bool dIsMC;
 
+    TH1D* dHist_Temp;
+
     ClassDef(DSelector_phi_d_thrown, 0);
 };
 
@@ -47,6 +49,8 @@ void DSelector_phi_d_thrown::Init(TTree *locTree)
 	if(locInitializedPriorFlag)
 		return;                                                    // have already created histograms, etc. below: exit
 	dPreviousRunNumber = 0;
+
+    dHist_Temp = new TH1D("dHist_Temp", "Temporary Histogram", 100, -2.0, 2.0);
 
     // CUSTOM OUTPUT BRACHES: FLAT TREE
     dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("thrown_topology");
@@ -110,6 +114,12 @@ Bool_t DSelector_phi_d_thrown::Process(Long64_t locEntry)
             locDeuteronX4_Thrown = locKPlusX4_Thrown;  // workaround for the missing deuteron info in the tree
             locDeuteronP4_Thrown = locBeamP4_Thrown + TLorentzVector(0, 0, 0, 1.875612859) - locKPlusP4_Thrown - locKMinusP4_Thrown; // workaround for the missing deuteron info in the tree
         }
+
+        TLorentzVector locTestDeuteronP4 =  locKPlusP4_Thrown + locKMinusP4_Thrown - locBeamP4_Thrown;
+        // cout << "Deuteron Thrown X4: " << locDeuteronX4_Thrown.Px() << ", " << locDeuteronX4_Thrown.Py() << ", " << locDeuteronX4_Thrown.Pz() << ", " << locDeuteronX4_Thrown.E() << endl;
+        cout << "Deuteron Thrown P4 (calculated): " << locTestDeuteronP4.Px() << ", " << locTestDeuteronP4.Py() << ", " << locTestDeuteronP4.Pz() << ", " << locTestDeuteronP4.E() << endl;
+        dHist_Temp->Fill(locTestDeuteronP4.M2());
+        // cout << "Deuteron Thrown P4: " << locDeuteronP4_Thrown.Px() << ", " << locDeuteronP4_Thrown.Py() << ", " << locDeuteronP4_Thrown.Pz() << ", " << locDeuteronP4_Thrown.E() << endl;
 
         // FILL FLAT TREE
         dFlatTreeInterface->Fill_Fundamental<Int_t>("thrown_topology", locThrownTopologyFlag);
