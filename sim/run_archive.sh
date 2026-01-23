@@ -1,10 +1,16 @@
 #!/bin/bash
 
-XML_VERSION=recon_srcct-2021_11-ver04_0.1
-SIM_VERSION=halld_sim_srcct-5.1.0.1^hdr512
+REPO_NAME=halld_sim_srcct
+GIT_TAG=5.1.0.2
+BUILD_TAG=hdr512
 
-source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
-gxenv /work/halld2/home/boyu/src_software_builds/halld_versions_srcct/${XML_VERSION}.xml
+echo cd /work/halld2/home/boyu/src_software_builds/${REPO_NAME}
+if [[ $BUILD_TAG == "none" ]]; then
+    echo git archive --prefix=${REPO_NAME}-${GIT_TAG}/ -o ../temp.tar.gz ${GIT_TAG}_srcct
+else
+    echo git archive --prefix=${REPO_NAME}-${GIT_TAG}^${BUILD_TAG}/ -o ../temp.tar.gz ${GIT_TAG}_srcct
+fi
 
-cd /work/halld2/home/boyu/src_software_builds/${SIM_VERSION}/src
-scons install -j32
+echo cd ..
+echo tar -xvzf temp.tar.gz
+echo rm temp.tar.gz
