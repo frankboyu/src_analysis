@@ -216,7 +216,7 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
 		if(dComboWrapper->Get_IsComboCut())    // check whether the combo has been cut
 			continue;                          // combo has been cut previously
 
-        // DISCARD EVENTS WITH NO L1 TRIGGER BITS
+        // DISCARD SIMULATION EVENTS WITH NO L1 TRIGGER BITS
         if (dComboWrapper->Get_L1TriggerBits() == 0)
         {
             dComboWrapper->Set_IsComboCut(true);
@@ -269,8 +269,6 @@ Bool_t DSelector_phi_d_recon::Process(Long64_t locEntry)
                     locDeuteronP4_Thrown = dThrownWrapper->Get_P4();
                 }
             }
-            locDeuteronX4_Thrown = locKPlusX4_Thrown;  // workaround for the missing deuteron info in the tree
-            locDeuteronP4_Thrown = locBeamP4_Thrown + TLorentzVector(0, 0, 0, 1.875612859) - locKPlusP4_Thrown - locKMinusP4_Thrown; // workaround for the missing deuteron info in the tree
         }
 
         // FILL HISTOGRAMS BEFORE CUTS

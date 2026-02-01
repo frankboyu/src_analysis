@@ -107,8 +107,6 @@ Bool_t DSelector_phi_d_thrown::Process(Long64_t locEntry)
                     locDeuteronP4_Thrown = dThrownWrapper->Get_P4();
                 }
             }
-            locDeuteronX4_Thrown = locKPlusX4_Thrown;  // workaround for the missing deuteron info in the tree
-            locDeuteronP4_Thrown = locBeamP4_Thrown + TLorentzVector(0, 0, 0, 1.875612859) - locKPlusP4_Thrown - locKMinusP4_Thrown; // workaround for the missing deuteron info in the tree
         }
 
         // FILL FLAT TREE
