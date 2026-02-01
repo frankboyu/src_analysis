@@ -2,7 +2,7 @@
 
 start=`date +%s`
 
-INPUTFILE=/work/halld2/home/boyu/src_analysis/sim/output/phi_d_2H_ver12_test/root/thrown/tree_thrown_gen_coherent_090213_000.root
+INPUTFILE=/work/halld2/home/boyu/src_analysis/sim/output/phi_d_2H_ver12_02/root/thrown/tree_thrown_gen_coherent_090213_000.root
 TREENAME=Thrown_Tree
 SELECTOR=phi_d_thrown
 
