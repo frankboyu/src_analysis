@@ -16,10 +16,10 @@ if [[ $FILENAME == *"data"* ]]; then
         gxenv $HALLD_VERSIONS/version_6.5.0.xml
     fi
 elif [[ $FILENAME == *"sim"* ]]; then
-    if [[ $FILENAME == *"ver01"* || $FILENAME == *"ver02"* ]]; then
+    if [[ $FILENAME == *"ver10"* ]]; then
         echo gxenv $HALLD_VERSIONS/version_5.21.0.xml
         gxenv $HALLD_VERSIONS/version_5.21.0.xml
-    elif [[ $FILENAME == *"ver03"* ]]; then
+    elif [[ $FILENAME == *"ver12"* ]]; then
         echo gxenv $HALLD_VERSIONS/version_6.5.0.xml
         gxenv $HALLD_VERSIONS/version_6.5.0.xml
     fi
