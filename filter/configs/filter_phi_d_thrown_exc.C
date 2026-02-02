@@ -1,13 +1,13 @@
 #include </work/halld2/home/boyu/src_analysis/filter/configs/const.h>
 
-double sim_weight_func(double beam_energy_truth, double minust_truth)
+double sim_weight_func(double beam_energy_truth, double minust_truth, int sim_model_flag)
 {
     double a1 = 2813.72894997;
     double b1 = 15.13997936;
     double a2 = 17.88792021;
     double b2 = 2.98839991;
     double normalization = 10;
-    if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
+    if (beam_energy_truth < 0.01 || sim_model_flag > 0)   // data, with its truth variable set to zero as placeholder
         return 1.0;
     else                            // simulation, weighted by the measured cross section
         return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
@@ -26,6 +26,10 @@ void filter_phi_d_thrown_exc(string reaction, string output_mode)
     cout << "Defining data frame...\n";
     RDataFrame rdf_raw(chain);
     auto rdf_def = RNode(rdf_raw);
+    if (reaction.find("model") != string::npos)
+        rdf_def = rdf_def.Define("sim_model_flag", "1");
+    else
+        rdf_def = rdf_def.Define("sim_model_flag", "-1");
     if (reaction.find("gen") != string::npos)
     {
         rdf_def = rdf_def
@@ -38,7 +42,7 @@ void filter_phi_d_thrown_exc(string reaction, string output_mode)
     }
     auto rdf_input = rdf_def
     .Define("target_p4",                        "TLorentzVector(0, 0, 0, mass_2H)")
-    .Define("sim_weight",                       "sim_weight_func(beam_p4_truth.E(), -(target_p4 - d_p4_truth).Mag2())")
+    .Define("sim_weight",                       "sim_weight_func(beam_p4_truth.E(), -(target_p4 - d_p4_truth).Mag2(), sim_model_flag)")
     .Define("event_weight",                     "sim_weight")
     .Define("beam_energy_truth",                "beam_p4_truth.E()")
     .Define("kp_as_pion_p4_truth",              "TLorentzVector(kp_p4_truth.Vect(), TMath::Sqrt(kp_p4_truth.P()*kp_p4_truth.P() + mass_piplus*mass_piplus))")
