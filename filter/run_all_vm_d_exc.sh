@@ -3,19 +3,22 @@
 start=`date +%s`
 
 # data
-sh run_local.sh 'phi_d_recon_exc' 'data_2H'     'both'
+sh run_local.sh 'phi_d_recon_exc' 'data_2H_ver12'           'both'
 
 # sim
-sh run_local.sh 'phi_d_recon_exc' 'sim_2H'      'both'
+sh run_local.sh 'phi_d_recon_exc' 'sim_2H_ver12_flat'       'both'
+sh run_local.sh 'phi_d_recon_exc' 'sim_2H_ver12_model'      'both'
 
 # tagged
-sh run_local.sh 'phi_d_thrown_exc' 'tagged_2H'  'both'
+sh run_local.sh 'phi_d_thrown_exc' 'tagged_2H_ver12_flat'   'both'
+sh run_local.sh 'phi_d_thrown_exc' 'tagged_2H_ver12_model'  'both'
 
 # gen
-sh run_local.sh 'phi_d_thrown_exc' 'gen_2H'     'both'
+sh run_local.sh 'phi_d_thrown_exc' 'gen_2H_ver12_flat'      'both'
+sh run_local.sh 'phi_d_thrown_exc' 'gen_2H_ver12_model'     'both'
 
 # hists
-python configs/hist_vm_d.py
+# python configs/hist_vm_d.py
 
 end=`date +%s`
 echo "Time taken: $(echo "scale=2; ($end - $start) / 60" | bc -l) minutes"
