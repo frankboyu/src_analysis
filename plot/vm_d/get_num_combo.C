@@ -6,11 +6,12 @@
 #include <algorithm>
 using namespace std;
 
-int get_num_combo()
+int get_num_combo(string channel, string reaction)
 {
-    // TFile *input_treefile = new TFile("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_phi_d_recon_exc_data_2H.root", "UPDATE");
-    TFile *input_treefile = new TFile("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_phi_d_recon_exc_sim_2H.root", "UPDATE");
-    TTree *input_tree = (TTree*) input_treefile->Get("filteredtree_phi_d_recon");
+    string input_treefile_name = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_%s_%s.root", channel.c_str(), reaction.c_str());
+    string input_tree_name = Form("filteredtree_%s_recon", channel.c_str());
+    TFile *input_treefile = new TFile(input_treefile_name.c_str(), "UPDATE");
+    TTree *input_tree = (TTree*) input_treefile->Get(input_tree_name.c_str());
 
     int nevents = 0;
     int nmultiple = 0;
