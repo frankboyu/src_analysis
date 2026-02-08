@@ -232,7 +232,7 @@ for i in range(len(dedx_p_edges)-1):
 hist_data = file_data.get('dEdxCut/d_dEdx_cdc_meas_dEdxCut')
 p_points = np.arange(0.25, 3, 0.01)
 para_list = []
-variation_list = np.arange(-3,3.5,0.5)
+variation_list = np.arange(-3,0.25,0.25)
 color_list = ['violet', 'blue', 'cyan', 'green', 'yellow', 'orange', 'red', 'orange', 'yellow', 'green', 'cyan', 'blue', 'violet']
 for N in variation_list:
     popt, pcov = curve_fit(exponential, dedx_p_centers/100, mean_value+N*sigma_value)
@@ -251,9 +251,9 @@ plt.close()
 
 plt.figure(figsize=(8,6))
 hist_data.plotHeatmap(log_scale=True, vmin=0, vmax=5, cmap='jet')
-dE_points = exponential(p_points, *para_list[2])
+dE_points = exponential(p_points, *para_list[4])
 plt.scatter(dedx_p_centers/100, mean_value-2.0*sigma_value, color='r', marker='o', s=20, label=r'Data points of $\mu-2\sigma$')
-plt.plot(p_points, dE_points, label=r'Exponential fit, $p_1=%.2f, p_2=%.2f, p_3=%.2f$' % (para_list[2][0], para_list[2][1], para_list[2][2]), color='y')
+plt.plot(p_points, dE_points, label=r'Exponential fit, $p_1=%.2f, p_2=%.2f, p_3=%.2f$' % (para_list[4][0], para_list[4][1], para_list[4][2]), color='y')
 plt.xlim(0,2)
 plt.ylim(0,40)
 plt.xlabel(r'$p$ (GeV/c)')
@@ -267,7 +267,7 @@ hist_data.plotHeatmap(log_scale=True, vmin=0, vmax=5, cmap='jet')
 for i in range(len(variation_list)):
     N = variation_list[i]
     dE_points = exponential(p_points, *para_list[i])
-    plt.plot(p_points, dE_points, label=r'$%.1f \sigma, p_1=%.2f, p_2=%.2f, p_3=%.2f$' % (N, para_list[i][0], para_list[i][1], para_list[i][2]), color=color_list[i])
+    plt.plot(p_points, dE_points, label=r'$%.2f \sigma, p_1=%.2f, p_2=%.2f, p_3=%.2f$' % (N, para_list[i][0], para_list[i][1], para_list[i][2]), color=color_list[i])
     plt.scatter(dedx_p_centers/100, mean_value+N*sigma_value, color=color_list[i], marker='o', s=10)
 plt.xlim(0,2)
 plt.ylim(0,40)
