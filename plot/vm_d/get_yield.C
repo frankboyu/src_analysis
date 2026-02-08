@@ -34,13 +34,6 @@ Double_t rel_bw_noBL                    (Double_t *x, Double_t *par);
 Double_t nonrel_bw                      (Double_t *x, Double_t *par);
 
 // Simulation weight functions
-double sim_weight_func_pass1        (double beam_energy_truth, double minust_truth);
-double sim_weight_func_pass2        (double beam_energy_truth, double minust_truth);
-double sim_weight_func_pass3        (double beam_energy_truth, double minust_truth);
-double sim_weight_func_pass4        (double beam_energy_truth, double minust_truth);
-double sim_weight_func_pass5        (double beam_energy_truth, double minust_truth);
-double sim_weight_func_pass6        (double beam_energy_truth, double minust_truth);
-double sim_weight_func_pass7        (double beam_energy_truth, double minust_truth);
 double sim_weight_func_nominal      (double beam_energy_truth, double minust_truth);
 double sim_weight_func_iterations   (double beam_energy_truth, double minust_truth, string iteration);
 double sim_weight_func_systematic   (double beam_energy_truth, double minust_truth, string variation);
@@ -65,17 +58,21 @@ int get_yield(string channel, string reaction, string observable, string tag)
         string dEdxCut          = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.65*d_momentum_meas+4.47) + 2.57)";
         string MissPMinusCut    = "miss_pminus_meas > -0.02";
         string KinFitChiSqCut   = "chisq_per_ndf_kin < 5.0";
-        string KinematicsCut    = "kp_momentum_meas > 0.45 && km_momentum_meas > 0.45 && d_momentum_meas > 0.45 && kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
-        string VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.0";
+        string MomentumCut      = "kp_momentum_meas > 0.45 && km_momentum_meas > 0.45 && d_momentum_meas > 0.45";
+        string ThetaCut         = "kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
+        string VertexZCut       = "TMath::Abs(vertex_z_kin - 65.0) < 14.0";
+        string VertexRCut       = "TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.0";
         string BeamAccidCut     = "TMath::Abs(beam_DeltaT_meas) < 18.0";
 
-        if      (tag.find("dEdx_1.0") != string::npos)
+        if      (tag.find("dEdx_1.00") != string::npos)
             dEdxCut         = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-4.01*d_momentum_meas+4.88) + 3.26)";
-        else if (tag.find("dEdx_1.5") != string::npos)
+        else if (tag.find("dEdx_1.50") != string::npos)
             dEdxCut         = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.85*d_momentum_meas+4.69) + 2.92)";
-        else if (tag.find("dEdx_2.5") != string::npos)
+        else if (tag.find("dEdx_1.75") != string::npos)
+            dEdxCut         = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.74*d_momentum_meas+4.58) + 2.73)";
+        else if (tag.find("dEdx_2.50") != string::npos)
             dEdxCut         = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.41*d_momentum_meas+4.21) + 2.21)";
-        else if (tag.find("dEdx_3.0") != string::npos)
+        else if (tag.find("dEdx_3.00") != string::npos)
             dEdxCut         = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.11*d_momentum_meas+3.90) + 1.83)";
         else if (tag.find("misspminus_0.010") != string::npos)
             MissPMinusCut   = "miss_pminus_meas > -0.010";
@@ -94,37 +91,37 @@ int get_yield(string channel, string reaction, string observable, string tag)
         else if (tag.find("chisquared_7.0") != string::npos)
             KinFitChiSqCut   = "chisq_per_ndf_kin < 7.0";
         else if (tag.find("momentum_0.400") != string::npos)
-            KinematicsCut    = "kp_momentum_meas > 0.400 && km_momentum_meas > 0.400 && d_momentum_meas > 0.400 && kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
+            MomentumCut    = "kp_momentum_meas > 0.400 && km_momentum_meas > 0.400 && d_momentum_meas > 0.400";
         else if (tag.find("momentum_0.425") != string::npos)
-            KinematicsCut    = "kp_momentum_meas > 0.425 && km_momentum_meas > 0.425 && d_momentum_meas > 0.425 && kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
+            MomentumCut    = "kp_momentum_meas > 0.425 && km_momentum_meas > 0.425 && d_momentum_meas > 0.425";
         else if (tag.find("momentum_0.475") != string::npos)
-            KinematicsCut    = "kp_momentum_meas > 0.475 && km_momentum_meas > 0.475 && d_momentum_meas > 0.475 && kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
+            MomentumCut    = "kp_momentum_meas > 0.475 && km_momentum_meas > 0.475 && d_momentum_meas > 0.475";
         else if (tag.find("momentum_0.500") != string::npos)
-            KinematicsCut    = "kp_momentum_meas > 0.500 && km_momentum_meas > 0.500 && d_momentum_meas > 0.500 && kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
+            MomentumCut    = "kp_momentum_meas > 0.500 && km_momentum_meas > 0.500 && d_momentum_meas > 0.500";
         else if (tag.find("theta_1.0") != string::npos)
-            KinematicsCut    = "kp_momentum_meas > 0.400 && km_momentum_meas > 0.400 && d_momentum_meas > 0.400 && kp_theta_meas > 1.0 && km_theta_meas > 1.0 && d_theta_meas > 1.0";
+            ThetaCut    = "kp_theta_meas > 1.0 && km_theta_meas > 1.0 && d_theta_meas > 1.0";
         else if (tag.find("theta_1.5") != string::npos)
-            KinematicsCut    = "kp_momentum_meas > 0.400 && km_momentum_meas > 0.400 && d_momentum_meas > 0.400 && kp_theta_meas > 1.5 && km_theta_meas > 1.5 && d_theta_meas > 1.5";
+            ThetaCut    = "kp_theta_meas > 1.5 && km_theta_meas > 1.5 && d_theta_meas > 1.5";
         else if (tag.find("theta_2.5") != string::npos)
-            KinematicsCut    = "kp_momentum_meas > 0.400 && km_momentum_meas > 0.400 && d_momentum_meas > 0.400 && kp_theta_meas > 2.5 && km_theta_meas > 2.5 && d_theta_meas > 2.5";
+            ThetaCut    = "kp_theta_meas > 2.5 && km_theta_meas > 2.5 && d_theta_meas > 2.5";
         else if (tag.find("theta_3.0") != string::npos)
-            KinematicsCut    = "kp_momentum_meas > 0.400 && km_momentum_meas > 0.400 && d_momentum_meas > 0.400 && kp_theta_meas > 3.0 && km_theta_meas > 3.0 && d_theta_meas > 3.0";
+            ThetaCut    = "kp_theta_meas > 3.0 && km_theta_meas > 3.0 && d_theta_meas > 3.0";
         else if (tag.find("vertexZ_13.0") != string::npos)
-            VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 13.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.00";
+            VertexZCut       = "TMath::Abs(vertex_z_kin - 65.0) < 13.0";
         else if (tag.find("vertexZ_13.5") != string::npos)
-            VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 13.5 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.00";
+            VertexZCut       = "TMath::Abs(vertex_z_kin - 65.0) < 13.5";
         else if (tag.find("vertexZ_14.5") != string::npos)
-            VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.5 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.00";
+            VertexZCut       = "TMath::Abs(vertex_z_kin - 65.0) < 14.5";
         else if (tag.find("vertexZ_15.0") != string::npos)
-            VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 15.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.00";
+            VertexZCut       = "TMath::Abs(vertex_z_kin - 65.0) < 15.0";
         else if (tag.find("vertexR_0.50") != string::npos)
-            VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 0.50";
+            VertexRCut       = "TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 0.50";
         else if (tag.find("vertexR_0.75") != string::npos)
-            VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 0.75";
+            VertexRCut       = "TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 0.75";
         else if (tag.find("vertexR_1.25") != string::npos)
-            VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.25";
+            VertexRCut       = "TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.25";
         else if (tag.find("vertexR_1.50") != string::npos)
-            VertexCut        = "TMath::Abs(vertex_z_kin - 65.0) < 14.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.50";
+            VertexRCut       = "TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.50";
         else if (tag.find("beamaccid_5") != string::npos)
             BeamAccidCut     = "TMath::Abs(beam_DeltaT_meas) < 22.0";
         else if (tag.find("beamaccid_3") != string::npos)
@@ -135,8 +132,10 @@ int get_yield(string channel, string reaction, string observable, string tag)
         rdf_input = rdf_input   .Filter(dEdxCut.c_str())
                                 .Filter(MissPMinusCut.c_str())
                                 .Filter(KinFitChiSqCut.c_str())
-                                .Filter(KinematicsCut.c_str())
-                                .Filter(VertexCut.c_str())
+                                .Filter(MomentumCut.c_str())
+                                .Filter(ThetaCut.c_str())
+                                .Filter(VertexZCut.c_str())
+                                .Filter(VertexRCut.c_str())
                                 .Filter(BeamAccidCut.c_str());
 
         if      (tag.find("beamaccid_3") != string::npos)
@@ -153,23 +152,9 @@ int get_yield(string channel, string reaction, string observable, string tag)
         else
             rdf_input = rdf_input   .Define("combo_accid_weight_syst",  "combo_accid_weight");
 
-        // if      (tag.find("simweight_pass0") != string::npos)
-        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "1.0");
-        // else if (tag.find("simweight_pass1") != string::npos)
-        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass1(beam_energy_truth, minust_truth)");
-        // else if (tag.find("simweight_pass2") != string::npos)
-        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass2(beam_energy_truth, minust_truth)");
-        // else if (tag.find("simweight_pass3") != string::npos)
-        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass3(beam_energy_truth, minust_truth)");
-        // else if (tag.find("simweight_pass4") != string::npos)
-        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass4(beam_energy_truth, minust_truth)");
-        // else if (tag.find("simweight_pass5") != string::npos)
-        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass5(beam_energy_truth, minust_truth)");
-        // else if (tag.find("simweight_pass6") != string::npos)
-        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass6(beam_energy_truth, minust_truth)");
-        // else if (tag.find("simweight_pass7") != string::npos)
-        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass7(beam_energy_truth, minust_truth)");
-        if (tag.find("simweight_iter") != string::npos)
+        if (reaction.find("model") != string::npos)
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "1.0");
+        else if (tag.find("simweight_iter") != string::npos)
             rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_iterations(beam_energy_truth, minust_truth, tag)");
         else if (tag.find("simweight_syst") != string::npos)
             rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_systematic(beam_energy_truth, minust_truth, tag)");
@@ -181,26 +166,13 @@ int get_yield(string channel, string reaction, string observable, string tag)
     }
     else if (reaction.find("thrown") != string::npos)
     {
-        // if      (tag == "simweight_pass0")
-        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "1.0");
-        // else if (tag == "simweight_pass1")
-        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass1(beam_energy_truth, minust_truth)");
-        // else if (tag == "simweight_pass2")
-        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass2(beam_energy_truth, minust_truth)");
-        // else if (tag == "simweight_pass3")
-        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass3(beam_energy_truth, minust_truth)");
-        // else if (tag == "simweight_pass4")
-        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass4(beam_energy_truth, minust_truth)");
-        // else if (tag == "simweight_pass5")
-        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass5(beam_energy_truth, minust_truth)");
-        // else if (tag == "simweight_pass6")
-        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass6(beam_energy_truth, minust_truth)");
-        // else if (tag == "simweight_pass7")
-        //     rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_pass7(beam_energy_truth, minust_truth)");
-        if (tag.find("simweight_iter") != string::npos)
+        if (reaction.find("model") != string::npos)
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "1.0");
+        else if (tag.find("simweight_iter") != string::npos)
             rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_iterations(beam_energy_truth, minust_truth, tag)");
         else if (tag.find("simweight_syst") != string::npos)
             rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_systematic(beam_energy_truth, minust_truth, tag)");
+
         else
             rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_nominal(beam_energy_truth, minust_truth)");
 
@@ -226,8 +198,8 @@ int get_yield(string channel, string reaction, string observable, string tag)
     input_txt.close();
 
     // Prepare output files
-    string output_textfile_name = Form("/work/halld2/home/boyu/src_analysis/plot/vm_d/output/yield_phi_d/yield_%s_%s_%s_%s.txt", channel.c_str(), reaction.c_str(), observable.c_str(), tag.c_str());
-    string output_pdffile_name = Form("/work/halld2/home/boyu/src_analysis/plot/vm_d/output/yield_phi_d/yield_%s_%s_%s_%s.pdf", channel.c_str(), reaction.c_str(), observable.c_str(), tag.c_str());
+    string output_textfile_name = Form("/work/halld2/home/boyu/src_analysis/plot/vm_d/output/yield_%s/yield_%s_%s_%s_%s.txt", channel.c_str(), channel.c_str(), reaction.c_str(), observable.c_str(), tag.c_str());
+    string output_pdffile_name = Form("/work/halld2/home/boyu/src_analysis/plot/vm_d/output/yield_%s/yield_%s_%s_%s_%s.pdf", channel.c_str(), channel.c_str(), reaction.c_str(), observable.c_str(), tag.c_str());
     cout << "Output text file: " << output_textfile_name << endl;
     cout << "Output PDF file: " << output_pdffile_name << endl;
     FILE *output_textfile = fopen(output_textfile_name.c_str(),"w");
@@ -262,7 +234,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
         bin_width = 0.0060;
     else if (tag == "fitwidth_0.0075")
         bin_width = 0.0075;
-    int     num_bins    = (1.10-0.98)/bin_width;
+    int num_bins    = (1.10-0.98)/bin_width;
 
     for (int i = 0; i < bins.size(); i++)
     {
@@ -301,14 +273,18 @@ int get_yield(string channel, string reaction, string observable, string tag)
             {
                 if (observable == "Wcostheta")
                     variable = "decay_costheta_helicity_kin";
-                else if (observable == "Wphi")
+                else if (observable == "Wdecayphi")
                     variable = "decay_phi_helicity_kin";
-                else if (observable == "WPhi")
+                else if (observable == "Wpolphi")
                     variable = "polarization_phi_com_kin";
                 else if (observable == "Wpsi")
                     variable = "psi_helicity_kin";
                 angle_cut = Form("%s>%.2f && %s<%.2f", variable.c_str(), bins[i][4], variable.c_str(), bins[i][5]);
                 rdf_bin = rdf_bin.Filter(angle_cut.c_str());
+                if (tag == "sideband")
+                {
+                    rdf_bin = rdf_bin.Filter("phi_mass_kin>1.05");
+                }
                 if (reaction.find("data") != string::npos)
                 {
                     angle_center = rdf_bin.Mean(variable.c_str()).GetValue();
@@ -327,7 +303,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
                 }
             }
 
-            if (reaction.find("sim") != string::npos && tag != "fitsig_relBWsim")
+            if ((reaction.find("sim") != string::npos && tag != "fitsig_relBWsim") || tag == "sideband")
             {
                 yield = rdf_bin.Sum("yield_weight").GetValue();
                 yield_err = sqrt(rdf_bin.Sum("yield_weight_squared").GetValue());
@@ -499,8 +475,8 @@ int get_yield(string channel, string reaction, string observable, string tag)
                 auto fit_results = hist_bin.Fit(&fit_func, "SLR");
                 hist_bin.GetFunction("fit_func")->SetLineColor(kBlack);
                 hist_bin.Draw("same");
-                yield = 1;
-                yield_err = 1;
+                // yield = 1;
+                // yield_err = 1;
                 TF1 *rel_bw_func = new TF1("rel_bw_func", rel_bw, 0.99, fit_max, 4);
                 rel_bw_func->SetParameters(fit_func.GetParameter(0), fit_func.GetParameter(1), fit_func.GetParameter(2), fit_func.GetParameter(3));
                 rel_bw_func->SetLineColor(kRed);
@@ -531,14 +507,18 @@ int get_yield(string channel, string reaction, string observable, string tag)
             {
                 if (observable == "Wcostheta")
                     variable = "decay_costheta_helicity_truth";
-                else if (observable == "Wphi")
+                else if (observable == "Wdecayphi")
                     variable = "decay_phi_helicity_truth";
-                else if (observable == "WPhi")
+                else if (observable == "Wpolphi")
                     variable = "polarization_phi_com_truth";
                 else if (observable == "Wpsi")
                     variable = "psi_helicity_truth";
                 angle_cut = Form("%s>%.2f && %s<%.2f", variable.c_str(), bins[i][4], variable.c_str(), bins[i][5]);
                 rdf_bin = rdf_bin.Filter(angle_cut.c_str());
+                if (tag == "sideband")
+                {
+                    rdf_bin = rdf_bin.Filter("phi_mass_kin>1.05");
+                }
 
                 cout << energy_cut << " && " << t_cut << " && " << angle_cut << endl;
                 hist_bin = *rdf_bin.Histo1D({Form("hist_%.1f_%.1f_%.3f_%.3f_%.2f_%.2f", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]), ";m_{K^{+}K^{-}} (GeV/c);Counts", num_bins, 0.98, 1.10},"phi_mass_truth","yield_weight");
@@ -555,7 +535,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
         if (observable == "dsdt")
             fprintf(output_textfile, "%6.4f\t%6.4f\t%6.1f\t%6.1f\t%6.4f\t%6.4f\t%6.3f\t%6.3f\t%f\t%f\n", energy_center, energy_width, bins[i][0], bins[i][1], t_center, t_width, bins[i][2], bins[i][3], yield, yield_err);
         else
-            fprintf(output_textfile, "%6.4f\t%6.4f\t%6.1f\t%6.1f\t%6.4f\t%6.4f\t%6.3f\t%6.3f\t%6.4f\t%6.4f\t%6.1f\t%6.1f\t%f\t%f\n", energy_center, energy_width, bins[i][0], bins[i][1], t_center, t_width, bins[i][2], bins[i][3], angle_center, angle_width, bins[i][4], bins[i][5], yield, yield_err);
+            fprintf(output_textfile, "%6.3f\t%6.3f\t%6.1f\t%6.1f\t%6.3f\t%6.4f\t%6.3f\t%6.3f\t%6.3f\t%6.3f\t%6.1f\t%6.1f\t%f\t%f\n", energy_center, energy_width, bins[i][0], bins[i][1], t_center, t_width, bins[i][2], bins[i][3], angle_center, angle_width, bins[i][4], bins[i][5], yield, yield_err);
     }
     canvas->Print((output_pdffile_name+")").c_str());
 
@@ -1192,152 +1172,219 @@ Double_t nonrel_bw(Double_t *x, Double_t *par)
 
 double sim_weight_func_nominal(double beam_energy_truth, double minust_truth)
 {
+    // No energy dependence
     double a1, b1, a2, b2 = 0;
     double normalization = 10;
     if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
         return 1.0;
-    else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
+    else
     {
-        a1 = 6445.03;  b1 = 17.22; a2 = 12.42; b2 = 2.49;
-    }
-    else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
-    {
-        a1 = 13232.54; b1 = 20.23; a2 = 24.78; b2 = 3.61;
-    }
-    else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
-    {
-        a1 = 4782.12;  b1 = 16.78; a2 = 13.18; b2 = 2.94;
+        a1 = 13232.54;
+        b1 = 20.23;
+        a2 = 24.78;
+        b2 = 3.61;
     }
     return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
+
+    // With energy dependence
+    // double a1, b1, a2, b2 = 0;
+    // double normalization = 10;
+    // if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
+    //     return 1.0;
+    // else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
+    // {
+    //     a1 = 6445.03;  b1 = 17.22; a2 = 12.42; b2 = 2.49;
+    // }
+    // else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
+    // {
+    //     a1 = 13232.54; b1 = 20.23; a2 = 24.78; b2 = 3.61;
+    // }
+    // else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
+    // {
+    //     a1 = 4782.12;  b1 = 16.78; a2 = 13.18; b2 = 2.94;
+    // }
+    // return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
 }
 
 double sim_weight_func_iterations(double beam_energy_truth, double minust_truth, string iteration)
 {
+    // No energy dependence
     double a1, b1, a2, b2 = 0;
     double normalization = 10;
     if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
         return 1.0;
     else if (iteration == "simweight_iter0")
         return 1.0;
-    else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
+    else if (iteration == "simweight_iter1")
     {
-        if (iteration == "simweight_iter1")
-        {
-            a1 = 3632.01; b1 = 15.82; a2 = 12.19; b2 = 2.49;
-        }
-        else if (iteration == "simweight_iter2")
-        {
-            a1 = 6127.78; b1 = 17.10; a2 = 12.43; b2 = 2.50;
-        }
-        else if (iteration == "simweight_iter3")
-        {
-            a1 = 6417.46; b1 = 17.21; a2 = 12.42; b2 = 2.49;
-        }
-        else if (iteration == "simweight_iter4")
-        {
-            a1 = 6442.44; b1 = 17.22; a2 = 12.42; b2 = 2.49;
-        }
-        else if (iteration == "simweight_iter5")
-        {
-            a1 = 6444.93; b1 = 17.22; a2 = 12.42; b2 = 2.49;
-        }
-        else if (iteration == "simweight_iter6")
-        {
-            a1 = 6444.97; b1 = 17.22; a2 = 12.42; b2 = 2.49;
-        }
-        else if (iteration == "simweight_iter7")
-        {
-            a1 = 6445.03; b1 = 17.22; a2 = 12.42; b2 = 2.49;
-        }
+        a1 = 4842.04;  b1 = 17.22; a2 = 17.43; b2 = 3.13;
     }
-    else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
+    else if (iteration == "simweight_iter2")
     {
-        if (iteration == "simweight_iter1")
-        {
-            a1 = 4842.04;  b1 = 17.22; a2 = 17.43; b2 = 3.13;
-        }
-        else if (iteration == "simweight_iter2")
-        {
-            a1 = 11328.73; b1 = 19.75; a2 = 23.50; b2 = 3.54;
-        }
-        else if (iteration == "simweight_iter3")
-        {
-            a1 = 12903.60; b1 = 20.16; a2 = 24.55; b2 = 3.60;
-        }
-        else if (iteration == "simweight_iter4")
-        {
-            a1 = 13181.89; b1 = 20.22; a2 = 24.74; b2 = 3.61;
-        }
-        else if (iteration == "simweight_iter5")
-        {
-            a1 = 13225.39; b1 = 20.23; a2 = 24.77; b2 = 3.61;
-        }
-        else if (iteration == "simweight_iter6")
-        {
-            a1 = 13232.23; b1 = 20.23; a2 = 24.78; b2 = 3.61;
-        }
-        else if (iteration == "simweight_iter7")
-        {
-            a1 = 13232.54; b1 = 20.23; a2 = 24.78; b2 = 3.61;
-        }
+        a1 = 11328.73; b1 = 19.75; a2 = 23.50; b2 = 3.54;
     }
-    else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
+    else if (iteration == "simweight_iter3")
     {
-        if (iteration == "simweight_iter1")
-        {
-            a1 = 2882.53; b1 = 15.54; a2 = 12.54; b2 = 2.90;
-        }
-        else if (iteration == "simweight_iter2")
-        {
-            a1 = 4602.99; b1 = 16.69; a2 = 13.21; b2 = 2.95;
-        }
-        else if (iteration == "simweight_iter3")
-        {
-            a1 = 4769.82; b1 = 16.77; a2 = 13.19; b2 = 2.94;
-        }
-        else if (iteration == "simweight_iter4")
-        {
-            a1 = 4781.31; b1 = 16.78; a2 = 13.18; b2 = 2.94;
-        }
-        else if (iteration == "simweight_iter5")
-        {
-            a1 = 4782.23; b1 = 16.78; a2 = 13.18; b2 = 2.94;
-        }
-        else if (iteration == "simweight_iter6")
-        {
-            a1 = 4782.18; b1 = 16.78; a2 = 13.18; b2 = 2.94;
-        }
-        else if (iteration == "simweight_iter7")
-        {
-            a1 = 4782.12; b1 = 16.78; a2 = 13.18; b2 = 2.94;
-        }
+        a1 = 12903.60; b1 = 20.16; a2 = 24.55; b2 = 3.60;
+    }
+    else if (iteration == "simweight_iter4")
+    {
+        a1 = 13181.89; b1 = 20.22; a2 = 24.74; b2 = 3.61;
+    }
+    else if (iteration == "simweight_iter5")
+    {
+        a1 = 13225.39; b1 = 20.23; a2 = 24.77; b2 = 3.61;
+    }
+    else if (iteration == "simweight_iter6")
+    {
+        a1 = 13232.23; b1 = 20.23; a2 = 24.78; b2 = 3.61;
+    }
+    else if (iteration == "simweight_iter7")
+    {
+        a1 = 13232.54; b1 = 20.23; a2 = 24.78; b2 = 3.61;
     }
     return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
+
+    // With energy dependence
+    // double a1, b1, a2, b2 = 0;
+    // double normalization = 10;
+    // if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
+    //     return 1.0;
+    // else if (iteration == "simweight_iter0")
+    //     return 1.0;
+    // else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
+    // {
+    //     if (iteration == "simweight_iter1")
+    //     {
+    //         a1 = 3632.01; b1 = 15.82; a2 = 12.19; b2 = 2.49;
+    //     }
+    //     else if (iteration == "simweight_iter2")
+    //     {
+    //         a1 = 6127.78; b1 = 17.10; a2 = 12.43; b2 = 2.50;
+    //     }
+    //     else if (iteration == "simweight_iter3")
+    //     {
+    //         a1 = 6417.46; b1 = 17.21; a2 = 12.42; b2 = 2.49;
+    //     }
+    //     else if (iteration == "simweight_iter4")
+    //     {
+    //         a1 = 6442.44; b1 = 17.22; a2 = 12.42; b2 = 2.49;
+    //     }
+    //     else if (iteration == "simweight_iter5")
+    //     {
+    //         a1 = 6444.93; b1 = 17.22; a2 = 12.42; b2 = 2.49;
+    //     }
+    //     else if (iteration == "simweight_iter6")
+    //     {
+    //         a1 = 6444.97; b1 = 17.22; a2 = 12.42; b2 = 2.49;
+    //     }
+    //     else if (iteration == "simweight_iter7")
+    //     {
+    //         a1 = 6445.03; b1 = 17.22; a2 = 12.42; b2 = 2.49;
+    //     }
+    // }
+    // else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
+    // {
+    //     if (iteration == "simweight_iter1")
+    //     {
+    //         a1 = 4842.04;  b1 = 17.22; a2 = 17.43; b2 = 3.13;
+    //     }
+    //     else if (iteration == "simweight_iter2")
+    //     {
+    //         a1 = 11328.73; b1 = 19.75; a2 = 23.50; b2 = 3.54;
+    //     }
+    //     else if (iteration == "simweight_iter3")
+    //     {
+    //         a1 = 12903.60; b1 = 20.16; a2 = 24.55; b2 = 3.60;
+    //     }
+    //     else if (iteration == "simweight_iter4")
+    //     {
+    //         a1 = 13181.89; b1 = 20.22; a2 = 24.74; b2 = 3.61;
+    //     }
+    //     else if (iteration == "simweight_iter5")
+    //     {
+    //         a1 = 13225.39; b1 = 20.23; a2 = 24.77; b2 = 3.61;
+    //     }
+    //     else if (iteration == "simweight_iter6")
+    //     {
+    //         a1 = 13232.23; b1 = 20.23; a2 = 24.78; b2 = 3.61;
+    //     }
+    //     else if (iteration == "simweight_iter7")
+    //     {
+    //         a1 = 13232.54; b1 = 20.23; a2 = 24.78; b2 = 3.61;
+    //     }
+    // }
+    // else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
+    // {
+    //     if (iteration == "simweight_iter1")
+    //     {
+    //         a1 = 2882.53; b1 = 15.54; a2 = 12.54; b2 = 2.90;
+    //     }
+    //     else if (iteration == "simweight_iter2")
+    //     {
+    //         a1 = 4602.99; b1 = 16.69; a2 = 13.21; b2 = 2.95;
+    //     }
+    //     else if (iteration == "simweight_iter3")
+    //     {
+    //         a1 = 4769.82; b1 = 16.77; a2 = 13.19; b2 = 2.94;
+    //     }
+    //     else if (iteration == "simweight_iter4")
+    //     {
+    //         a1 = 4781.31; b1 = 16.78; a2 = 13.18; b2 = 2.94;
+    //     }
+    //     else if (iteration == "simweight_iter5")
+    //     {
+    //         a1 = 4782.23; b1 = 16.78; a2 = 13.18; b2 = 2.94;
+    //     }
+    //     else if (iteration == "simweight_iter6")
+    //     {
+    //         a1 = 4782.18; b1 = 16.78; a2 = 13.18; b2 = 2.94;
+    //     }
+    //     else if (iteration == "simweight_iter7")
+    //     {
+    //         a1 = 4782.12; b1 = 16.78; a2 = 13.18; b2 = 2.94;
+    //     }
+    // }
+    // return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
 }
 
 double sim_weight_func_systematic(double beam_energy_truth, double minust_truth, string variation)
 {
+    // No energy dependence
     double a1_nominal, b1_nominal, a2_nominal, b2_nominal = 0;
     double a1_sigma, b1_sigma, a2_sigma, b2_sigma = 0;
     double a1, b1, a2, b2 = 0;
     double normalization = 10;
     if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
         return 1.0;
-    else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
-    {
-        a1_nominal = 6445.03;  b1_nominal = 17.22; a2_nominal = 12.42; b2_nominal = 2.49;
-        a1_sigma = 100.0; b1_sigma = 0.1; a2_sigma = 0.5; b2_sigma = 0.05;
-    }
-    else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
+    else
     {
         a1_nominal = 13232.54; b1_nominal = 20.23; a2_nominal = 24.78; b2_nominal = 3.61;
         a1_sigma = 200.0; b1_sigma = 0.2; a2_sigma = 1.0; b2_sigma = 0.1;
     }
-    else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
-    {
-        a1_nominal = 4782.12;  b1_nominal = 16.78; a2_nominal = 13.18; b2_nominal = 2.94;
-        a1_sigma = 150.0; b1_sigma = 0.15; a2_sigma = 0.7; b2_sigma = 0.07;
-    }
+
+    // With energy dependence
+    // double a1_nominal, b1_nominal, a2_nominal, b2_nominal = 0;
+    // double a1_sigma, b1_sigma, a2_sigma, b2_sigma = 0;
+    // double a1, b1, a2, b2 = 0;
+    // double normalization = 10;
+    // if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
+    //     return 1.0;
+    // else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
+    // {
+    //     a1_nominal = 6445.03;  b1_nominal = 17.22; a2_nominal = 12.42; b2_nominal = 2.49;
+    //     a1_sigma = 100.0; b1_sigma = 0.1; a2_sigma = 0.5; b2_sigma = 0.05;
+    // }
+    // else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
+    // {
+    //     a1_nominal = 13232.54; b1_nominal = 20.23; a2_nominal = 24.78; b2_nominal = 3.61;
+    //     a1_sigma = 200.0; b1_sigma = 0.2; a2_sigma = 1.0; b2_sigma = 0.1;
+    // }
+    // else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
+    // {
+    //     a1_nominal = 4782.12;  b1_nominal = 16.78; a2_nominal = 13.18; b2_nominal = 2.94;
+    //     a1_sigma = 150.0; b1_sigma = 0.15; a2_sigma = 0.7; b2_sigma = 0.07;
+    // }
 
     if (variation.find("a1_+1") != string::npos)
         a1 = a1_nominal + a1_sigma;
