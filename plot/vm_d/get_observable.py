@@ -74,7 +74,8 @@ def legend_without_duplicate_labels(ax):
     unique = [(h, l) for i, (h, l) in enumerate(zip(handles, labels)) if l not in labels[:i]]
     ax.legend(*zip(*unique))
 
-# List of labels and colors for the plots
+################################################################# LISTS OF LABELS ###################################################################################
+
 dsdt_label_list = [r'$E_\gamma$=5.8-7.8 GeV', r'$E_\gamma$=7.8-8.8 GeV', r'$E_\gamma$=8.8-10.8 GeV']
 dsdt_color_list = ['r', 'g', 'b']
 W_label_list    = [ r'$E_\gamma$=5.8-7.8 GeV, $-t<0.6 \rm{ GeV}^2$', \
@@ -114,7 +115,8 @@ for i, this_list in enumerate([nominal_list, dedx_list, pminus_list, chisquared_
             subplot_list.append(i-1)
             color_list.append(color_options[j])
 
-# Read the bin edges
+################################################################# READ THE NUMBERS ###################################################################################
+
 phi_d_2H_dsdt_energy_center         = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_dsdt_nominal.txt')[:,0]
 phi_d_2H_dsdt_energy_width          = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_dsdt_nominal.txt')[:,1]
 phi_d_2H_dsdt_energy_low            = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_dsdt_nominal.txt')[:,2]
