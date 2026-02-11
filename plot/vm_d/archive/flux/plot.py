@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-energy_bins = [(6,8), (8,9), (9,11)]
+energy_bins = [(5.8,7.8), (7.8,8.8), (8.8,10.8)]
 
 region1 = 0
 region2 = 125
@@ -29,7 +29,7 @@ ax1.legend(fontsize=14)
 ax1.set_xlabel("Photon energy [GeV]", fontsize=16)
 ax1.set_ylabel("PS normalization uncertainty [%]", fontsize=16)
 ax1.set_ylim(0, 10)
-ax1.set_xlim(6, 11)
+ax1.set_xlim(5.8, 10.8)
 ax1.tick_params(axis='x', labelsize=14)
 ax1.tick_params(axis='y', labelsize=14)
 
