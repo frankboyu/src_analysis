@@ -58,7 +58,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
         string dEdxCut          = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.65*d_momentum_meas+4.47) + 2.57)";
         string MissPMinusCut    = "miss_pminus_meas > -0.02";
         string KinFitChiSqCut   = "chisq_per_ndf_kin < 5.0";
-        string MomentumCut      = "kp_momentum_meas > 0.45 && km_momentum_meas > 0.45 && d_momentum_meas > 0.45";
+        string MomentumCut      = "kp_momentum_meas > 0.400 && km_momentum_meas > 0.400 && d_momentum_meas > 0.400";
         string ThetaCut         = "kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
         string VertexZCut       = "TMath::Abs(vertex_z_kin - 65.0) < 14.0";
         string VertexRCut       = "TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.0";
@@ -74,46 +74,64 @@ int get_yield(string channel, string reaction, string observable, string tag)
             dEdxCut         = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.41*d_momentum_meas+4.21) + 2.21)";
         else if (tag.find("dEdx_3.00") != string::npos)
             dEdxCut         = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.11*d_momentum_meas+3.90) + 1.83)";
-        else if (tag.find("misspminus_0.010") != string::npos)
-            MissPMinusCut   = "miss_pminus_meas > -0.010";
-        else if (tag.find("misspminus_0.015") != string::npos)
-            MissPMinusCut   = "miss_pminus_meas > -0.015";
-        else if (tag.find("misspminus_0.025") != string::npos)
-            MissPMinusCut   = "miss_pminus_meas > -0.025";
-        else if (tag.find("misspminus_0.030") != string::npos)
-            MissPMinusCut   = "miss_pminus_meas > -0.030";
-        else if (tag.find("chisquared_3.5") != string::npos)
-            KinFitChiSqCut   = "chisq_per_ndf_kin < 3.5";
-        else if (tag.find("chisquared_4.0") != string::npos)
-            KinFitChiSqCut   = "chisq_per_ndf_kin < 4.0";
-        else if (tag.find("chisquared_6.0") != string::npos)
-            KinFitChiSqCut   = "chisq_per_ndf_kin < 6.0";
-        else if (tag.find("chisquared_7.0") != string::npos)
-            KinFitChiSqCut   = "chisq_per_ndf_kin < 7.0";
-        else if (tag.find("momentum_0.400") != string::npos)
-            MomentumCut    = "kp_momentum_meas > 0.400 && km_momentum_meas > 0.400 && d_momentum_meas > 0.400";
+        else if (tag.find("misspminus_0.0100") != string::npos)
+            MissPMinusCut   = "miss_pminus_meas > -0.0100";
+        else if (tag.find("misspminus_0.0150") != string::npos)
+            MissPMinusCut   = "miss_pminus_meas > -0.0150";
+        else if (tag.find("misspminus_0.0175") != string::npos)
+            MissPMinusCut   = "miss_pminus_meas > -0.0175";
+        else if (tag.find("misspminus_0.0250") != string::npos)
+            MissPMinusCut   = "miss_pminus_meas > -0.0250";
+        else if (tag.find("misspminus_0.0300") != string::npos)
+            MissPMinusCut   = "miss_pminus_meas > -0.0300";
+        else if (tag.find("chisquared_3.00") != string::npos)
+            KinFitChiSqCut   = "chisq_per_ndf_kin < 3.00";
+        else if (tag.find("chisquared_3.50") != string::npos)
+            KinFitChiSqCut   = "chisq_per_ndf_kin < 3.50";
+        else if (tag.find("chisquared_4.00") != string::npos)
+            KinFitChiSqCut   = "chisq_per_ndf_kin < 4.00";
+        else if (tag.find("chisquared_4.50") != string::npos)
+            KinFitChiSqCut   = "chisq_per_ndf_kin < 4.50";
+        else if (tag.find("chisquared_4.75") != string::npos)
+            KinFitChiSqCut   = "chisq_per_ndf_kin < 4.75";
+        else if (tag.find("chisquared_5.50") != string::npos)
+            KinFitChiSqCut   = "chisq_per_ndf_kin < 5.50";
+        else if (tag.find("chisquared_6.00") != string::npos)
+            KinFitChiSqCut   = "chisq_per_ndf_kin < 6.00";
+        else if (tag.find("chisquared_7.00") != string::npos)
+            KinFitChiSqCut   = "chisq_per_ndf_kin < 7.00";
+        else if (tag.find("momentum_0.350") != string::npos)
+            MomentumCut    = "kp_momentum_meas > 0.350 && km_momentum_meas > 0.350 && d_momentum_meas > 0.350";
+        else if (tag.find("momentum_0.375") != string::npos)
+            MomentumCut    = "kp_momentum_meas > 0.375 && km_momentum_meas > 0.375 && d_momentum_meas > 0.375";
         else if (tag.find("momentum_0.425") != string::npos)
             MomentumCut    = "kp_momentum_meas > 0.425 && km_momentum_meas > 0.425 && d_momentum_meas > 0.425";
-        else if (tag.find("momentum_0.475") != string::npos)
-            MomentumCut    = "kp_momentum_meas > 0.475 && km_momentum_meas > 0.475 && d_momentum_meas > 0.475";
-        else if (tag.find("momentum_0.500") != string::npos)
-            MomentumCut    = "kp_momentum_meas > 0.500 && km_momentum_meas > 0.500 && d_momentum_meas > 0.500";
-        else if (tag.find("theta_1.0") != string::npos)
-            ThetaCut    = "kp_theta_meas > 1.0 && km_theta_meas > 1.0 && d_theta_meas > 1.0";
-        else if (tag.find("theta_1.5") != string::npos)
-            ThetaCut    = "kp_theta_meas > 1.5 && km_theta_meas > 1.5 && d_theta_meas > 1.5";
-        else if (tag.find("theta_2.5") != string::npos)
-            ThetaCut    = "kp_theta_meas > 2.5 && km_theta_meas > 2.5 && d_theta_meas > 2.5";
-        else if (tag.find("theta_3.0") != string::npos)
-            ThetaCut    = "kp_theta_meas > 3.0 && km_theta_meas > 3.0 && d_theta_meas > 3.0";
-        else if (tag.find("vertexZ_13.0") != string::npos)
-            VertexZCut       = "TMath::Abs(vertex_z_kin - 65.0) < 13.0";
-        else if (tag.find("vertexZ_13.5") != string::npos)
-            VertexZCut       = "TMath::Abs(vertex_z_kin - 65.0) < 13.5";
-        else if (tag.find("vertexZ_14.5") != string::npos)
-            VertexZCut       = "TMath::Abs(vertex_z_kin - 65.0) < 14.5";
-        else if (tag.find("vertexZ_15.0") != string::npos)
-            VertexZCut       = "TMath::Abs(vertex_z_kin - 65.0) < 15.0";
+        else if (tag.find("momentum_0.450") != string::npos)
+            MomentumCut    = "kp_momentum_meas > 0.450 && km_momentum_meas > 0.450 && d_momentum_meas > 0.450";
+        else if (tag.find("theta_1.80") != string::npos)
+            ThetaCut    = "kp_theta_meas > 1.80 && km_theta_meas > 1.80 && d_theta_meas > 1.80";
+        else if (tag.find("theta_1.90") != string::npos)
+            ThetaCut    = "kp_theta_meas > 1.90 && km_theta_meas > 1.90 && d_theta_meas > 1.90";
+        else if (tag.find("theta_1.95") != string::npos)
+            ThetaCut    = "kp_theta_meas > 1.95 && km_theta_meas > 1.95 && d_theta_meas > 1.95";
+        else if (tag.find("theta_2.05") != string::npos)
+            ThetaCut    = "kp_theta_meas > 2.05 && km_theta_meas > 2.05 && d_theta_meas > 2.05";
+        else if (tag.find("theta_2.10") != string::npos)
+            ThetaCut    = "kp_theta_meas > 2.10 && km_theta_meas > 2.10 && d_theta_meas > 2.10";
+        else if (tag.find("theta_2.20") != string::npos)
+            ThetaCut    = "kp_theta_meas > 2.20 && km_theta_meas > 2.20 && d_theta_meas > 2.20";
+        else if (tag.find("vertexZ_13.00") != string::npos)
+            VertexZCut       = "TMath::Abs(vertex_z_kin - 65.0) < 13.00";
+        else if (tag.find("vertexZ_13.50") != string::npos)
+            VertexZCut       = "TMath::Abs(vertex_z_kin - 65.0) < 13.50";
+        else if (tag.find("vertexZ_13.75") != string::npos)
+            VertexZCut       = "TMath::Abs(vertex_z_kin - 65.0) < 13.75";
+        else if (tag.find("vertexZ_14.25") != string::npos)
+            VertexZCut       = "TMath::Abs(vertex_z_kin - 65.0) < 14.25";
+        else if (tag.find("vertexZ_14.50") != string::npos)
+            VertexZCut       = "TMath::Abs(vertex_z_kin - 65.0) < 14.50";
+        else if (tag.find("vertexZ_15.00") != string::npos)
+            VertexZCut       = "TMath::Abs(vertex_z_kin - 65.0) < 15.00";
         else if (tag.find("vertexR_0.50") != string::npos)
             VertexRCut       = "TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 0.50";
         else if (tag.find("vertexR_0.75") != string::npos)
@@ -216,6 +234,8 @@ int get_yield(string channel, string reaction, string observable, string tag)
     double  fit_min     = 0.99;
     double  fit_max     = 1.08;
     double  bin_width   = 0.005;
+    double  hist_min    = 0.9825;
+    double  hist_max    = 1.1125;
 
     if (tag == "fitmax_1.06")
         fit_max = 1.06;
@@ -234,7 +254,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
         bin_width = 0.0060;
     else if (tag == "fitwidth_0.0075")
         bin_width = 0.0075;
-    int num_bins    = (1.10-0.98)/bin_width;
+    int num_bins    = (hist_max-hist_min)/bin_width;
 
     for (int i = 0; i < bins.size(); i++)
     {
@@ -267,7 +287,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
             if (observable == "dsdt")
             {
                 cout << energy_cut << " && " << t_cut << endl;
-                hist_bin = *rdf_bin.Histo1D({Form("hist_%.1f_%.1f_%.3f_%.3f", bins[i][0], bins[i][1], bins[i][2], bins[i][3]), ";m_{K^{+}K^{-}} (GeV/c);Counts", num_bins, 0.98, 1.10},"phi_mass_kin","yield_weight");
+                hist_bin = *rdf_bin.Histo1D({Form("hist_%.1f_%.1f_%.3f_%.3f", bins[i][0], bins[i][1], bins[i][2], bins[i][3]), ";m_{K^{+}K^{-}} (GeV/c);Counts", num_bins, hist_min, hist_max},"phi_mass_kin","yield_weight");
             }
             else
             {
@@ -291,7 +311,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
                     angle_width  = rdf_bin.StdDev(variable.c_str()).GetValue();
                 }
                 cout << energy_cut << " && " << t_cut << " && " << angle_cut << endl;
-                hist_bin = *rdf_bin.Histo1D({Form("hist_%.1f_%.1f_%.3f_%.3f_%.2f_%.2f", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]), ";m_{K^{+}K^{-}} (GeV/c);Counts", num_bins, 0.98, 1.10},"phi_mass_kin","yield_weight");
+                hist_bin = *rdf_bin.Histo1D({Form("hist_%.1f_%.1f_%.3f_%.3f_%.2f_%.2f", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]), ";m_{K^{+}K^{-}} (GeV/c);Counts", num_bins, hist_min, hist_max},"phi_mass_kin","yield_weight");
             }
 
             for (int i = 0; i < hist_bin.GetNbinsX(); i++)
@@ -501,7 +521,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
             if (observable == "dsdt")
             {
                 cout << energy_cut << " && " << t_cut << endl;
-                hist_bin = *rdf_bin.Histo1D({Form("hist_%.1f_%.1f_%.3f_%.3f", bins[i][0], bins[i][1], bins[i][2], bins[i][3]), ";m_{K^{+}K^{-}} (GeV/c);Counts", num_bins, 0.98, 1.10},"phi_mass_truth","yield_weight");
+                hist_bin = *rdf_bin.Histo1D({Form("hist_%.1f_%.1f_%.3f_%.3f", bins[i][0], bins[i][1], bins[i][2], bins[i][3]), ";m_{K^{+}K^{-}} (GeV/c);Counts", num_bins, hist_min, hist_max},"phi_mass_truth","yield_weight");
             }
             else
             {
@@ -521,7 +541,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
                 }
 
                 cout << energy_cut << " && " << t_cut << " && " << angle_cut << endl;
-                hist_bin = *rdf_bin.Histo1D({Form("hist_%.1f_%.1f_%.3f_%.3f_%.2f_%.2f", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]), ";m_{K^{+}K^{-}} (GeV/c);Counts", num_bins, 0.98, 1.10},"phi_mass_truth","yield_weight");
+                hist_bin = *rdf_bin.Histo1D({Form("hist_%.1f_%.1f_%.3f_%.3f_%.2f_%.2f", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]), ";m_{K^{+}K^{-}} (GeV/c);Counts", num_bins, hist_min, hist_max},"phi_mass_truth","yield_weight");
             }
 
             yield           = rdf_bin.Sum("yield_weight").GetValue();
@@ -534,8 +554,12 @@ int get_yield(string channel, string reaction, string observable, string tag)
 
         if (observable == "dsdt")
             fprintf(output_textfile, "%6.4f\t%6.4f\t%6.1f\t%6.1f\t%6.4f\t%6.4f\t%6.3f\t%6.3f\t%f\t%f\n", energy_center, energy_width, bins[i][0], bins[i][1], t_center, t_width, bins[i][2], bins[i][3], yield, yield_err);
+            // fprintf(output_textfile, "%6.1f\t%6.1f\t%6.3f\t%6.3f\t%f\t%f\n", bins[i][0], bins[i][1], bins[i][2], bins[i][3], yield, yield_err);
+            // fprintf(output_textfile, "%6.1f\t%6.1f\t%6.3f\t%6.3f\n", bins[i][0], bins[i][1], bins[i][2], bins[i][3]);
         else
             fprintf(output_textfile, "%6.3f\t%6.3f\t%6.1f\t%6.1f\t%6.3f\t%6.4f\t%6.3f\t%6.3f\t%6.3f\t%6.3f\t%6.1f\t%6.1f\t%f\t%f\n", energy_center, energy_width, bins[i][0], bins[i][1], t_center, t_width, bins[i][2], bins[i][3], angle_center, angle_width, bins[i][4], bins[i][5], yield, yield_err);
+            // fprintf(output_textfile, "%6.1f\t%6.1f\t%6.3f\t%6.3f\t%6.1f\t%6.1f\t%f\t%f\n", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5], yield, yield_err);
+            // fprintf(output_textfile, "%6.1f\t%6.1f\t%6.3f\t%6.3f\t%6.1f\t%6.1f\n", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
     }
     canvas->Print((output_pdffile_name+")").c_str());
 
