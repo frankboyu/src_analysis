@@ -36,7 +36,7 @@ Double_t nonrel_bw                      (Double_t *x, Double_t *par);
 // Simulation weight functions
 double sim_weight_func_nominal      (double beam_energy_truth, double minust_truth);
 double sim_weight_func_iterations   (double beam_energy_truth, double minust_truth, int iteration);
-double sim_weight_func_systematic   (double beam_energy_truth, double minust_truth, int a1_variation, int b1_variation, int a2_variation, int b2_variation);
+double sim_weight_func_systematic   (double beam_energy_truth, double minust_truth, double a1_variation, double b1_variation, double a2_variation, double b2_variation);
 
 int get_yield(string channel, string reaction, string observable, string tag)
 {
@@ -170,6 +170,50 @@ int get_yield(string channel, string reaction, string observable, string tag)
         else
             rdf_input = rdf_input   .Define("combo_accid_weight_syst",  "combo_accid_weight");
 
+        if (reaction.find("a1_-1.0") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "-1.0");
+        else if (reaction.find("a1_-0.5") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "-0.5");
+        else if (reaction.find("a1_0.5") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "0.5");
+        else if (reaction.find("a1_1.0") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "1.0");
+        else
+            rdf_input = rdf_input   .Define("a1_variation",             "0.0");
+
+        if (reaction.find("b1_-1.0") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "-1.0");
+        else if (reaction.find("b1_-0.5") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "-0.5");
+        else if (reaction.find("b1_0.5") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "0.5");
+        else if (reaction.find("b1_1.0") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "1.0");
+        else
+            rdf_input = rdf_input   .Define("b1_variation",             "0.0");
+
+                    if (reaction.find("a2_-1.0") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "-1.0");
+        else if (reaction.find("a2_-0.5") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "-0.5");
+        else if (reaction.find("a2_0.5") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "0.5");
+        else if (reaction.find("a2_1.0") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "1.0");
+        else
+            rdf_input = rdf_input   .Define("a2_variation",             "0.0");
+
+                    if (reaction.find("b2_-1.0") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "-1.0");
+        else if (reaction.find("b2_-0.5") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "-0.5");
+        else if (reaction.find("b2_0.5") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "0.5");
+        else if (reaction.find("b2_1.0") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "1.0");
+        else
+            rdf_input = rdf_input   .Define("b2_variation",             "0.0");
+
         if (reaction.find("model") != string::npos)
             rdf_input = rdf_input   .Define("sim_weight_syst",          "1.0");
         else if (tag.find("simweight_iter0") != string::npos)
@@ -189,7 +233,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
         else if (tag.find("simweight_iter7") != string::npos)
             rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_iterations(beam_energy_truth, minust_truth, 7)");
         else if (tag.find("simweight_syst") != string::npos)
-            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_systematic(beam_energy_truth, minust_truth, tag)");
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_systematic(beam_energy_truth, minust_truth, a1_variation, b1_variation, a2_variation, b2_variation");
         else
             rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_nominal(beam_energy_truth, minust_truth)");
 
@@ -198,6 +242,50 @@ int get_yield(string channel, string reaction, string observable, string tag)
     }
     else if (reaction.find("thrown") != string::npos)
     {
+        if (reaction.find("a1_-1.0") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "-1.0");
+        else if (reaction.find("a1_-0.5") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "-0.5");
+        else if (reaction.find("a1_0.5") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "0.5");
+        else if (reaction.find("a1_1.0") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "1.0");
+        else
+            rdf_input = rdf_input   .Define("a1_variation",             "0.0");
+
+        if (reaction.find("b1_-1.0") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "-1.0");
+        else if (reaction.find("b1_-0.5") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "-0.5");
+        else if (reaction.find("b1_0.5") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "0.5");
+        else if (reaction.find("b1_1.0") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "1.0");
+        else
+            rdf_input = rdf_input   .Define("b1_variation",             "0.0");
+
+                    if (reaction.find("a2_-1.0") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "-1.0");
+        else if (reaction.find("a2_-0.5") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "-0.5");
+        else if (reaction.find("a2_0.5") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "0.5");
+        else if (reaction.find("a2_1.0") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "1.0");
+        else
+            rdf_input = rdf_input   .Define("a2_variation",             "0.0");
+
+                    if (reaction.find("b2_-1.0") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "-1.0");
+        else if (reaction.find("b2_-0.5") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "-0.5");
+        else if (reaction.find("b2_0.5") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "0.5");
+        else if (reaction.find("b2_1.0") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "1.0");
+        else
+            rdf_input = rdf_input   .Define("b2_variation",             "0.0");
+
         if (reaction.find("model") != string::npos)
             rdf_input = rdf_input   .Define("sim_weight_syst",          "1.0");
         else if (tag.find("simweight_iter0") != string::npos)
@@ -217,7 +305,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
         else if (tag.find("simweight_iter7") != string::npos)
             rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_iterations(beam_energy_truth, minust_truth, 7)");
         else if (tag.find("simweight_syst") != string::npos)
-            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_systematic(beam_energy_truth, minust_truth, tag)");
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_systematic(beam_energy_truth, minust_truth, a1_variation, b1_variation, a2_variation, b2_variation");
 
         else
             rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_nominal(beam_energy_truth, minust_truth)");
@@ -1231,10 +1319,10 @@ double sim_weight_func_nominal(double beam_energy_truth, double minust_truth)
         return 1.0;
     else
     {
-        a1 = 13232.54;
-        b1 = 20.23;
-        a2 = 24.78;
-        b2 = 3.61;
+        a1 = 10220;
+        b1 = 19.34;
+        a2 = 20.23;
+        b2 = 3.331;
     }
     return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
 
@@ -1275,17 +1363,17 @@ double sim_weight_func_iterations(double beam_energy_truth, double minust_truth,
     {
         a1 = 9847; b1 = 19.24; a2 = 20.17; b2 = 3.327;
     }
-
-
-
     else if (iteration == 3)
     {
-        a1 = 12903.60; b1 = 20.16; a2 = 24.55; b2 = 3.60;
+        a1 = 10200; b1 = 19.33; a2 = 20.23; b2 = 3.330;
     }
     else if (iteration == 4)
     {
-        a1 = 13181.89; b1 = 20.22; a2 = 24.74; b2 = 3.61;
+        a1 = 10220; b1 = 19.34; a2 = 20.23; b2 = 3.331;
     }
+
+
+
     else if (iteration == 5)
     {
         a1 = 13225.39; b1 = 20.23; a2 = 24.77; b2 = 3.61;
@@ -1403,7 +1491,7 @@ double sim_weight_func_iterations(double beam_energy_truth, double minust_truth,
     // return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
 }
 
-double sim_weight_func_systematic(double beam_energy_truth, double minust_truth, int a1_variation, int b1_variation, int a2_variation, int b2_variation)
+double sim_weight_func_systematic(double beam_energy_truth, double minust_truth, double a1_variation, double b1_variation, double a2_variation, double b2_variation)
 {
     // No energy dependence
     double a1_nominal, b1_nominal, a2_nominal, b2_nominal = 0;
@@ -1414,8 +1502,8 @@ double sim_weight_func_systematic(double beam_energy_truth, double minust_truth,
         return 1.0;
     else
     {
-        a1_nominal = 13232.54; b1_nominal = 20.23; a2_nominal = 24.78; b2_nominal = 3.61;
-        a1_sigma = 200.0; b1_sigma = 0.2; a2_sigma = 1.0; b2_sigma = 0.1;
+        a1_nominal = 10220; b1_nominal = 19.34; a2_nominal = 20.23; b2_nominal = 3.331;
+        a1_sigma = 1480; b1_sigma = 0.50; a2_sigma = 1.21; b2_sigma = 0.068;
     }
 
     // With energy dependence
