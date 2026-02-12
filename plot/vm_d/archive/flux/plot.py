@@ -40,9 +40,9 @@ ax2.set_ylabel("Integrated luminosity [nb$^{-1}$]")
 
 plt.savefig("flux_syst.png")
 
-print(np.max(bin_edges[:,6]))
+print("Average energy between 5.8 and 7.8 GeV for SRC-CT:", np.sum(bin_edges[182:,3]*bin_edges[182:,5]/np.sum(bin_edges[182:,5])))
+print("Average energy between 7.8 and 8.8 GeV for SRC-CT:", np.sum(bin_edges[98:182,3]*bin_edges[98:182,5]/np.sum(bin_edges[98:182,5])))
+print("Average energy between 8.8 and 10.8 GeV for SRC-CT:", np.sum(bin_edges[0:98,3]*bin_edges[0:98,5]/np.sum(bin_edges[0:98,5])))
 
-for i in range(3):
-    energy_low, energy_high = energy_bins[i]
-    flux_error = np.average(bin_edges[:,6][(bin_edges[:,3] >= energy_low) & (bin_edges[:,3] < energy_high)], weights=bin_edges[:,5][(bin_edges[:,3] >= energy_low) & (bin_edges[:,3] < energy_high)])
-    print(f"Average flux uncertainty between {energy_low} and {energy_high} GeV: {flux_error:.2f} %")
+print("Average energy between 1.6 and 2.6 GeV for CLAS:", 1/(np.log(2.6)-np.log(1.6)) * (2.6-1.6))
+print("Average energy between 2.6 and 3.6 GeV for CLAS:", 1/(np.log(3.6)-np.log(2.6)) * (3.6-2.6))
