@@ -202,6 +202,20 @@ int get_yield(string channel, string reaction, string observable, string tag)
             rdf_input = rdf_input   .Define("sim_weight_syst",          "1.0");
         else if (tag.find("simweight_iter0") != string::npos)
             rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_iterations(beam_energy_truth, minust_truth, 0)");
+        else if (tag.find("simweight_iter1") != string::npos)
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_iterations(beam_energy_truth, minust_truth, 1)");
+        else if (tag.find("simweight_iter2") != string::npos)
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_iterations(beam_energy_truth, minust_truth, 2)");
+        else if (tag.find("simweight_iter3") != string::npos)
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_iterations(beam_energy_truth, minust_truth, 3)");
+        else if (tag.find("simweight_iter4") != string::npos)
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_iterations(beam_energy_truth, minust_truth, 4)");
+        else if (tag.find("simweight_iter5") != string::npos)
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_iterations(beam_energy_truth, minust_truth, 5)");
+        else if (tag.find("simweight_iter6") != string::npos)
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_iterations(beam_energy_truth, minust_truth, 6)");
+        else if (tag.find("simweight_iter7") != string::npos)
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_iterations(beam_energy_truth, minust_truth, 7)");
         else if (tag.find("simweight_syst") != string::npos)
             rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_systematic(beam_energy_truth, minust_truth, tag)");
 
@@ -1255,15 +1269,15 @@ double sim_weight_func_iterations(double beam_energy_truth, double minust_truth,
         return 1.0;
     else if (iteration == 1)
     {
-        a1 = 6066;  b1 = 17.94; a2 = 18.72; b2 = 3.234;
+        a1 = 6066; b1 = 17.94; a2 = 18.72; b2 = 3.234;
     }
-
-
-
     else if (iteration == 2)
     {
-        a1 = 11328.73; b1 = 19.75; a2 = 23.50; b2 = 3.54;
+        a1 = 9847; b1 = 19.24; a2 = 20.17; b2 = 3.327;
     }
+
+
+
     else if (iteration == 3)
     {
         a1 = 12903.60; b1 = 20.16; a2 = 24.55; b2 = 3.60;
