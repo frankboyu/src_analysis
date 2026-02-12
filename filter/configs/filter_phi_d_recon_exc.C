@@ -361,7 +361,7 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
             hist_miss_momentum_energy_meas.Write();
             TH2D hist_miss_energy_phi_mass_meas             = *rdf.Histo2D({("miss_energy_phi_mass_meas_"+ label).c_str(), ";E_{miss} (GeV);m_{K^{+}K^{-}} (GeV/c)", 300, -3.0, 3.0, 500, 0.9, 1.9},"miss_energy_meas","phi_mass_meas","event_weight");
             hist_miss_energy_phi_mass_meas.Write();
-            TH1D hist_coplanarity_meas                      = *rdf.Histo1D({("coplanarity_meas_"+ label).c_str(), ";Coplanarity (deg);Counts", 40, 160.0, 200.0},"coplanarity_meas","event_weight");
+            TH1D hist_coplanarity_meas                      = *rdf.Histo1D({("coplanarity_meas_"+ label).c_str(), ";Coplanarity (deg);Counts", 41, 159.5, 200.5},"coplanarity_meas","event_weight");
             hist_coplanarity_meas.Write();
 
             TH1D hist_phi_mass_kin                          = *rdf.Histo1D({("phi_mass_kin_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);Counts", 300, 0.9, 1.5},"phi_mass_kin","event_weight");
