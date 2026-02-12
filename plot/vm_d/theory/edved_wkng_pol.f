@@ -30,7 +30,7 @@
         do it = 100,2000,1                              ! defines a list of t values to run through
         t = -float(it)/1000.0
         flag = 0
-        if((ephin.gt.1.6).and.(ephin.lt.2.6))then
+        if((ephin.gt.1.6).and.(ephin.lt.3.6))then
             if((((it.eq.360).or.(it.eq.385)).or.(it.eq.410)))then
                 flag = 1
             endif
@@ -46,42 +46,94 @@
             if(it.eq.1637)then
                 flag = 1
             endif
-        elseif((ephin.gt.6.0).and.(ephin.lt.8.0))then
-            if((((it.eq.360).or.(it.eq.385)).or.(it.eq.410)))then
+        elseif((ephin.gt.5.8).and.(ephin.lt.7.8))then
+            if((((it.eq.251).or.(it.eq.265)).or.(it.eq.275)))then
                 flag = 1
             endif
-            if((((it.eq.435).or.(it.eq.474)).or.(it.eq.524)))then
+            if((((it.eq.285).or.(it.eq.295)).or.(it.eq.305)))then
                 flag = 1
             endif
-            if((((it.eq.574).or.(it.eq.646)).or.(it.eq.746)))then
+            if((((it.eq.315).or.(it.eq.325)).or.(it.eq.335)))then
                 flag = 1
             endif
-            if((((it.eq.888).or.(it.eq.1091)).or.(it.eq.1292)))then
+            if((((it.eq.350).or.(it.eq.369)).or.(it.eq.390)))then
                 flag = 1
             endif
-            if(it.eq.1637)then
+            if((((it.eq.410).or.(it.eq.440)).or.(it.eq.480)))then
                 flag = 1
             endif
-        elseif((ephin.gt.8.0).and.(ephin.lt.9.0))then
-            if((((it.eq.275).or.(it.eq.312)).or.(it.eq.337)))then
+            if((((it.eq.525).or.(it.eq.574)).or.(it.eq.646)))then
                 flag = 1
             endif
-            if((((it.eq.362).or.(it.eq.387)).or.(it.eq.412)))then
+            if((((it.eq.748).or.(it.eq.850)).or.(it.eq.949)))then
                 flag = 1
             endif
-            if((((it.eq.437).or.(it.eq.462)).or.(it.eq.487)))then
+            if((((it.eq.1087).or.(it.eq.1411)).or.(it.eq.2026)))then
                 flag = 1
             endif
-            if((((it.eq.524).or.(it.eq.573)).or.(it.eq.623)))then
+        elseif((ephin.gt.7.8).and.(ephin.lt.8.8))then
+            if((((it.eq.235).or.(it.eq.245)).or.(it.eq.255)))then
                 flag = 1
             endif
-            if((((it.eq.673).or.(it.eq.725)).or.(it.eq.775)))then
+            if((((it.eq.263).or.(it.eq.268)).or.(it.eq.272)))then
                 flag = 1
             endif
-            if((((it.eq.847).or.(it.eq.948)).or.(it.eq.1087)))then
+            if((((it.eq.278).or.(it.eq.285)).or.(it.eq.295)))then
                 flag = 1
             endif
-            if((((it.eq.1395).or.(it.eq.2025)).or.(it.eq.2026)))then
+            if((((it.eq.305).or.(it.eq.315)).or.(it.eq.325)))then
+                flag = 1
+            endif
+            if((((it.eq.335).or.(it.eq.345)).or.(it.eq.355)))then
+                flag = 1
+            endif
+            if((((it.eq.365).or.(it.eq.375)).or.(it.eq.385)))then
+                flag = 1
+            endif
+            if((((it.eq.395).or.(it.eq.410)).or.(it.eq.430)))then
+                flag = 1
+            endif
+            if((((it.eq.450).or.(it.eq.470)).or.(it.eq.490)))then
+                flag = 1
+            endif
+            if((((it.eq.524).or.(it.eq.574)).or.(it.eq.624)))then
+                flag = 1
+            endif
+            if((((it.eq.674).or.(it.eq.726)).or.(it.eq.775)))then
+                flag = 1
+            endif
+            if((((it.eq.846).or.(it.eq.948)).or.(it.eq.1089)))then
+                flag = 1
+            endif
+            if((((it.eq.1436).or.(it.eq.2025)).or.(it.eq.2026)))then
+                flag = 1
+            endif
+        elseif((ephin.gt.8.8).and.(ephin.lt.10.8))then
+            if((((it.eq.251).or.(it.eq.265)).or.(it.eq.275)))then
+                flag = 1
+            endif
+            if((((it.eq.285).or.(it.eq.295)).or.(it.eq.305)))then
+                flag = 1
+            endif
+            if((((it.eq.315).or.(it.eq.325)).or.(it.eq.335)))then
+                flag = 1
+            endif
+            if((((it.eq.345).or.(it.eq.355)).or.(it.eq.370)))then
+                flag = 1
+            endif
+            if((((it.eq.390).or.(it.eq.410)).or.(it.eq.430)))then
+                flag = 1
+            endif
+            if((((it.eq.450).or.(it.eq.470)).or.(it.eq.490)))then
+                flag = 1
+            endif
+            if((((it.eq..524).or.(it.eq.575)).or.(it.eq.647)))then
+                flag = 1
+            endif
+            if((((it.eq.745).or.(it.eq.850)).or.(it.eq.948)))then
+                flag = 1
+            endif
+            if((((it.eq.1087).or.(it.eq.1456)).or.(it.eq.2026)))then
                 flag = 1
             endif
         endif
@@ -919,7 +971,7 @@
 ****************************************************************
       dsdt_tmin =  -6.9937  +8.2732*eg - 3.2595*eg**2
      &          +0.67068*eg**3 -0.69670E-01*eg**4 +0.28879E-02*eg**5   
-      dsdt_tmin = 0.61237
+*      dsdt_tmin = 0.61237
       return
       end
 
