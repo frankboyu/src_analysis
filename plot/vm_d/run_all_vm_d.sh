@@ -26,45 +26,53 @@ gxenv $HALLD_VERSIONS/version.xml
 # root -b -q -l "get_yield.C(\"phi_d\", \"thrown_exc_tagged_2H_ver12_flat\",    \"dsdt\", \"simweight_iter2\")"
 # python get_simweight.py
 
-root -b -q -l "get_yield.C(\"phi_d\", \"recon_exc_sim_2H_ver12_flat\",        \"dsdt\", \"simweight_iter3\")"
-root -b -q -l "get_yield.C(\"phi_d\", \"thrown_exc_tagged_2H_ver12_flat\",    \"dsdt\", \"simweight_iter3\")"
+# root -b -q -l "get_yield.C(\"phi_d\", \"recon_exc_sim_2H_ver12_flat\",        \"dsdt\", \"simweight_iter3\")"
+# root -b -q -l "get_yield.C(\"phi_d\", \"thrown_exc_tagged_2H_ver12_flat\",    \"dsdt\", \"simweight_iter3\")"
+# python get_simweight.py
+
+# root -b -q -l "get_yield.C(\"phi_d\", \"recon_exc_sim_2H_ver12_flat\",        \"dsdt\", \"simweight_iter4\")"
+# root -b -q -l "get_yield.C(\"phi_d\", \"thrown_exc_tagged_2H_ver12_flat\",    \"dsdt\", \"simweight_iter4\")"
 # python get_simweight.py
 
 ###################################################################### CUT VARIATIONS #####################################################################################
 
-# RUN_MODE="batch"
+RUN_MODE="batch"
 # RUN_MODE="local"
-RUN_MODE="echo"
+# RUN_MODE="echo"
 
 CHANNEL_LIST=()
 CHANNEL_LIST+=("phi_d")
 # CHANNEL_LIST+=("rho_d")
 
 REACTION_LIST=()
-# REACTION_LIST+=("recon_exc_data_2H_ver12")
+REACTION_LIST+=("recon_exc_data_2H_ver12")
 REACTION_LIST+=("recon_exc_sim_2H_ver12_flat" "thrown_exc_tagged_2H_ver12_flat")
-# REACTION_LIST+=("recon_exc_sim_2H_ver12_model" "thrown_exc_tagged_2H_ver12_model")
+REACTION_LIST+=("recon_exc_sim_2H_ver12_model" "thrown_exc_tagged_2H_ver12_model")
 
 OBSERVABLE_LIST=()
-OBSERVABLE_LIST+=("dsdt")
-# OBSERVABLE_LIST+=("dsdt" "Wcostheta" "Wdecayphi" "Wpolphi" "Wpsi")
+# OBSERVABLE_LIST+=("dsdt")
+OBSERVABLE_LIST+=("dsdt" "Wcostheta" "Wdecayphi" "Wpolphi" "Wpsi")
 
 TAG_LIST=()
 TAG_LIST+=("nominal")
-# TAG_LIST+=("dEdx_1.50" "dEdx_1.75" "dEdx_2.50" "dEdx_3.00")
-# TAG_LIST+=("misspminus_0.0150" "misspminus_0.0175" "misspminus_0.0250" "misspminus_0.0300")
-# TAG_LIST+=("chisquared_4.50" "chisquared_4.75" "chisquared_5.50" "chisquared_6.00")
-# TAG_LIST+=("momentum_0.350" "momentum_0.375" "momentum_0.425" "momentum_0.450")
-# TAG_LIST+=("theta_1.90" "theta_1.95" "theta_2.05" "theta_2.10")
-# TAG_LIST+=("vertexZ_13.50" "vertexZ_13.75" "vertexZ_14.25" "vertexZ_14.50")
-# TAG_LIST+=("vertexR_0.50" "vertexR_0.75" "vertexR_1.25" "vertexR_1.50")
-# TAG_LIST+=("fitfunc_quadratic" "fitfunc_phenomenological" "fitfunc_fulllinear" "fitfunc_fullquadratic")
-# TAG_LIST+=("beamaccid_3" "beamaccid_5" "beamaccid_4out")
-# TAG_LIST+=("comboaccid_all" "comboaccid_none")
-# TAG_LIST+=("fitmax_1.06" "fitmax_1.07" "fitmax_1.09" "fitmax_1.10")
-# TAG_LIST+=("fitwidth_0.0040" "fitwidth_0.0048" "fitwidth_0.0060" "fitwidth_0.0075")
-# TAG_LIST+=("fitbkg_fulllinear" "fitbkg_quadratic" "fitbkg_fullquadratic" "fitbkg_phenomenological")
-# TAG_LIST+=("fitsig_noBL" "fitsig_nonrel" "fitsig_relBWsim")
+TAG_LIST+=("dEdx_1.50" "dEdx_1.75" "dEdx_2.50" "dEdx_3.00")
+TAG_LIST+=("misspminus_0.0150" "misspminus_0.0175" "misspminus_0.0250" "misspminus_0.0300")
+TAG_LIST+=("chisquared_4.50" "chisquared_4.75" "chisquared_5.50" "chisquared_6.00")
+TAG_LIST+=("momentum_0.350" "momentum_0.375" "momentum_0.425" "momentum_0.450")
+TAG_LIST+=("theta_1.90" "theta_1.95" "theta_2.05" "theta_2.10")
+TAG_LIST+=("vertexZ_13.50" "vertexZ_13.75" "vertexZ_14.25" "vertexZ_14.50")
+TAG_LIST+=("vertexR_0.50" "vertexR_0.75" "vertexR_1.25" "vertexR_1.50")
+TAG_LIST+=("fitfunc_quadratic" "fitfunc_phenomenological" "fitfunc_fulllinear" "fitfunc_fullquadratic")
+TAG_LIST+=("beamaccid_3" "beamaccid_5" "beamaccid_4out")
+TAG_LIST+=("comboaccid_all" "comboaccid_none")
+TAG_LIST+=("fitmax_1.06" "fitmax_1.07" "fitmax_1.09" "fitmax_1.10")
+TAG_LIST+=("fitwidth_0.0040" "fitwidth_0.0048" "fitwidth_0.0060" "fitwidth_0.0075")
+TAG_LIST+=("fitbkg_fulllinear" "fitbkg_quadratic" "fitbkg_fullquadratic" "fitbkg_phenomenological")
+TAG_LIST+=("fitsig_noBL" "fitsig_nonrel" "fitsig_relBWsim")
+TAG_LIST+=("simweight_syst_a1_-1.0" "simweight_syst_a1_-0.5" "simweight_syst_a1_0.5" "simweight_syst_a1_1.0")
+TAG_LIST+=("simweight_syst_b1_-1.0" "simweight_syst_b1_-0.5" "simweight_syst_b1_0.5" "simweight_syst_b1_1.0")
+TAG_LIST+=("simweight_syst_a2_-1.0" "simweight_syst_a2_-0.5" "simweight_syst_a2_0.5" "simweight_syst_a2_1.0")
+TAG_LIST+=("simweight_syst_b2_-1.0" "simweight_syst_b2_-0.5" "simweight_syst_b2_0.5" "simweight_syst_b2_1.0")
 # for i in {-1..1}
 # do
 #     for j in {-1..1}
@@ -111,10 +119,10 @@ do
                     root -b -q -l "get_yield.C(\"$CHANNEL\", \"$REACTION\", \"$OBSERVABLE\", \"$TAG\")"
                 elif [[ "$RUN_MODE" == "batch" ]]; then
                     JOB_WORKFLOW="-workflow src_analysis_plot"
-                    JOB_NAME="-name yield_phi_d_${REACTION}_$(date '+%Y-%m-%d-%H-%M')"
+                    JOB_NAME="-name yield_${CHANNEL}_${REACTION}_${OBSERVABLE}_${TAG}_$(date '+%Y-%m-%d-%H-%M')"
                     JOB_RESOURCES="-account halld -partition production -os el9 -cores 1 -ram 1GB -disk 4GB -time 24hrs"
-                    JOB_OUT="-stdout /farm_out/boyu/src_analysis/plot/yield_phi_d_${REACTION}_${OUTPUTMODE}_$(date '+%Y-%m-%d').out"
-                    JOB_ERR="-stderr /farm_out/boyu/src_analysis/plot/yield_phi_d_${REACTION}_${OUTPUTMODE}_$(date '+%Y-%m-%d').err"
+                    JOB_OUT="-stdout /farm_out/boyu/src_analysis/plot/yield_${CHANNEL}_${REACTION}_${OBSERVABLE}_${TAG}_$(date '+%Y-%m-%d').out"
+                    JOB_ERR="-stderr /farm_out/boyu/src_analysis/plot/yield_${CHANNEL}_${REACTION}_${OBSERVABLE}_${TAG}_$(date '+%Y-%m-%d').err"
                     JOB_COMMAND="sh /work/halld2/home/boyu/src_analysis/plot/vm_d/run_yield_extraction.sh \"$CHANNEL\" \"$REACTION\" \"$OBSERVABLE\" \"$TAG\""
                     swif2 add-job $JOB_WORKFLOW $JOB_NAME $JOB_RESOURCES $JOB_OUT $JOB_ERR $JOB_COMMAND
                 else
