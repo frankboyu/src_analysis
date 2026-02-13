@@ -100,16 +100,22 @@ do
                 if [[ "$REACTION" == *"thrown"* && "$TAG" != "nominal" && "$TAG" != *"simweight"* ]]; then
                     continue
                 fi
-                if [[ "$REACTION" == *"sim"* && "$TAG" == *"fit"* ]]; then
+                if [[ "$REACTION" == *"sim"* && "$TAG" == *"fit"* && "$TAG" != "fitsig_relBWsim" ]]; then
                     continue
                 fi
                 if [[ "$REACTION" == *"data"* && "$TAG" == *"simweight"* ]]; then
                     continue
                 fi
-                if [[ "$REACTION" == *"data"* && "$TAG" == "sideband" ]]; then
+                if [[ "$REACTION" != *"data"* && "$TAG" == "sideband" ]]; then
                     continue
                 fi
                 if [[ "$OBSERVABLE" == "dsdt" && "$TAG" == "sideband" ]]; then
+                    continue
+                fi
+                if [[ "$REACTION" == *"model"* && "$TAG" != "nominal" ]]; then
+                    continue
+                fi
+                if [[ "$REACTION" == *"data"* && "$TAG" == "fitsig_relBWsim" ]]; then
                     continue
                 fi
 
