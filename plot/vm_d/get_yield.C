@@ -233,7 +233,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
         else if (tag.find("simweight_iter7") != string::npos)
             rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_iterations(beam_energy_truth, minust_truth, 7)");
         else if (tag.find("simweight_syst") != string::npos)
-            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_systematic(beam_energy_truth, minust_truth, a1_variation, b1_variation, a2_variation, b2_variation");
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_systematic(beam_energy_truth, minust_truth, a1_variation, b1_variation, a2_variation, b2_variation)");
         else
             rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_nominal(beam_energy_truth, minust_truth)");
 
@@ -305,7 +305,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
         else if (tag.find("simweight_iter7") != string::npos)
             rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_iterations(beam_energy_truth, minust_truth, 7)");
         else if (tag.find("simweight_syst") != string::npos)
-            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_systematic(beam_energy_truth, minust_truth, a1_variation, b1_variation, a2_variation, b2_variation");
+            rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_systematic(beam_energy_truth, minust_truth, a1_variation, b1_variation, a2_variation, b2_variation)");
 
         else
             rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_nominal(beam_energy_truth, minust_truth)");
@@ -344,6 +344,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
     gStyle->SetOptStat(1);
     gStyle->SetOptFit(1);
     double yield, yield_err, energy_center, energy_width, t_center, t_width, angle_center, angle_width;
+    double chisquared_per_ndf = 0.0;
     string energy_cut, t_cut, angle_cut;
     string variable;
 
@@ -457,6 +458,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
                 hist_bin.Draw("same");
                 yield = fit_func.GetParameter(0)/bin_width;
                 yield_err = fit_func.GetParError(0)/bin_width;
+                chisquared_per_ndf = fit_func.GetChisquare()/fit_func.GetNDF();
             }
             else if (tag == "fitbkg_fulllinear")
             {
@@ -481,6 +483,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
                 fulllinear_function->Draw("same");
                 yield = fit_func.GetParameter(0)/bin_width;
                 yield_err = fit_func.GetParError(0)/bin_width;
+                chisquared_per_ndf = fit_func.GetChisquare()/fit_func.GetNDF();
             }
             else if (tag == "fitbkg_quadratic")
             {
@@ -505,6 +508,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
                 quadratic_function->Draw("same");
                 yield = fit_func.GetParameter(0)/bin_width;
                 yield_err = fit_func.GetParError(0)/bin_width;
+                chisquared_per_ndf = fit_func.GetChisquare()/fit_func.GetNDF();
             }
             else if (tag == "fitbkg_fullquadratic")
             {
@@ -531,6 +535,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
                 fullquadratic_function->Draw("same");
                 yield = fit_func.GetParameter(0)/bin_width;
                 yield_err = fit_func.GetParError(0)/bin_width;
+                chisquared_per_ndf = fit_func.GetChisquare()/fit_func.GetNDF();
             }
             else if (tag == "fitbkg_phenomenological")
             {
@@ -555,6 +560,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
                 phenomenological_function->Draw("same");
                 yield = fit_func.GetParameter(0)/bin_width;
                 yield_err = fit_func.GetParError(0)/bin_width;
+                chisquared_per_ndf = fit_func.GetChisquare()/fit_func.GetNDF();
             }
             else if (tag == "fitsig_noBL")
             {
@@ -577,6 +583,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
                 linear_function->Draw("same");
                 yield = fit_func.GetParameter(0)/bin_width;
                 yield_err = fit_func.GetParError(0)/bin_width;
+                chisquared_per_ndf = fit_func.GetChisquare()/fit_func.GetNDF();
             }
             else if (tag == "fitsig_nonrel")
             {
@@ -599,6 +606,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
                 linear_function->Draw("same");
                 yield = fit_func.GetParameter(0)/bin_width;
                 yield_err = fit_func.GetParError(0)/bin_width;
+                chisquared_per_ndf = fit_func.GetChisquare()/fit_func.GetNDF();
             }
             else
             {
@@ -623,6 +631,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
                 linear_function->Draw("same");
                 yield = fit_func.GetParameter(0)/bin_width;
                 yield_err = fit_func.GetParError(0)/bin_width;
+                chisquared_per_ndf = fit_func.GetChisquare()/fit_func.GetNDF();
             }
             canvas->Update();
             canvas->Print((output_pdffile_name+"(").c_str());
@@ -669,11 +678,11 @@ int get_yield(string channel, string reaction, string observable, string tag)
         }
 
         if (observable == "dsdt")
-            fprintf(output_textfile, "%6.4f\t%6.4f\t%6.1f\t%6.1f\t%6.4f\t%6.4f\t%6.3f\t%6.3f\t%f\t%f\n", energy_center, energy_width, bins[i][0], bins[i][1], t_center, t_width, bins[i][2], bins[i][3], yield, yield_err);
+            fprintf(output_textfile, "%8.4f\t%8.4f\t%8.1f\t%8.1f\t%8.4f\t%8.4f\t%8.3f\t%8.3f\t%f\t%f\t%f\n", energy_center, energy_width, bins[i][0], bins[i][1], t_center, t_width, bins[i][2], bins[i][3], yield, yield_err, chisquared_per_ndf);
             // fprintf(output_textfile, "%6.1f\t%6.1f\t%6.3f\t%6.3f\t%f\t%f\n", bins[i][0], bins[i][1], bins[i][2], bins[i][3], yield, yield_err);
             // fprintf(output_textfile, "%6.1f\t%6.1f\t%6.3f\t%6.3f\n", bins[i][0], bins[i][1], bins[i][2], bins[i][3]);
         else
-            fprintf(output_textfile, "%6.3f\t%6.3f\t%6.1f\t%6.1f\t%6.3f\t%6.4f\t%6.3f\t%6.3f\t%6.3f\t%6.3f\t%6.1f\t%6.1f\t%f\t%f\n", energy_center, energy_width, bins[i][0], bins[i][1], t_center, t_width, bins[i][2], bins[i][3], angle_center, angle_width, bins[i][4], bins[i][5], yield, yield_err);
+            fprintf(output_textfile, "%8.3f\t%8.3f\t%8.1f\t%8.1f\t%8.3f\t%8.4f\t%8.3f\t%8.3f\t%8.3f\t%8.3f\t%8.1f\t%8.1f\t%f\t%f\t%f\n", energy_center, energy_width, bins[i][0], bins[i][1], t_center, t_width, bins[i][2], bins[i][3], angle_center, angle_width, bins[i][4], bins[i][5], yield, yield_err, chisquared_per_ndf);
             // fprintf(output_textfile, "%6.1f\t%6.1f\t%6.3f\t%6.3f\t%6.1f\t%6.1f\t%f\t%f\n", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5], yield, yield_err);
             // fprintf(output_textfile, "%6.1f\t%6.1f\t%6.3f\t%6.3f\t%6.1f\t%6.1f\n", bins[i][0], bins[i][1], bins[i][2], bins[i][3], bins[i][4], bins[i][5]);
     }
@@ -1371,20 +1380,9 @@ double sim_weight_func_iterations(double beam_energy_truth, double minust_truth,
     {
         a1 = 10220; b1 = 19.34; a2 = 20.23; b2 = 3.331;
     }
-
-
-
     else if (iteration == 5)
     {
-        a1 = 13225.39; b1 = 20.23; a2 = 24.77; b2 = 3.61;
-    }
-    else if (iteration == 6)
-    {
-        a1 = 13232.23; b1 = 20.23; a2 = 24.78; b2 = 3.61;
-    }
-    else if (iteration == 7)
-    {
-        a1 = 13232.54; b1 = 20.23; a2 = 24.78; b2 = 3.61;
+        a1 = 10223; b1 = 19.34; a2 = 20.24; b2 = 3.331;
     }
     return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
 
