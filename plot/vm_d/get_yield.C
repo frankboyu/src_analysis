@@ -170,46 +170,174 @@ int get_yield(string channel, string reaction, string observable, string tag)
         else
             rdf_input = rdf_input   .Define("combo_accid_weight_syst",  "combo_accid_weight");
 
-        if (reaction.find("a1_-1.0") != string::npos)
+        if (tag.find("a1_-1.0") != string::npos)
             rdf_input = rdf_input   .Define("a1_variation",             "-1.0");
-        else if (reaction.find("a1_-0.5") != string::npos)
+        else if (tag.find("a1_-0.9") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "-0.9");
+        else if (tag.find("a1_-0.8") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "-0.8");
+        else if (tag.find("a1_-0.7") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "-0.7");
+        else if (tag.find("a1_-0.6") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "-0.6");
+        else if (tag.find("a1_-0.5") != string::npos)
             rdf_input = rdf_input   .Define("a1_variation",             "-0.5");
-        else if (reaction.find("a1_0.5") != string::npos)
+        else if (tag.find("a1_-0.4") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "-0.4");
+        else if (tag.find("a1_-0.3") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "-0.3");
+        else if (tag.find("a1_-0.2") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "-0.2");
+        else if (tag.find("a1_-0.1") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "-0.1");
+        else if (tag.find("a1_0.1") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "0.1");
+        else if (tag.find("a1_0.2") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "0.2");
+        else if (tag.find("a1_0.3") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "0.3");
+        else if (tag.find("a1_0.4") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "0.4");
+        else if (tag.find("a1_0.5") != string::npos)
             rdf_input = rdf_input   .Define("a1_variation",             "0.5");
-        else if (reaction.find("a1_1.0") != string::npos)
+        else if (tag.find("a1_0.6") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "0.6");
+        else if (tag.find("a1_0.7") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "0.7");
+        else if (tag.find("a1_0.8") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "0.8");
+        else if (tag.find("a1_0.9") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "0.9");
+        else if (tag.find("a1_1.0") != string::npos)
             rdf_input = rdf_input   .Define("a1_variation",             "1.0");
         else
             rdf_input = rdf_input   .Define("a1_variation",             "0.0");
 
-        if (reaction.find("b1_-1.0") != string::npos)
+        if (tag.find("b1_-1.0") != string::npos)
             rdf_input = rdf_input   .Define("b1_variation",             "-1.0");
-        else if (reaction.find("b1_-0.5") != string::npos)
+        else if (tag.find("b1_-0.9") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "-0.9");
+        else if (tag.find("b1_-0.8") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "-0.8");
+        else if (tag.find("b1_-0.7") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "-0.7");
+        else if (tag.find("b1_-0.6") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "-0.6");
+        else if (tag.find("b1_-0.5") != string::npos)
             rdf_input = rdf_input   .Define("b1_variation",             "-0.5");
-        else if (reaction.find("b1_0.5") != string::npos)
+        else if (tag.find("b1_-0.4") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "-0.4");
+        else if (tag.find("b1_-0.3") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "-0.3");
+        else if (tag.find("b1_-0.2") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "-0.2");
+        else if (tag.find("b1_-0.1") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "-0.1");
+        else if (tag.find("b1_0.1") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "0.1");
+        else if (tag.find("b1_0.2") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "0.2");
+        else if (tag.find("b1_0.3") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "0.3");
+        else if (tag.find("b1_0.4") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "0.4");
+        else if (tag.find("b1_0.5") != string::npos)
             rdf_input = rdf_input   .Define("b1_variation",             "0.5");
-        else if (reaction.find("b1_1.0") != string::npos)
+        else if (tag.find("b1_0.6") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "0.6");
+        else if (tag.find("b1_0.7") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "0.7");
+        else if (tag.find("b1_0.8") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "0.8");
+        else if (tag.find("b1_0.9") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "0.9");
+        else if (tag.find("b1_1.0") != string::npos)
             rdf_input = rdf_input   .Define("b1_variation",             "1.0");
         else
             rdf_input = rdf_input   .Define("b1_variation",             "0.0");
 
-                    if (reaction.find("a2_-1.0") != string::npos)
+        if (tag.find("a2_-1.0") != string::npos)
             rdf_input = rdf_input   .Define("a2_variation",             "-1.0");
-        else if (reaction.find("a2_-0.5") != string::npos)
+        else if (tag.find("a2_-0.9") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "-0.9");
+        else if (tag.find("a2_-0.8") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "-0.8");
+        else if (tag.find("a2_-0.7") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "-0.7");
+        else if (tag.find("a2_-0.6") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "-0.6");
+        else if (tag.find("a2_-0.5") != string::npos)
             rdf_input = rdf_input   .Define("a2_variation",             "-0.5");
-        else if (reaction.find("a2_0.5") != string::npos)
+        else if (tag.find("a2_-0.4") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "-0.4");
+        else if (tag.find("a2_-0.3") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "-0.3");
+        else if (tag.find("a2_-0.2") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "-0.2");
+        else if (tag.find("a2_-0.1") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "-0.1");
+        else if (tag.find("a2_0.1") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "0.1");
+        else if (tag.find("a2_0.2") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "0.2");
+        else if (tag.find("a2_0.3") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "0.3");
+        else if (tag.find("a2_0.4") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "0.4");
+        else if (tag.find("a2_0.5") != string::npos)
             rdf_input = rdf_input   .Define("a2_variation",             "0.5");
-        else if (reaction.find("a2_1.0") != string::npos)
+        else if (tag.find("a2_0.6") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "0.6");
+        else if (tag.find("a2_0.7") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "0.7");
+        else if (tag.find("a2_0.8") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "0.8");
+        else if (tag.find("a2_0.9") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "0.9");
+        else if (tag.find("a2_1.0") != string::npos)
             rdf_input = rdf_input   .Define("a2_variation",             "1.0");
         else
             rdf_input = rdf_input   .Define("a2_variation",             "0.0");
 
-                    if (reaction.find("b2_-1.0") != string::npos)
+        if (tag.find("b2_-1.0") != string::npos)
             rdf_input = rdf_input   .Define("b2_variation",             "-1.0");
-        else if (reaction.find("b2_-0.5") != string::npos)
+        else if (tag.find("b2_-0.9") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "-0.9");
+        else if (tag.find("b2_-0.8") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "-0.8");
+        else if (tag.find("b2_-0.7") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "-0.7");
+        else if (tag.find("b2_-0.6") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "-0.6");
+        else if (tag.find("b2_-0.5") != string::npos)
             rdf_input = rdf_input   .Define("b2_variation",             "-0.5");
-        else if (reaction.find("b2_0.5") != string::npos)
+        else if (tag.find("b2_-0.4") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "-0.4");
+        else if (tag.find("b2_-0.3") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "-0.3");
+        else if (tag.find("b2_-0.2") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "-0.2");
+        else if (tag.find("b2_-0.1") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "-0.1");
+        else if (tag.find("b2_0.1") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "0.1");
+        else if (tag.find("b2_0.2") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "0.2");
+        else if (tag.find("b2_0.3") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "0.3");
+        else if (tag.find("b2_0.4") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "0.4");
+        else if (tag.find("b2_0.5") != string::npos)
             rdf_input = rdf_input   .Define("b2_variation",             "0.5");
-        else if (reaction.find("b2_1.0") != string::npos)
+        else if (tag.find("b2_0.6") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "0.6");
+        else if (tag.find("b2_0.7") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "0.7");
+        else if (tag.find("b2_0.8") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "0.8");
+        else if (tag.find("b2_0.9") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "0.9");
+        else if (tag.find("b2_1.0") != string::npos)
             rdf_input = rdf_input   .Define("b2_variation",             "1.0");
         else
             rdf_input = rdf_input   .Define("b2_variation",             "0.0");
@@ -242,46 +370,174 @@ int get_yield(string channel, string reaction, string observable, string tag)
     }
     else if (reaction.find("thrown") != string::npos)
     {
-        if (reaction.find("a1_-1.0") != string::npos)
+        if (tag.find("a1_-1.0") != string::npos)
             rdf_input = rdf_input   .Define("a1_variation",             "-1.0");
-        else if (reaction.find("a1_-0.5") != string::npos)
+        else if (tag.find("a1_-0.9") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "-0.9");
+        else if (tag.find("a1_-0.8") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "-0.8");
+        else if (tag.find("a1_-0.7") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "-0.7");
+        else if (tag.find("a1_-0.6") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "-0.6");
+        else if (tag.find("a1_-0.5") != string::npos)
             rdf_input = rdf_input   .Define("a1_variation",             "-0.5");
-        else if (reaction.find("a1_0.5") != string::npos)
+        else if (tag.find("a1_-0.4") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "-0.4");
+        else if (tag.find("a1_-0.3") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "-0.3");
+        else if (tag.find("a1_-0.2") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "-0.2");
+        else if (tag.find("a1_-0.1") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "-0.1");
+        else if (tag.find("a1_0.1") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "0.1");
+        else if (tag.find("a1_0.2") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "0.2");
+        else if (tag.find("a1_0.3") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "0.3");
+        else if (tag.find("a1_0.4") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "0.4");
+        else if (tag.find("a1_0.5") != string::npos)
             rdf_input = rdf_input   .Define("a1_variation",             "0.5");
-        else if (reaction.find("a1_1.0") != string::npos)
+        else if (tag.find("a1_0.6") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "0.6");
+        else if (tag.find("a1_0.7") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "0.7");
+        else if (tag.find("a1_0.8") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "0.8");
+        else if (tag.find("a1_0.9") != string::npos)
+            rdf_input = rdf_input   .Define("a1_variation",             "0.9");
+        else if (tag.find("a1_1.0") != string::npos)
             rdf_input = rdf_input   .Define("a1_variation",             "1.0");
         else
             rdf_input = rdf_input   .Define("a1_variation",             "0.0");
 
-        if (reaction.find("b1_-1.0") != string::npos)
+        if (tag.find("b1_-1.0") != string::npos)
             rdf_input = rdf_input   .Define("b1_variation",             "-1.0");
-        else if (reaction.find("b1_-0.5") != string::npos)
+        else if (tag.find("b1_-0.9") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "-0.9");
+        else if (tag.find("b1_-0.8") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "-0.8");
+        else if (tag.find("b1_-0.7") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "-0.7");
+        else if (tag.find("b1_-0.6") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "-0.6");
+        else if (tag.find("b1_-0.5") != string::npos)
             rdf_input = rdf_input   .Define("b1_variation",             "-0.5");
-        else if (reaction.find("b1_0.5") != string::npos)
+        else if (tag.find("b1_-0.4") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "-0.4");
+        else if (tag.find("b1_-0.3") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "-0.3");
+        else if (tag.find("b1_-0.2") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "-0.2");
+        else if (tag.find("b1_-0.1") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "-0.1");
+        else if (tag.find("b1_0.1") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "0.1");
+        else if (tag.find("b1_0.2") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "0.2");
+        else if (tag.find("b1_0.3") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "0.3");
+        else if (tag.find("b1_0.4") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "0.4");
+        else if (tag.find("b1_0.5") != string::npos)
             rdf_input = rdf_input   .Define("b1_variation",             "0.5");
-        else if (reaction.find("b1_1.0") != string::npos)
+        else if (tag.find("b1_0.6") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "0.6");
+        else if (tag.find("b1_0.7") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "0.7");
+        else if (tag.find("b1_0.8") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "0.8");
+        else if (tag.find("b1_0.9") != string::npos)
+            rdf_input = rdf_input   .Define("b1_variation",             "0.9");
+        else if (tag.find("b1_1.0") != string::npos)
             rdf_input = rdf_input   .Define("b1_variation",             "1.0");
         else
             rdf_input = rdf_input   .Define("b1_variation",             "0.0");
 
-                    if (reaction.find("a2_-1.0") != string::npos)
+        if (tag.find("a2_-1.0") != string::npos)
             rdf_input = rdf_input   .Define("a2_variation",             "-1.0");
-        else if (reaction.find("a2_-0.5") != string::npos)
+        else if (tag.find("a2_-0.9") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "-0.9");
+        else if (tag.find("a2_-0.8") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "-0.8");
+        else if (tag.find("a2_-0.7") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "-0.7");
+        else if (tag.find("a2_-0.6") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "-0.6");
+        else if (tag.find("a2_-0.5") != string::npos)
             rdf_input = rdf_input   .Define("a2_variation",             "-0.5");
-        else if (reaction.find("a2_0.5") != string::npos)
+        else if (tag.find("a2_-0.4") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "-0.4");
+        else if (tag.find("a2_-0.3") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "-0.3");
+        else if (tag.find("a2_-0.2") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "-0.2");
+        else if (tag.find("a2_-0.1") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "-0.1");
+        else if (tag.find("a2_0.1") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "0.1");
+        else if (tag.find("a2_0.2") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "0.2");
+        else if (tag.find("a2_0.3") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "0.3");
+        else if (tag.find("a2_0.4") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "0.4");
+        else if (tag.find("a2_0.5") != string::npos)
             rdf_input = rdf_input   .Define("a2_variation",             "0.5");
-        else if (reaction.find("a2_1.0") != string::npos)
+        else if (tag.find("a2_0.6") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "0.6");
+        else if (tag.find("a2_0.7") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "0.7");
+        else if (tag.find("a2_0.8") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "0.8");
+        else if (tag.find("a2_0.9") != string::npos)
+            rdf_input = rdf_input   .Define("a2_variation",             "0.9");
+        else if (tag.find("a2_1.0") != string::npos)
             rdf_input = rdf_input   .Define("a2_variation",             "1.0");
         else
             rdf_input = rdf_input   .Define("a2_variation",             "0.0");
 
-                    if (reaction.find("b2_-1.0") != string::npos)
+        if (tag.find("b2_-1.0") != string::npos)
             rdf_input = rdf_input   .Define("b2_variation",             "-1.0");
-        else if (reaction.find("b2_-0.5") != string::npos)
+        else if (tag.find("b2_-0.9") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "-0.9");
+        else if (tag.find("b2_-0.8") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "-0.8");
+        else if (tag.find("b2_-0.7") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "-0.7");
+        else if (tag.find("b2_-0.6") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "-0.6");
+        else if (tag.find("b2_-0.5") != string::npos)
             rdf_input = rdf_input   .Define("b2_variation",             "-0.5");
-        else if (reaction.find("b2_0.5") != string::npos)
+        else if (tag.find("b2_-0.4") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "-0.4");
+        else if (tag.find("b2_-0.3") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "-0.3");
+        else if (tag.find("b2_-0.2") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "-0.2");
+        else if (tag.find("b2_-0.1") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "-0.1");
+        else if (tag.find("b2_0.1") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "0.1");
+        else if (tag.find("b2_0.2") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "0.2");
+        else if (tag.find("b2_0.3") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "0.3");
+        else if (tag.find("b2_0.4") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "0.4");
+        else if (tag.find("b2_0.5") != string::npos)
             rdf_input = rdf_input   .Define("b2_variation",             "0.5");
-        else if (reaction.find("b2_1.0") != string::npos)
+        else if (tag.find("b2_0.6") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "0.6");
+        else if (tag.find("b2_0.7") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "0.7");
+        else if (tag.find("b2_0.8") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "0.8");
+        else if (tag.find("b2_0.9") != string::npos)
+            rdf_input = rdf_input   .Define("b2_variation",             "0.9");
+        else if (tag.find("b2_1.0") != string::npos)
             rdf_input = rdf_input   .Define("b2_variation",             "1.0");
         else
             rdf_input = rdf_input   .Define("b2_variation",             "0.0");
@@ -306,7 +562,6 @@ int get_yield(string channel, string reaction, string observable, string tag)
             rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_iterations(beam_energy_truth, minust_truth, 7)");
         else if (tag.find("simweight_syst") != string::npos)
             rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_systematic(beam_energy_truth, minust_truth, a1_variation, b1_variation, a2_variation, b2_variation)");
-
         else
             rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_nominal(beam_energy_truth, minust_truth)");
 
@@ -1109,216 +1364,6 @@ Double_t nonrel_bw(Double_t *x, Double_t *par)
     return par[0] / 2 * convol_sum;
 }
 
-// double sim_weight_func_pass1(double beam_energy_truth, double minust_truth)
-// {
-//     double a1, b1, a2, b2 = 0;
-//     double normalization = 10;
-//     if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
-//         return 1.0;
-//     else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
-//     {
-//         a1 = 3632.01;
-//         b1 = 15.82;
-//         a2 = 12.19;
-//         b2 = 2.49;
-//     }
-//     else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
-//     {
-//         a1 = 4842.04;
-//         b1 = 17.22;
-//         a2 = 17.43;
-//         b2 = 3.13;
-//     }
-//     else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
-//     {
-//         a1 = 2882.53;
-//         b1 = 15.54;
-//         a2 = 12.54;
-//         b2 = 2.90;
-//     }
-//     return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
-// }
-
-// double sim_weight_func_pass2(double beam_energy_truth, double minust_truth)
-// {
-//     double a1, b1, a2, b2 = 0;
-//     double normalization = 10;
-//     if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
-//         return 1.0;
-//     else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
-//     {
-//         a1 = 6127.78;
-//         b1 = 17.10;
-//         a2 = 12.43;
-//         b2 = 2.50;
-//     }
-//     else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
-//     {
-//         a1 = 11328.73;
-//         b1 = 19.75;
-//         a2 = 23.50;
-//         b2 = 3.54;
-//     }
-//     else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
-//     {
-//         a1 = 4602.99;
-//         b1 = 16.69;
-//         a2 = 13.21;
-//         b2 = 2.95;
-//     }
-//     return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
-// }
-
-// double sim_weight_func_pass3(double beam_energy_truth, double minust_truth)
-// {
-//     double a1, b1, a2, b2 = 0;
-//     double normalization = 10;
-//     if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
-//         return 1.0;
-//     else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
-//     {
-//         a1 = 6417.46;
-//         b1 = 17.21;
-//         a2 = 12.42;
-//         b2 = 2.49;
-//     }
-//     else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
-//     {
-//         a1 = 12903.60;
-//         b1 = 20.16;
-//         a2 = 24.55;
-//         b2 = 3.60;
-//     }
-//     else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
-//     {
-//         a1 = 4769.82;
-//         b1 = 16.77;
-//         a2 = 13.19;
-//         b2 = 2.94;
-//     }
-//     return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
-// }
-
-// double sim_weight_func_pass4(double beam_energy_truth, double minust_truth)
-// {
-//     double a1, b1, a2, b2 = 0;
-//     double normalization = 10;
-//     if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
-//         return 1.0;
-//     else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
-//     {
-//         a1 = 6442.44;
-//         b1 = 17.22;
-//         a2 = 12.42;
-//         b2 = 2.49;
-//     }
-//     else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
-//     {
-//         a1 = 13181.89;
-//         b1 = 20.22;
-//         a2 = 24.74;
-//         b2 = 3.61;
-//     }
-//     else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
-//     {
-//         a1 = 4781.31;
-//         b1 = 16.78;
-//         a2 = 13.18;
-//         b2 = 2.94;
-//     }
-//     return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
-// }
-
-// double sim_weight_func_pass5(double beam_energy_truth, double minust_truth)
-// {
-//     double a1, b1, a2, b2 = 0;
-//     double normalization = 10;
-//     if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
-//         return 1.0;
-//     else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
-//     {
-//         a1 = 6444.93;
-//         b1 = 17.22;
-//         a2 = 12.42;
-//         b2 = 2.49;
-//     }
-//     else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
-//     {
-//         a1 = 13225.39;
-//         b1 = 20.23;
-//         a2 = 24.77;
-//         b2 = 3.61;
-//     }
-//     else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
-//     {
-//         a1 = 4782.23;
-//         b1 = 16.78;
-//         a2 = 13.18;
-//         b2 = 2.94;
-//     }
-//     return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
-// }
-
-// double sim_weight_func_pass6(double beam_energy_truth, double minust_truth)
-// {
-//     double a1, b1, a2, b2 = 0;
-//     double normalization = 10;
-//     if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
-//         return 1.0;
-//     else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
-//     {
-//         a1 = 6444.97;
-//         b1 = 17.22;
-//         a2 = 12.42;
-//         b2 = 2.49;
-//     }
-//     else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
-//     {
-//         a1 = 13232.23;
-//         b1 = 20.23;
-//         a2 = 24.78;
-//         b2 = 3.61;
-//     }
-//     else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
-//     {
-//         a1 = 4782.18;
-//         b1 = 16.78;
-//         a2 = 13.18;
-//         b2 = 2.94;
-//     }
-//     return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
-// }
-
-// double sim_weight_func_pass7(double beam_energy_truth, double minust_truth)
-// {
-//     double a1, b1, a2, b2 = 0;
-//     double normalization = 10;
-//     if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
-//         return 1.0;
-//     else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
-//     {
-//         a1 = 6445.03;
-//         b1 = 17.22;
-//         a2 = 12.42;
-//         b2 = 2.49;
-//     }
-//     else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
-//     {
-//         a1 = 13232.54;
-//         b1 = 20.23;
-//         a2 = 24.78;
-//         b2 = 3.61;
-//     }
-//     else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
-//     {
-//         a1 = 4782.12;
-//         b1 = 16.78;
-//         a2 = 13.18;
-//         b2 = 2.94;
-//     }
-//     return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
-// }
-
 double sim_weight_func_nominal(double beam_energy_truth, double minust_truth)
 {
     // No energy dependence
@@ -1531,6 +1576,8 @@ double sim_weight_func_systematic(double beam_energy_truth, double minust_truth,
         b1 = b1_nominal + b1_variation*b1_sigma;
         a2 = a2_nominal + a2_variation*a2_sigma;
         b2 = b2_nominal + b2_variation*b2_sigma;
+
+        cout << a1 << " " << b1 << " " << a2 << " " << b2 << " " << endl;
 
     return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
 }
