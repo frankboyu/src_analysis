@@ -6,6 +6,7 @@ mass_photon = 0.0  # GeV/c^2
 mass_proton = 0.9382720813  # GeV/c^2
 mass_phi = 1.019461  # GeV/c^2
 s_min = (mass_proton + mass_phi)**2
+energy_min = (s_min - mass_proton**2) / (2*mass_proton)
 
 def kallen(s, m1, m2):
     return s**2 + m1**4 + m2**4 - 2*s*m1**2 - 2*s*m2**2 - 2*m1**2*m2**2
@@ -35,7 +36,7 @@ fit_y = fit_function(x_fit, *coefficients)
 chisquared_per_dof = np.sum(((dsdt_fit - fit_y) / dsdt_error_fit)**2) / (len(dsdt_fit) - len(coefficients))
 
 # Create the plot
-plt.figure(figsize=(8, 6), dpi=300)
+plt.figure(figsize=(6, 6), dpi=300)
 energy_plot = np.linspace(1.5, 10.0, 1000)
 s_plot = mass_proton**2 + 2*mass_proton*energy_plot
 q_photon_plot = np.sqrt(kallen(s_plot, mass_proton**2, mass_photon**2))/(2*np.sqrt(s_plot))
@@ -55,5 +56,22 @@ plt.ylim(0, 3.5)
 # plt.yscale('log')
 plt.legend()
 plt.grid()
-plt.savefig('parameterization_fit.png')
+plt.savefig('dsdt_fit.png')
 plt.show()
+plt.close()
+
+# Plot the energy dependence of the slope factor
+plt.figure(figsize=(6, 6), dpi=300)
+energy_plot = np.linspace(energy_min, 10.0, 1000)
+s_plot = mass_proton**2 + 2*mass_proton*energy_plot
+b_plot = 2*0.27*np.log(s_plot/s_min) + 4.2
+plt.plot(energy_plot, b_plot, color='g', linestyle='-')
+plt.title('Energy Dependence of the Slope Factor')
+plt.xlabel('Photon Energy (GeV)')
+plt.ylabel(r'b (GeV$^{-2}$)')
+plt.xlim(1.0, 10.0)
+plt.ylim(0, 10)
+plt.grid()
+plt.savefig('slope_factor.png')
+plt.show()
+plt.close()
