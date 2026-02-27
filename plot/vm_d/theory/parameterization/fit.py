@@ -60,6 +60,14 @@ plt.savefig('dsdt_fit.png')
 plt.show()
 plt.close()
 
+energy_theory = np.array([2.0597, 3.0729, 6.8739, 8.3011, 9.6774])
+s_theory = mass_proton**2 + 2*mass_proton*energy_theory
+q_photon_theory = np.sqrt(kallen(s_theory, mass_proton**2, mass_photon**2))/(2*np.sqrt(s_theory))
+q_phi_theory = np.sqrt(kallen(s_theory, mass_proton**2, mass_phi**2))/(2*np.sqrt(s_theory))
+x_theory = (q_phi_theory/q_photon_theory)**2
+dsdt_theory = fit_function(x_theory, *coefficients)
+print("Theoretical ds/dt values at energies", energy_theory, "are:", dsdt_theory)
+
 # Plot the energy dependence of the slope factor
 plt.figure(figsize=(6, 6), dpi=300)
 energy_plot = np.linspace(energy_min, 10.0, 1000)
@@ -75,3 +83,6 @@ plt.grid()
 plt.savefig('slope_factor.png')
 plt.show()
 plt.close()
+
+b_theory = 2*0.27*np.log(s_theory/s_min) + 4.2
+print("Theoretical slope factor values at energies", energy_theory, "are:", b_theory)
