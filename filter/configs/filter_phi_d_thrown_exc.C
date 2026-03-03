@@ -2,10 +2,10 @@
 
 double sim_weight_func(double beam_energy_truth, double minust_truth, int sim_model_flag)
 {
-    double a1 = 2813.72894997;
-    double b1 = 15.13997936;
-    double a2 = 17.88792021;
-    double b2 = 2.98839991;
+    double a1 = 10222.59309;
+    double b1 = 19.33908;
+    double a2 = 20.23543;
+    double b2 = 3.33070;
     double normalization = 10;
     if (beam_energy_truth < 0.01 || sim_model_flag > 0)   // data, with its truth variable set to zero as placeholder
         return 1.0;
@@ -136,14 +136,10 @@ void filter_phi_d_thrown_exc(string reaction, string output_mode)
                 hist_phi_d_momentum_truth.Write();
                 TH1D hist_minust_truth                      = *rdf.Histo1D({("minust_truth_"+ label).c_str(), ";-t (GeV^{2}/c^{2});Counts", 100, 0.0, 2.0},"minust_truth","event_weight");
                 hist_minust_truth.Write();
-                TH1D hist_rho_mass_truth                    = *rdf.Histo1D({("rho_mass_truth_"+ label).c_str(), ";m_{#pi^{+}#pi^{-}} (GeV/c^{2});Counts", 100, 0.0, 1.0},"rho_mass_truth","event_weight");
-                hist_rho_mass_truth.Write();
                 TH2D hist_beam_energy_minust_truth          = *rdf.Histo2D({("beam_energy_minust_truth_"+ label).c_str(), ";E_{beam} (GeV);-t (GeV^{2}/c^{2})", 60, 5.0, 11.0, 20, 0.0, 2.0},"beam_energy_truth","minust_truth","event_weight");
                 hist_beam_energy_minust_truth.Write();
                 TH1D hist_scatter_theta_com_truth           = *rdf.Histo1D({("scatter_theta_com_truth_"+ label).c_str(), ";#theta_{CM} (deg);Counts", 180, 0.0, 180.0},"scatter_theta_com_truth","event_weight");
                 hist_scatter_theta_com_truth.Write();
-                TH2D hist_minust_scatter_theta_com_truth    = *rdf.Histo2D({("minust_scatter_theta_com_truth_"+ label).c_str(), ";-t (GeV^{2}/c^{2});#theta_{CM} (deg)", 20, 0.0, 2.0, 180, 0.0, 180.0},"minust_truth","scatter_theta_com_truth","event_weight");
-                hist_minust_scatter_theta_com_truth.Write();
                 TH1D hist_polarization_phi_com_truth        = *rdf.Histo1D({("polarization_phi_com_truth_"+ label).c_str(), ";#phi_{com} (deg);Counts", 9, -180, 180.0},"polarization_phi_com_truth","event_weight");
                 hist_polarization_phi_com_truth.Write();
                 TH1D hist_decay_costheta_helicity_truth     = *rdf.Histo1D({("decay_costheta_helicity_truth_"+ label).c_str(), ";cos(#theta_{helicity});Counts", 10, -1.0, 1.0},"decay_costheta_helicity_truth","event_weight");
