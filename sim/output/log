@@ -19,6 +19,9 @@ ver04: flat, -t, -u > 0.0, ana ver10, 10M
 phi_d_2H
 ver10_01: flat cross section, uniform decay, -t=0-2, 10M
 ver10_02: flat cross section, helicity-conserving decay, -t=0-2, 10M
+ver12_01: flat cross section, helicity-conserving decay, -t=0-2, 10M
+ver12_02: model cross section, helicity-conserving decay, -t=0.18-2, 10M
+ver12_03: flat cross section, corrected helicity-conserving decay, -t=0-2, 10M
 
 rho_d_2H
 ver01: flat cross section, uniform decay, -t=0-2, ana ver10, 10M
