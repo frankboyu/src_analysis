@@ -6,7 +6,7 @@ double sim_weight_func(double beam_energy_truth, double minust_truth, int sim_mo
     double b1 = 19.33908;
     double a2 = 20.23543;
     double b2 = 3.33070;
-    double normalization = 10;
+    double normalization = 1.0;
     if (beam_energy_truth < 0.01 || sim_model_flag > 0)   // data, with its truth variable set to zero as placeholder
         return 1.0;
     else                            // simulation, weighted by the measured cross section
@@ -30,7 +30,7 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
         rdf_def = rdf_def.Define("sim_model_flag", "-1");
     auto rdf_input = rdf_def
     .Define("target_p4",                        "TLorentzVector(0, 0, 0, mass_2H)")
-    .Define("sim_weight",                       "sim_weight_func(beam_p4_truth.E(), -(target_p4 - d_p4_truth).Mag2(), sim_model_flag)")
+    .Define("sim_weight",                       "sim_weight_func(beam_p4_truth.E(), -(beam_p4_truth - kp_p4_truth - km_p4_truth).Mag2(), sim_model_flag)")
     .Define("event_weight",                     "beam_accid_weight*combo_accid_weight*sim_weight")
 
     .Define("beam_energy_meas",                 "beam_p4_meas.E()")
@@ -226,7 +226,7 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
     string MissPMinusCutSyst    = "miss_pminus_meas > -0.04";
     string KinFitChiSqCut       = "chisq_per_ndf_kin < 5.0";
     string KinFitChiSqCutSyst   = "chisq_per_ndf_kin < 7.0";
-    string KinematicsCut        = "kp_momentum_meas > 0.45 && km_momentum_meas > 0.45 && d_momentum_meas > 0.45 && kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
+    string KinematicsCut        = "kp_momentum_meas > 0.40 && km_momentum_meas > 0.40 && d_momentum_meas > 0.40 && kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
     string KinematicsCutSyst    = "kp_momentum_meas > 0.35 && km_momentum_meas > 0.35 && d_momentum_meas > 0.35 && kp_theta_meas > 1.0 && km_theta_meas > 1.0 && d_theta_meas > 1.0";
     string VertexCut            = "TMath::Abs(vertex_z_kin - 65.0) < 14.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.0";
     string VertexCutSyst        = "TMath::Abs(vertex_z_kin - 65.0) < 15.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.5";

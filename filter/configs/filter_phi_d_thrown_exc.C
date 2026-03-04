@@ -6,7 +6,7 @@ double sim_weight_func(double beam_energy_truth, double minust_truth, int sim_mo
     double b1 = 19.33908;
     double a2 = 20.23543;
     double b2 = 3.33070;
-    double normalization = 10;
+    double normalization = 1.0;
     if (beam_energy_truth < 0.01 || sim_model_flag > 0)   // data, with its truth variable set to zero as placeholder
         return 1.0;
     else                            // simulation, weighted by the measured cross section
@@ -42,7 +42,7 @@ void filter_phi_d_thrown_exc(string reaction, string output_mode)
     }
     auto rdf_input = rdf_def
     .Define("target_p4",                        "TLorentzVector(0, 0, 0, mass_2H)")
-    .Define("sim_weight",                       "sim_weight_func(beam_p4_truth.E(), -(target_p4 - d_p4_truth).Mag2(), sim_model_flag)")
+    .Define("sim_weight",                       "sim_weight_func(beam_p4_truth.E(), -(beam_p4_truth - kp_p4_truth - km_p4_truth).Mag2(), sim_model_flag)")
     .Define("event_weight",                     "sim_weight")
     .Define("beam_energy_truth",                "beam_p4_truth.E()")
     .Define("kp_as_pion_p4_truth",              "TLorentzVector(kp_p4_truth.Vect(), TMath::Sqrt(kp_p4_truth.P()*kp_p4_truth.P() + mass_piplus*mass_piplus))")
