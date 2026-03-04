@@ -2,9 +2,9 @@
 
 start=`date +%s`
 
-INPUTFILE=/work/halld2/home/boyu/src_analysis/sim/output/phi_d_2H_ver12_02/root/thrown/tree_thrown_gen_coherent_090213_000.root
-TREENAME=Thrown_Tree
-SELECTOR=phi_d_thrown
+INPUTFILE=/work/halld2/home/boyu/src_analysis/sim/output/phi_d_2H_test/root/trees/tree_gd_kpkmd__B5_F4_gen_coherent_090213_000.root
+TREENAME=gd_kpkmd__B5_F4_Tree
+SELECTOR=phi_d_recon
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
 # gxenv $HALLD_VERSIONS/version_5.21.0.xml
