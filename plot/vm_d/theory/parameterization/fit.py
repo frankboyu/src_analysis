@@ -14,9 +14,12 @@ def kallen(s, m1, m2):
 def fit_function(x, c):
     return c*x
 
-# Load data from the text file
+def slope_function(s, alpha, beta):
+    return 2*alpha*np.log(s) + beta
+
+# dsdt
 data = np.loadtxt('dsdt.txt', delimiter=',')
-error = np.loadtxt('sigma.txt', delimiter=',')
+error = np.loadtxt('dsdt_sigma.txt', delimiter=',')
 energy = data[:, 0]
 s = mass_proton**2 + 2*mass_proton*energy
 q_photon = np.sqrt(kallen(s, mass_proton**2, mass_photon**2))/(2*np.sqrt(s))
@@ -35,7 +38,6 @@ coefficients = popt
 fit_y = fit_function(x_fit, *coefficients)
 chisquared_per_dof = np.sum(((dsdt_fit - fit_y) / dsdt_error_fit)**2) / (len(dsdt_fit) - len(coefficients))
 
-# Create the plot
 plt.figure(figsize=(6, 6), dpi=300)
 energy_plot = np.linspace(1.5, 10.0, 1000)
 s_plot = mass_proton**2 + 2*mass_proton*energy_plot
@@ -68,21 +70,34 @@ x_theory = (q_phi_theory/q_photon_theory)**2
 dsdt_theory = fit_function(x_theory, *coefficients)
 print("Theoretical ds/dt values at energies", energy_theory, "are:", dsdt_theory)
 
-# Plot the energy dependence of the slope factor
+# slope factor
+s           = np.loadtxt('slope.txt')[:, 0]
+slope       = np.loadtxt('slope.txt')[:, 1]
+slope_error = np.loadtxt('slope.txt')[:, 2]
+energy_slope = (s - mass_proton**2) / (2*mass_proton)
 plt.figure(figsize=(6, 6), dpi=300)
-energy_plot = np.linspace(energy_min, 10.0, 1000)
+plt.errorbar(energy_slope, slope, yerr=slope_error, color='b', label='Data Points', fmt='o')
+
+popt, pcov = curve_fit(slope_function, s, slope, sigma=slope_error, absolute_sigma=True)
+coefficients = popt
+fit_y = slope_function(s, *coefficients)
+chisquared_per_dof = np.sum(((slope - fit_y) / slope_error)**2) / (len(slope) - len(coefficients))
+
+energy_plot = np.linspace(energy_min, 20.0, 1000)
 s_plot = mass_proton**2 + 2*mass_proton*energy_plot
-b_plot = 2*0.27*np.log(s_plot/s_min) + 4.2
-plt.plot(energy_plot, b_plot, color='g', linestyle='-')
+plt.plot(energy_plot, slope_function(s_plot, *coefficients), color='r', linestyle='--', label='Fitted Curve')
+plt.text(2, 3, r'$\alpha ^{\prime} =%.5f\pm%.5f$' % (coefficients[0], np.sqrt(pcov[0][0])), fontsize=10, color='r', ha='left', va='top')
+plt.text(2, 2.5, r'$b_0 =%.5f\pm%.5f$' % (coefficients[1], np.sqrt(pcov[1][1])), fontsize=10, color='r', ha='left', va='top')
+plt.text(2, 2.0, r'$\chi^2/dof=%.2f$' % chisquared_per_dof, fontsize=10, color='r', ha='left', va='top')
 plt.title('Energy Dependence of the Slope Factor')
 plt.xlabel('Photon Energy (GeV)')
 plt.ylabel(r'b (GeV$^{-2}$)')
-plt.xlim(1.0, 10.0)
+plt.xlim(1.0, 15.0)
 plt.ylim(0, 10)
 plt.grid()
 plt.savefig('slope_factor.png')
 plt.show()
 plt.close()
 
-b_theory = 2*0.27*np.log(s_theory/s_min) + 4.2
+b_theory = slope_function(s_theory, *coefficients)
 print("Theoretical slope factor values at energies", energy_theory, "are:", b_theory)
