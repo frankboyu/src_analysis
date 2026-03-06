@@ -11,7 +11,7 @@
         in   = 1 ! initialize
         call 
      & edved(in,kvm,ei,q2,q0,epsl,t,crs0,crs,tcrs0,tcrs,pd,thd,pvm,thvm, !initialization
-     & crs0_m1,crs0_0,crs0_1,crs_m1,crs_0,crs_1,bphin,sphin)
+     & crs0_m1,crs0_0,crs0_1,crs_m1,crs_0,crs_1,ephin,bphin,sphin)
        
  
         ei = 0.0 ! electron energy (for ed--> evd)
@@ -147,7 +147,7 @@
         in = 0
         call 
      & edved(in,kvm,ei,q2,q0,epsl,t,crs0,crs,tcrs0,tcrs,pd,thd,pvm,thvm,
-     & crs0_m1,crs0_0,crs0_1,crs_m1,crs_0,crs_1,bphin,sphin)
+     & crs0_m1,crs0_0,crs0_1,crs_m1,crs_0,crs_1,ephin,bphin,sphin)
 
         pdt  = pd*sin(thd)          !transverse momentum of deuteron
         pvmt = pvm*sin(thvm)        !transverse momentum of vmeson
@@ -179,7 +179,7 @@
 
        subroutine 
      & edved(in,ivm,ei,q2,q0,epsl,t,crs0,crs,tcrs0,tcrs,pd,thd,pvm,thvm,
-     & crs0_m1,crs0_0,crs0_1,crs_m1,crs_0,crs_1,bphin,sphin)
+     & crs0_m1,crs0_0,crs0_1,crs_m1,crs_0,crs_1,ephin,bphin,sphin)
 **************************************************************************
 *  in   - parameter for initialization (1)-initialize (0)-compute - input
 *  ivm  - 1 - rho meson,  3- phi meson
@@ -313,9 +313,31 @@
 
 ********************************************************************
         gn_scale =   1.0
-        icase    =   3
-        sigma_gn =   4.5 !relevant only for icase=5
-        b_g      =   4.0 !relevant only for icase=3,4,5
+        icase    =   5
+        sigma_gn =   0.0 !relevant only for icase=5
+        if((ephin.gt.1.6).and.(ephin.lt.2.6))then
+            sigma_gn = 0.89641878 ! for egm=2.0597 GeV
+        elseif((ephin.gt.2.6).and.(ephin.lt.3.6))then
+            sigma_gn = 1.60592106 ! for egm=3.0729 GeV
+        elseif((ephin.gt.5.8).and.(ephin.lt.7.8))then
+            sigma_gn = 2.31789209 ! for egm=6.8739 GeV
+        elseif((ephin.gt.7.8).and.(ephin.lt.8.8))then
+            sigma_gn = 2.40936493 ! for egm=8.3011 GeV
+        elseif((ephin.gt.8.8).and.(ephin.lt.10.8))then
+            sigma_gn = 2.47093851 ! for egm=9.6774 GeV
+        endif
+        b_g      =   0.0 !relevant only for icase=3,4,5
+        if((ephin.gt.1.6).and.(ephin.lt.2.6))then
+            b_g = 5.5083353 ! for egm=2.0597 GeV
+        elseif((ephin.gt.2.6).and.(ephin.lt.3.6))then
+            b_g = 5.6891075 ! for egm=3.0729 GeV
+        elseif((ephin.gt.5.8).and.(ephin.lt.7.8))then
+            b_g = 6.08024861 ! for egm=6.8739 GeV
+        elseif((ephin.gt.7.8).and.(ephin.lt.8.8))then
+            b_g = 6.17553841 ! for egm=8.3011 GeV
+        elseif((ephin.gt.8.8).and.(ephin.lt.10.8))then
+            b_g = 6.25374437 ! for egm=9.6774 GeV
+        endif
         alpha_g  =  0.0
 ********************************************************************
 *         Parameters of cross section, slope  factor and real part
@@ -946,7 +968,8 @@
       !if(tpr.le.0.0)
        dsdt = dsdt_tmin(eg)*exp(b_gn(s,kvm)*tpr)
        elseif(icase.eq.5)then
-       dsdt = sigma_gn*exp(b_gn(s,kvm)*t)
+       dsdt = sigma_gn*exp(b_gn(s,kvm)*(t-tmin))
+       !dsdt = sigma_gn*exp(b_gn(s,kvm)*(t-tmin) + 1.4*(t-tmin)**2)
        endif
 ************************************************************************
 
