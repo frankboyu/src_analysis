@@ -2,16 +2,16 @@
 
 start=`date +%s`
 
-LABEL=case3_4.0_alpha0_61237
+LABEL=nominal
 mkdir output/${LABEL}/
 
 gfortran edved_wkng_pol.f
 
-for EPHIN in 2.1
+for EPHIN in 8.3 6.9 9.7 2.1 3.1
 do
-    for SPHIN in $(seq 0 1 120)
+    for SPHIN in $(seq 30 1 40)
     do
-        for BPHIN in $(seq 0 1 30)
+        for BPHIN in $(seq 10 0.25 15)
         do
             echo "Running with E=$EPHIN GeV, sigma=$SPHIN mb, b=$BPHIN GeV^-2"
             echo "$EPHIN" > input.txt
