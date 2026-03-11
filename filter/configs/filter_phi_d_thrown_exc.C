@@ -140,13 +140,13 @@ void filter_phi_d_thrown_exc(string reaction, string output_mode)
                 hist_beam_energy_minust_truth.Write();
                 TH1D hist_scatter_theta_com_truth           = *rdf.Histo1D({("scatter_theta_com_truth_"+ label).c_str(), ";#theta_{CM} (deg);Counts", 180, 0.0, 180.0},"scatter_theta_com_truth","event_weight");
                 hist_scatter_theta_com_truth.Write();
-                TH1D hist_polarization_phi_com_truth        = *rdf.Histo1D({("polarization_phi_com_truth_"+ label).c_str(), ";#phi_{com} (deg);Counts", 9, -180, 180.0},"polarization_phi_com_truth","event_weight");
+                TH1D hist_polarization_phi_com_truth        = *rdf.Histo1D({("polarization_phi_com_truth_"+ label).c_str(), ";#phi_{com} (deg);Counts", 10, -180, 180.0},"polarization_phi_com_truth","event_weight");
                 hist_polarization_phi_com_truth.Write();
                 TH1D hist_decay_costheta_helicity_truth     = *rdf.Histo1D({("decay_costheta_helicity_truth_"+ label).c_str(), ";cos(#theta_{helicity});Counts", 10, -1.0, 1.0},"decay_costheta_helicity_truth","event_weight");
                 hist_decay_costheta_helicity_truth.Write();
-                TH1D hist_decay_phi_helicity_truth          = *rdf.Histo1D({("decay_phi_helicity_truth_"+ label).c_str(), ";#phi_{helicity} (deg);Counts", 9, -180.0, 180.0},"decay_phi_helicity_truth","event_weight");
+                TH1D hist_decay_phi_helicity_truth          = *rdf.Histo1D({("decay_phi_helicity_truth_"+ label).c_str(), ";#phi_{helicity} (deg);Counts", 10, -180.0, 180.0},"decay_phi_helicity_truth","event_weight");
                 hist_decay_phi_helicity_truth.Write();
-                TH1D hist_psi_helicity_truth                = *rdf.Histo1D({("psi_helicity_truth_"+ label).c_str(), ";#psi_{helicity} (deg);Counts", 9, -270.0, 270.0},"psi_helicity_truth","event_weight");
+                TH1D hist_psi_helicity_truth                = *rdf.Histo1D({("psi_helicity_truth_"+ label).c_str(), ";#psi_{helicity} (deg);Counts", 10, -180.0, 180.0},"psi_helicity_truth","event_weight");
                 hist_psi_helicity_truth.Write();
         }
         output_histfile->Close();
