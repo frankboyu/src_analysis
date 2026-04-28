@@ -144,6 +144,11 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
     .Define("minust_kin",                       "-(beam_p4_kin - phi_p4_kin).Mag2()")
     .Define("minust_truth",                     "-(beam_p4_truth - phi_p4_truth).Mag2()")
     .Define("minust_diff",                      "minust_kin - minust_truth")
+    .Define("minusu_meas_target",               "-(phi_p4_meas - target_p4).Mag2()")
+    .Define("minusu_meas_beam",                 "-(beam_p4_meas - d_p4_meas).Mag2()")
+    .Define("minusu_kin",                       "-(beam_p4_kin - d_p4_kin).Mag2()")
+    .Define("minusu_truth",                     "-(beam_p4_truth - d_p4_truth).Mag2()")
+    .Define("minusu_diff",                      "minusu_kin - minusu_truth")
     .Define("vertex_z_meas",                    "beam_x4_meas.Z()")
     .Define("vertex_z_kin",                     "beam_x4_kin.Z()")
     .Define("vertex_z_truth",                   "beam_x4_truth.Z()")
@@ -366,6 +371,8 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
             hist_phi_mass_chisq_kin.Write();
             TH2D hist_phi_mass_minust_kin                   = *rdf.Histo2D({("phi_mass_minust_kin_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);-t (GeV^{2}/c^{2})", 300, 0.9, 1.5, 100, 0.0, 2.0},"phi_mass_kin","minust_kin","event_weight");
             hist_phi_mass_minust_kin.Write();
+            TH2D hist_phi_mass_minusu_kin                   = *rdf.Histo2D({("phi_mass_minusu_kin_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);-u (GeV^{2}/c^{2})", 300, 0.9, 1.5, 100, 15.0, 35.0},"phi_mass_kin","minusu_kin","event_weight");
+            hist_phi_mass_minusu_kin.Write();
             TH2D hist_phi_mass_miss_pminus_meas             = *rdf.Histo2D({("phi_mass_miss_pminus_meas_"+ label).c_str(), ";m_{K^{+}K^{-}} (GeV/c);P_{miss}^{-} (GeV/c)", 300, 0.9, 1.5, 400, -0.2, 0.2},"phi_mass_kin","miss_pminus_meas","event_weight");
             hist_phi_mass_miss_pminus_meas.Write();
             TH2D hist_phi_kinematics_kin                    = *rdf.Histo2D({("phi_kinematics_kin_"+ label).c_str(), ";p (GeV/c);#theta (deg)", 110, 0.0, 11.0, 180, 0.0, 180.0},"phi_momentum_kin","phi_theta_kin","event_weight");
@@ -375,6 +382,10 @@ void filter_phi_d_recon_exc(string reaction, string output_mode)
             hist_minust_kin.Write();
             TH2D hist_minust_kin_d_momentum_meas            = *rdf.Histo2D({("minust_kin_d_momentum_meas_"+ label).c_str(), ";-t (GeV^{2}/c^{2});P_{d} (GeV/c)", 100, 0.0, 2.0, 200, 0.0, 2.0},"minust_kin","d_momentum_meas","event_weight");
             hist_minust_kin_d_momentum_meas.Write();
+            TH1D hist_minusu_kin                            = *rdf.Histo1D({("minusu_kin_"+ label).c_str(), ";-u (GeV^{2}/c^{2});Counts", 100, 15.0, 35.0},"minusu_kin","event_weight");
+            hist_minusu_kin.Write();
+            TH2D hist_minusu_kin_beam_energy_meas            = *rdf.Histo2D({("minusu_kin_beam_energy_meas_"+ label).c_str(), ";-u (GeV^{2}/c^{2});E_{beam} (GeV)", 100, 15.0, 35.0, 60, 5.0, 11.0},"minusu_kin","beam_energy_meas","event_weight");
+            hist_minusu_kin_beam_energy_meas.Write();
             TH1D hist_vertex_z_kin                          = *rdf.Histo1D({("vertex_z_kin_"+ label).c_str(), ";Z_{vertex} (cm);Counts", 100, 40.0, 90.0},"vertex_z_kin","event_weight");
             hist_vertex_z_kin.Write();
             TH2D hist_vertex_x_y_kin                        = *rdf.Histo2D({("vertex_x_y_kin_"+ label).c_str(), ";X_{vertex} (cm);Y_{vertex} (cm)", 100, -2.0, 2.0, 100, -2.0, 2.0},"vertex_x_kin","vertex_y_kin","event_weight");
