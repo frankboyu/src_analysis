@@ -6,6 +6,8 @@ phi_d_2H
 ver05: (K+K-)d, (K+K-)X
 ver09: (K+K-)d, (K+K-)X, (K+K-d), (K+d)K-, (K-d)K+, with updated PIDFOM
 ver10: (K+K-d), (K+d)K-, (K-d)K+, with default dE/dx cut on deuterons
+ver11: (K+K-d), (K+K-d)X, with JANA2
+ver12: (K+K-d), (K+K-d)X, with recon ver04 and deuteron mass hypothesis
 
 phi_d_4He
 ver10: (K+K-d)X, with default dE/dx cut on deuterons
