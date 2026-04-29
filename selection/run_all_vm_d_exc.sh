@@ -3,8 +3,8 @@
 start=`date +%s`
 
 # data
-# sh run_local.sh     'phi_d_recon'   '/work/halld2/home/boyu/src_analysis/data/output/phi_d_2H_ver12/tree_gd_kpkmd__B5_F4/*.root'        'gd_kpkmd__B5_F4_Tree'
-# sh run_rename.sh    'phi_d_recon'   'exc_data_2H' 'ver12'
+sh run_local.sh     'phi_d_recon'   '/work/halld2/home/boyu/src_analysis/data/output/phi_d_2H_ver12/tree_gd_kpkmd__B5_F4/*.root'        'gd_kpkmd__B5_F4_Tree'
+sh run_rename.sh    'phi_d_recon'   'exc_data_2H' 'ver12'
 
 # sim
 sh run_local.sh     'phi_d_recon'   '/work/halld2/home/boyu/src_analysis/sim/output/phi_d_2H_ver12_03/root/tree_gd_kpkmd__B5_F4_gen_coherent/*.root'     'gd_kpkmd__B5_F4_Tree'
