@@ -1,5 +1,12 @@
 #include <iostream>
 #include <string>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <limits>
+#include <cmath>
+
+using namespace std;
 
 #include "DSelector/DSelector.h"
 #include "DSelector/DHistogramActions.h"
@@ -8,7 +15,9 @@
 double rad_to_deg = 180.0 / TMath::Pi();
 
 double sigma_jpsi_d(double Ephoton, double t) {
-    std::ifstream ifs("tables/dvmp_xsec_deuteron2024.csv");
+    std::ifstream ifs("/work/halld2/home/boyu/src_analysis/selection/configs/dvmp_xsec_deuteron2024.csv");
+    if (Ephoton < 5.6) return 0.0; // table only goes down to 5.6 GeV, so return 0 below that
+
     if (!ifs.is_open()) return std::numeric_limits<double>::quiet_NaN();
 
     std::string line;
@@ -41,7 +50,7 @@ double sigma_jpsi_d(double Ephoton, double t) {
 
             // keep nearest (Euclidean) if no exact match
             double dx = e - Ephoton;
-            double dt = tt - t;
+            double dt = tt + t;  // note: table has t as positive, but function argument is negative, so add to get distance
             double dist = std::sqrt(dx*dx + dt*dt);
             if (dist < bestDist) {
                 bestDist = dist;
@@ -53,7 +62,6 @@ double sigma_jpsi_d(double Ephoton, double t) {
     }
 
     if (!any) return std::numeric_limits<double>::quiet_NaN();
-    cout << "best match: E=" << bestE << ", t=" << bestT << ", cross_section=" << bestXS << "\n";
     return bestXS;
 }
 
@@ -94,8 +102,12 @@ private:
     TH1D* dHist_NumUnusedShowers;
     TH1D* dHist_PhotonEnergy;
     TH2D* dHist_PositronKinematics;
+    TH2D* dHist_PositronKinematics_Thrown;
     TH2D* dHist_ElectronKinematics;
+    TH2D* dHist_ElectronKinematics_Thrown;
     TH2D* dHist_DeuteronKinematics;
+    TH2D* dHist_DeuteronKinematics_Thrown;
+    TH2D* dHist_DeuterondEdxCDC;
     TH1D* dHist_InvariantMassJpsi;
     TH2D* dHist_ChiSqPerNDF;
     TH1D* dHist_Minust;
@@ -137,12 +149,15 @@ void DSelector_jpsi_d_recon::Init(TTree *locTree)
     dHist_NumUnusedShowers   = new TH1D("NumUnusedShowers",   ";Unused Showers            ;Events/1",             10,     0.0,    10.0);
     dHist_PhotonEnergy       = new TH1D("PhotonEnergy",       ";Photon Energy (GeV)       ;Events/0.01 GeV",      900,    3.0,    12.0);
     dHist_PositronKinematics    = new TH2D("PositronKinematics",    ";P (GeV/c)                 ;#theta (deg)",         100,    0.0,    10.0,   180,    0.0,    180.0);
+    dHist_PositronKinematics_Thrown    = new TH2D("PositronKinematics_Thrown",    ";P (GeV/c)                 ;#theta (deg)",         100,    0.0,    10.0,   180,    0.0,    180.0);
     dHist_ElectronKinematics   = new TH2D("ElectronKinematics",   ";P (GeV/c)                 ;#theta (deg)",         100,    0.0,    10.0,   180,    0.0,    180.0);
+    dHist_ElectronKinematics_Thrown   = new TH2D("ElectronKinematics_Thrown",   ";P (GeV/c)                 ;#theta (deg)",         100,    0.0,    10.0,   180,    0.0,    180.0);
     dHist_DeuteronKinematics = new TH2D("DeuteronKinematics", ";P (GeV/c)                 ;#theta (deg)",         100,    0.0,    10.0,   180,    0.0,    180.0);
+    dHist_DeuteronKinematics_Thrown = new TH2D("DeuteronKinematics_Thrown", ";P (GeV/c)                 ;#theta (deg)",         100,    0.0,    10.0,   180,    0.0,    180.0);
+    dHist_DeuterondEdxCDC    = new TH2D("DeuterondEdxCDC", ";P (GeV/c)                 ;dE/dx CDC (MeV/cm)", 100,    0.0,    10.0,   100,    0.0,    40.0);
     dHist_InvariantMassJpsi   = new TH1D("InvariantMassJpsi",	";M_{K^{+}K^{-}} (GeV)      ;Events/0.01 GeV",      500,    0.0,    5.0);
     dHist_ChiSqPerNDF        = new TH2D("ChiSqPerNDF",        ";M_{K^{+}K^{-}} (GeV)      ;log(#chi^{2}/NDF)",    400,    0.9,    4.9,    100,    0.0,    5);
     dHist_Minust              = new TH1D("Minust",              ";-t (GeV^{2})             ;Events/0.01 GeV^{2}", 100,    0.0,    5.0);
-
 }
 // END OF INITIALIZATION
 
@@ -264,24 +279,27 @@ Bool_t DSelector_jpsi_d_recon::Process(Long64_t locEntry)
             locUsedSoFar_BeamID.insert(locBeamID);
         }
 
-        double event_weight = locHistAccidWeightFactor*locComboAccidWeightFactor*sigma_jpsi_p(locBeamP4.E(), (locBeamP4 - locPositronP4 - locElectronP4 - locDeuteronP4).M2());
+        double event_weight = locHistAccidWeightFactor*locComboAccidWeightFactor*sigma_jpsi_d(locBeamP4_Thrown.E(), (locBeamP4_Thrown - locPositronP4_Thrown - locElectronP4_Thrown - locDeuteronP4_Thrown).M2());
 
+        if ((locPositronP4 + locElectronP4).M() < 3.0 || (locPositronP4 + locElectronP4).M() > 3.2)
+        {
+            dComboWrapper->Set_IsComboCut(true);
+            continue;
+        }
         // FILL HISTOGRAMS BEFORE CUTS
         dHist_NumUnusedTracks    ->Fill(dComboWrapper->Get_NumUnusedTracks(), event_weight);
         dHist_NumUnusedShowers   ->Fill(dComboWrapper->Get_NumUnusedShowers(), event_weight);
         dHist_PhotonEnergy       ->Fill(locBeamP4_Measured.E(), event_weight);
-        dHist_VertexZ            ->Fill(dComboBeamWrapper->Get_X4().Z(), event_weight);
-        dHist_VertexXY           ->Fill(dComboBeamWrapper->Get_X4().X(), dComboBeamWrapper->Get_X4().Y(), event_weight);
         dHist_PositronKinematics    ->Fill(locPositronP4_Measured.P(), locPositronP4_Measured.Theta()*rad_to_deg, event_weight);
+        dHist_PositronKinematics_Thrown    ->Fill(locPositronP4_Thrown.P(), locPositronP4_Thrown.Theta()*rad_to_deg, event_weight);
         dHist_ElectronKinematics   ->Fill(locElectronP4_Measured.P(), locElectronP4_Measured.Theta()*rad_to_deg, event_weight);
+        dHist_ElectronKinematics_Thrown   ->Fill(locElectronP4_Thrown.P(), locElectronP4_Thrown.Theta()*rad_to_deg, event_weight);
         dHist_DeuteronKinematics ->Fill(locDeuteronP4_Measured.P(), locDeuteronP4_Measured.Theta()*rad_to_deg, event_weight);
-        dHist_PositronPIDFOM        ->Fill(TMath::Log10(dPositronWrapper->Get_PIDFOM()), event_weight);
-        dHist_ElectronPIDFOM       ->Fill(TMath::Log10(dElectronWrapper->Get_PIDFOM()), event_weight);
+        dHist_DeuteronKinematics_Thrown ->Fill(locDeuteronP4_Thrown.P(), locDeuteronP4_Thrown.Theta()*rad_to_deg, event_weight);
         dHist_DeuterondEdxCDC    ->Fill(locDeuteronP4_Measured.P(), dDeuteronWrapper->Get_dEdx_CDC()*1e6, event_weight);
-        dHist_DeuterondEdxST     ->Fill(locDeuteronP4_Measured.P(), dDeuteronWrapper->Get_dEdx_ST()*1e3, event_weight);
         dHist_InvariantMassJpsi   ->Fill((locPositronP4+locElectronP4).M(), event_weight);
         dHist_ChiSqPerNDF        ->Fill((locPositronP4+locElectronP4).M(), TMath::Log10(dComboWrapper->Get_ChiSq_KinFit()/dComboWrapper->Get_NDF_KinFit()), event_weight);
-        dHist_Minust              ->Fill(-1*(locBeamP4 - locPositronP4 - locElectronP4 - locDeuteronP4).M2(), event_weight);
+        dHist_Minust              ->Fill(-1*(locBeamP4 - locPositronP4 - locElectronP4).M2(), event_weight);
 
 		// EXECUTE ANALYSIS ACTIONS
         if(!Execute_Actions()) // if the active combo fails a cut, IsComboCutFlag automatically set
