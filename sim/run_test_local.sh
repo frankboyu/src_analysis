@@ -1,6 +1,6 @@
 #!/bin/bash
 
-REACTION=jpsi_p_1H
+REACTION=jpsi_d_2H
 XML_VERSION=recon_srcct-2021_11-dev
 RUN=90213
 EVENTS=100000
