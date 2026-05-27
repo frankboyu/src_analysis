@@ -41,8 +41,19 @@ private:
     // CUSTOM HISTOGRAMS
     TH1D* dHist_Chisq_ndf_Before;
     TH1D* dHist_Chisq_ndf_After;
-    TH1D* dHist_PhiMass_Before;
-    TH1D* dHist_PhiMass_After;
+    TH2D* dHist_Deuteron_dEdx_Before;
+    TH2D* dHist_Deuteron_dEdx_After;
+    TH1D* dHist_MissPMinus_Before;
+    TH1D* dHist_MissPMinus_After;
+
+    TH1D* dHist_PhiMass_ChisqCut_10;
+    TH1D* dHist_PhiMass_ChisqCut_9;
+    TH1D* dHist_PhiMass_ChisqCut_8;
+    TH1D* dHist_PhiMass_ChisqCut_7;
+    TH1D* dHist_PhiMass_ChisqCut_6;
+    TH1D* dHist_PhiMass_ChisqCut_5;
+    TH1D* dHist_PhiMass_ChisqCut_4;
+    TH1D* dHist_PhiMass_ChisqCut_3;
 
     ClassDef(DSelector_phi_d_exc_test_chisqcut, 0);
 };
@@ -78,8 +89,18 @@ void DSelector_phi_d_exc_test_chisqcut::Init(TTree *locTree)
     // CUSTOM HISTOGRAMS
     dHist_Chisq_ndf_Before = new TH1D("chisq_ndf_before", ";#chi^{2}/NDF;Counts", 100, 0.0, 50.0);
     dHist_Chisq_ndf_After  = new TH1D("chisq_ndf_after", ";#chi^{2}/NDF;Counts", 100, 0.0, 50.0);
-    dHist_PhiMass_Before = new TH1D("phi_mass_before", ";m_{K^{+}K^{-}} (GeV/c);Counts", 120, 0.98, 1.1);
-    dHist_PhiMass_After  = new TH1D("phi_mass_after", ";m_{K^{+}K^{-}} (GeV/c);Counts", 120, 0.98, 1.1);
+    dHist_Deuteron_dEdx_Before = new TH2D("deuteron_dedx_before", ";p (GeV/c);dE/dx (keV/cm)", 200, 0.0, 2.0, 100, 0.0, 40);
+    dHist_Deuteron_dEdx_After  = new TH2D("deuteron_dedx_after", ";p (GeV/c);dE/dx (keV/cm)", 200, 0.0, 2.0, 100, 0.0, 40);
+    dHist_MissPMinus_Before = new TH1D("miss_pminus_before", ";P_{miss}^{-} (GeV/c);Counts", 400, -0.2, 0.2);
+    dHist_MissPMinus_After  = new TH1D("miss_pminus_after", ";P_{miss}^{-} (GeV/c);Counts", 400, -0.2, 0.2);
+    dHist_PhiMass_ChisqCut_10 = new TH1D("phi_mass_chisqcut_10", ";m_{K^{+}K^{-}} (GeV/c);Counts", 120, 0.98, 1.1);
+    dHist_PhiMass_ChisqCut_9  = new TH1D("phi_mass_chisqcut_9", ";m_{K^{+}K^{-}} (GeV/c);Counts", 120, 0.98, 1.1);
+    dHist_PhiMass_ChisqCut_8  = new TH1D("phi_mass_chisqcut_8", ";m_{K^{+}K^{-}} (GeV/c);Counts", 120, 0.98, 1.1);
+    dHist_PhiMass_ChisqCut_7  = new TH1D("phi_mass_chisqcut_7", ";m_{K^{+}K^{-}} (GeV/c);Counts", 120, 0.98, 1.1);
+    dHist_PhiMass_ChisqCut_6  = new TH1D("phi_mass_chisqcut_6", ";m_{K^{+}K^{-}} (GeV/c);Counts", 120, 0.98, 1.1);
+    dHist_PhiMass_ChisqCut_5  = new TH1D("phi_mass_chisqcut_5", ";m_{K^{+}K^{-}} (GeV/c);Counts", 120, 0.98, 1.1);
+    dHist_PhiMass_ChisqCut_4  = new TH1D("phi_mass_chisqcut_4", ";m_{K^{+}K^{-}} (GeV/c);Counts", 120, 0.98, 1.1);
+    dHist_PhiMass_ChisqCut_3  = new TH1D("phi_mass_chisqcut_3", ";m_{K^{+}K^{-}} (GeV/c);Counts", 120, 0.98, 1.1);
 }
 // END OF INITIALIZATION
 
@@ -146,24 +167,7 @@ Bool_t DSelector_phi_d_exc_test_chisqcut::Process(Long64_t locEntry)
         double locMissPMinus = (locBeamP4_Measured + TLorentzVector(0,0,0,1.875612859) - locKPlusP4_Measured - locKMinusP4_Measured - locDeuteronP4_Measured).Minus();
         double locVertexR = TMath::Sqrt(dComboBeamWrapper->Get_X4_Measured().X()*dComboBeamWrapper->Get_X4_Measured().X() + dComboBeamWrapper->Get_X4_Measured().Y()*dComboBeamWrapper->Get_X4_Measured().Y());
 
-        // PERFORM CUTS
-        if(locBeamP4_Measured.E() < 5.84)                                                                       dComboWrapper->Set_IsComboCut(true);
-        if(dDeuteronWrapper->Get_dEdx_CDC()     == 0.0  || dDeuteronWrapper->Get_dEdx_ST()  == 0.0)             dComboWrapper->Set_IsComboCut(true);
-        if(dDeuteronWrapper->Get_dEdx_CDC()*1e6 < (TMath::Exp(-3.65*locDeuteronP4_Measured.P())+4.47) + 2.57)   dComboWrapper->Set_IsComboCut(true);
-        if((locKPlusP4+locKMinusP4).M()         > 1.1)                                                          dComboWrapper->Set_IsComboCut(true);
-        if(locMissPMinus < -0.02)                                                                               dComboWrapper->Set_IsComboCut(true);
-        if(locKPlusP4_Measured.P() < 0.40)                                                                      dComboWrapper->Set_IsComboCut(true);
-        if(locKMinusP4_Measured.P() < 0.40)                                                                     dComboWrapper->Set_IsComboCut(true);
-        if(locDeuteronP4_Measured.P() < 0.40)                                                                   dComboWrapper->Set_IsComboCut(true);
-        if(locKPlusP4_Measured.Theta()*rad_to_deg < 2.0)                                                        dComboWrapper->Set_IsComboCut(true);
-        if(locKMinusP4_Measured.Theta()*rad_to_deg < 2.0)                                                       dComboWrapper->Set_IsComboCut(true);
-        if(locDeuteronP4_Measured.Theta()*rad_to_deg < 2.0)                                                     dComboWrapper->Set_IsComboCut(true);
-        if(locVertexR > 1.0)                                                                                    dComboWrapper->Set_IsComboCut(true);
-        if(TMath::Abs(dComboBeamWrapper->Get_X4_Measured().Z() - 65.0) > 14.0)                                  dComboWrapper->Set_IsComboCut(true);
-
-        if(dComboWrapper->Get_IsComboCut())  continue;
-
-		// GET THE BEAM ACCIDENTAL WEIGHT FACTOR
+        // GET THE BEAM ACCIDENTAL WEIGHT FACTOR
 		TLorentzVector locBeamX4                       = dComboBeamWrapper->Get_X4_Measured();
 		Double_t       locBunchPeriod                  = dAnalysisUtilities.Get_BeamBunchPeriod(Get_RunNumber());
 		Double_t       locDeltaT_RF                    = dAnalysisUtilities.Get_DeltaT_RF(Get_RunNumber(), locBeamX4, dComboWrapper);
@@ -187,17 +191,48 @@ Bool_t DSelector_phi_d_exc_test_chisqcut::Process(Long64_t locEntry)
             locUsedSoFar_BeamID.insert(locBeamID);
         }
 
+        // PERFORM CUTS
+        if(locBeamP4_Measured.E() < 5.84)                                                                       dComboWrapper->Set_IsComboCut(true);
+        if(dDeuteronWrapper->Get_dEdx_CDC()     == 0.0  || dDeuteronWrapper->Get_dEdx_ST()  == 0.0)             dComboWrapper->Set_IsComboCut(true);
+        if((locKPlusP4+locKMinusP4).M()         > 1.1)                                                          dComboWrapper->Set_IsComboCut(true);
+        if(locKPlusP4_Measured.P() < 0.40)                                                                      dComboWrapper->Set_IsComboCut(true);
+        if(locKMinusP4_Measured.P() < 0.40)                                                                     dComboWrapper->Set_IsComboCut(true);
+        if(locDeuteronP4_Measured.P() < 0.40)                                                                   dComboWrapper->Set_IsComboCut(true);
+        if(locKPlusP4_Measured.Theta()*rad_to_deg < 2.0)                                                        dComboWrapper->Set_IsComboCut(true);
+        if(locKMinusP4_Measured.Theta()*rad_to_deg < 2.0)                                                       dComboWrapper->Set_IsComboCut(true);
+        if(locDeuteronP4_Measured.Theta()*rad_to_deg < 2.0)                                                     dComboWrapper->Set_IsComboCut(true);
+        if(locVertexR > 1.0)                                                                                    dComboWrapper->Set_IsComboCut(true);
+        if(TMath::Abs(dComboBeamWrapper->Get_X4_Measured().Z() - 65.0) > 14.0)                                  dComboWrapper->Set_IsComboCut(true);
+
+        if(dComboWrapper->Get_IsComboCut())  continue;
+
+        if ((dDeuteronWrapper->Get_dEdx_CDC()*1e6 > (TMath::Exp(-3.65*locDeuteronP4_Measured.P())+4.47) + 2.57))
+            dHist_MissPMinus_Before->Fill(locMissPMinus, locHistAccidWeightFactor*locComboAccidWeightFactor);
+        if (locMissPMinus > -0.02)
+            dHist_Deuteron_dEdx_Before->Fill(locDeuteronP4_Measured.P(), dDeuteronWrapper->Get_dEdx_CDC()*1e6, locHistAccidWeightFactor*locComboAccidWeightFactor);
+
+        if(dDeuteronWrapper->Get_dEdx_CDC()*1e6 < (TMath::Exp(-3.65*locDeuteronP4_Measured.P())+4.47) + 2.57)   dComboWrapper->Set_IsComboCut(true);
+        if(locMissPMinus < -0.02)                                                                               dComboWrapper->Set_IsComboCut(true);
+        if(dComboWrapper->Get_IsComboCut())  continue;
+
         dHist_Chisq_ndf_Before->Fill(dComboWrapper->Get_ChiSq_KinFit("")/dComboWrapper->Get_NDF_KinFit(""), locHistAccidWeightFactor*locComboAccidWeightFactor);
-        dHist_PhiMass_Before->Fill((locKPlusP4+locKMinusP4).M(), locHistAccidWeightFactor*locComboAccidWeightFactor);
+        dHist_Deuteron_dEdx_After->Fill(locDeuteronP4_Measured.P(), dDeuteronWrapper->Get_dEdx_CDC()*1e6, locHistAccidWeightFactor*locComboAccidWeightFactor);
+        dHist_MissPMinus_After->Fill(locMissPMinus, locHistAccidWeightFactor*locComboAccidWeightFactor);
+
+        if(dComboWrapper->Get_ChiSq_KinFit("")/dComboWrapper->Get_NDF_KinFit("") < 10.0)    dHist_PhiMass_ChisqCut_10->Fill((locKPlusP4+locKMinusP4).M(), locHistAccidWeightFactor*locComboAccidWeightFactor);
+        if(dComboWrapper->Get_ChiSq_KinFit("")/dComboWrapper->Get_NDF_KinFit("") < 9.0)     dHist_PhiMass_ChisqCut_9->Fill((locKPlusP4+locKMinusP4).M(), locHistAccidWeightFactor*locComboAccidWeightFactor);
+        if(dComboWrapper->Get_ChiSq_KinFit("")/dComboWrapper->Get_NDF_KinFit("") < 8.0)     dHist_PhiMass_ChisqCut_8->Fill((locKPlusP4+locKMinusP4).M(), locHistAccidWeightFactor*locComboAccidWeightFactor);
+        if(dComboWrapper->Get_ChiSq_KinFit("")/dComboWrapper->Get_NDF_KinFit("") < 7.0)     dHist_PhiMass_ChisqCut_7->Fill((locKPlusP4+locKMinusP4).M(), locHistAccidWeightFactor*locComboAccidWeightFactor);
+        if(dComboWrapper->Get_ChiSq_KinFit("")/dComboWrapper->Get_NDF_KinFit("") < 6.0)     dHist_PhiMass_ChisqCut_6->Fill((locKPlusP4+locKMinusP4).M(), locHistAccidWeightFactor*locComboAccidWeightFactor);
+        if(dComboWrapper->Get_ChiSq_KinFit("")/dComboWrapper->Get_NDF_KinFit("") < 5.0)     dHist_PhiMass_ChisqCut_5->Fill((locKPlusP4+locKMinusP4).M(), locHistAccidWeightFactor*locComboAccidWeightFactor);
+        if(dComboWrapper->Get_ChiSq_KinFit("")/dComboWrapper->Get_NDF_KinFit("") < 4.0)     dHist_PhiMass_ChisqCut_4->Fill((locKPlusP4+locKMinusP4).M(), locHistAccidWeightFactor*locComboAccidWeightFactor);
+        if(dComboWrapper->Get_ChiSq_KinFit("")/dComboWrapper->Get_NDF_KinFit("") < 3.0)     dHist_PhiMass_ChisqCut_3->Fill((locKPlusP4+locKMinusP4).M(), locHistAccidWeightFactor*locComboAccidWeightFactor);
 
         if(dComboWrapper->Get_ChiSq_KinFit("")/dComboWrapper->Get_NDF_KinFit("") > 5.0)   // CHISQ CUT
         {
             dComboWrapper->Set_IsComboCut(true);
             continue;
         }
-
-        dHist_Chisq_ndf_After->Fill(dComboWrapper->Get_ChiSq_KinFit("")/dComboWrapper->Get_NDF_KinFit(""), locHistAccidWeightFactor*locComboAccidWeightFactor);
-        dHist_PhiMass_After->Fill((locKPlusP4+locKMinusP4).M(), locHistAccidWeightFactor*locComboAccidWeightFactor);
 
 		// EXECUTE ANALYSIS ACTIONS
         if(!Execute_Actions()) // if the active combo fails a cut, IsComboCutFlag automatically set
