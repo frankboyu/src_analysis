@@ -2,12 +2,9 @@
 
 start=`date +%s`
 
-INPUTFILE=/work/halld2/home/boyu/src_analysis/sim/output/jpsi_p_1H_test/root/trees/tree_epem__B5_F4_gen_coherent_090213_000.root
-TREENAME=epem__B5_F4_Tree
-SELECTOR=jpsi_p_recon
-# INPUTFILE=/work/halld2/home/boyu/src_analysis/sim/output/jpsi_d_2H_test/root/trees/tree_gd_epemd__B5_F4_gen_coherent_090213_000.root
-# TREENAME=gd_epemd__B5_F4_Tree
-# SELECTOR=jpsi_d_recon
+INPUTFILE=/work/halld2/home/boyu/src_analysis/data/output/phi_d_2H_ver12/tree_gd_kpkmd__B5_F4/*90208.root
+TREENAME=gd_kpkmd__B5_F4_Tree
+SELECTOR=phi_d_exc_recon
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
 # gxenv $HALLD_VERSIONS/version_5.21.0.xml
