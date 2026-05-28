@@ -3,19 +3,16 @@
 start=`date +%s`
 
 # data
-sh run_local.sh 'phi_d_recon_exc' 'data_2H_ver12'           'hist'
+sh run_local.sh 'phi_d_exc_recon'   'data_2H_ver12'     'both'
 
 # sim
-sh run_local.sh 'phi_d_recon_exc' 'sim_2H_ver12_flat'       'hist'
-sh run_local.sh 'phi_d_recon_exc' 'sim_2H_ver12_model'      'hist'
+sh run_local.sh 'phi_d_exc_recon'   'sim_2H_ver12'      'both'
 
 # tagged
-sh run_local.sh 'phi_d_thrown_exc' 'tagged_2H_ver12_flat'   'hist'
-sh run_local.sh 'phi_d_thrown_exc' 'tagged_2H_ver12_model'  'hist'
+sh run_local.sh 'phi_d_exc_thrown'  'tagged_2H_ver12'   'both'
 
 # gen
-sh run_local.sh 'phi_d_thrown_exc' 'gen_2H_ver12_flat'      'hist'
-sh run_local.sh 'phi_d_thrown_exc' 'gen_2H_ver12_model'     'hist'
+sh run_local.sh 'phi_d_exc_thrown'  'gen_2H_ver12'      'both'
 
 # hists
 # python configs/hist_vm_d.py

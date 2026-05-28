@@ -15,18 +15,19 @@ double dxs_weight_func(double beam_energy_truth, double minust_truth, int sim_mo
 
 double psi_weight_func(double beam_energy_truth, double psi_helicity_truth)
 {
-    double polarization_degree = 0.4;
+    double polarization_degree[] = {0.0000, 0.0614, 0.1087, 0.0971, 0.0763, 0.0629, 0.0517, 0.0413, 0.1486, 0.1490, 0.2020, 0.2395, 0.2812, 0.3042, 0.2247, 0.0528, 0.0443, 0.0521, 0.0744, 0.0376, 0.0290, 0.0132, 0.0359, 0.0282, 0.0576};
+    int energy_bin = (beam_energy_truth - 5.8) / 0.2;
     if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
         return 1.0;
     else                            // simulation, to be weighted by the SCHC+NPE predictions
-        return 1.0 + polarization_degree*TMath::Cos(2*psi_helicity_truth/RadToDeg);
+        return 1.0 + polarization_degree[energy_bin]*TMath::Cos(2*psi_helicity_truth/RadToDeg);
 }
 
-void filter_phi_d_thrown_exc(string reaction, string output_mode)
+void filter_phi_d_exc_thrown(string reaction, string output_mode)
 {
     cout << "Reading input files...\n";
-    string input_treefile_name  = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_phi_d_thrown_%s.root",reaction.c_str());
-    string input_tree_name  = "selectedtree_phi_d_thrown";
+    string input_treefile_name  = Form("/work/halld2/home/boyu/src_analysis/selection/output/selectedtree_phi_d_exc_thrown_%s.root",reaction.c_str());
+    string input_tree_name  = "selectedtree_phi_d_exc_thrown";
     if (reaction.find("gen") != string::npos)
         input_tree_name = "genT";
     TChain chain(input_tree_name.c_str());
@@ -105,7 +106,7 @@ void filter_phi_d_thrown_exc(string reaction, string output_mode)
 
     cout << "Filtering events...\n";
     auto rdf_NoCut          = rdf_input;
-    auto rdf_output         = rdf_NoCut;
+    auto rdf_SystCut        = rdf_NoCut;
     RNode rdfs []           = {rdf_NoCut};
     string labels []        = {"NoCut"};
     int N_filters           = sizeof(labels) / sizeof(labels[0]);
@@ -113,15 +114,15 @@ void filter_phi_d_thrown_exc(string reaction, string output_mode)
     if (output_mode == "tree" || output_mode == "both")
     {
         cout << "Saving to new tree...\n";
-        string output_treefile_name = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_phi_d_thrown_exc_%s.root",reaction.c_str());
-        string output_tree_name = "filteredtree_phi_d_thrown";
-        rdf_output.Snapshot(output_tree_name.c_str(), output_treefile_name.c_str());
+        string output_treefile_name = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_phi_d_exc_thrown_%s.root",reaction.c_str());
+        string output_tree_name = "filteredtree_phi_d_exc_thrown";
+        rdf_SystCut.Snapshot(output_tree_name.c_str(), output_treefile_name.c_str());
     }
 
     if (output_mode == "hist" || output_mode == "both")
     {
         cout << "Plotting histograms...\n";
-        string output_histfile_name = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_thrown_exc_%s.root",reaction.c_str());
+        string output_histfile_name = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_exc_thrown_%s.root",reaction.c_str());
         TFile * output_histfile = new TFile(output_histfile_name.c_str(), "RECREATE");
         output_histfile->cd();
 
