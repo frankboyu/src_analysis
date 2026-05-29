@@ -4,7 +4,8 @@ from scipy.optimize import curve_fit
 from matplotlib.backends.backend_pdf import PdfPages
 
 rad_to_deg = 180/np.pi
-file_pdf = PdfPages("/work/halld2/home/boyu/src_analysis/plot/vm_d/output/plots_vm_d.pdf")
+file_results    = PdfPages("/work/halld2/home/boyu/src_analysis/plot/vm_d/output/plots_vm_d_results.pdf")
+file_syst       = PdfPages("/work/halld2/home/boyu/src_analysis/plot/vm_d/output/plots_vm_d_syst.pdf")
 
 def dsdt_func(minust, a1, b1, a2, b2):
     return a1*np.exp(-b1*minust) + a2*np.exp(-b2*minust)
@@ -499,7 +500,7 @@ axs[4].set_ylabel(r'$Y_{\rm data}$')
 axs[4].set_xlim(-180, 180)
 axs[4].set_ylim(0, 800)
 
-file_pdf.savefig()
+file_results.savefig()
 plt.close()
 
 ################################################################# EFFICIENCY #############################################################################################################################
@@ -579,7 +580,7 @@ axs[4].set_ylabel(r'$\epsilon$')
 axs[4].set_xlim(-180, 180)
 axs[4].set_ylim(0, 0.6)
 
-file_pdf.savefig()
+file_results.savefig()
 
 ################################################################# SYSTEMATICS: DATA YIELD #################################################################################################################
 
@@ -648,7 +649,7 @@ for k in range(len(cut_name_list)):
             ax.legend()
             legend_without_duplicate_labels(ax)
 
-    file_pdf.savefig()
+    file_syst.savefig()
     plt.close()
 
 ################################################################# SYSTEMATICS: SIM YIELD ####################################################################################################################
@@ -718,7 +719,7 @@ for k in range(len(cut_name_list)):
             ax.legend()
             legend_without_duplicate_labels(ax)
 
-    file_pdf.savefig()
+    file_syst.savefig()
     plt.close()
 
 ################################################################# SYSTEMATICS: THROWN YIELD ####################################################################################################################
@@ -788,7 +789,7 @@ for k in range(len(cut_name_list)):
             ax.legend()
             legend_without_duplicate_labels(ax)
 
-    file_pdf.savefig()
+    file_syst.savefig()
     plt.close()
 
 ################################################################# SYSTEMATICS: BARLOW SCORE ###############################################################################################################
@@ -859,7 +860,7 @@ for k in range(len(cut_name_list)):
             ax.legend()
             legend_without_duplicate_labels(ax)
 
-    file_pdf.savefig()
+    file_syst.savefig()
     plt.close()
 
 ################################################################# SYSTEMATICS: OBSERVABLE #################################################################################################################
@@ -925,7 +926,7 @@ for k in range(len(cut_name_list)):
             ax.legend()
             legend_without_duplicate_labels(ax)
 
-    file_pdf.savefig()
+    file_syst.savefig()
     plt.close()
 
 ################################################################# SYSTEMATICS: DSDT #############################################################################################################
@@ -988,7 +989,7 @@ for i in range(len(p2p_list)):
 
 plt.suptitle('Systematic uncertainties: ' + title_list[0], fontsize=20)
 plt.legend()
-file_pdf.savefig()
+file_results.savefig()
 plt.close()
 
 ################################################################# SYSTEMATICS: W(COSTHETA) #############################################################################################################
@@ -1047,7 +1048,7 @@ axs[5].set_xlabel(xlabel_list[1], fontsize=16)
 axs[2].legend()
 
 plt.suptitle('Systematic uncertainties: ' + title_list[1], fontsize=20)
-file_pdf.savefig()
+file_results.savefig()
 plt.close()
 
 ################################################################# SYSTEMATICS: W(DECAYPHI) #############################################################################################################
@@ -1106,7 +1107,7 @@ axs[5].set_xlabel(xlabel_list[2], fontsize=16)
 axs[2].legend()
 
 plt.suptitle('Systematic uncertainties: ' + title_list[2], fontsize=20)
-file_pdf.savefig()
+file_results.savefig()
 plt.close()
 
 ################################################################# SYSTEMATICS: W(POLPHI) #############################################################################################################
@@ -1165,7 +1166,7 @@ axs[5].set_xlabel(xlabel_list[3], fontsize=16)
 axs[2].legend()
 
 plt.suptitle('Systematic uncertainties: ' + title_list[3], fontsize=20)
-file_pdf.savefig()
+file_results.savefig()
 plt.close()
 
 ################################################################# SYSTEMATICS: W(PSI) #############################################################################################################
@@ -1224,7 +1225,7 @@ axs[5].set_xlabel(xlabel_list[4], fontsize=16)
 axs[2].legend()
 
 plt.suptitle('Systematic uncertainties: ' + title_list[4], fontsize=20)
-file_pdf.savefig()
+file_results.savefig()
 plt.close()
 
 ################################################################# OBSERVABLE RESULTS: DIFFERENTIAL CROSS SECTIONS #############################################################################################################
@@ -1255,9 +1256,10 @@ phi_d_2H_dsdt_leps_results_157          = np.array([0.0005, 0.004, 0.0087, 0.006
 phi_d_2H_dsdt_leps_results_157_statserr = np.array([0.0005, 0.002, 0.0035, 0.0028, 0.007, 0.0076, 0.0102, 0.0118, 0.0142, 0.0137, 0.0159, 0.0148, 0.0166, 0.0152, 0.0143])*1000
 
 # Theoretical calculation examples
-phi_d_2H_dsdt_theory_minust             = np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/nominal/E_8.3_sigma_30.0_b_10.0.txt')[:,0]
-phi_d_2H_dsdt_theory_10mb               = np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/nominal/E_8.3_sigma_20.0_b_6.0.txt')[:,2]
-phi_d_2H_dsdt_theory_30mb               = np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/nominal/E_8.3_sigma_30.0_b_8.0.txt')[:,2]
+phi_d_2H_dsdt_theory_minust             = np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/nominal/E_8.3_sigma_30_b_10.00.txt')[:,0]
+phi_d_2H_dsdt_theory_minust2            = np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/temp/8.5gev_sigma10_b6_case3.txt')[:,0]
+phi_d_2H_dsdt_theory_10mb               = np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/temp/8.5gev_sigma10_b6_case3.txt')[:,2]
+phi_d_2H_dsdt_theory_30mb               = np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/nominal/E_8.3_sigma_30_b_10.00.txt')[:,2]
 
 # ds/dt world data
 fig = plt.figure(figsize=(8, 6), dpi=300)
@@ -1274,99 +1276,99 @@ plt.errorbar(phi_d_2H_dsdt_clas_minust_center,                          phi_d_2H
 plt.errorbar(phi_d_2H_dsdt_leps_minust_center,                          phi_d_2H_dsdt_leps_results_157,                                                                                         yerr=phi_d_2H_dsdt_leps_results_157_statserr,                           fmt='g^', markerfacecolor='white', markersize=3, capsize=2, capthick=1)
 plt.errorbar(phi_d_2H_dsdt_leps_minust_center,                          phi_d_2H_dsdt_leps_results_157,                                                                                         yerr=phi_d_2H_dsdt_leps_results_157_statserr,                           fmt='g^', markerfacecolor='white', markersize=3, label='LEPS (1.57-2.37 GeV)')
 
-plt.xlabel(r'$-t\ [GeV^2/c]$', fontsize=16)
-plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$', fontsize=16)
-plt.xticks(fontsize=16)
-plt.yticks(fontsize=16)
+plt.xlabel(r'$-t\ [GeV^2]$', fontsize=14)
+plt.ylabel(r'$d\sigma/dt\ [nb/GeV^2]$', fontsize=14)
+plt.xticks(np.arange(0, 2.5, 0.5), fontsize=12)
+plt.yticks(fontsize=12)
 plt.xlim(0, 2)
 plt.ylim(1e-1, 1e3)
 plt.yscale('log')
-plt.legend()
-file_pdf.savefig()
+# plt.legend()
+file_results.savefig()
 plt.close()
 
 # ds/dt compare with theory
 fig = plt.figure(figsize=(8, 6), dpi=300)
-plt.errorbar(phi_d_2H_dsdt_minust_center[dsdt_index[0]:dsdt_index[1]],  phi_d_2H_dsdt_results[0, dsdt_index[0]:dsdt_index[1]],  xerr=phi_d_2H_dsdt_minust_width[dsdt_index[0]:dsdt_index[1]],   yerr=phi_d_2H_dsdt_results_statserr[0, dsdt_index[0]:dsdt_index[1]],    fmt='b.', capsize=1.5, capthick=1, label='This work (5.8-7.8 GeV)')
+plt.errorbar(phi_d_2H_dsdt_minust_center[dsdt_index[0]:dsdt_index[1]],  phi_d_2H_dsdt_results[0, dsdt_index[0]:dsdt_index[1]],  xerr=phi_d_2H_dsdt_minust_width[dsdt_index[0]:dsdt_index[1]],   yerr=phi_d_2H_dsdt_results_statserr[0, dsdt_index[0]:dsdt_index[1]],    fmt='k.', capsize=1.5, capthick=1, label='This work (5.8-7.8 GeV)')
 plt.errorbar(phi_d_2H_dsdt_minust_center[dsdt_index[1]:dsdt_index[2]],  phi_d_2H_dsdt_results[0, dsdt_index[1]:dsdt_index[2]],  xerr=phi_d_2H_dsdt_minust_width[dsdt_index[1]:dsdt_index[2]],   yerr=phi_d_2H_dsdt_results_statserr[0, dsdt_index[1]:dsdt_index[2]],    fmt='k.', capsize=1.5, capthick=1, label='This work (7.8-8.8 GeV)')
-plt.errorbar(phi_d_2H_dsdt_minust_center[dsdt_index[2]:dsdt_index[3]],  phi_d_2H_dsdt_results[0, dsdt_index[2]:dsdt_index[3]],  xerr=phi_d_2H_dsdt_minust_width[dsdt_index[2]:dsdt_index[3]],   yerr=phi_d_2H_dsdt_results_statserr[0, dsdt_index[2]:dsdt_index[3]],    fmt='r.', capsize=1.5, capthick=1, label='This work (8.8-10.8 GeV)')
+plt.errorbar(phi_d_2H_dsdt_minust_center[dsdt_index[2]:dsdt_index[3]],  phi_d_2H_dsdt_results[0, dsdt_index[2]:dsdt_index[3]],  xerr=phi_d_2H_dsdt_minust_width[dsdt_index[2]:dsdt_index[3]],   yerr=phi_d_2H_dsdt_results_statserr[0, dsdt_index[2]:dsdt_index[3]],    fmt='k.', capsize=1.5, capthick=1, label='This work (8.8-10.8 GeV)')
 plt.errorbar(phi_d_2H_dsdt_minust_center[dsdt_index[1]:dsdt_index[2]],  phi_d_2H_dsdt_results[0, dsdt_index[1]:dsdt_index[2]],  xerr=phi_d_2H_dsdt_minust_width[dsdt_index[1]:dsdt_index[2]],   yerr=phi_d_2H_dsdt_results_totalerr[dsdt_index[1]:dsdt_index[2]],       fmt='k.')
-plt.errorbar(phi_d_2H_dsdt_minust_center[dsdt_index[2]:dsdt_index[3]],  phi_d_2H_dsdt_results[0, dsdt_index[2]:dsdt_index[3]],  xerr=phi_d_2H_dsdt_minust_width[dsdt_index[2]:dsdt_index[3]],   yerr=phi_d_2H_dsdt_results_totalerr[dsdt_index[2]:dsdt_index[3]],       fmt='r.')
+plt.errorbar(phi_d_2H_dsdt_minust_center[dsdt_index[2]:dsdt_index[3]],  phi_d_2H_dsdt_results[0, dsdt_index[2]:dsdt_index[3]],  xerr=phi_d_2H_dsdt_minust_width[dsdt_index[2]:dsdt_index[3]],   yerr=phi_d_2H_dsdt_results_totalerr[dsdt_index[2]:dsdt_index[3]],       fmt='k.')
 
-plt.errorbar(phi_d_2H_dsdt_theory_minust,                               phi_d_2H_dsdt_theory_10mb,                                                                                              fmt='-', color = 'g', label='E=8.3 GeV $\sigma_{\phi N}=$10 mb (VMD)')
-plt.fill_between(phi_d_2H_dsdt_theory_minust,                           phi_d_2H_dsdt_theory_10mb-0.2*(phi_d_2H_dsdt_theory_10mb), phi_d_2H_dsdt_theory_10mb+0.2*(phi_d_2H_dsdt_theory_10mb),   color='g', alpha=0.2)
-plt.errorbar(phi_d_2H_dsdt_theory_minust,                               phi_d_2H_dsdt_theory_30mb,                                                                                              fmt='-', color = 'y', label=r'E=8.3 GeV $\sigma_{\phi N}=$30 mb ($b_{\phi N}=8 \rm \ GeV^{-2}$)')
-plt.fill_between(phi_d_2H_dsdt_theory_minust,                           phi_d_2H_dsdt_theory_30mb-0.2*(phi_d_2H_dsdt_theory_30mb), phi_d_2H_dsdt_theory_30mb+0.2*(phi_d_2H_dsdt_theory_30mb),   color='y', alpha=0.2)
+plt.plot(phi_d_2H_dsdt_theory_minust2,                              phi_d_2H_dsdt_theory_10mb,                                                                                              linestyle='--', color = 'gray', label='E=8.3 GeV $\sigma_{\phi N}=$10 mb (VMD)')
+plt.fill_between(phi_d_2H_dsdt_theory_minust2,                          (phi_d_2H_dsdt_theory_10mb-0.2*(phi_d_2H_dsdt_theory_10mb)), (phi_d_2H_dsdt_theory_10mb+0.2*(phi_d_2H_dsdt_theory_10mb)),   color='gray', alpha=0.2)
+plt.plot(phi_d_2H_dsdt_theory_minust,                               2*phi_d_2H_dsdt_theory_30mb,                                                                                              linestyle='--', color = 'blue', label=r'E=8.3 GeV $\sigma_{\phi N}=$30 mb ($b_{\phi N}=8 \rm \ GeV^{-2}$)')
+plt.fill_between(phi_d_2H_dsdt_theory_minust,                           2*(phi_d_2H_dsdt_theory_30mb-0.2*(phi_d_2H_dsdt_theory_30mb)), 2*(phi_d_2H_dsdt_theory_30mb+0.2*(phi_d_2H_dsdt_theory_30mb)),   color='blue', alpha=0.2)
 
-plt.xlabel(r'$-t\ [GeV^2/c]$', fontsize=16)
-plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$', fontsize=16)
-plt.xticks(fontsize=16)
-plt.yticks(fontsize=16)
+plt.xlabel(r'$-t\ [GeV^2]$', fontsize=14)
+plt.ylabel(r'$d\sigma/dt\ [nb/GeV^2]$', fontsize=14)
+plt.xticks(np.arange(0, 2.5, 0.5), fontsize=12)
+plt.yticks(fontsize=12)
 plt.xlim(0, 2)
 plt.ylim(1e-1, 1e3)
 plt.yscale('log')
-plt.legend()
-file_pdf.savefig()
+# plt.legend()
+file_results.savefig()
 plt.close()
 
-# Constraints on sigma_phiN and b_phiN using chi2 fit to ds/dt
-print('Performing chi2 analysis on sigma_phiN...')
+# # Constraints on sigma_phiN and b_phiN using chi2 fit to ds/dt
+# print('Performing chi2 analysis on sigma_phiN...')
 
-sphin_list = np.arange(30,40,0.5)
-bphin_list = np.arange(10,15,0.5)
-normerr_src     = np.sqrt(0.0656**2+0.05**2+0.002**2 + 0.005**2+0.01**2)
-normerr_clas    = 0.2
-normerr_theory  = 0.2
+# sphin_list = np.arange(30,40,0.5)
+# bphin_list = np.arange(10,15,0.5)
+# normerr_src     = np.sqrt(0.0656**2+0.05**2+0.002**2 + 0.005**2+0.01**2)
+# normerr_clas    = 0.2
+# normerr_theory  = 0.2
 
-chi2_array = np.zeros((len(bphin_list), len(sphin_list)))
-for i,sphin in enumerate(sphin_list):
-    for j,bphin in enumerate(bphin_list):
-        print(f'Calculating chi2 for sigma={sphin}, b={bphin}')
-        theory_results = np.loadtxt(f'/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/nominal/E_8.3_sigma_%.1f_b_%.1f.txt' % (sphin, bphin))
-        nuisance_opt = 0
-        for nuisance in np.arange(-10, 10.1, 0.01):
-            ndf = 0
-            this_chi2 = 0
-            for k in range(dsdt_index[1], dsdt_index[2]):
-                t_val = phi_d_2H_dsdt_minust_center[k]
-                if (t_val < 0.24):
-                    continue
-                data_val = phi_d_2H_dsdt_results[0,k]
-                data_err = phi_d_2H_dsdt_results_p2perr[0,k]
-                theory_idx = (np.abs(theory_results[:,0] - t_val)).argmin()  # Find the closest theory point
-                theory_val = theory_results[theory_idx, 2]
-                this_chi2 += ((data_val - (1 + nuisance*np.sqrt(normerr_src**2 + normerr_theory**2))*theory_val)**2)/(data_err**2)
-                ndf += 1
-            this_chi2 += nuisance**2  # pull term
-            ndf -= 2  # 2 parameters: sigma_phiN and b_phiN
-            this_chi2 /= ndf
-            if this_chi2 < chi2_array[j, i] or chi2_array[j, i] == 0:
-                chi2_array[j, i] = this_chi2
-                nuisance_opt = nuisance
-        if np.abs(nuisance_opt) >= 9.9:
-            print(f'Warning: Nuisance parameter at limit for sigma={sphin}, b={bphin}, nuisance={nuisance_opt}')
+# chi2_array = np.zeros((len(bphin_list), len(sphin_list)))
+# for i,sphin in enumerate(sphin_list):
+#     for j,bphin in enumerate(bphin_list):
+#         print(f'Calculating chi2 for sigma={sphin}, b={bphin}')
+#         theory_results = np.loadtxt(f'/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/nominal/E_8.3_sigma_%.1f_b_%.1f.txt' % (sphin, bphin))
+#         nuisance_opt = 0
+#         for nuisance in np.arange(-10, 10.1, 0.01):
+#             ndf = 0
+#             this_chi2 = 0
+#             for k in range(dsdt_index[1], dsdt_index[2]):
+#                 t_val = phi_d_2H_dsdt_minust_center[k]
+#                 if (t_val < 0.24):
+#                     continue
+#                 data_val = phi_d_2H_dsdt_results[0,k]
+#                 data_err = phi_d_2H_dsdt_results_p2perr[0,k]
+#                 theory_idx = (np.abs(theory_results[:,0] - t_val)).argmin()  # Find the closest theory point
+#                 theory_val = theory_results[theory_idx, 2]
+#                 this_chi2 += ((data_val - (1 + nuisance*np.sqrt(normerr_src**2 + normerr_theory**2))*theory_val)**2)/(data_err**2)
+#                 ndf += 1
+#             this_chi2 += nuisance**2  # pull term
+#             ndf -= 2  # 2 parameters: sigma_phiN and b_phiN
+#             this_chi2 /= ndf
+#             if this_chi2 < chi2_array[j, i] or chi2_array[j, i] == 0:
+#                 chi2_array[j, i] = this_chi2
+#                 nuisance_opt = nuisance
+#         if np.abs(nuisance_opt) >= 9.9:
+#             print(f'Warning: Nuisance parameter at limit for sigma={sphin}, b={bphin}, nuisance={nuisance_opt}')
 
-fig = plt.figure(figsize=(8, 6), dpi=300)
-plt.contourf(sphin_list, bphin_list, chi2_array, levels=50, cmap='viridis')
-cbar = plt.colorbar()
-cbar.set_label(r'$\chi^2/NDF$')
-plt.xlabel(r'$\sigma_{\phi N}\ [mb]$')
-plt.ylabel(r'$\rm b_{\phi N}\ [GeV^{-2}]$')
-file_pdf.savefig()
-plt.close()
+# fig = plt.figure(figsize=(8, 6), dpi=300)
+# plt.contourf(sphin_list, bphin_list, chi2_array, levels=50, cmap='viridis')
+# cbar = plt.colorbar()
+# cbar.set_label(r'$\chi^2/NDF$')
+# plt.xlabel(r'$\sigma_{\phi N}\ [mb]$')
+# plt.ylabel(r'$\rm b_{\phi N}\ [GeV^{-2}]$')
+# file_pdf.savefig()
+# plt.close()
 
-fig = plt.figure(figsize=(8, 6), dpi=300)
-confidence_levels = [2.30, 6.18, 11.83]  # 68%, 95%, 99.7% for 2 parameters
-best_fit_idx = np.unravel_index(np.argmin(chi2_array), chi2_array.shape)
-best_chi2 = chi2_array[best_fit_idx]
-for level in confidence_levels:
-    contour_level = best_chi2 + level/ndf
-    plt.contour(sphin_list, bphin_list, chi2_array, levels=[contour_level], colors='black', linestyles='dashed')
-    # plt.text(best_fit_idx[1]*5 + 5, best_fit_idx[0]*5 + 20 + level, f'{int(level*100)/100}', color='black')
-plt.xlabel(r'$\sigma_{\phi N}\ [mb]$')
-plt.ylabel(r'$\rm b_{\phi N}\ [GeV^{-2}]$')
-file_pdf.savefig()
-plt.close()
+# fig = plt.figure(figsize=(8, 6), dpi=300)
+# confidence_levels = [2.30, 6.18, 11.83]  # 68%, 95%, 99.7% for 2 parameters
+# best_fit_idx = np.unravel_index(np.argmin(chi2_array), chi2_array.shape)
+# best_chi2 = chi2_array[best_fit_idx]
+# for level in confidence_levels:
+#     contour_level = best_chi2 + level/ndf
+#     plt.contour(sphin_list, bphin_list, chi2_array, levels=[contour_level], colors='black', linestyles='dashed')
+#     # plt.text(best_fit_idx[1]*5 + 5, best_fit_idx[0]*5 + 20 + level, f'{int(level*100)/100}', color='black')
+# plt.xlabel(r'$\sigma_{\phi N}\ [mb]$')
+# plt.ylabel(r'$\rm b_{\phi N}\ [GeV^{-2}]$')
+# file_pdf.savefig()
+# plt.close()
 
 ################################################################# OBSERVABLE RESULTS: DECAY ANGULAR DISTRIBUTIONS #############################################################################################################
 
@@ -1406,7 +1408,7 @@ for i in range(3):
     axs[i].set_xticks([])
     axs[i+3].set_xticks(np.arange(-1, 1, 0.25))
 
-file_pdf.savefig()
+file_results.savefig()
 plt.close()
 
 # Wdecayphi
@@ -1440,7 +1442,7 @@ for i in range(3):
     axs[i].set_xticks([])
     axs[i+3].set_xticks(np.arange(-180, 180, 45))
 
-file_pdf.savefig()
+file_results.savefig()
 plt.close()
 
 # Wpolphi
@@ -1474,7 +1476,7 @@ for i in range(3):
     axs[i].set_xticks([])
     axs[i+3].set_xticks(np.arange(-180, 180, 45))
 
-file_pdf.savefig()
+file_results.savefig()
 plt.close()
 
 # Wpsi
@@ -1510,7 +1512,7 @@ for i in range(3):
     axs[i].set_xticks([])
     axs[i+3].set_xticks(np.arange(-180, 180, 45))
 
-file_pdf.savefig()
+file_results.savefig()
 plt.close()
 
 # SDMEs
@@ -1565,134 +1567,10 @@ for i in range(4):
 #     axs[i].set_xticks([])
 #     axs[i+3].set_xticks(np.arange(-180, 180, 45))
 
-file_pdf.savefig()
+file_results.savefig()
 plt.close()
 
-################################################################# OUTPUT RESULT FOR LaTeX #############################################################################################################
-
-print('Writing results to text file...')
-
-file_txt = open("output/table_numerical.txt", "w")
-
-def format_scientific(number, precision=2):
-    # Format the number in scientific notation (e.g., 'e' or 'E')
-    formatted = f"{number:.{precision}E}"
-    # Remove the '+', but keep the '-' for negative exponents
-    return formatted.replace('e+0', 'e').replace('E+0', 'E')
-
-
-file_txt.write("dsdt\n")
-for i in range(phi_d_2H_dsdt_results[0].shape[0]):
-    file_txt.write("        ")
-    file_txt.write(f"{phi_d_2H_dsdt_minust_low[i]:5.3f} & {phi_d_2H_dsdt_minust_high[i]:5.3f} & ")
-    file_txt.write(f"{phi_d_2H_dsdt_minust_center[i]:5.4f} & {phi_d_2H_dsdt_minust_width[i]:5.4f} &    ")
-    file_txt.write(f"{phi_d_2H_dsdt_yield_data[0, i]:6.2f} $\pm$ {phi_d_2H_dsdt_yield_data_statserr[0, i]:5.2f} &    ")
-    file_txt.write(f"{format_scientific(phi_d_2H_dsdt_yield_sim[0, i])} $\pm$ {format_scientific(phi_d_2H_dsdt_yield_sim_statserr[0, i])} &    ")
-    file_txt.write(f"{format_scientific(phi_d_2H_dsdt_yield_tagged[0, i])} $\pm$ {format_scientific(phi_d_2H_dsdt_yield_tagged_statserr[0, i])} &    ")
-    file_txt.write(f"{phi_d_2H_dsdt_results[0, i]:6.2f} $\pm$ {phi_d_2H_dsdt_results_statserr[0, i]:5.2f} $\pm$ {phi_d_2H_dsdt_results_systerr[i]:5.2f}")
-    file_txt.write(" \\\\\n")
-    if (i+1) in dsdt_index:
-        file_txt.write("\n")
-
-file_txt.write("Wcostheta\n")
-for i in range(phi_d_2H_Wcostheta_results[0].shape[0]):
-    file_txt.write("        & ")
-    file_txt.write(f"{phi_d_2H_Wcostheta_costheta_low[i]:5.1f} & {phi_d_2H_Wcostheta_costheta_high[i]:5.1f} & ")
-    file_txt.write(f"{phi_d_2H_Wcostheta_costheta_center[i]:6.3f} & {phi_d_2H_Wcostheta_costheta_width[i]:5.3f} &    ")
-    file_txt.write(f"{phi_d_2H_Wcostheta_yield_data[0, i]:6.2f} $\pm$ {phi_d_2H_Wcostheta_yield_data_statserr[0, i]:5.2f} &    ")
-    file_txt.write(f"{format_scientific(phi_d_2H_Wcostheta_yield_sim[0, i])} $\pm$ {format_scientific(phi_d_2H_Wcostheta_yield_sim_statserr[0, i])} &    ")
-    file_txt.write(f"{format_scientific(phi_d_2H_Wcostheta_yield_tagged[0, i])} $\pm$ {format_scientific(phi_d_2H_Wcostheta_yield_tagged_statserr[0, i])} &    ")
-    file_txt.write(f"{phi_d_2H_Wcostheta_results[0, i]:6.2f} $\pm$ {phi_d_2H_Wcostheta_results_statserr[0, i]:4.2f} $\pm$ {phi_d_2H_Wcostheta_results_systerr[i]:4.2f}")
-    file_txt.write(" \\\\\n")
-    if (i+1) in Wcostheta_index:
-        file_txt.write("\n")
-
-file_txt.write("Wdecayphi\n")
-for i in range(phi_d_2H_Wdecayphi_results[0].shape[0]):
-    file_txt.write("        & ")
-    file_txt.write(f"{phi_d_2H_Wdecayphi_decayphi_low[i]:4.0f} & {phi_d_2H_Wdecayphi_decayphi_high[i]:4.0f} & ")
-    file_txt.write(f"{phi_d_2H_Wdecayphi_decayphi_center[i]:7.2f} & {phi_d_2H_Wdecayphi_decayphi_width[i]:5.2f} &    ")
-    file_txt.write(f"{phi_d_2H_Wdecayphi_yield_data[0, i]:6.2f} $\pm$ {phi_d_2H_Wdecayphi_yield_data_statserr[0, i]:5.2f} &    ")
-    file_txt.write(f"{format_scientific(phi_d_2H_Wdecayphi_yield_sim[0, i])} $\pm$ {format_scientific(phi_d_2H_Wdecayphi_yield_sim_statserr[0, i])} &    ")
-    file_txt.write(f"{format_scientific(phi_d_2H_Wdecayphi_yield_tagged[0, i])} $\pm$ {format_scientific(phi_d_2H_Wdecayphi_yield_tagged_statserr[0, i])} &    ")
-    file_txt.write(f"{phi_d_2H_Wdecayphi_results[0, i]:6.2f} $\pm$ {phi_d_2H_Wdecayphi_results_statserr[0, i]:4.2f} $\pm$ {phi_d_2H_Wdecayphi_results_systerr[i]:4.2f}")
-    file_txt.write(" \\\\\n")
-    if (i+1) in Wdecayphi_index:
-        file_txt.write("\n")
-
-file_txt.write("Wpolphi\n")
-for i in range(phi_d_2H_Wpolphi_results[0].shape[0]):
-    file_txt.write("        & ")
-    file_txt.write(f"{phi_d_2H_Wpolphi_polphi_low[i]:4.0f} & {phi_d_2H_Wpolphi_polphi_high[i]:4.0f} & ")
-    file_txt.write(f"{phi_d_2H_Wpolphi_polphi_center[i]:7.2f} & {phi_d_2H_Wpolphi_polphi_width[i]:5.2f} &    ")
-    file_txt.write(f"{phi_d_2H_Wpolphi_yield_data[0, i]:6.2f} $\pm$ {phi_d_2H_Wpolphi_yield_data_statserr[0, i]:5.2f} &    ")
-    file_txt.write(f"{format_scientific(phi_d_2H_Wpolphi_yield_sim[0, i])} $\pm$ {format_scientific(phi_d_2H_Wpolphi_yield_sim_statserr[0, i])} &    ")
-    file_txt.write(f"{format_scientific(phi_d_2H_Wpolphi_yield_tagged[0, i])} $\pm$ {format_scientific(phi_d_2H_Wpolphi_yield_tagged_statserr[0, i])} &    ")
-    file_txt.write(f"{phi_d_2H_Wpolphi_results[0, i]:6.2f} $\pm$ {phi_d_2H_Wpolphi_results_statserr[0, i]:4.2f} $\pm$ {phi_d_2H_Wpolphi_results_systerr[i]:4.2f}")
-    file_txt.write(" \\\\\n")
-    if (i+1) in Wpolphi_index:
-        file_txt.write("\n")
-
-file_txt.write("Wpsi\n")
-for i in range(phi_d_2H_Wpsi_results[0].shape[0]):
-    file_txt.write("        & ")
-    file_txt.write(f"{phi_d_2H_Wpsi_psi_low[i]:4.0f} & {phi_d_2H_Wpsi_psi_high[i]:4.0f} & ")
-    file_txt.write(f"{phi_d_2H_Wpsi_psi_center[i]:7.2f} & {phi_d_2H_Wpsi_psi_width[i]:5.2f} &    ")
-    file_txt.write(f"{phi_d_2H_Wpsi_yield_data[0, i]:6.2f} $\pm$ {phi_d_2H_Wpsi_yield_data_statserr[0, i]:5.2f} &    ")
-    file_txt.write(f"{format_scientific(phi_d_2H_Wpsi_yield_sim[0, i])} $\pm$ {format_scientific(phi_d_2H_Wpsi_yield_sim_statserr[0, i])} &    ")
-    file_txt.write(f"{format_scientific(phi_d_2H_Wpsi_yield_tagged[0, i])} $\pm$ {format_scientific(phi_d_2H_Wpsi_yield_tagged_statserr[0, i])} &    ")
-    file_txt.write(f"{phi_d_2H_Wpsi_results[0, i]:6.2f} $\pm$ {phi_d_2H_Wpsi_results_statserr[0, i]:4.2f} $\pm$ {phi_d_2H_Wpsi_results_systerr[i]:4.2f}")
-    file_txt.write(" \\\\\n")
-    if (i+1) in Wpsi_index:
-        file_txt.write("\n")
-
-file_txt.close()
-
-
-
-
-
-# # sphin_list = np.arange(0,120,1)
-# # bphin_list = np.arange(0,30,1)
-
-# # chi2_array = np.zeros((len(bphin_list), len(sphin_list)))
-# # for i,sphin in enumerate(sphin_list):
-# #     for j,bphin in enumerate(bphin_list):
-# #         theory_results = np.loadtxt(f'/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/case3_4.0_alpha0_61237/E_2.1_sigma_%.0f_b_%.0f.txt' % (sphin, bphin))
-# #         chi2 = 0
-# #         ndf = 0
-# #         for k in range(len(phi_d_2H_dsdt_clas_minust_center)):
-# #             t_val = phi_d_2H_dsdt_clas_minust_center[k]
-# #             data_val = phi_d_2H_dsdt_clas_results_16[k]
-# #             data_err = phi_d_2H_dsdt_clas_results_16_totalerr[k]
-# #             # Find the closest theory point
-# #             theory_idx = (np.abs(theory_results[:,0] - t_val)).argmin()
-# #             theory_val = theory_results[theory_idx, 2]
-# #             if data_err > 0 and data_val > 0 and theory_val > 0:
-# #                 chi2 += ((data_val - theory_val)**2)/(data_err**2 + (0.1*theory_val)**2)  # adding 20% theory uncertainty
-# #                 ndf += 1
-# #         # ndf -= 2  # two fit parameters
-# #         chi2_array[j, i] = np.log(chi2/ndf)
-
-# # fig = plt.figure(figsize=(8, 6), dpi=300)
-# # # plt.contourf(sphin_list, bphin_list, chi2_array, levels=50, cmap='viridis')
-# # # cbar = plt.colorbar()
-# # # cbar.set_label(r'$\chi^2/NDF$')
-# # confidence_levels = [2.30, 6.18]  # 68%, 95%, 99.7% for 2 parameters
-# # best_fit_idx = np.unravel_index(np.argmin(chi2_array), chi2_array.shape)
-# # best_chi2 = chi2_array[best_fit_idx]
-# # for level in confidence_levels:
-# #     contour_level = best_chi2 + level/ndf
-# #     plt.contour(sphin_list, bphin_list, chi2_array, levels=[contour_level], colors='black', linestyles='dashed')
-# #     # plt.text(best_fit_idx[1]*5 + 5, best_fit_idx[0]*5 + 20 + level, f'{int(level*100)/100}', color='black')
-# # plt.xlabel(r'$\sigma_{\phi N}\ [mb]$')
-# # plt.ylabel(r'$\rm b_{\phi N}\ [GeV^{-2}]$')
-# # plt.title(r'$\chi^2/NDF$ map for $\phi-D$ scattering parameters')
-# # file_pdf.savefig()
-# # plt.close()
-
-
-
+################################################################# OBSERVABLE RESULTS: DECAY ANGULAR DISTRIBUTIONS FOR SIDEBAND EVENTS #############################################################################################################
 
 # # Read the bin edges
 # phi_d_2H_Wcostheta_energy_low            = np.loadtxt('configs/bins_phi_d_Wcostheta.txt')[:,0]
@@ -1887,4 +1765,200 @@ file_txt.close()
 # file_pdf.savefig()
 # plt.close()
 
-file_pdf.close()
+################################################################# OUTPUT RESULT FOR LaTeX #############################################################################################################
+
+print('Writing results to text file...')
+
+def format_scientific(number, precision=2):
+    # Format the number in scientific notation (e.g., 'e' or 'E')
+    formatted = f"{number:.{precision}E}"
+    # Remove the '+', but keep the '-' for negative exponents
+    return formatted.replace('e+0', 'e').replace('E+0', 'E')
+
+# Numerical results of yield and physics observables
+file_txt = open("output/table_vm_d_numerical.txt", "w")
+
+file_txt.write("dsdt\n")
+for i in range(phi_d_2H_dsdt_results[0].shape[0]):
+    file_txt.write(f"{phi_d_2H_dsdt_minust_low[i]:5.3f} {phi_d_2H_dsdt_minust_high[i]:5.3f} ")
+    file_txt.write(f"{phi_d_2H_dsdt_minust_center[i]:5.4f} {phi_d_2H_dsdt_minust_width[i]:5.4f} \t ")
+    file_txt.write(f"{phi_d_2H_dsdt_yield_data[0, i]:6.2f} {phi_d_2H_dsdt_yield_data_statserr[0, i]:5.2f} \t ")
+    file_txt.write(f"{format_scientific(phi_d_2H_dsdt_yield_sim[0, i])} {format_scientific(phi_d_2H_dsdt_yield_sim_statserr[0, i])} \t ")
+    file_txt.write(f"{format_scientific(phi_d_2H_dsdt_yield_tagged[0, i])} {format_scientific(phi_d_2H_dsdt_yield_tagged_statserr[0, i])} \t ")
+    file_txt.write(f"{phi_d_2H_dsdt_results[0, i]:6.2f} {phi_d_2H_dsdt_results_statserr[0, i]:5.2f} {phi_d_2H_dsdt_results_systerr[i]:5.2f}")
+    file_txt.write("\n")
+    if (i+1) in dsdt_index:
+        file_txt.write("\n")
+
+file_txt.write("Wcostheta\n")
+for i in range(phi_d_2H_Wcostheta_results[0].shape[0]):
+    file_txt.write(f"{phi_d_2H_Wcostheta_costheta_low[i]:5.1f} {phi_d_2H_Wcostheta_costheta_high[i]:5.1f} ")
+    file_txt.write(f"{phi_d_2H_Wcostheta_costheta_center[i]:6.3f} {phi_d_2H_Wcostheta_costheta_width[i]:5.3f} \t ")
+    file_txt.write(f"{phi_d_2H_Wcostheta_yield_data[0, i]:6.2f} {phi_d_2H_Wcostheta_yield_data_statserr[0, i]:5.2f} \t ")
+    file_txt.write(f"{format_scientific(phi_d_2H_Wcostheta_yield_sim[0, i])} {format_scientific(phi_d_2H_Wcostheta_yield_sim_statserr[0, i])} \t ")
+    file_txt.write(f"{format_scientific(phi_d_2H_Wcostheta_yield_tagged[0, i])} {format_scientific(phi_d_2H_Wcostheta_yield_tagged_statserr[0, i])} \t ")
+    file_txt.write(f"{phi_d_2H_Wcostheta_results[0, i]:6.2f} {phi_d_2H_Wcostheta_results_statserr[0, i]:4.2f} {phi_d_2H_Wcostheta_results_systerr[i]:4.2f}")
+    file_txt.write("\n")
+    if (i+1) in Wcostheta_index:
+        file_txt.write("\n")
+
+file_txt.write("Wdecayphi\n")
+for i in range(phi_d_2H_Wdecayphi_results[0].shape[0]):
+    file_txt.write(f"{phi_d_2H_Wdecayphi_decayphi_low[i]:4.0f} {phi_d_2H_Wdecayphi_decayphi_high[i]:4.0f} ")
+    file_txt.write(f"{phi_d_2H_Wdecayphi_decayphi_center[i]:7.2f} {phi_d_2H_Wdecayphi_decayphi_width[i]:5.2f} \t ")
+    file_txt.write(f"{phi_d_2H_Wdecayphi_yield_data[0, i]:6.2f} {phi_d_2H_Wdecayphi_yield_data_statserr[0, i]:5.2f} \t ")
+    file_txt.write(f"{format_scientific(phi_d_2H_Wdecayphi_yield_sim[0, i])} {format_scientific(phi_d_2H_Wdecayphi_yield_sim_statserr[0, i])} \t ")
+    file_txt.write(f"{format_scientific(phi_d_2H_Wdecayphi_yield_tagged[0, i])} {format_scientific(phi_d_2H_Wdecayphi_yield_tagged_statserr[0, i])} \t ")
+    file_txt.write(f"{phi_d_2H_Wdecayphi_results[0, i]:6.2f} {phi_d_2H_Wdecayphi_results_statserr[0, i]:4.2f} {phi_d_2H_Wdecayphi_results_systerr[i]:4.2f}")
+    file_txt.write("\n")
+    if (i+1) in Wdecayphi_index:
+        file_txt.write("\n")
+
+file_txt.write("Wpolphi\n")
+for i in range(phi_d_2H_Wpolphi_results[0].shape[0]):
+    file_txt.write(f"{phi_d_2H_Wpolphi_polphi_low[i]:4.0f} {phi_d_2H_Wpolphi_polphi_high[i]:4.0f} ")
+    file_txt.write(f"{phi_d_2H_Wpolphi_polphi_center[i]:7.2f} {phi_d_2H_Wpolphi_polphi_width[i]:5.2f} \t ")
+    file_txt.write(f"{phi_d_2H_Wpolphi_yield_data[0, i]:6.2f} {phi_d_2H_Wpolphi_yield_data_statserr[0, i]:5.2f} \t ")
+    file_txt.write(f"{format_scientific(phi_d_2H_Wpolphi_yield_sim[0, i])} {format_scientific(phi_d_2H_Wpolphi_yield_sim_statserr[0, i])} \t ")
+    file_txt.write(f"{format_scientific(phi_d_2H_Wpolphi_yield_tagged[0, i])} {format_scientific(phi_d_2H_Wpolphi_yield_tagged_statserr[0, i])} \t ")
+    file_txt.write(f"{phi_d_2H_Wpolphi_results[0, i]:6.2f} {phi_d_2H_Wpolphi_results_statserr[0, i]:4.2f} {phi_d_2H_Wpolphi_results_systerr[i]:4.2f}")
+    file_txt.write("\n")
+    if (i+1) in Wpolphi_index:
+        file_txt.write("\n")
+
+file_txt.write("Wpsi\n")
+for i in range(phi_d_2H_Wpsi_results[0].shape[0]):
+    file_txt.write(f"{phi_d_2H_Wpsi_psi_low[i]:4.0f} {phi_d_2H_Wpsi_psi_high[i]:4.0f} ")
+    file_txt.write(f"{phi_d_2H_Wpsi_psi_center[i]:7.2f} {phi_d_2H_Wpsi_psi_width[i]:5.2f} \t ")
+    file_txt.write(f"{phi_d_2H_Wpsi_yield_data[0, i]:6.2f} {phi_d_2H_Wpsi_yield_data_statserr[0, i]:5.2f} \t ")
+    file_txt.write(f"{format_scientific(phi_d_2H_Wpsi_yield_sim[0, i])} {format_scientific(phi_d_2H_Wpsi_yield_sim_statserr[0, i])} \t ")
+    file_txt.write(f"{format_scientific(phi_d_2H_Wpsi_yield_tagged[0, i])} {format_scientific(phi_d_2H_Wpsi_yield_tagged_statserr[0, i])} \t ")
+    file_txt.write(f"{phi_d_2H_Wpsi_results[0, i]:6.2f} {phi_d_2H_Wpsi_results_statserr[0, i]:4.2f} {phi_d_2H_Wpsi_results_systerr[i]:4.2f}")
+    file_txt.write("\n")
+    if (i+1) in Wpsi_index:
+        file_txt.write("\n")
+
+file_txt.close()
+
+# Numerical results of yield and physics observables for LaTeX tables
+file_txt = open("output/table_vm_d_latex.txt", "w")
+
+file_txt.write("dsdt\n")
+for i in range(phi_d_2H_dsdt_results[0].shape[0]):
+    file_txt.write("        ")
+    file_txt.write(f"{phi_d_2H_dsdt_minust_low[i]:5.3f} & {phi_d_2H_dsdt_minust_high[i]:5.3f} & ")
+    file_txt.write(f"{phi_d_2H_dsdt_minust_center[i]:5.4f} & {phi_d_2H_dsdt_minust_width[i]:5.4f} &    ")
+    file_txt.write(f"{phi_d_2H_dsdt_yield_data[0, i]:6.2f} $\pm$ {phi_d_2H_dsdt_yield_data_statserr[0, i]:5.2f} &    ")
+    file_txt.write(f"{format_scientific(phi_d_2H_dsdt_yield_sim[0, i])} $\pm$ {format_scientific(phi_d_2H_dsdt_yield_sim_statserr[0, i])} &    ")
+    file_txt.write(f"{format_scientific(phi_d_2H_dsdt_yield_tagged[0, i])} $\pm$ {format_scientific(phi_d_2H_dsdt_yield_tagged_statserr[0, i])} &    ")
+    file_txt.write(f"{phi_d_2H_dsdt_results[0, i]:6.2f} $\pm$ {phi_d_2H_dsdt_results_statserr[0, i]:5.2f} $\pm$ {phi_d_2H_dsdt_results_systerr[i]:5.2f}")
+    file_txt.write(" \\\\\n")
+    if (i+1) in dsdt_index:
+        file_txt.write("\n")
+
+file_txt.write("Wcostheta\n")
+for i in range(phi_d_2H_Wcostheta_results[0].shape[0]):
+    file_txt.write("        & ")
+    file_txt.write(f"{phi_d_2H_Wcostheta_costheta_low[i]:5.1f} & {phi_d_2H_Wcostheta_costheta_high[i]:5.1f} & ")
+    file_txt.write(f"{phi_d_2H_Wcostheta_costheta_center[i]:6.3f} & {phi_d_2H_Wcostheta_costheta_width[i]:5.3f} &    ")
+    file_txt.write(f"{phi_d_2H_Wcostheta_yield_data[0, i]:6.2f} $\pm$ {phi_d_2H_Wcostheta_yield_data_statserr[0, i]:5.2f} &    ")
+    file_txt.write(f"{format_scientific(phi_d_2H_Wcostheta_yield_sim[0, i])} $\pm$ {format_scientific(phi_d_2H_Wcostheta_yield_sim_statserr[0, i])} &    ")
+    file_txt.write(f"{format_scientific(phi_d_2H_Wcostheta_yield_tagged[0, i])} $\pm$ {format_scientific(phi_d_2H_Wcostheta_yield_tagged_statserr[0, i])} &    ")
+    file_txt.write(f"{phi_d_2H_Wcostheta_results[0, i]:6.2f} $\pm$ {phi_d_2H_Wcostheta_results_statserr[0, i]:4.2f} $\pm$ {phi_d_2H_Wcostheta_results_systerr[i]:4.2f}")
+    file_txt.write(" \\\\\n")
+    if (i+1) in Wcostheta_index:
+        file_txt.write("\n")
+
+file_txt.write("Wdecayphi\n")
+for i in range(phi_d_2H_Wdecayphi_results[0].shape[0]):
+    file_txt.write("        & ")
+    file_txt.write(f"{phi_d_2H_Wdecayphi_decayphi_low[i]:4.0f} & {phi_d_2H_Wdecayphi_decayphi_high[i]:4.0f} & ")
+    file_txt.write(f"{phi_d_2H_Wdecayphi_decayphi_center[i]:7.2f} & {phi_d_2H_Wdecayphi_decayphi_width[i]:5.2f} &    ")
+    file_txt.write(f"{phi_d_2H_Wdecayphi_yield_data[0, i]:6.2f} $\pm$ {phi_d_2H_Wdecayphi_yield_data_statserr[0, i]:5.2f} &    ")
+    file_txt.write(f"{format_scientific(phi_d_2H_Wdecayphi_yield_sim[0, i])} $\pm$ {format_scientific(phi_d_2H_Wdecayphi_yield_sim_statserr[0, i])} &    ")
+    file_txt.write(f"{format_scientific(phi_d_2H_Wdecayphi_yield_tagged[0, i])} $\pm$ {format_scientific(phi_d_2H_Wdecayphi_yield_tagged_statserr[0, i])} &    ")
+    file_txt.write(f"{phi_d_2H_Wdecayphi_results[0, i]:6.2f} $\pm$ {phi_d_2H_Wdecayphi_results_statserr[0, i]:4.2f} $\pm$ {phi_d_2H_Wdecayphi_results_systerr[i]:4.2f}")
+    file_txt.write(" \\\\\n")
+    if (i+1) in Wdecayphi_index:
+        file_txt.write("\n")
+
+file_txt.write("Wpolphi\n")
+for i in range(phi_d_2H_Wpolphi_results[0].shape[0]):
+    file_txt.write("        & ")
+    file_txt.write(f"{phi_d_2H_Wpolphi_polphi_low[i]:4.0f} & {phi_d_2H_Wpolphi_polphi_high[i]:4.0f} & ")
+    file_txt.write(f"{phi_d_2H_Wpolphi_polphi_center[i]:7.2f} & {phi_d_2H_Wpolphi_polphi_width[i]:5.2f} &    ")
+    file_txt.write(f"{phi_d_2H_Wpolphi_yield_data[0, i]:6.2f} $\pm$ {phi_d_2H_Wpolphi_yield_data_statserr[0, i]:5.2f} &    ")
+    file_txt.write(f"{format_scientific(phi_d_2H_Wpolphi_yield_sim[0, i])} $\pm$ {format_scientific(phi_d_2H_Wpolphi_yield_sim_statserr[0, i])} &    ")
+    file_txt.write(f"{format_scientific(phi_d_2H_Wpolphi_yield_tagged[0, i])} $\pm$ {format_scientific(phi_d_2H_Wpolphi_yield_tagged_statserr[0, i])} &    ")
+    file_txt.write(f"{phi_d_2H_Wpolphi_results[0, i]:6.2f} $\pm$ {phi_d_2H_Wpolphi_results_statserr[0, i]:4.2f} $\pm$ {phi_d_2H_Wpolphi_results_systerr[i]:4.2f}")
+    file_txt.write(" \\\\\n")
+    if (i+1) in Wpolphi_index:
+        file_txt.write("\n")
+
+file_txt.write("Wpsi\n")
+for i in range(phi_d_2H_Wpsi_results[0].shape[0]):
+    file_txt.write("        & ")
+    file_txt.write(f"{phi_d_2H_Wpsi_psi_low[i]:4.0f} & {phi_d_2H_Wpsi_psi_high[i]:4.0f} & ")
+    file_txt.write(f"{phi_d_2H_Wpsi_psi_center[i]:7.2f} & {phi_d_2H_Wpsi_psi_width[i]:5.2f} &    ")
+    file_txt.write(f"{phi_d_2H_Wpsi_yield_data[0, i]:6.2f} $\pm$ {phi_d_2H_Wpsi_yield_data_statserr[0, i]:5.2f} &    ")
+    file_txt.write(f"{format_scientific(phi_d_2H_Wpsi_yield_sim[0, i])} $\pm$ {format_scientific(phi_d_2H_Wpsi_yield_sim_statserr[0, i])} &    ")
+    file_txt.write(f"{format_scientific(phi_d_2H_Wpsi_yield_tagged[0, i])} $\pm$ {format_scientific(phi_d_2H_Wpsi_yield_tagged_statserr[0, i])} &    ")
+    file_txt.write(f"{phi_d_2H_Wpsi_results[0, i]:6.2f} $\pm$ {phi_d_2H_Wpsi_results_statserr[0, i]:4.2f} $\pm$ {phi_d_2H_Wpsi_results_systerr[i]:4.2f}")
+    file_txt.write(" \\\\\n")
+    if (i+1) in Wpsi_index:
+        file_txt.write("\n")
+
+file_txt.close()
+
+# ds/dt results for chi-squared analysis
+file_txt = open("output/table_vm_d_dsdt.txt", "w")
+
+for i in range(phi_d_2H_dsdt_results[0].shape[0]):
+    file_txt.write(f"{phi_d_2H_dsdt_energy_center[i]:5.4f} \t {phi_d_2H_dsdt_minust_center[i]:5.4f} \t {phi_d_2H_dsdt_results[0, i]:8.4f} \t {phi_d_2H_dsdt_results_statserr[0, i]:7.4f} \t {phi_d_2H_dsdt_results_p2perr[0, i]:7.4f} \t {phi_d_2H_dsdt_results_normerr[i]:7.4f} \t {phi_d_2H_dsdt_results_systerr[i]:7.4f}\n")
+
+file_txt.close()
+
+
+# # sphin_list = np.arange(0,120,1)
+# # bphin_list = np.arange(0,30,1)
+
+# # chi2_array = np.zeros((len(bphin_list), len(sphin_list)))
+# # for i,sphin in enumerate(sphin_list):
+# #     for j,bphin in enumerate(bphin_list):
+# #         theory_results = np.loadtxt(f'/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/case3_4.0_alpha0_61237/E_2.1_sigma_%.0f_b_%.0f.txt' % (sphin, bphin))
+# #         chi2 = 0
+# #         ndf = 0
+# #         for k in range(len(phi_d_2H_dsdt_clas_minust_center)):
+# #             t_val = phi_d_2H_dsdt_clas_minust_center[k]
+# #             data_val = phi_d_2H_dsdt_clas_results_16[k]
+# #             data_err = phi_d_2H_dsdt_clas_results_16_totalerr[k]
+# #             # Find the closest theory point
+# #             theory_idx = (np.abs(theory_results[:,0] - t_val)).argmin()
+# #             theory_val = theory_results[theory_idx, 2]
+# #             if data_err > 0 and data_val > 0 and theory_val > 0:
+# #                 chi2 += ((data_val - theory_val)**2)/(data_err**2 + (0.1*theory_val)**2)  # adding 20% theory uncertainty
+# #                 ndf += 1
+# #         # ndf -= 2  # two fit parameters
+# #         chi2_array[j, i] = np.log(chi2/ndf)
+
+# # fig = plt.figure(figsize=(8, 6), dpi=300)
+# # # plt.contourf(sphin_list, bphin_list, chi2_array, levels=50, cmap='viridis')
+# # # cbar = plt.colorbar()
+# # # cbar.set_label(r'$\chi^2/NDF$')
+# # confidence_levels = [2.30, 6.18]  # 68%, 95%, 99.7% for 2 parameters
+# # best_fit_idx = np.unravel_index(np.argmin(chi2_array), chi2_array.shape)
+# # best_chi2 = chi2_array[best_fit_idx]
+# # for level in confidence_levels:
+# #     contour_level = best_chi2 + level/ndf
+# #     plt.contour(sphin_list, bphin_list, chi2_array, levels=[contour_level], colors='black', linestyles='dashed')
+# #     # plt.text(best_fit_idx[1]*5 + 5, best_fit_idx[0]*5 + 20 + level, f'{int(level*100)/100}', color='black')
+# # plt.xlabel(r'$\sigma_{\phi N}\ [mb]$')
+# # plt.ylabel(r'$\rm b_{\phi N}\ [GeV^{-2}]$')
+# # plt.title(r'$\chi^2/NDF$ map for $\phi-D$ scattering parameters')
+# # file_pdf.savefig()
+# # plt.close()
+
+################################################################# END #############################################################################################################
+
+file_results.close()
+file_syst.close()
