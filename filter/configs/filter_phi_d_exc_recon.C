@@ -277,7 +277,7 @@ void filter_phi_d_exc_recon(string reaction, string output_mode)
     {
         cout << "Saving to new tree...\n";
         string output_treefile_name = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_phi_d_exc_recon_%s.root",reaction.c_str());
-        string output_tree_name = "filteredtree_phi_d_recon";
+        string output_tree_name = "filteredtree_phi_d_exc_recon";
         rdf_SystCut.Snapshot(output_tree_name.c_str(), output_treefile_name.c_str());
     }
 
