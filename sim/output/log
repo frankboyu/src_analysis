@@ -24,6 +24,7 @@ ver12_02: model cross section,  helicity-conserving decay,  -t=0.18-2,  10M
 ver12_03: flat cross section,   helicity-conserving decay,  -t=0-2,     10M, helicity-conserving decay model corrrected for the phi channel
 ver12_04: flat cross section,   helicity-conserving decay,  -t=0-2,     10M, corrected behavior of tagged photon flux
 ver12_05: flat cross section,   helicity-conserving decay,  -t=0-2,     10M, with run number and event number written to the gen output tree
+ver12_06: flat cross section,   helicity-conserving decay,  -t=0-2,     100M
 
 rho_d_2H
 ver01: flat cross section, uniform decay, -t=0-2, ana ver10, 10M
