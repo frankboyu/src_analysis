@@ -594,6 +594,14 @@ tpolToGo_t makePolValsTmp2021(int year,int part,int userSet,int radTh,bool mixMo
     sprintf(hString,"hPhiCut0AtEg8500");
     TH1D *hPhiCut0AtEg8500 = new TH1D(hString,"",nBy,yLow,yHigh); hPhiCut0AtEg8500->Sumw2();
     phi1D(hPhiCutVsRunAtEg8500,hMask2dE0,hPhiCut0AtEg8500,hString,fitFun,true);
+    // hPhiCut0AtEg8500->Draw();
+    // fitFun->Draw("same");
+    // if (gPad) gPad->SaveAs("hPhiCut0AtEg8500.png");
+    // cout << "par0 = "<<fitFun->GetParameter(0)<<" +/- "<<fitFun->GetParError(0)<<endl;
+    // cout << "par1 = "<<fitFun->GetParameter(1)<<" +/- "<<fitFun->GetParError(1)<<endl;
+    // cout << "par2 = "<<fitFun->GetParameter(2)<<" +/- "<<fitFun->GetParError(2)<<endl;
+    // cout << "par3 = "<<fitFun->GetParameter(3)<<" +/- "<<fitFun->GetParError(3)<<endl;
+    // cout << "par4 = "<<fitFun->GetParameter(4)<<" +/- "<<fitFun->GetParError(4)<<endl;
     par1 = fitFun->GetParameter(1); err1 = fitFun->GetParError(1);
     hPol0->SetBinContent(index,fabs(par1)); 
     hPol0->SetBinError(index,err1);
