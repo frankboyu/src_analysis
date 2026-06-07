@@ -44,9 +44,9 @@ int get_yield(string channel, string reaction, string observable, string tag)
     string input_treefile_name  = Form("/work/halld2/home/boyu/src_analysis/filter/output/filteredtree_%s_%s.root", channel.c_str(), reaction.c_str());
     string input_tree_name;
     if (reaction.find("recon") != string::npos)
-        input_tree_name = Form("filteredtree_%s_recon", channel.c_str());
+        input_tree_name = Form("filteredtree_%s_exc_recon", channel.c_str());
     else if (reaction.find("thrown") != string::npos)
-        input_tree_name = Form("filteredtree_%s_thrown", channel.c_str());
+        input_tree_name = Form("filteredtree_%s_exc_thrown", channel.c_str());
     cout << "Input tree file: " << input_treefile_name << endl;
     cout << "Input tree: " << input_tree_name << endl;
     TChain chain(input_tree_name.c_str());
@@ -394,10 +394,10 @@ int get_yield(string channel, string reaction, string observable, string tag)
             rdf_bin = rdf_input.Filter(energy_cut.c_str()).Filter(t_cut.c_str());
             if (reaction.find("data") != string::npos)
             {
-                energy_center   = rdf_bin.Mean("beam_energy_kin").GetValue();
+                energy_center   = rdf_bin.Mean  ("beam_energy_kin").GetValue();
                 energy_width    = rdf_bin.StdDev("beam_energy_kin").GetValue();
-                t_center        = rdf_bin.Mean("minust_kin").GetValue();
-                t_width         = rdf_bin.StdDev("minust_kin").GetValue();
+                t_center        = rdf_bin.Mean  ("minust_kin")     .GetValue();
+                t_width         = rdf_bin.StdDev("minust_kin")     .GetValue();
             }
 
             if (observable == "dsdt")
