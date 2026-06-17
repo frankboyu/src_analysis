@@ -84,8 +84,7 @@ for run in run_list:
     tagh_scaled_energy_assignment    = ccdb_conn.get_assignment("/PHOTON_BEAM/hodoscope/scaled_energy_range",      run_number, ccdb_variation)
     tagm_scaled_energy_assignment    = ccdb_conn.get_assignment("/PHOTON_BEAM/microscope/scaled_energy_range",     run_number, ccdb_variation)
     photon_endpoint_assignment       = ccdb_conn.get_assignment("/PHOTON_BEAM/endpoint_energy",                    run_number, ccdb_variation)
-    photon_endpoint_calib_assignment = ccdb_conn.get_assignment("/PHOTON_BEAM/endpoint_energy",                    run_number, ccdb_variation)    # revert to Sasha's version
-    # photon_endpoint_calib_assignment = ccdb_conn.get_assignment("/PHOTON_BEAM/hodoscope/endpoint_calib",           run_number, ccdb_variation)  # GlueX version
+    photon_endpoint_calib_assignment = ccdb_conn.get_assignment("/PHOTON_BEAM/hodoscope/endpoint_calib",           run_number, ccdb_variation)
     PS_accept_assignment             = ccdb_conn.get_assignment("/PHOTON_BEAM/pair_spectrometer/lumi/PS_accept",   run_number, ccdb_variation)
 
     tagh_tagged_flux      = tagh_tagged_flux_assignment     .constant_set.data_table
@@ -162,7 +161,7 @@ for run in run_list:
 
         bin_count += 1
         total_flux += flux_tagm
-        file_corr.write('{:>3.0f}    {:>3.0f}    {:>13.10f}    {:>13.10f}    {:>13.10f}    {:>17.16e}    {:>17.16e}\n'.format(bin_count, counter_tagm, energy_low, energy_center, energy_high, flux_tagm, flux_err_tagm))
+        file_corr.write('{:>3.0f}    {:>3.0f}    {:>15.12f}    {:>15.12f}    {:>15.12f}    {:>17.16e}    {:>17.16e}\n'.format(bin_count, counter_tagm, energy_low, energy_center, energy_high, flux_tagm, flux_err_tagm))
 
     file_corr.write('\n')
 
@@ -182,7 +181,7 @@ for run in run_list:
 
         bin_count += 1
         total_flux += flux_tagh
-        file_corr.write('{:>3.0f}    {:>3.0f}    {:>13.10f}    {:>13.10f}    {:>13.10f}    {:>17.16e}    {:>17.16e}\n'.format(bin_count, counter_tagh, energy_low, energy_center, energy_high, flux_tagh, flux_err_tagh))
+        file_corr.write('{:>3.0f}    {:>3.0f}    {:>15.12f}    {:>15.12f}    {:>15.12f}    {:>17.16e}    {:>17.16e}\n'.format(bin_count, counter_tagh, energy_low, energy_center, energy_high, flux_tagh, flux_err_tagh))
 
     file_corr.close()
     file_total.write('{:>3.0f}    {:>17.16e}\n'.format(run_number, total_flux))
@@ -246,4 +245,4 @@ summed_lumi[:,5] *= density*target_length*Navagadro*units_cm2_b/atomic_mass/1e12
 summed_lumi[:,6] *= density*target_length*Navagadro*units_cm2_b/atomic_mass/1e12
 
 for i in range(len(summed_lumi)):
-    file_summed.write('{:>3.0f}    {:>3.0f}    {:>13.10f}    {:>13.10f}    {:>13.10f}    {:>17.16e}    {:>17.16e}\n'.format(summed_lumi[i][0], summed_lumi[i][1], summed_lumi[i][2], summed_lumi[i][3], summed_lumi[i][4], summed_lumi[i][5], summed_lumi[i][6]))
+    file_summed.write('{:>3.0f}    {:>3.0f}    {:>15.12f}    {:>15.12f}    {:>15.12f}    {:>17.16e}    {:>17.16e}\n'.format(summed_lumi[i][0], summed_lumi[i][1], summed_lumi[i][2], summed_lumi[i][3], summed_lumi[i][4], summed_lumi[i][5], summed_lumi[i][6]))
