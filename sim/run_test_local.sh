@@ -1,9 +1,9 @@
 #!/bin/bash
 
 REACTION=phi_d_2H
-XML_VERSION=recon_srcct-2021_11-ver04_0.5
+XML_VERSION=recon_srcct-2021_11-dev
 RUN=90600
-EVENTS=10000
+EVENTS=100000
 # OPTIONS='cleangenerate=0 cleangeant=0 cleanmcsmear=0'
 OPTIONS=''
 
