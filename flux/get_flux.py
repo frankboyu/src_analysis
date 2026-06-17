@@ -38,7 +38,6 @@ units_cm2_b     = 1e-24
 
 #FILE IO
 target = sys.argv[1]
-file_total = open("output/"+target+"/flux_total_"+target+".txt", "w")
 
 #RCDB CONNECTION
 if (target == 'deuterium'):
@@ -65,7 +64,8 @@ elif (target == 'empty'):
 db         = rcdb.RCDBProvider(os.environ.get('RCDB_CONNECTION'))
 run_list   = db.select_runs(rcdb_query, 90001, 90662)
 
-#LOOP OVER RUNS
+# LOOP OVER RUNS
+file_total = open("output/"+target+"/flux_total_"+target+".txt", "w")
 for run in run_list:
 
     #INITIALIZATION
@@ -230,7 +230,6 @@ for run in run_list:
 
 file_total.close()
 
-file_summed = open("output/"+target+"/lumi_summed_"+target+".txt", "w")
 for i, run in enumerate(run_list):
     if (i == 0):
         summed_lumi = np.loadtxt("output/"+target+"/flux_corr_"+str(run.number)+".txt")
@@ -244,5 +243,6 @@ for i, run in enumerate(run_list):
 summed_lumi[:,5] *= density*target_length*Navagadro*units_cm2_b/atomic_mass/1e12
 summed_lumi[:,6] *= density*target_length*Navagadro*units_cm2_b/atomic_mass/1e12
 
+file_summed = open("output/"+target+"/lumi_summed_"+target+".txt", "w+")
 for i in range(len(summed_lumi)):
     file_summed.write('{:>3.0f}    {:>3.0f}    {:>15.12f}    {:>15.12f}    {:>15.12f}    {:>17.16e}    {:>17.16e}\n'.format(summed_lumi[i][0], summed_lumi[i][1], summed_lumi[i][2], summed_lumi[i][3], summed_lumi[i][4], summed_lumi[i][5], summed_lumi[i][6]))
