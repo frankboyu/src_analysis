@@ -3,16 +3,17 @@
 start=`date +%s`
 
 # data
-sh run_local.sh 'phi_d_exc_recon'   'data_ver12'     'both'
+# sh run_local.sh 'phi_d_exc_recon'   'data_ver12'     'both'
+# sh run_local.sh 'phi_d_exc_recon'   'data_ver12_empty'     'both'
 
 # sim
-sh run_local.sh 'phi_d_exc_recon'   'sim_ver12'      'both'
+sh run_local.sh 'phi_d_exc_recon'   'sim_ver12'      'hist'
 
 # tagged
-sh run_local.sh 'phi_d_exc_thrown'  'tagged_ver12'   'both'
+# sh run_local.sh 'phi_d_exc_thrown'  'tagged_ver12'   'both'
 
 # gen
-sh run_local.sh 'phi_d_exc_thrown'  'gen_ver12'      'both'
+# sh run_local.sh 'phi_d_exc_thrown'  'gen_ver12'      'both'
 
 # hists
 # python configs/hist_phi_d_exc.py
