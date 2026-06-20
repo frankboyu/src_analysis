@@ -3,7 +3,7 @@
 REACTION=phi_d_2H
 XML_VERSION=recon_srcct-2021_11-dev
 RUN=90600
-EVENTS=100000
+EVENTS=1000
 # OPTIONS='cleangenerate=0 cleangeant=0 cleanmcsmear=0'
 OPTIONS=''
 
