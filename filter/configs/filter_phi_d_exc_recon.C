@@ -157,15 +157,20 @@ void filter_phi_d_exc_recon(string reaction, string output_mode)
     .Define("minusu_kin",                       "-(beam_p4_kin   - d_p4_kin  ).Mag2()")
     .Define("minusu_truth",                     "-(beam_p4_truth - d_p4_truth).Mag2()")
     .Define("minusu_diff",                      "minusu_kin - minusu_truth")
-    .Define("vertex_z_meas",                    "beam_x4_meas .Z()")
-    .Define("vertex_z_kin",                     "beam_x4_kin  .Z()")
-    .Define("vertex_z_truth",                   "beam_x4_truth.Z()")
-    .Define("vertex_x_meas",                    "beam_x4_meas .X()")
-    .Define("vertex_x_kin",                     "beam_x4_kin  .X()")
-    .Define("vertex_x_truth",                   "beam_x4_truth.X()")
-    .Define("vertex_y_meas",                    "beam_x4_meas .Y()")
-    .Define("vertex_y_kin",                     "beam_x4_kin  .Y()")
-    .Define("vertex_y_truth",                   "beam_x4_truth.Y()")
+    .Define("vertex_z_meas",                    "d_x4_meas.Z()")
+    .Define("vertex_z_kin",                     "d_x4_kin  .Z()")
+    .Define("vertex_z_truth",                   "d_x4_truth.Z()")
+    .Define("vertex_z_diff",                    "vertex_z_kin - vertex_z_truth")
+    .Define("vertex_x_meas",                    "d_x4_meas.X()")
+    .Define("vertex_x_kin",                     "d_x4_kin  .X()")
+    .Define("vertex_x_truth",                   "d_x4_truth.X()")
+    .Define("vertex_y_meas",                    "d_x4_meas .Y()")
+    .Define("vertex_y_kin",                     "d_x4_kin  .Y()")
+    .Define("vertex_y_truth",                   "d_x4_truth.Y()")
+    .Define("vertex_r_meas",                    "TMath::Sqrt(vertex_x_meas* vertex_x_meas  + vertex_y_meas* vertex_y_meas)")
+    .Define("vertex_r_kin",                     "TMath::Sqrt(vertex_x_kin*  vertex_x_kin   + vertex_y_kin*  vertex_y_kin)")
+    .Define("vertex_r_truth",                   "TMath::Sqrt(vertex_x_truth*vertex_x_truth + vertex_y_truth*vertex_y_truth)")
+    .Define("vertex_r_diff",                    "vertex_r_kin - vertex_r_truth")
     .Define("coplanarity_meas",                 "abs(phi_p4_meas.Phi()  - d_p4_meas.Phi()) *RadToDeg")
     .Define("coplanarity_kin",                  "abs(phi_p4_kin.Phi()   - d_p4_kin.Phi())  *RadToDeg")
     .Define("coplanarity_truth",                "abs(phi_p4_truth.Phi() - d_p4_truth.Phi())*RadToDeg")
@@ -267,7 +272,7 @@ void filter_phi_d_exc_recon(string reaction, string output_mode)
     auto rdf_KinematicsCut  = rdf_input.Filter(dEdxCut.c_str()).Filter(MissPMinusCut.c_str()).Filter(KinFitChiSqCut.c_str())                              .Filter(VertexCut.c_str());
     auto rdf_VertexCut      = rdf_input.Filter(dEdxCut.c_str()).Filter(MissPMinusCut.c_str()).Filter(KinFitChiSqCut.c_str()).Filter(KinematicsCut.c_str());
     auto rdf_NominalCut     = rdf_input.Filter(dEdxCut.c_str()).Filter(MissPMinusCut.c_str()).Filter(KinFitChiSqCut.c_str()).Filter(KinematicsCut.c_str()).Filter(VertexCut.c_str());
-    auto rdf_PlotCut        = rdf_NominalCut.Filter(PhiMassCut.c_str());
+    auto rdf_PlotCut        = rdf_input.Filter(dEdxCut.c_str()).Filter(MissPMinusCut.c_str()).Filter(KinFitChiSqCut.c_str()).Filter(KinematicsCut.c_str()).Filter(VertexCut.c_str()).Filter(PhiMassCut.c_str());
     auto rdf_SystCut        = rdf_input.Filter(dEdxCutSyst.c_str()).Filter(MissPMinusCutSyst.c_str()).Filter(KinFitChiSqCutSyst.c_str()).Filter(KinematicsCutSyst.c_str()).Filter(VertexCutSyst.c_str());
     RNode rdfs []           = {rdf_NoCut,   rdf_dEdxCut,    rdf_MissPMinusCut,  rdf_KinFitChiSqCut, rdf_KinematicsCut,  rdf_VertexCut,  rdf_NominalCut, rdf_PlotCut};
     string labels []        = {"NoCut",     "dEdxCut",      "MissPMinusCut",    "KinFitChiSqCut",   "KinematicsCut",    "VertexCut",    "NominalCut",   "PlotCut"};
@@ -499,6 +504,10 @@ void filter_phi_d_exc_recon(string reaction, string output_mode)
                         hist_resolution_polarization_phi.Write();
                 TH2D    hist_resolution_psi                             = *rdf.Histo2D({("resolution_psi_"+ label).c_str(),                     ";#psi_{helicity}^{truth} (deg)         ;#psi_{helicity}^{kin} - #psi_{helicity}^{truth} (deg)",            40, 0.0, 2.0, 80, -8.0, 8.0},           "psi_helicity_truth",               "psi_helicity_diff",            "event_weight");
                         hist_resolution_psi.Write();
+                TH2D    hist_resolution_vertex_z                        = *rdf.Histo2D({("resolution_vertex_z_"+ label).c_str(),                ";z_{truth} (cm)                        ;z_{kin} - z_{truth} (cm)",                                         100, 40.0, 90.0, 80, -2.0, 2.0},        "vertex_z_truth",                   "vertex_z_diff",                "event_weight");
+                        hist_resolution_vertex_z.Write();
+                TH2D    hist_resolution_vertex_r                        = *rdf.Histo2D({("resolution_vertex_r_"+ label).c_str(),                ";r_{truth} (cm)                        ;r_{kin} - r_{truth} (cm)",                                         100, 0.0, 1.0, 80, -1.0, 1.0},          "vertex_r_truth",                   "vertex_r_diff",                "event_weight");
+                        hist_resolution_vertex_r.Write();
 
                 cout << "----Processing resolution w.r.t. t plots..." << endl;
                 TH2D    hist_resolution_t_phi_mass                      = *rdf.Histo2D({("resolution_t_phi_mass_"+ label).c_str(),              ";-t^{truth} (GeV^{2})                  ;m_{K^{+}K^{-}}^{kin} - m_{K^{+}K^{-}}^{truth} (GeV)",              40, 0.0, 2.0, 80, -0.02, 0.02},         "minust_truth",                     "phi_mass_diff",                "event_weight");
@@ -511,6 +520,10 @@ void filter_phi_d_exc_recon(string reaction, string output_mode)
                         hist_resolution_t_polarization_phi.Write();
                 TH2D    hist_resolution_t_psi                           = *rdf.Histo2D({("resolution_t_psi_"+ label).c_str(),                   ";-t^{truth} (GeV^{2})                  ;#psi_{helicity}^{kin} - #psi_{helicity}^{truth} (deg)",            40, 0.0, 2.0, 80, -8.0, 8.0},           "minust_truth",                     "psi_helicity_diff",            "event_weight");
                         hist_resolution_t_psi.Write();
+                TH2D    hist_resolution_t_vertex_z                      = *rdf.Histo2D({("resolution_t_vertex_z_"+ label).c_str(),              ";-t^{truth} (GeV^{2})                  ;z_{kin} - z_{truth} (cm)",                                         40, 0.0, 2.0, 100, -2.0, 2.0},          "minust_truth",                     "vertex_z_diff",                "event_weight");
+                        hist_resolution_t_vertex_z.Write();
+                TH2D    hist_resolution_t_vertex_r                      = *rdf.Histo2D({("resolution_t_vertex_r_"+ label).c_str(),              ";-t^{truth} (GeV^{2})                  ;r_{kin} - r_{truth} (cm)",                                         40, 0.0, 2.0, 100, -1.0, 1.0},          "minust_truth",                     "vertex_r_diff",                "event_weight");
+                        hist_resolution_t_vertex_r.Write();
             }
         }
         output_histfile->Close();
