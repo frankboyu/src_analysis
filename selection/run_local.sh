@@ -7,22 +7,19 @@ FILENAME=$2
 TREENAME=$3
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
-if [[ $FILENAME == *"data"* ]]; then
-    if [[ $FILENAME == *"ver10"* ]]; then
-        echo gxenv $HALLD_VERSIONS/version_5.21.0.xml
-        gxenv $HALLD_VERSIONS/version_5.21.0.xml
-    elif [[ $FILENAME == *"ver11"* || $FILENAME == *"ver12"* ]]; then
-        echo gxenv $HALLD_VERSIONS/version_6.5.0.xml
-        gxenv $HALLD_VERSIONS/version_6.5.0.xml
-    fi
-elif [[ $FILENAME == *"sim"* ]]; then
-    if [[ $FILENAME == *"ver10"* ]]; then
-        echo gxenv $HALLD_VERSIONS/version_5.21.0.xml
-        gxenv $HALLD_VERSIONS/version_5.21.0.xml
-    elif [[ $FILENAME == *"ver12"* ]]; then
-        echo gxenv $HALLD_VERSIONS/version_6.5.0.xml
-        gxenv $HALLD_VERSIONS/version_6.5.0.xml
-    fi
+
+if [[ $FILENAME == *"ver10"* ]]; then
+    echo gxenv $HALLD_VERSIONS/version_5.21.0.xml
+    gxenv $HALLD_VERSIONS/version_5.21.0.xml
+elif [[ $FILENAME == *"ver11"* ]]; then
+    echo gxenv $HALLD_VERSIONS/version_6.3.0.xml
+    gxenv $HALLD_VERSIONS/version_6.3.0.xml
+elif [[ $FILENAME == *"ver12"* ]]; then
+    echo gxenv $HALLD_VERSIONS/version_6.5.0.xml
+    gxenv $HALLD_VERSIONS/version_6.5.0.xml
+elif [[ $FILENAME == *"ver13"* ]]; then
+    echo gxenv $HALLD_VERSIONS/version_7.7.0.xml
+    gxenv $HALLD_VERSIONS/version_7.7.0.xml
 fi
 
 cd output/
