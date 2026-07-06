@@ -11,12 +11,16 @@ def legend_without_duplicate_labels(ax):
     unique = [(h, l) for i, (h, l) in enumerate(zip(handles, labels)) if l not in labels[:i]]
     ax.legend(*zip(*unique))
 
-
-
-
-
+chisq_array = np.loadtxt("/work/halld2/home/boyu/src_analysis/plot/vm_d/output/table_vm_d_chisq.txt")
+sphin_list = chisq_array[:, 0].reshape(20,40)[:,0]
+print(sphin_list)
+bphin_list = chisq_array[:, 1].reshape(20,40)[0,:]
+print(bphin_list)
+ndf=84
+chi2_array = chisq_array[:, 11].reshape(20,40).T/ndf
 
 fig = plt.figure(figsize=(8, 6), dpi=300)
+print(chisq_array[:, 5].reshape(20,40))
 plt.contourf(sphin_list, bphin_list, chi2_array, levels=50, cmap='viridis')
 cbar = plt.colorbar()
 cbar.set_label(r'$\chi^2/NDF$')
@@ -43,8 +47,7 @@ plt.close()
 
 
 
-# # sphin_list = np.arange(0,120,1)
-# # bphin_list = np.arange(0,30,1)
+
 
 # # fig = plt.figure(figsize=(8, 6), dpi=300)
 # # # plt.contourf(sphin_list, bphin_list, chi2_array, levels=50, cmap='viridis')
