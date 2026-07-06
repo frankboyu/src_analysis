@@ -424,7 +424,7 @@ void filter_phi_d_exc_recon(string reaction, string output_mode)
                     hist_kinematics_phi.Write();
 
             cout << "----Processing vertex plots..." << endl;
-            TH1D    hist_vertex_cut_z                                   = *rdf.Histo1D({("vertex_cut_z_"+ label).c_str(),                       ";Z_{vertex}^{kin} (cm)                 ;Counts",                                                           100, 40.0, 90.0},                       "vertex_z_kin",                                                     "event_weight");
+            TH1D    hist_vertex_cut_z                                   = *rdf.Histo1D({("vertex_cut_z_"+ label).c_str(),                       ";Z_{vertex}^{kin} (cm)                 ;Counts",                                                           200, 40.0, 90.0},                       "vertex_z_kin",                                                     "event_weight");
                     hist_vertex_cut_z.Write();
             TH2D    hist_vertex_cut_x_y                                 = *rdf.Histo2D({("vertex_cut_x_y_"+ label).c_str(),                     ";X_{vertex}^{kin} (cm)                 ;Y_{vertex}^{kin} (cm)",                                            100, -2.0, 2.0, 100, -2.0, 2.0},        "vertex_x_kin",                     "vertex_y_kin",                 "event_weight");
                     hist_vertex_cut_x_y.Write();
