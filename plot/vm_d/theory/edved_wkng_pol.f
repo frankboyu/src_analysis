@@ -1,8 +1,10 @@
         program test
         common/par/pi,pm,dm,vmm
-        common/input/ephin,sphin,bphin,flag
-        open(12,file='input.txt')
-        read(12,*)ephin
+        common/input/beamenergy,sgamman,bgamman,sphin,bphin,flag
+        open(12,file='input_paras.txt')
+        read(12,*)beamenergy
+        read(12,*)sgamman
+        read(12,*)bgamman
         read(12,*)sphin
         read(12,*)bphin
         pi = acos(-1.0)
@@ -11,7 +13,7 @@
         in   = 1 ! initialize
         call 
      & edved(in,kvm,ei,q2,q0,epsl,t,crs0,crs,tcrs0,tcrs,pd,thd,pvm,thvm, !initialization
-     & crs0_m1,crs0_0,crs0_1,crs_m1,crs_0,crs_1,ephin,bphin,sphin)
+     & beamenergy,bgamman,sgamman,bphin,sphin)
        
  
         ei = 0.0 ! electron energy (for ed--> evd)
@@ -22,7 +24,7 @@
         q2 =  0.0  !(if q2=0 - real photoproduction)
         epsl = 0.0
 
-        q0 = ephin                                    ! photon energy
+        q0 = beamenergy                                    ! photon energy
         s = -q2 + 2.0*pm*q0 + pm**2
         w = sqrt(s)
         t_min = t_minimum(q2,s)
@@ -30,7 +32,7 @@
         do it = 100,2000,1                              ! defines a list of t values to run through
         t = -float(it)/1000.0
         flag = 0
-        if((ephin.gt.1.6).and.(ephin.lt.3.6))then
+        if((beamenergy.gt.1.6).and.(beamenergy.lt.3.6))then
             if((((it.eq.360).or.(it.eq.385)).or.(it.eq.410)))then
                 flag = 1
             endif
@@ -46,7 +48,7 @@
             if(it.eq.1637)then
                 flag = 1
             endif
-        elseif((ephin.gt.5.8).and.(ephin.lt.7.8))then
+        elseif((beamenergy.gt.5.8).and.(beamenergy.lt.7.8))then
             if((((it.eq.251).or.(it.eq.265)).or.(it.eq.275)))then
                 flag = 1
             endif
@@ -71,7 +73,7 @@
             if((((it.eq.1087).or.(it.eq.1411)).or.(it.eq.2026)))then
                 flag = 1
             endif
-        elseif((ephin.gt.7.8).and.(ephin.lt.8.8))then
+        elseif((beamenergy.gt.7.8).and.(beamenergy.lt.8.8))then
             if((((it.eq.235).or.(it.eq.245)).or.(it.eq.255)))then
                 flag = 1
             endif
@@ -108,7 +110,7 @@
             if((((it.eq.1436).or.(it.eq.2025)).or.(it.eq.2026)))then
                 flag = 1
             endif
-        elseif((ephin.gt.8.8).and.(ephin.lt.10.8))then
+        elseif((beamenergy.gt.8.8).and.(beamenergy.lt.10.8))then
             if((((it.eq.251).or.(it.eq.265)).or.(it.eq.275)))then
                 flag = 1
             endif
@@ -147,7 +149,7 @@
         in = 0
         call 
      & edved(in,kvm,ei,q2,q0,epsl,t,crs0,crs,tcrs0,tcrs,pd,thd,pvm,thvm,
-     & crs0_m1,crs0_0,crs0_1,crs_m1,crs_0,crs_1,ephin,bphin,sphin)
+     & beamenergy,bgamman,sgamman,bphin,sphin)
 
         pdt  = pd*sin(thd)          !transverse momentum of deuteron
         pvmt = pvm*sin(thvm)        !transverse momentum of vmeson
@@ -159,11 +161,11 @@
 *     checking that individual polarization cross section give the
 *     same unpolarized  and tensor polarized cross sections
 ******************************************************************        
-        crs0_chk = (crs0_m1+crs0_0+crs0_1)/3.0
-        crs_chk  = (crs_m1 + crs_0 + crs_1)/3.0
+*        rs0_chk = (crs0_m1+crs0_0+crs0_1)/3.0
+*        crs_chk  = (crs_m1 + crs_0 + crs_1)/3.0
         
-        tcrs0_chk = (crs0_m1 + crs0_1 - 2.0*crs0_0)/3.0
-        tcrs_chk  = (crs_m1 + crs_1 - 2.0*crs_0)/3.0
+*        tcrs0_chk = (crs0_m1 + crs0_1 - 2.0*crs0_0)/3.0
+*        tcrs_chk  = (crs_m1 + crs_1 - 2.0*crs_0)/3.0
        
         
         write(6,*)"       ",-t,crs0,crs,tcrs0,tcrs
@@ -179,7 +181,7 @@
 
        subroutine 
      & edved(in,ivm,ei,q2,q0,epsl,t,crs0,crs,tcrs0,tcrs,pd,thd,pvm,thvm,
-     & crs0_m1,crs0_0,crs0_1,crs_m1,crs_0,crs_1,ephin,bphin,sphin)
+     & beamenergy,bgamman,sgamman,bphin,sphin)
 **************************************************************************
 *  in   - parameter for initialization (1)-initialize (0)-compute - input
 *  ivm  - 1 - rho meson,  3- phi meson
@@ -312,32 +314,10 @@
 *   alpha_g - real part of the amplitude - relevant for all icases
 
 ********************************************************************
-        gn_scale =   1.0
-        icase    =   5
-        sigma_gn =   0.0 !relevant only for icase=5
-        if((ephin.gt.1.6).and.(ephin.lt.2.6))then
-            sigma_gn = 0.89641878 ! for egm=2.0597 GeV
-        elseif((ephin.gt.2.6).and.(ephin.lt.3.6))then
-            sigma_gn = 1.60592106 ! for egm=3.0729 GeV
-        elseif((ephin.gt.5.8).and.(ephin.lt.7.8))then
-            sigma_gn = 2.31789209 ! for egm=6.8739 GeV
-        elseif((ephin.gt.7.8).and.(ephin.lt.8.8))then
-            sigma_gn = 2.40936493 ! for egm=8.3011 GeV
-        elseif((ephin.gt.8.8).and.(ephin.lt.10.8))then
-            sigma_gn = 2.47093851 ! for egm=9.6774 GeV
-        endif
-        b_g      =   0.0 !relevant only for icase=3,4,5
-        if((ephin.gt.1.6).and.(ephin.lt.2.6))then
-            b_g = 5.5083353 ! for egm=2.0597 GeV
-        elseif((ephin.gt.2.6).and.(ephin.lt.3.6))then
-            b_g = 5.6891075 ! for egm=3.0729 GeV
-        elseif((ephin.gt.5.8).and.(ephin.lt.7.8))then
-            b_g = 6.08024861 ! for egm=6.8739 GeV
-        elseif((ephin.gt.7.8).and.(ephin.lt.8.8))then
-            b_g = 6.17553841 ! for egm=8.3011 GeV
-        elseif((ephin.gt.8.8).and.(ephin.lt.10.8))then
-            b_g = 6.25374437 ! for egm=9.6774 GeV
-        endif
+        gn_scale =  1.0
+        icase    =  5
+        sigma_gn =  sgamman !relevant only for icase=5
+        b_g      =  bgamman !relevant only for icase=3,4,5
         alpha_g  =  0.0
 ********************************************************************
 *         Parameters of cross section, slope  factor and real part
@@ -968,7 +948,10 @@
       !if(tpr.le.0.0)
        dsdt = dsdt_tmin(eg)*exp(b_gn(s,kvm)*tpr)
        elseif(icase.eq.5)then
-       dsdt = sigma_gn*exp(b_gn(s,kvm)*(t-tmin))
+       q_photon = sqrt(s**2 + pm**4 - 2*s*pm**2)/2.0/sqrt(s)
+       q_phi = sqrt(s**2 + pm**4 + vmm**4 - 2*s*pm*pm - 2*s*vmm*vmm - 2*pm*pm*vmm*vmm)/2.0/sqrt(s)
+       dsdt_min = (1.0/137.0/16.0/6.69**2)*((q_phi/q_photon)**2)*(sigma_gn*sigma_gn)*1000.0*2.56819
+       dsdt = dsdt_min*exp(b_gn(s,kvm)*(t-tmin))
        !dsdt = sigma_gn*exp(b_gn(s,kvm)*(t-tmin) + 1.4*(t-tmin)**2)
        endif
 ************************************************************************
@@ -1194,10 +1177,10 @@
       common/formfactors/f_c(400),f_q(400),t_c(40,40),t_q(40,40)
       common/ctornot/ict0
       if(ins.eq.1)then
-      open(unit=11,status='old',file='fc_fq.data')
+      open(unit=11,status='old',file='input_fc_fq.data')
       read(11,10)(f_c(k),f_q(k),k=1,400)
       close(11)
-      open(unit=12,status='old',file='tc_tq.data')
+      open(unit=12,status='old',file='input_tc_tq.data')
 *      write(12,10)((TC(kt,kz),TQ(kt,kz),kt=1,400),kz=1,400)
       read(12,10)((t_c(kt,kz),t_q(kt,kz),kt=1,40),kz=1,40)
       close(12)
