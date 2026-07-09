@@ -13,7 +13,7 @@ double dxs_weight_func(double beam_energy_truth, double minust_truth, int sim_mo
         return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
 }
 
-double psi_weight_func(double polarization_angle, double beam_energy_truth, double psi_helicity_truth)
+double diff_psi_weight_func(double polarization_angle, double beam_energy_truth, double diff_psi_helicity_truth)
 {
     double polarization_degree[] = {                                0.0000,
                                     0.0614, 0.1087, 0.0971, 0.0763, 0.0629,
@@ -27,7 +27,7 @@ double psi_weight_func(double polarization_angle, double beam_energy_truth, doub
     else if (polarization_angle < -0.01) // amorphous simulation runs
         return 1.0;
     else                                 // diamond simulation runs, to be weighted by the SCHC+NPE predictions
-        return 1.0 + polarization_degree[energy_bin]*TMath::Cos(2*psi_helicity_truth/RadToDeg);
+        return 1.0 + polarization_degree[energy_bin]*TMath::Cos(2*diff_psi_helicity_truth/RadToDeg);
 }
 
 void filter_phi_d_exc_recon(string reaction, string output_mode)
@@ -46,6 +46,7 @@ void filter_phi_d_exc_recon(string reaction, string output_mode)
     else
         rdf_def = rdf_def.Define("sim_model_flag", "-1");
     auto rdf_input = rdf_def
+    // auto rdf_input = rdf_def.Filter("run == 90213")
     .Define("target_p4",                        "TLorentzVector(0, 0, 0, mass_2H)")
 
     .Define("beam_energy_meas",                 "beam_p4_meas .E()")
@@ -231,14 +232,18 @@ void filter_phi_d_exc_recon(string reaction, string output_mode)
     .Define("decay_phi_helicity_kin",           "TMath::ATan2(-x_x3_helicity_kin  .Dot(pi_x3_helicity_kin  .Cross(z_x3_helicity_kin  )), y_x3_helicity_kin  .Dot(pi_x3_helicity_kin  .Cross(z_x3_helicity_kin  )))*RadToDeg")
     .Define("decay_phi_helicity_truth",         "TMath::ATan2(-x_x3_helicity_truth.Dot(pi_x3_helicity_truth.Cross(z_x3_helicity_truth)), y_x3_helicity_truth.Dot(pi_x3_helicity_truth.Cross(z_x3_helicity_truth)))*RadToDeg")
     .Define("decay_phi_helicity_diff",          "decay_phi_helicity_kin - decay_phi_helicity_truth")
-    .Define("psi_helicity_meas",                "fmod(polarization_phi_com_meas -decay_phi_helicity_meas +360, 360.0) >= 180 ? fmod(polarization_phi_com_meas -decay_phi_helicity_meas +360, 360.0) - 360 : fmod(polarization_phi_com_meas -decay_phi_helicity_meas +360, 360.0)")
-    .Define("psi_helicity_kin",                 "fmod(polarization_phi_com_kin  -decay_phi_helicity_kin  +360, 360.0) >= 180 ? fmod(polarization_phi_com_kin  -decay_phi_helicity_kin  +360, 360.0) - 360 : fmod(polarization_phi_com_kin  -decay_phi_helicity_kin  +360, 360.0)")
-    .Define("psi_helicity_truth",               "fmod(polarization_phi_com_truth-decay_phi_helicity_truth+360, 360.0) >= 180 ? fmod(polarization_phi_com_truth-decay_phi_helicity_truth+360, 360.0) - 360 : fmod(polarization_phi_com_truth-decay_phi_helicity_truth+360, 360.0)")
-    .Define("psi_helicity_diff",                "psi_helicity_kin - psi_helicity_truth")
+    .Define("diff_psi_helicity_meas",           "fmod(polarization_phi_com_meas -decay_phi_helicity_meas +360, 360.0) >= 180 ? fmod(polarization_phi_com_meas -decay_phi_helicity_meas +360, 360.0) - 360 : fmod(polarization_phi_com_meas -decay_phi_helicity_meas +360, 360.0)")
+    .Define("diff_psi_helicity_kin",            "fmod(polarization_phi_com_kin  -decay_phi_helicity_kin  +360, 360.0) >= 180 ? fmod(polarization_phi_com_kin  -decay_phi_helicity_kin  +360, 360.0) - 360 : fmod(polarization_phi_com_kin  -decay_phi_helicity_kin  +360, 360.0)")
+    .Define("diff_psi_helicity_truth",          "fmod(polarization_phi_com_truth-decay_phi_helicity_truth+360, 360.0) >= 180 ? fmod(polarization_phi_com_truth-decay_phi_helicity_truth+360, 360.0) - 360 : fmod(polarization_phi_com_truth-decay_phi_helicity_truth+360, 360.0)")
+    .Define("diff_psi_helicity_diff",           "diff_psi_helicity_kin - diff_psi_helicity_truth")
+    .Define("sum_psi_helicity_meas",            "fmod(polarization_phi_com_meas +decay_phi_helicity_meas +360, 360.0) >= 180 ? fmod(polarization_phi_com_meas +decay_phi_helicity_meas +360, 360.0) - 360 : fmod(polarization_phi_com_meas +decay_phi_helicity_meas +360, 360.0)")
+    .Define("sum_psi_helicity_kin",             "fmod(polarization_phi_com_kin  +decay_phi_helicity_kin  +360, 360.0) >= 180 ? fmod(polarization_phi_com_kin  +decay_phi_helicity_kin  +360, 360.0) - 360 : fmod(polarization_phi_com_kin  +decay_phi_helicity_kin  +360, 360.0)")
+    .Define("sum_psi_helicity_truth",           "fmod(polarization_phi_com_truth+decay_phi_helicity_truth+360, 360.0) >= 180 ? fmod(polarization_phi_com_truth+decay_phi_helicity_truth+360, 360.0) - 360 : fmod(polarization_phi_com_truth+decay_phi_helicity_truth+360, 360.0)")
+    .Define("sum_psi_helicity_diff",            "sum_psi_helicity_kin - sum_psi_helicity_truth")
 
     .Define("dxs_weight",                       "dxs_weight_func(beam_energy_truth, minust_truth, sim_model_flag)")
-    .Define("psi_weight",                       "psi_weight_func(polarization_angle, beam_energy_truth, psi_helicity_truth)")
-    .Define("event_weight",                     "beam_accid_weight*combo_accid_weight*dxs_weight*psi_weight")
+    .Define("diff_psi_weight",                  "diff_psi_weight_func(polarization_angle, beam_energy_truth, diff_psi_helicity_truth)")
+    .Define("event_weight",                     "beam_accid_weight*combo_accid_weight*dxs_weight*diff_psi_weight")
 
     .Define("if_kp_in_fdc",                     "event_weight*(kp_dedx_fdc >  0.0 && kp_dedx_cdc == 0.0)")
     .Define("if_kp_in_cdc",                     "event_weight*(kp_dedx_cdc >  0.0 && kp_dedx_fdc == 0.0)")
@@ -320,10 +325,12 @@ void filter_phi_d_exc_recon(string reaction, string output_mode)
                     hist_observable_decay_costheta.Write();
             TH1D    hist_observable_decay_phi                           = *rdf.Histo1D({("observable_decay_phi_"+ label).c_str(),               ";#phi_{helicity}^{kin} (deg)           ;Counts",                                                           18, -180.0, 180.0},                     "decay_phi_helicity_kin",                                           "event_weight");
                     hist_observable_decay_phi.Write();
-            TH1D    hist_observable_polarization_phi                    = *rdf.Histo1D({("observable_polarization_phi_"+ label).c_str(),        ";#phi_{com}^{kin} (deg)                ;Counts",                                                           18, -180, 180.0},                       "polarization_phi_com_kin",                                         "event_weight");
+            TH1D    hist_observable_polarization_phi                    = *rdf.Histo1D({("observable_polarization_phi_"+ label).c_str(),        ";#Phi_{pol}^{kin} (deg)                ;Counts",                                                           18, -180, 180.0},                       "polarization_phi_com_kin",                                         "event_weight");
                     hist_observable_polarization_phi.Write();
-            TH1D    hist_observable_psi                                 = *rdf.Histo1D({("observable_psi_"+ label).c_str(),                     ";#psi_{helicity}^{kin} (deg)           ;Counts",                                                           18, -180.0, 180.0},                     "psi_helicity_kin",                                                 "event_weight");
-                    hist_observable_psi.Write();
+            TH1D    hist_observable_diff_psi                            = *rdf.Histo1D({("observable_diff_psi_"+ label).c_str(),                ";#psi_{helicity}^{kin} (deg)           ;Counts",                                                           18, -180.0, 180.0},                     "diff_psi_helicity_kin",                                            "event_weight");
+                    hist_observable_diff_psi.Write();
+            TH1D    hist_observable_sum_psi                             = *rdf.Histo1D({("observable_sum_psi_"+ label).c_str(),                 ";#Psi_{helicity}^{kin} (deg)           ;Counts",                                                           18, -180.0, 180.0},                     "sum_psi_helicity_kin",                                             "event_weight");
+                    hist_observable_sum_psi.Write();
 
             cout << "----Processing KinFit plots..." << endl;
             TH1D    hist_kinfit_cut_chisq_per_ndf                       = *rdf.Histo1D({("kinfit_cut_chisq_per_ndf_"+ label).c_str(),           ";#chi^{2}/NDF                          ;Counts",                                                           100, 0.0, 10.0},                        "chisq_per_ndf_kin",                                                "event_weight");
@@ -458,10 +465,12 @@ void filter_phi_d_exc_recon(string reaction, string output_mode)
                         hist_truth_observable_decay_costheta.Write();
                 TH1D    hist_truth_observable_decay_phi                 = *rdf.Histo1D({("truth_observable_decay_phi_"+ label).c_str(),         ";#phi_{helicity}^{truth} (deg)         ;Counts",                                                           10, -180.0, 180.0},                     "decay_phi_helicity_truth",                                         "event_weight");
                         hist_truth_observable_decay_phi.Write();
-                TH1D    hist_truth_observable_polarization_phi          = *rdf.Histo1D({("truth_observable_polarization_phi_"+ label).c_str(),  ";#phi_{com}^{truth} (deg)              ;Counts",                                                           10, -180, 180.0},                       "polarization_phi_com_truth",                                       "event_weight");
+                TH1D    hist_truth_observable_polarization_phi          = *rdf.Histo1D({("truth_observable_polarization_phi_"+ label).c_str(),  ";#Phi_{pol}^{truth} (deg)              ;Counts",                                                           10, -180, 180.0},                       "polarization_phi_com_truth",                                       "event_weight");
                         hist_truth_observable_polarization_phi.Write();
-                TH1D    hist_truth_observable_psi                       = *rdf.Histo1D({("truth_observable_psi_"+ label).c_str(),               ";#psi_{helicity}^{truth} (deg)         ;Counts",                                                           10, -180.0, 180.0},                     "psi_helicity_truth",                                               "event_weight");
-                        hist_truth_observable_psi.Write();
+                TH1D    hist_truth_observable_diff_psi                  = *rdf.Histo1D({("truth_observable_diff_psi_"+ label).c_str(),          ";#psi_{helicity}^{truth} (deg)         ;Counts",                                                           10, -180.0, 180.0},                     "diff_psi_helicity_truth",                                          "event_weight");
+                        hist_truth_observable_diff_psi.Write();
+                TH1D    hist_truth_observable_sum_psi                   = *rdf.Histo1D({("truth_observable_sum_psi_"+ label).c_str(),           ";#Psi_{helicity}^{truth} (deg)         ;Counts",                                                           10, -180.0, 180.0},                     "sum_psi_helicity_truth",                                           "event_weight");
+                        hist_truth_observable_sum_psi.Write();
 
                 cout << "----Processing truth kinematics plots..." << endl;
                 TH2D    hist_truth_kinematics_kp                        = *rdf.Histo2D({("truth_kinematics_kp_"+ label).c_str(),                ";p_{K^{+}}^{truth} (GeV)               ;#theta_{K^{+}}^{truth} (deg)",                                     100, 0.0, 10.0, 180, 0.0, 180.0},       "kp_momentum_truth",                "kp_theta_truth",               "event_weight");
@@ -486,10 +495,12 @@ void filter_phi_d_exc_recon(string reaction, string output_mode)
                         hist_bin_migration_decay_costheta.Write();
                 TH2D    hist_bin_migration_decay_phi                    = *rdf.Histo2D({("bin_migration_decay_phi_"+ label).c_str(),            ";#phi_{helicity}^{truth} (deg)         ;#phi_{helicity}^{kin} (deg)",                                      10, -180.0, 180.0, 10, -180.0, 180.0},  "decay_phi_helicity_truth",         "decay_phi_helicity_kin",       "event_weight");
                         hist_bin_migration_decay_phi.Write();
-                TH2D    hist_bin_migration_polarization_phi             = *rdf.Histo2D({("bin_migration_polarization_phi_"+ label).c_str(),     ";#phi_{com}^{truth} (deg)              ;#phi_{com}^{kin} (deg)",                                           10, -180.0, 180.0, 10, -180.0, 180.0},  "polarization_phi_com_truth",       "polarization_phi_com_kin",     "event_weight");
+                TH2D    hist_bin_migration_polarization_phi             = *rdf.Histo2D({("bin_migration_polarization_phi_"+ label).c_str(),     ";#Phi_{pol}^{truth} (deg)              ;#Phi_{pol}^{kin} (deg)",                                           10, -180.0, 180.0, 10, -180.0, 180.0},  "polarization_phi_com_truth",       "polarization_phi_com_kin",     "event_weight");
                         hist_bin_migration_polarization_phi.Write();
-                TH2D    hist_bin_migration_psi                          = *rdf.Histo2D({("bin_migration_psi_"+ label).c_str(),                  ";#psi_{helicity}^{truth} (deg)         ;#psi_{helicity}^{kin} (deg)",                                      10, -180.0, 180.0, 10, -180.0, 180.0},  "psi_helicity_truth",               "psi_helicity_kin",             "event_weight");
-                        hist_bin_migration_psi.Write();
+                TH2D    hist_bin_migration_diff_psi                     = *rdf.Histo2D({("bin_migration_diff_psi_"+ label).c_str(),             ";#psi_{helicity}^{truth} (deg)         ;#psi_{helicity}^{kin} (deg)",                                      10, -180.0, 180.0, 10, -180.0, 180.0},  "diff_psi_helicity_truth",          "diff_psi_helicity_kin",        "event_weight");
+                        hist_bin_migration_diff_psi.Write();
+                TH2D    hist_bin_migration_sum_psi                      = *rdf.Histo2D({("bin_migration_sum_psi_"+ label).c_str(),              ";#Psi_{helicity}^{truth} (deg)         ;#Psi_{helicity}^{kin} (deg)",                                      10, -180.0, 180.0, 10, -180.0, 180.0},  "sum_psi_helicity_truth",           "sum_psi_helicity_kin",         "event_weight");
+                        hist_bin_migration_sum_psi.Write();
 
                 cout << "----Processing resolution plots..." << endl;
                 TH2D    hist_resolution_Eg                              = *rdf.Histo2D({("resolution_Eg_"+ label).c_str(),                      ";E_{beam}^{truth} (GeV)                ;E_{beam}^{kin} - E_{beam}^{truth} (GeV)",                          60, 5.0, 11.0, 100, -0.5, 0.5},         "beam_energy_truth",                "beam_energy_diff",             "event_weight");
@@ -500,10 +511,12 @@ void filter_phi_d_exc_recon(string reaction, string output_mode)
                         hist_resolution_decay_costheta.Write();
                 TH2D    hist_resolution_decay_phi                       = *rdf.Histo2D({("resolution_decay_phi_"+ label).c_str(),               ";#phi_{helicity}^{truth} (deg)         ;#phi_{helicity}^{kin} - #phi_{helicity}^{truth} (deg)",            40, 0.0, 2.0, 80, -8.0, 8.0},           "decay_phi_helicity_truth",         "decay_phi_helicity_diff",      "event_weight");
                         hist_resolution_decay_phi.Write();
-                TH2D    hist_resolution_polarization_phi                = *rdf.Histo2D({("resolution_polarization_phi_"+ label).c_str(),        ";#phi_{com}^{truth} (deg)              ;#phi_{com}^{kin} - #phi_{com}^{truth} (deg)",                      40, 0.0, 2.0, 80, -2.0, 2.0},           "polarization_phi_com_truth",       "polarization_phi_com_diff",    "event_weight");
+                TH2D    hist_resolution_polarization_phi                = *rdf.Histo2D({("resolution_polarization_phi_"+ label).c_str(),        ";#Phi_{pol}^{truth} (deg)              ;#Phi_{pol}^{kin} - #Phi_{pol}^{truth} (deg)",                      40, 0.0, 2.0, 80, -2.0, 2.0},           "polarization_phi_com_truth",       "polarization_phi_com_diff",    "event_weight");
                         hist_resolution_polarization_phi.Write();
-                TH2D    hist_resolution_psi                             = *rdf.Histo2D({("resolution_psi_"+ label).c_str(),                     ";#psi_{helicity}^{truth} (deg)         ;#psi_{helicity}^{kin} - #psi_{helicity}^{truth} (deg)",            40, 0.0, 2.0, 80, -8.0, 8.0},           "psi_helicity_truth",               "psi_helicity_diff",            "event_weight");
-                        hist_resolution_psi.Write();
+                TH2D    hist_resolution_diff_psi                        = *rdf.Histo2D({("resolution_diff_psi_"+ label).c_str(),                ";#psi_{helicity}^{truth} (deg)         ;#psi_{helicity}^{kin} - #psi_{helicity}^{truth} (deg)",            40, 0.0, 2.0, 80, -8.0, 8.0},           "diff_psi_helicity_truth",          "diff_psi_helicity_diff",       "event_weight");
+                        hist_resolution_diff_psi.Write();
+                TH2D    hist_resolution_sum_psi                         = *rdf.Histo2D({("resolution_sum_psi_"+ label).c_str(),                 ";#Psi_{helicity}^{truth} (deg)         ;#Psi_{helicity}^{kin} - #Psi_{helicity}^{truth} (deg)",            40, 0.0, 2.0, 80, -8.0, 8.0},           "sum_psi_helicity_truth",           "sum_psi_helicity_diff",         "event_weight");
+                        hist_resolution_sum_psi.Write();
                 TH2D    hist_resolution_vertex_z                        = *rdf.Histo2D({("resolution_vertex_z_"+ label).c_str(),                ";z_{truth} (cm)                        ;z_{kin} - z_{truth} (cm)",                                         100, 40.0, 90.0, 80, -2.0, 2.0},        "vertex_z_truth",                   "vertex_z_diff",                "event_weight");
                         hist_resolution_vertex_z.Write();
                 TH2D    hist_resolution_vertex_r                        = *rdf.Histo2D({("resolution_vertex_r_"+ label).c_str(),                ";r_{truth} (cm)                        ;r_{kin} - r_{truth} (cm)",                                         100, 0.0, 1.0, 80, -1.0, 1.0},          "vertex_r_truth",                   "vertex_r_diff",                "event_weight");
@@ -516,10 +529,12 @@ void filter_phi_d_exc_recon(string reaction, string output_mode)
                         hist_resolution_t_decay_costheta.Write();
                 TH2D    hist_resolution_t_decay_phi                     = *rdf.Histo2D({("resolution_t_decay_phi_"+ label).c_str(),             ";-t^{truth} (GeV^{2})                  ;#phi_{helicity}^{kin} - #phi_{helicity}^{truth} (deg)",            40, 0.0, 2.0, 80, -8.0, 8.0},           "minust_truth",                     "decay_phi_helicity_diff",      "event_weight");
                         hist_resolution_t_decay_phi.Write();
-                TH2D    hist_resolution_t_polarization_phi              = *rdf.Histo2D({("resolution_t_polarization_phi_"+ label).c_str(),      ";-t^{truth} (GeV^{2})                  ;#phi_{com}^{kin} - #phi_{com}^{truth} (deg)",                      40, 0.0, 2.0, 80, -2.0, 2.0},           "minust_truth",                     "polarization_phi_com_diff",    "event_weight");
+                TH2D    hist_resolution_t_polarization_phi              = *rdf.Histo2D({("resolution_t_polarization_phi_"+ label).c_str(),      ";-t^{truth} (GeV^{2})                  ;#Phi_{pol}^{kin} - #Phi_{pol}^{truth} (deg)",                      40, 0.0, 2.0, 80, -2.0, 2.0},           "minust_truth",                     "polarization_phi_com_diff",    "event_weight");
                         hist_resolution_t_polarization_phi.Write();
-                TH2D    hist_resolution_t_psi                           = *rdf.Histo2D({("resolution_t_psi_"+ label).c_str(),                   ";-t^{truth} (GeV^{2})                  ;#psi_{helicity}^{kin} - #psi_{helicity}^{truth} (deg)",            40, 0.0, 2.0, 80, -8.0, 8.0},           "minust_truth",                     "psi_helicity_diff",            "event_weight");
-                        hist_resolution_t_psi.Write();
+                TH2D    hist_resolution_t_diff_psi                      = *rdf.Histo2D({("resolution_t_diff_psi_"+ label).c_str(),              ";-t^{truth} (GeV^{2})                  ;#psi_{helicity}^{kin} - #psi_{helicity}^{truth} (deg)",            40, 0.0, 2.0, 80, -8.0, 8.0},           "minust_truth",                     "diff_psi_helicity_diff",       "event_weight");
+                        hist_resolution_t_diff_psi.Write();
+                TH2D    hist_resolution_t_sum_psi                       = *rdf.Histo2D({("resolution_t_sum_psi_"+ label).c_str(),               ";-t^{truth} (GeV^{2})                  ;#Psi_{helicity}^{kin} - #Psi_{helicity}^{truth} (deg)",            40, 0.0, 2.0, 80, -8.0, 8.0},           "minust_truth",                     "sum_psi_helicity_diff",         "event_weight");
+                        hist_resolution_t_sum_psi.Write();
                 TH2D    hist_resolution_t_vertex_z                      = *rdf.Histo2D({("resolution_t_vertex_z_"+ label).c_str(),              ";-t^{truth} (GeV^{2})                  ;z_{kin} - z_{truth} (cm)",                                         40, 0.0, 2.0, 100, -2.0, 2.0},          "minust_truth",                     "vertex_z_diff",                "event_weight");
                         hist_resolution_t_vertex_z.Write();
                 TH2D    hist_resolution_t_vertex_r                      = *rdf.Histo2D({("resolution_t_vertex_r_"+ label).c_str(),              ";-t^{truth} (GeV^{2})                  ;r_{kin} - r_{truth} (cm)",                                         40, 0.0, 2.0, 100, -1.0, 1.0},          "minust_truth",                     "vertex_r_diff",                "event_weight");
