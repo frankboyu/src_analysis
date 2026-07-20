@@ -30,3 +30,6 @@ ver12_07: flat cross section,   helicity-conserving decay,  -t=0-2,     10M, wit
 rho_d_2H
 ver01: flat cross section, uniform decay, -t=0-2, ana ver10, 10M
 ver02: flat cross section, helicity-conserving decay, -t=0-2, ana ver10, 10M
+
+jpsi_d_2H
+ver13_01: flat cross section,   helicity-conserving decay,  -t=0-3,     10M, first version
