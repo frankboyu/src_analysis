@@ -246,3 +246,4 @@ summed_lumi[:,6] *= density*target_length*Navagadro*units_cm2_b/atomic_mass/1e12
 file_summed = open("output/"+target+"/lumi_summed_"+target+".txt", "w+")
 for i in range(len(summed_lumi)):
     file_summed.write('{:>3.0f}    {:>3.0f}    {:>15.12f}    {:>15.12f}    {:>15.12f}    {:>17.16e}    {:>17.16e}\n'.format(summed_lumi[i][0], summed_lumi[i][1], summed_lumi[i][2], summed_lumi[i][3], summed_lumi[i][4], summed_lumi[i][5], summed_lumi[i][6]))
+file_summed.close()
