@@ -14,3 +14,5 @@
 *.out
 
 temp
+plot/vm_d/archive/target_density/deuterium_eos.csv
+plot/vm_d/archive/target_density/epics_readings.csv
