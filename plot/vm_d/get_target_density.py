@@ -22,6 +22,7 @@ matplotlib.use("Agg")
 
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
 from matplotlib.ticker import FuncFormatter
 import numpy as np
 
@@ -256,7 +257,7 @@ def plot_density_uncertainty(ax: plt.Axes, readings: EpicsReadings) -> None:
     ax.legend(loc="best")
 
 
-def plot_density_vs_temperature(density_table: DensityTable, output_path: Path, title: str | None = None) -> None:
+def plot_density_vs_temperature(density_table: DensityTable, title: str | None = None) -> plt.Figure:
     fig, ax = plt.subplots(
         1,
         1,
@@ -283,13 +284,10 @@ def plot_density_vs_temperature(density_table: DensityTable, output_path: Path, 
     ax.set_xlim(20.5, 23.0)
     ax.grid(True, alpha=0.3)
     ax.legend(loc="best", fontsize=8, ncol=2)
-
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(output_path, bbox_inches="tight")
-    plt.close(fig)
+    return fig
 
 
-def plot_readings(readings: EpicsReadings, output_path: Path, title: str | None = None) -> None:
+def plot_readings(readings: EpicsReadings, title: str | None = None) -> plt.Figure:
     fig, (ax_temp, ax_pressure, ax_density, ax_uncertainty) = plt.subplots(
         4,
         1,
@@ -342,10 +340,7 @@ def plot_readings(readings: EpicsReadings, output_path: Path, title: str | None 
 
     ax_pressure.xaxis.set_major_formatter(FuncFormatter(format_actual_time))
     fig.autofmt_xdate()
-
-    output_path.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(output_path, bbox_inches="tight")
-    plt.close(fig)
+    return fig
 
 
 def parse_args() -> argparse.Namespace:
@@ -353,14 +348,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "csv_file",
         nargs="?",
-        default="epics_readings.csv",
-        help="Input CSV file (default: epics_readings.csv in the current directory)",
+        default="input/target_density_epics_readings.csv",
+        help="Input CSV file (default: input/target_density_epics_readings.csv in the current directory)",
     )
     parser.add_argument(
         "-o",
         "--output",
-        default="epics_readings.png",
-        help="Output image file (default: epics_readings.png)",
+        default="output/plots_phi_d_target_density.pdf",
+        help="Output PDF file (default: output/plots_phi_d_target_density.pdf)",
     )
     parser.add_argument(
         "--title",
@@ -369,13 +364,8 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--density-table",
-        default=str(Path(__file__).with_name("deuterium_eos.csv")),
-        help="EOS table for density lookup (default: deuterium_eos.csv next to this script)",
-    )
-    parser.add_argument(
-        "--density-output",
-        default="epics_readings_density_vs_temperature.png",
-        help="Output image file for the density-vs-temperature canvas (default: epics_readings_density_vs_temperature.png)",
+        default=str(Path(__file__).resolve().parent / "input" / "target_density_deuterium_eos.csv"),
+        help="EOS table for density lookup (default: input/target_density_deuterium_eos.csv next to this script)",
     )
     return parser.parse_args()
 
@@ -385,7 +375,6 @@ def main() -> int:
     csv_path = Path(args.csv_file).expanduser().resolve()
     output_path = Path(args.output).expanduser().resolve()
     density_table_path = Path(args.density_table).expanduser().resolve()
-    density_output_path = Path(args.density_output).expanduser().resolve()
 
     density_table = load_density_table(density_table_path)
     readings = read_readings(csv_path, density_table_path)
@@ -394,10 +383,13 @@ def main() -> int:
     density_stddev = float(np.std(density_values))
 
     print(f"Density over time: mean = {density_mean:.6f} g/mL, std dev = {density_stddev:.6f} g/mL")
-    plot_readings(readings, output_path, title=args.title)
-    plot_density_vs_temperature(density_table, density_output_path, title=args.title)
-    print(f"Saved plot to {output_path}")
-    print(f"Saved density-vs-temperature plot to {density_output_path}")
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    with PdfPages(output_path) as pdf:
+        pdf.savefig(plot_readings(readings, title=args.title), bbox_inches="tight")
+        pdf.savefig(plot_density_vs_temperature(density_table, title=args.title), bbox_inches="tight")
+        plt.close("all")
+
+    print(f"Saved plots to {output_path}")
     return 0
 
 
