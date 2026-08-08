@@ -39,7 +39,7 @@ double dxs_weight_func(double beam_energy_truth, double minust_truth, int sim_mo
         return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
 }
 
-double psi_weight_func(double polarization_angle, double beam_energy_truth, double psi_helicity_truth)
+double diff_psi_weight_func(double polarization_angle, double beam_energy_truth, double diff_psi_helicity_truth)
 {
     double polarization_degree[] = {                                0.0000,
                                     0.0614, 0.1087, 0.0971, 0.0763, 0.0629,
@@ -53,7 +53,7 @@ double psi_weight_func(double polarization_angle, double beam_energy_truth, doub
     else if (polarization_angle < -0.01) // amorphous simulation runs
         return 1.0;
     else                                 // diamond simulation runs, to be weighted by the SCHC+NPE predictions
-        return 1.0 + polarization_degree[energy_bin]*TMath::Cos(2*psi_helicity_truth/RadToDeg);
+        return 1.0 + polarization_degree[energy_bin]*TMath::Cos(2*diff_psi_helicity_truth/RadToDeg);
 }
 
 void filter_phi_d_exc_thrown(string reaction, string output_mode)
@@ -91,10 +91,12 @@ void filter_phi_d_exc_thrown(string reaction, string output_mode)
     .Define("kp_energy_truth",                  "kp_p4_truth.E()")
     .Define("kp_momentum_truth",                "kp_p4_truth.P()")
     .Define("kp_theta_truth",                   "kp_p4_truth.Theta()*RadToDeg")
+    .Define("kp_phi_truth",                     "kp_p4_truth.Phi()*RadToDeg")
     .Define("km_as_pion_p4_truth",              "TLorentzVector(km_p4_truth.Vect(), TMath::Sqrt(km_p4_truth.P()*km_p4_truth.P() + mass_piminus*mass_piminus))")
     .Define("km_energy_truth",                  "km_p4_truth.E()")
     .Define("km_momentum_truth",                "km_p4_truth.P()")
     .Define("km_theta_truth",                   "km_p4_truth.Theta()*RadToDeg")
+    .Define("km_phi_truth",                     "km_p4_truth.Phi()*RadToDeg")
     .Define("d_energy_truth",                   "d_p4_truth.E()")
     .Define("d_momentum_truth",                 "d_p4_truth.P()")
     .Define("d_theta_truth",                    "d_p4_truth.Theta()*RadToDeg")
@@ -132,10 +134,11 @@ void filter_phi_d_exc_thrown(string reaction, string output_mode)
     .Define("pi_x3_helicity_truth",             "boost_lorentz_vector(kp_p4_com_truth, -phi_p4_com_truth.BoostVector()).Vect().Unit()")
     .Define("decay_costheta_helicity_truth",    "pi_x3_helicity_truth.Dot(z_x3_helicity_truth)")
     .Define("decay_phi_helicity_truth",         "TMath::ATan2(-x_x3_helicity_truth.Dot(pi_x3_helicity_truth.Cross(z_x3_helicity_truth)), y_x3_helicity_truth.Dot(pi_x3_helicity_truth.Cross(z_x3_helicity_truth)))*RadToDeg")
-    .Define("psi_helicity_truth",               "fmod(polarization_phi_com_truth-decay_phi_helicity_truth+360, 360.0) >= 180 ? fmod(polarization_phi_com_truth-decay_phi_helicity_truth+360, 360.0) - 360 : fmod(polarization_phi_com_truth-decay_phi_helicity_truth+360, 360.0)")
+    .Define("diff_psi_helicity_truth",          "fmod(polarization_phi_com_truth-decay_phi_helicity_truth+360, 360.0) >= 180 ? fmod(polarization_phi_com_truth-decay_phi_helicity_truth+360, 360.0) - 360 : fmod(polarization_phi_com_truth-decay_phi_helicity_truth+360, 360.0)")
+    .Define("sum_psi_helicity_truth",           "fmod(polarization_phi_com_truth+decay_phi_helicity_truth+360, 360.0) >= 180 ? fmod(polarization_phi_com_truth+decay_phi_helicity_truth+360, 360.0) - 360 : fmod(polarization_phi_com_truth+decay_phi_helicity_truth+360, 360.0)")
     .Define("dxs_weight",                       "dxs_weight_func(beam_energy_truth, minust_truth, sim_model_flag)")
-    .Define("psi_weight",                       "psi_weight_func(polarization_angle, beam_energy_truth, psi_helicity_truth)")
-    .Define("event_weight",                     "dxs_weight*psi_weight")
+    .Define("diff_psi_weight",                  "diff_psi_weight_func(polarization_angle, beam_energy_truth, diff_psi_helicity_truth)")
+    .Define("event_weight",                     "dxs_weight*diff_psi_weight")
     ;
 
     cout << "Filtering events...\n";
@@ -181,12 +184,14 @@ void filter_phi_d_exc_thrown(string reaction, string output_mode)
                         hist_truth_observable_scatter_theta.Write();
                 TH1D    hist_truth_observable_decay_costheta            = *rdf.Histo1D({("truth_observable_decay_costheta_"+ label).c_str(),    ";cos(#theta_{helicity}^{truth})        ;Counts",                                                           10, -1.0, 1.0},                         "decay_costheta_helicity_truth",                                    "event_weight");
                         hist_truth_observable_decay_costheta.Write();
-                TH1D    hist_truth_observable_decay_phi                 = *rdf.Histo1D({("truth_observable_decay_phi_"+ label).c_str(),         ";#phi_{helicity}^{truth} (deg)         ;Counts",                                                           10, -180.0, 180.0},                     "decay_phi_helicity_truth",                                         "event_weight");
+                TH1D    hist_truth_observable_decay_phi                 = *rdf.Histo1D({("truth_observable_decay_phi_"+ label).c_str(),         ";#phi_{helicity}^{truth} (deg)         ;Counts",                                                           18, -180.0, 180.0},                     "decay_phi_helicity_truth",                                         "event_weight");
                         hist_truth_observable_decay_phi.Write();
-                TH1D    hist_truth_observable_polarization_phi          = *rdf.Histo1D({("truth_observable_polarization_phi_"+ label).c_str(),  ";#phi_{com}^{truth} (deg)              ;Counts",                                                           10, -180, 180.0},                       "polarization_phi_com_truth",                                       "event_weight");
+                TH1D    hist_truth_observable_polarization_phi          = *rdf.Histo1D({("truth_observable_polarization_phi_"+ label).c_str(),  ";#Phi_{pol}^{truth} (deg)              ;Counts",                                                           18, -180, 180.0},                       "polarization_phi_com_truth",                                       "event_weight");
                         hist_truth_observable_polarization_phi.Write();
-                TH1D    hist_truth_observable_psi                       = *rdf.Histo1D({("truth_observable_psi_"+ label).c_str(),               ";#psi_{helicity}^{truth} (deg)         ;Counts",                                                           10, -180.0, 180.0},                     "psi_helicity_truth",                                               "event_weight");
-                        hist_truth_observable_psi.Write();
+                TH1D    hist_truth_observable_diff_psi                  = *rdf.Histo1D({("truth_observable_diff_psi_"+ label).c_str(),          ";#psi_{helicity}^{truth} (deg)         ;Counts",                                                           18, -180.0, 180.0},                     "diff_psi_helicity_truth",                                          "event_weight");
+                        hist_truth_observable_diff_psi.Write();
+                TH1D    hist_truth_observable_sum_psi                   = *rdf.Histo1D({("truth_observable_sum_psi_"+ label).c_str(),           ";#Psi_{helicity}^{truth} (deg)         ;Counts",                                                           18, -180.0, 180.0},                     "sum_psi_helicity_truth",                                           "event_weight");
+                        hist_truth_observable_sum_psi.Write();
 
                 cout << "----Processing truth kinematics plots..." << endl;
                 TH2D    hist_truth_kinematics_kp                        = *rdf.Histo2D({("truth_kinematics_kp_"+ label).c_str(),                ";p_{K^{+}}^{truth} (GeV)               ;#theta_{K^{+}}^{truth} (deg)",                                     100, 0.0, 10.0, 180, 0.0, 180.0},       "kp_momentum_truth",                "kp_theta_truth",               "event_weight");
