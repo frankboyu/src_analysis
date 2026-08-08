@@ -5,12 +5,12 @@
 #include "DSelector/DHistogramActions.h"
 #include "DSelector/DCutActions.h"
 
-class DSelector_phi_d_exc_thrown : public DSelector
+class DSelector_jpsi_d_exc_thrown : public DSelector
 {
 public:
 
-    DSelector_phi_d_exc_thrown(TTree* locTree = NULL) : DSelector(locTree){}
-    virtual ~DSelector_phi_d_exc_thrown(){}
+    DSelector_jpsi_d_exc_thrown(TTree* locTree = NULL) : DSelector(locTree){}
+    virtual ~DSelector_jpsi_d_exc_thrown(){}
 
     void    Init(TTree *tree);
     Bool_t  Process(Long64_t entry);
@@ -28,16 +28,16 @@ private:
     // FLAGS
     bool dIsMC;
 
-    ClassDef(DSelector_phi_d_exc_thrown, 0);
+    ClassDef(DSelector_jpsi_d_exc_thrown, 0);
 };
 
-void DSelector_phi_d_exc_thrown::Init(TTree *locTree)
+void DSelector_jpsi_d_exc_thrown::Init(TTree *locTree)
 {
     // SET OUTPUT FILE NAME
     dOutputFileName          = "";
     dOutputTreeFileName      = "";
-    dFlatTreeFileName        = "selectedtree_phi_d_exc_thrown.root";
-    dFlatTreeName            = "selectedtree_phi_d_exc_thrown";
+    dFlatTreeFileName        = "selectedtree_jpsi_d_exc_thrown.root";
+    dFlatTreeName            = "selectedtree_jpsi_d_exc_thrown";
     dSaveDefaultFlatBranches = true;
     dSkipNoTriggerEvents     = false;
 
@@ -52,16 +52,16 @@ void DSelector_phi_d_exc_thrown::Init(TTree *locTree)
     dFlatTreeInterface->Create_Branch_Fundamental<Int_t>("polarization_angle");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("beam_x4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("beam_p4_truth");
-    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("kp_x4_truth");
-    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("kp_p4_truth");
-    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("km_x4_truth");
-    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("km_p4_truth");
+    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("ep_x4_truth");
+    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("ep_p4_truth");
+    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("em_x4_truth");
+    dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("em_p4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("d_x4_truth");
     dFlatTreeInterface->Create_Branch_NoSplitTObject<TLorentzVector>("d_p4_truth");
 }
 // END OF INITIALIZATION
 
-Bool_t DSelector_phi_d_exc_thrown::Process(Long64_t locEntry)
+Bool_t DSelector_jpsi_d_exc_thrown::Process(Long64_t locEntry)
 {
 	// CALL THIS FIRST
 	DSelector::Process(locEntry); // gets the data from the tree for the entry
@@ -79,8 +79,8 @@ Bool_t DSelector_phi_d_exc_thrown::Process(Long64_t locEntry)
 	dIsMC = (dTreeInterface->Get_Branch("MCWeight") != NULL);
 
         //GET THROWN P4
-        TLorentzVector locBeamX4_Thrown, locKPlusX4_Thrown, locKMinusX4_Thrown, locDeuteronX4_Thrown;
-        TLorentzVector locBeamP4_Thrown, locKPlusP4_Thrown, locKMinusP4_Thrown, locDeuteronP4_Thrown;
+        TLorentzVector locBeamX4_Thrown, locPositronX4_Thrown, locElectronX4_Thrown, locDeuteronX4_Thrown;
+        TLorentzVector locBeamP4_Thrown, locPositronP4_Thrown, locElectronP4_Thrown, locDeuteronP4_Thrown;
         if (dIsMC)
         {
             locBeamX4_Thrown = dThrownBeam->Get_X4();
@@ -88,15 +88,15 @@ Bool_t DSelector_phi_d_exc_thrown::Process(Long64_t locEntry)
             for(UInt_t loc_j = 0; loc_j < Get_NumThrown(); ++loc_j)
             {
                 dThrownWrapper->Set_ArrayIndex(loc_j);
-                if (dThrownWrapper->Get_PID() == KPlus)
+                if (dThrownWrapper->Get_PID() == Positron)
                 {
-                    locKPlusX4_Thrown = dThrownWrapper->Get_X4();
-                    locKPlusP4_Thrown = dThrownWrapper->Get_P4();
+                    locPositronX4_Thrown = dThrownWrapper->Get_X4();
+                    locPositronP4_Thrown = dThrownWrapper->Get_P4();
                 }
-                else if (dThrownWrapper->Get_PID() == KMinus)
+                else if (dThrownWrapper->Get_PID() == Electron)
                 {
-                    locKMinusX4_Thrown = dThrownWrapper->Get_X4();
-                    locKMinusP4_Thrown = dThrownWrapper->Get_P4();
+                    locElectronX4_Thrown = dThrownWrapper->Get_X4();
+                    locElectronP4_Thrown = dThrownWrapper->Get_P4();
                 }
                 else if (dThrownWrapper->Get_PID() == Deuteron)
                 {
@@ -110,10 +110,10 @@ Bool_t DSelector_phi_d_exc_thrown::Process(Long64_t locEntry)
         dFlatTreeInterface->Fill_Fundamental<Int_t>("polarization_angle", dPolarizationAngle);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_x4_truth", locBeamX4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("beam_p4_truth", locBeamP4_Thrown);
-        dFlatTreeInterface->Fill_TObject<TLorentzVector>("kp_x4_truth", locKPlusX4_Thrown);
-        dFlatTreeInterface->Fill_TObject<TLorentzVector>("kp_p4_truth", locKPlusP4_Thrown);
-        dFlatTreeInterface->Fill_TObject<TLorentzVector>("km_x4_truth", locKMinusX4_Thrown);
-        dFlatTreeInterface->Fill_TObject<TLorentzVector>("km_p4_truth", locKMinusP4_Thrown);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("ep_x4_truth", locPositronX4_Thrown);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("ep_p4_truth", locPositronP4_Thrown);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("em_x4_truth", locElectronX4_Thrown);
+        dFlatTreeInterface->Fill_TObject<TLorentzVector>("em_p4_truth", locElectronP4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("d_x4_truth", locDeuteronX4_Thrown);
         dFlatTreeInterface->Fill_TObject<TLorentzVector>("d_p4_truth", locDeuteronP4_Thrown);
         Fill_FlatTree();
@@ -122,7 +122,7 @@ Bool_t DSelector_phi_d_exc_thrown::Process(Long64_t locEntry)
 }
 // END OF PROCESSING
 
-void DSelector_phi_d_exc_thrown::Finalize(void)
+void DSelector_jpsi_d_exc_thrown::Finalize(void)
 {
 	// CALL THIS LAST
 	DSelector::Finalize(); // saves results to the output file
