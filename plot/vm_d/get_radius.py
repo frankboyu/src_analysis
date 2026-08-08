@@ -51,6 +51,9 @@ def polynomial_1(minust, p0, p1):
 #     form_factor = 1 / (1 + p1*minust + p2*minust**2)
 #     return (p0 * form_factor)**2
 
+def linear_function(minust, p0, p1):
+    return p0 + p1*minust
+
 ###################################################################### CLAS #####################################################################################
 # CLAS results
 phi_d_2H_dsdt_clas_minust_low           = np.array([0.350, 0.375, 0.400, 0.425, 0.450, 0.500, 0.550, 0.600, 0.700, 0.800, 1.000, 1.200, 1.400])
@@ -177,6 +180,12 @@ for i in range(len(phi_d_2H_dsdt_results)):
 
 color_list = ['blue', 'orange', 'green', 'red', 'purple', 'brown', 'pink', 'gray', 'olive', 'cyan', 'black', 'yellow', 'magenta', 'teal', 'navy', 'maroon', 'lime', 'coral', 'gold', 'silver']
 
+fitting_indices = np.arange(6, 18)
+min_points = 6
+minust_array = np.zeros((len(fitting_indices)))
+radius_array = np.zeros((len(fitting_indices)))
+radius_err_array = np.zeros((len(fitting_indices)))
+
 ###################################################################### 5.8-7.8 GeV #####################################################################################
 
 phi_d_2H_dsdt_energy_center_68      = phi_d_2H_dsdt_energy_center   [index[0]:index[1]]
@@ -191,24 +200,30 @@ phi_d_2H_dsdt_results_systerr_68    = phi_d_2H_dsdt_results_systerr [index[0]:in
 fig = plt.figure(figsize=(16, 6), dpi=300)
 gs = fig.add_gridspec(1, 2)
 axs = gs.subplots()
+twin_axes = axs[1].twinx()
 plt.suptitle("Monopole Form, 5.8-7.8 GeV")
 plt.axes(axs[0])
 plt.errorbar(phi_d_2H_dsdt_minust_center_68[1:], phi_d_2H_dsdt_results_68[1:], yerr=phi_d_2H_dsdt_results_statserr_68[1:], fmt='b.', label='Data, 5.8-7.8 GeV')
 
-for i in range(6, 16):
+for i in fitting_indices:
     curve_fit_params, curve_fit_cov = curve_fit(monopole_form, \
                                             phi_d_2H_dsdt_minust_center_68[1:i], \
                                             phi_d_2H_dsdt_results_68[1:i], \
                                             sigma=phi_d_2H_dsdt_results_statserr_68[1:i], \
-                                            absolute_sigma=True, p0=[300, 0.05], maxfev=50000)
+                                            absolute_sigma=True, p0=[300, 0.05], bounds=([-np.inf, 0], [np.inf, 1]), maxfev=50000)
     curve_fit_residuals             = phi_d_2H_dsdt_results_68[1:i] - monopole_form(phi_d_2H_dsdt_minust_center_68[1:i], curve_fit_params[0], curve_fit_params[1])
     reduced_chi2                    = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr_68[1:i])**2)/(len(phi_d_2H_dsdt_results_68[1:i])-2)
     plt.axes(axs[0])
-    plt.plot(np.linspace(0.01, phi_d_2H_dsdt_minust_center_68[i], 1000), monopole_form(np.linspace(0.01, phi_d_2H_dsdt_minust_center_68[i], 1000), curve_fit_params[0], curve_fit_params[1]), '-',  color = color_list[i-3])
-    plt.plot(np.linspace(phi_d_2H_dsdt_minust_center_68[i], 0.6, 1000),  monopole_form(np.linspace(phi_d_2H_dsdt_minust_center_68[i], 0.6, 1000), curve_fit_params[0],  curve_fit_params[1]), ':', color = color_list[i-3])
+    plt.plot(np.linspace(phi_d_2H_dsdt_minust_center_68[1], phi_d_2H_dsdt_minust_center_68[i], 1000), monopole_form(np.linspace(phi_d_2H_dsdt_minust_center_68[1], phi_d_2H_dsdt_minust_center_68[i], 1000), curve_fit_params[0], curve_fit_params[1]), '-',  color = color_list[i-3])
+    plt.plot(np.linspace(0.01, 0.6, 1000),  monopole_form(np.linspace(0.01, 0.6, 1000), curve_fit_params[0],  curve_fit_params[1]), '--', color = color_list[i-3])
 
     plt.axes(axs[1])
-    # plt.errorbar(phi_d_2H_dsdt_minust_center_68[i], 0.197*np.sqrt(6/curve_fit_params[1]), yerr=0.197*np.sqrt(6/curve_fit_cov[1][1]), fmt='o', color = color_list[i-3])
+    this_radius = 0.1973*np.sqrt(6/curve_fit_params[1])
+    this_radius_err = 0.1973*np.sqrt(6)*0.5*np.sqrt(curve_fit_cov[1][1])/curve_fit_params[1]**(3/2)
+    plt.errorbar(phi_d_2H_dsdt_minust_center_68[i], this_radius, yerr=this_radius_err, fmt='o', color = 'g')
+
+    plt.axes(twin_axes)
+    plt.plot(phi_d_2H_dsdt_minust_center_68[i], reduced_chi2, 'o', color = 'r')
 
 plt.axes(axs[0])
 plt.yscale('log')
@@ -220,9 +235,15 @@ plt.legend()
 
 plt.axes(axs[1])
 plt.xlabel(r'$-t\ [GeV^2/c]$')
-plt.ylabel(r'$r\ [fm]$')
+plt.ylabel(r'$r\ [fm]$', color='g')
 plt.xlim(0, 0.6)
-plt.ylim(0, 2.5)
+plt.ylim(0, 3.0)
+plt.yticks(np.arange(0, 3.5, 0.5), color='g')
+
+plt.axes(twin_axes)
+plt.ylabel(r'$\chi^2/ndf$', color='r')
+plt.ylim(0, 3.0)
+plt.yticks(np.arange(0, 3.5, 0.5), color='r')
 
 file_pdf.savefig()
 plt.close()
@@ -232,21 +253,22 @@ plt.close()
 fig = plt.figure(figsize=(16, 6), dpi=300)
 gs = fig.add_gridspec(1, 2)
 axs = gs.subplots()
+twin_axes = axs[1].twinx()
 plt.suptitle("Dipole Form, 5.8-7.8 GeV")
 plt.axes(axs[0])
 plt.errorbar(phi_d_2H_dsdt_minust_center_68[1:], phi_d_2H_dsdt_results_68[1:], yerr=phi_d_2H_dsdt_results_statserr_68[1:], fmt='b.', label='Data, 5.8-7.8 GeV')
 
-for i in range(6, 16):
+for i in fitting_indices:
     curve_fit_params, curve_fit_cov = curve_fit(dipole_form, \
                                             phi_d_2H_dsdt_minust_center_68[1:i], \
                                             phi_d_2H_dsdt_results_68[1:i], \
                                             sigma=phi_d_2H_dsdt_results_statserr_68[1:i], \
-                                            absolute_sigma=True, p0=[300, 0.05], maxfev=50000)
+                                            absolute_sigma=True, p0=[300, 0.05], bounds=([-np.inf, 0], [np.inf, 1]), maxfev=50000)
     curve_fit_residuals             = phi_d_2H_dsdt_results_68[1:i] - dipole_form(phi_d_2H_dsdt_minust_center_68[1:i], curve_fit_params[0], curve_fit_params[1])
     reduced_chi2                    = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr_68[1:i])**2)/(len(phi_d_2H_dsdt_results_68[1:i])-2)
     plt.axes(axs[0])
-    plt.plot(np.linspace(0.01, phi_d_2H_dsdt_minust_center_68[i], 1000), dipole_form(np.linspace(0.01, phi_d_2H_dsdt_minust_center_68[i], 1000), curve_fit_params[0], curve_fit_params[1]), '-',  color = color_list[i-3])
-    plt.plot(np.linspace(phi_d_2H_dsdt_minust_center_68[i], 0.6, 1000),  dipole_form(np.linspace(phi_d_2H_dsdt_minust_center_68[i], 0.6, 1000), curve_fit_params[0],  curve_fit_params[1]), ':', color = color_list[i-3])
+    plt.plot(np.linspace(phi_d_2H_dsdt_minust_center_68[1], phi_d_2H_dsdt_minust_center_68[i], 1000), dipole_form(np.linspace(phi_d_2H_dsdt_minust_center_68[1], phi_d_2H_dsdt_minust_center_68[i], 1000), curve_fit_params[0], curve_fit_params[1]), '-',  color = color_list[i-3])
+    plt.plot(np.linspace(0.01, 0.6, 1000),  dipole_form(np.linspace(0.01, 0.6, 1000), curve_fit_params[0],  curve_fit_params[1]), '--', color = color_list[i-3])
 
     plt.axes(axs[1])
     # plt.errorbar(phi_d_2H_dsdt_minust_center_68[i], 0.197*np.sqrt(6/curve_fit_params[1]), yerr=0.197*np.sqrt(6/curve_fit_cov[1][1]), fmt='o', color = color_list[i-3])
@@ -261,9 +283,15 @@ plt.legend()
 
 plt.axes(axs[1])
 plt.xlabel(r'$-t\ [GeV^2/c]$')
-plt.ylabel(r'$r\ [fm]$')
+plt.ylabel(r'$r\ [fm]$', color='g')
 plt.xlim(0, 0.6)
-plt.ylim(0, 2.5)
+plt.ylim(0, 3.0)
+plt.yticks(np.arange(0, 3.5, 0.5), color='g')
+
+plt.axes(twin_axes)
+plt.ylabel(r'$\chi^2/ndf$', color='r')
+plt.ylim(0, 3.0)
+plt.yticks(np.arange(0, 3.5, 0.5), color='r')
 
 file_pdf.savefig()
 plt.close()
@@ -272,11 +300,12 @@ plt.close()
 fig = plt.figure(figsize=(16, 6), dpi=300)
 gs = fig.add_gridspec(1, 2)
 axs = gs.subplots()
+twin_axes = axs[1].twinx()
 plt.suptitle("Tripole Form, 5.8-7.8 GeV")
 plt.axes(axs[0])
 plt.errorbar(phi_d_2H_dsdt_minust_center_68[1:], phi_d_2H_dsdt_results_68[1:], yerr=phi_d_2H_dsdt_results_statserr_68[1:], fmt='b.', label='Data, 5.8-7.8 GeV')
 
-for i in range(6, 16):
+for i in fitting_indices:
     curve_fit_params, curve_fit_cov = curve_fit(tripole_form, \
                                             phi_d_2H_dsdt_minust_center_68[1:i], \
                                             phi_d_2H_dsdt_results_68[1:i], \
@@ -284,14 +313,18 @@ for i in range(6, 16):
                                             absolute_sigma=True, p0=[300, 0.05], maxfev=50000)
     curve_fit_residuals             = phi_d_2H_dsdt_results_68[1:i] - tripole_form(phi_d_2H_dsdt_minust_center_68[1:i], curve_fit_params[0], curve_fit_params[1])
     reduced_chi2                    = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr_68[1:i])**2)/(len(phi_d_2H_dsdt_results_68[1:i])-2)
+
     plt.axes(axs[0])
-    plt.plot(np.linspace(0.01, phi_d_2H_dsdt_minust_center_68[i], 1000), tripole_form(np.linspace(0.01, phi_d_2H_dsdt_minust_center_68[i], 1000), curve_fit_params[0], curve_fit_params[1]), '-',  color = color_list[i-3])
-    plt.plot(np.linspace(phi_d_2H_dsdt_minust_center_68[i], 0.6, 1000),  tripole_form(np.linspace(phi_d_2H_dsdt_minust_center_68[i], 0.6, 1000), curve_fit_params[0],  curve_fit_params[1]), ':', color = color_list[i-3])
+    plt.plot(np.linspace(phi_d_2H_dsdt_minust_center_68[1], phi_d_2H_dsdt_minust_center_68[i], 1000), tripole_form(np.linspace(phi_d_2H_dsdt_minust_center_68[1], phi_d_2H_dsdt_minust_center_68[i], 1000), curve_fit_params[0], curve_fit_params[1]), '-',  color = color_list[i-3])
+    plt.plot(np.linspace(0.01, 0.6, 1000),  tripole_form(np.linspace(0.01, 0.6, 1000), curve_fit_params[0],  curve_fit_params[1]), '--', color = color_list[i-3])
 
     plt.axes(axs[1])
     this_radius = 0.1973*np.sqrt(18/curve_fit_params[1])
     this_radius_err = 0.1973*np.sqrt(18)*0.5*np.sqrt(curve_fit_cov[1][1])/curve_fit_params[1]**(3/2)
-    plt.errorbar(phi_d_2H_dsdt_minust_center_68[i], this_radius, yerr=this_radius_err, fmt='o', color = color_list[i-3])
+    plt.errorbar(phi_d_2H_dsdt_minust_center_68[i], this_radius, yerr=this_radius_err, fmt='o', color = 'g')
+
+    plt.axes(twin_axes)
+    plt.plot(phi_d_2H_dsdt_minust_center_68[i], reduced_chi2, 'o', color = 'r')
 
 plt.axes(axs[0])
 plt.yscale('log')
@@ -303,9 +336,15 @@ plt.legend()
 
 plt.axes(axs[1])
 plt.xlabel(r'$-t\ [GeV^2/c]$')
-plt.ylabel(r'$r\ [fm]$')
+plt.ylabel(r'$r\ [fm]$', color='g')
 plt.xlim(0, 0.6)
-plt.ylim(0, 2.5)
+plt.ylim(0, 4.0)
+plt.yticks(np.arange(0, 4.5, 0.5), color='g')
+
+plt.axes(twin_axes)
+plt.ylabel(r'$\chi^2/ndf$', color='r')
+plt.ylim(0, 4.0)
+plt.yticks(np.arange(0, 4.5, 0.5), color='r')
 
 file_pdf.savefig()
 plt.close()
@@ -314,11 +353,12 @@ plt.close()
 fig = plt.figure(figsize=(16, 6), dpi=300)
 gs = fig.add_gridspec(1, 2)
 axs = gs.subplots()
+twin_axes = axs[1].twinx()
 plt.suptitle("Quadrupole Form, 5.8-7.8 GeV")
 plt.axes(axs[0])
 plt.errorbar(phi_d_2H_dsdt_minust_center_68[1:], phi_d_2H_dsdt_results_68[1:], yerr=phi_d_2H_dsdt_results_statserr_68[1:], fmt='b.', label='Data, 5.8-7.8 GeV')
 
-for i in range(6, 16):
+for i in fitting_indices:
     curve_fit_params, curve_fit_cov = curve_fit(quadrupole_form, \
                                             phi_d_2H_dsdt_minust_center_68[1:i], \
                                             phi_d_2H_dsdt_results_68[1:i], \
@@ -326,14 +366,26 @@ for i in range(6, 16):
                                             absolute_sigma=True, p0=[300, 0.05], maxfev=50000)
     curve_fit_residuals             = phi_d_2H_dsdt_results_68[1:i] - quadrupole_form(phi_d_2H_dsdt_minust_center_68[1:i], curve_fit_params[0], curve_fit_params[1])
     reduced_chi2                    = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr_68[1:i])**2)/(len(phi_d_2H_dsdt_results_68[1:i])-2)
+
     plt.axes(axs[0])
-    plt.plot(np.linspace(0.01, phi_d_2H_dsdt_minust_center_68[i], 1000), quadrupole_form(np.linspace(0.01, phi_d_2H_dsdt_minust_center_68[i], 1000), curve_fit_params[0], curve_fit_params[1]), '-',  color = color_list[i-3])
-    plt.plot(np.linspace(phi_d_2H_dsdt_minust_center_68[i], 0.6, 1000),  quadrupole_form(np.linspace(phi_d_2H_dsdt_minust_center_68[i], 0.6, 1000), curve_fit_params[0],  curve_fit_params[1]), ':', color = color_list[i-3])
+    plt.plot(np.linspace(phi_d_2H_dsdt_minust_center_68[1], phi_d_2H_dsdt_minust_center_68[i], 1000), quadrupole_form(np.linspace(phi_d_2H_dsdt_minust_center_68[1], phi_d_2H_dsdt_minust_center_68[i], 1000), curve_fit_params[0], curve_fit_params[1]), '-',  color = color_list[i-3])
+    plt.plot(np.linspace(0.01, 0.6, 1000),  quadrupole_form(np.linspace(0.01, 0.6, 1000), curve_fit_params[0],  curve_fit_params[1]), '--', color = color_list[i-3])
 
     plt.axes(axs[1])
-    this_radius = 0.1973*np.sqrt(24/curve_fit_params[1])
-    this_radius_err = 0.1973*np.sqrt(24)*0.5*np.sqrt(curve_fit_cov[1][1])/curve_fit_params[1]**(3/2)
-    plt.errorbar(phi_d_2H_dsdt_minust_center_68[i], this_radius, yerr=this_radius_err, fmt='o', color = color_list[i-3])
+    minust_array[i-min_points] = phi_d_2H_dsdt_minust_center_68[i]
+    radius_array[i-min_points] = 0.1973*np.sqrt(24/curve_fit_params[1])
+    radius_err_array[i-min_points] = 0.1973*np.sqrt(24)*0.5*np.sqrt(curve_fit_cov[1][1])/curve_fit_params[1]**(3/2)
+    plt.errorbar(phi_d_2H_dsdt_minust_center_68[i], radius_array[i-min_points], yerr=radius_err_array[i-min_points], fmt='o', color = 'g')
+
+    plt.axes(twin_axes)
+    plt.plot(phi_d_2H_dsdt_minust_center_68[i], reduced_chi2, 'o', color = 'r')
+    
+    print(f"Quadrupole fit for i={i}: radius={radius_array[i-min_points]}, err={radius_err_array[i-min_points]}, reduced_chi2={reduced_chi2}")
+
+plt.axes(axs[1])
+curve_fit_params, curve_fit_cov = curve_fit(linear_function, minust_array, radius_array, sigma=radius_err_array, absolute_sigma=True, p0=[1.0, 1.0], maxfev=50000)
+plt.plot(np.linspace(0, 0.6, 1000), linear_function(np.linspace(0, 0.6, 1000), curve_fit_params[0], curve_fit_params[1]), '--', color='g', label=f'Linear fit, r = ({curve_fit_params[1]:.2f}+-{np.sqrt(curve_fit_cov[1][1]):.2f}) * |t| + ({curve_fit_params[0]:.2f}+-{np.sqrt(curve_fit_cov[0][0]):.2f})')
+plt.legend()
 
 plt.axes(axs[0])
 plt.yscale('log')
@@ -345,9 +397,15 @@ plt.legend()
 
 plt.axes(axs[1])
 plt.xlabel(r'$-t\ [GeV^2/c]$')
-plt.ylabel(r'$r\ [fm]$')
+plt.ylabel(r'$r\ [fm]$', color='g')
 plt.xlim(0, 0.6)
 plt.ylim(0, 3.0)
+plt.yticks(np.arange(0, 3.5, 0.5), color='g')
+
+plt.axes(twin_axes)
+plt.ylabel(r'$\chi^2/ndf$', color='r')
+plt.ylim(0, 3.0)
+plt.yticks(np.arange(0, 3.5, 0.5), color='r')
 
 file_pdf.savefig()
 plt.close()
@@ -361,7 +419,7 @@ plt.suptitle("Gaussian Form, 5.8-7.8 GeV")
 plt.axes(axs[0])
 plt.errorbar(phi_d_2H_dsdt_minust_center_68[1:], phi_d_2H_dsdt_results_68[1:], yerr=phi_d_2H_dsdt_results_statserr_68[1:], fmt='b.', label='Data, 5.8-7.8 GeV')
 
-for i in range(6, 16):
+for i in fitting_indices:
     curve_fit_params, curve_fit_cov = curve_fit(gaussian_form, \
                                             phi_d_2H_dsdt_minust_center_68[1:i], \
                                             phi_d_2H_dsdt_results_68[1:i], \
@@ -369,23 +427,26 @@ for i in range(6, 16):
                                             absolute_sigma=True, p0=[300, 0.05], maxfev=50000)
     curve_fit_residuals             = phi_d_2H_dsdt_results_68[1:i] - gaussian_form(phi_d_2H_dsdt_minust_center_68[1:i], curve_fit_params[0], curve_fit_params[1])
     reduced_chi2                    = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr_68[1:i])**2)/(len(phi_d_2H_dsdt_results_68[1:i])-2)
+
     plt.axes(axs[0])
-    plt.plot(np.linspace(0.01, phi_d_2H_dsdt_minust_center_68[i], 1000), gaussian_form(np.linspace(0.01, phi_d_2H_dsdt_minust_center_68[i], 1000), curve_fit_params[0], curve_fit_params[1]), '-',  color = color_list[i-3])
-    plt.plot(np.linspace(phi_d_2H_dsdt_minust_center_68[i], 0.6, 1000),  gaussian_form(np.linspace(phi_d_2H_dsdt_minust_center_68[i], 0.6, 1000), curve_fit_params[0],  curve_fit_params[1]), ':', color = color_list[i-3])
+    plt.plot(np.linspace(phi_d_2H_dsdt_minust_center_68[1], phi_d_2H_dsdt_minust_center_68[i], 1000), gaussian_form(np.linspace(phi_d_2H_dsdt_minust_center_68[1], phi_d_2H_dsdt_minust_center_68[i], 1000), curve_fit_params[0], curve_fit_params[1]), '-',  color = color_list[i-3])
+    plt.plot(np.linspace(0.01, 0.6, 1000),  gaussian_form(np.linspace(0.01, 0.6, 1000), curve_fit_params[0],  curve_fit_params[1]), '--', color = color_list[i-3])
 
     plt.axes(axs[1])
-    this_radius     = 0.1973*np.sqrt(3/2/curve_fit_params[1])
-    this_radius_err = 0.1973*np.sqrt(3/2)*0.5*np.sqrt(curve_fit_cov[1][1])/curve_fit_params[1]**(3/2)
-    if (i == 6):
-        plt.errorbar(phi_d_2H_dsdt_minust_center_68[i], this_radius, yerr=this_radius_err, fmt='o', color = 'k', label='Extracted radius')
-    else:
-        plt.errorbar(phi_d_2H_dsdt_minust_center_68[i], this_radius, yerr=this_radius_err, fmt='o', color = 'k')
+    minust_array[i-min_points] = phi_d_2H_dsdt_minust_center_68[i]
+    radius_array[i-min_points] = 0.1973*np.sqrt(3/2/curve_fit_params[1])
+    radius_err_array[i-min_points] = 0.1973*np.sqrt(3/2)*0.5*np.sqrt(curve_fit_cov[1][1])/curve_fit_params[1]**(3/2)
+    plt.errorbar(phi_d_2H_dsdt_minust_center_68[i], radius_array[i-min_points], yerr=radius_err_array[i-min_points], fmt='o', color = 'g')
 
     plt.axes(twin_axes)
-    if (i == 6):
-        plt.errorbar(phi_d_2H_dsdt_minust_center_68[i], reduced_chi2, yerr=0, fmt='o', color = 'r', label='χ²/NDF')
-    else:
-        plt.plot(phi_d_2H_dsdt_minust_center_68[i], reduced_chi2, 'o', color = 'r')
+    plt.plot(phi_d_2H_dsdt_minust_center_68[i], reduced_chi2, 'o', color = 'r')
+    
+    print(f"Gaussian fit for i={i}: radius={radius_array[i-min_points]}, err={radius_err_array[i-min_points]}, reduced_chi2={reduced_chi2}")
+
+plt.axes(axs[1])
+curve_fit_params, curve_fit_cov = curve_fit(linear_function, minust_array, radius_array, sigma=radius_err_array, absolute_sigma=True, p0=[1.0, 1.0], maxfev=50000)
+plt.plot(np.linspace(0, 0.6, 1000), linear_function(np.linspace(0, 0.6, 1000), curve_fit_params[0], curve_fit_params[1]), '--', color='g', label=f'Linear fit, r = ({curve_fit_params[1]:.2f}+-{np.sqrt(curve_fit_cov[1][1]):.2f}) * |t| + ({curve_fit_params[0]:.2f}+-{np.sqrt(curve_fit_cov[0][0]):.2f})')
+plt.legend()
 
 plt.axes(axs[0])
 plt.yscale('log')
@@ -397,36 +458,740 @@ plt.legend()
 
 plt.axes(axs[1])
 plt.xlabel(r'$-t\ [GeV^2/c]$')
-plt.ylabel(r'$r\ [fm]$')
+plt.ylabel(r'$r\ [fm]$', color='g')
 plt.xlim(0, 0.6)
 plt.ylim(0, 3.0)
-plt.legend(loc='upper left')
+plt.yticks(np.arange(0, 3.5, 0.5), color='g')
 
 plt.axes(twin_axes)
-plt.ylabel(r'$\chi^2/ndf$')
-plt.yticks(np.arange(0, 3.5, 0.5))
-plt.legend(loc='upper right')
+plt.ylabel(r'$\chi^2/ndf$', color='r')
+plt.ylim(0, 5.0)
+plt.yticks(np.arange(0, 5.5, 1.0), color='r')
 
 file_pdf.savefig()
 plt.close()
 
-# curve_fit_params, curve_fit_cov = curve_fit(uniform_form, \
-#                                             phi_d_2H_dsdt_minust_center[fit_indices], \
-#                                             phi_d_2H_dsdt_results[fit_indices], \
-#                                             sigma=phi_d_2H_dsdt_results_statserr[fit_indices], \
-#                                             absolute_sigma=True, p0=[300, 0.05], maxfev=5000)
-# curve_fit_residuals             = phi_d_2H_dsdt_results[fit_indices] - uniform_form(phi_d_2H_dsdt_minust_center[fit_indices], curve_fit_params[0], curve_fit_params[1])
-# reduced_chi2                    = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr[fit_indices])**2)/(len(phi_d_2H_dsdt_results[fit_indices])-2)
-# plt.plot(np.linspace(0.01, 0.6, 100), uniform_form(np.linspace(0.01, 0.6, 100), curve_fit_params[0], curve_fit_params[1]), '--', color = 'purple', label=f'Uniform fit, χ²/ndf = {reduced_chi2:.2f}, r={0.1973*np.sqrt(3*curve_fit_params[1]*curve_fit_params[1]/5):.2f} fm')
+# UNIFORM FORM
+fig = plt.figure(figsize=(16, 6), dpi=300)
+gs = fig.add_gridspec(1, 2)
+axs = gs.subplots()
+twin_axes = axs[1].twinx()
+plt.suptitle("Uniform Form, 5.8-7.8 GeV")
+plt.axes(axs[0])
+plt.errorbar(phi_d_2H_dsdt_minust_center_68[1:], phi_d_2H_dsdt_results_68[1:], yerr=phi_d_2H_dsdt_results_statserr_68[1:], fmt='b.', label='Data, 5.8-7.8 GeV')
 
-# # Format the plot
-# plt.xlabel(r'$-t\ [GeV^2/c]$')
-# plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$')
-# plt.xlim(0, 0.6)
-# plt.ylim(1e0, 1e3)
-# plt.yscale('log')
-# plt.legend()
-# file_pdf.savefig()
-# plt.close()
+for i in fitting_indices:
+    curve_fit_params, curve_fit_cov = curve_fit(uniform_form, \
+                                            phi_d_2H_dsdt_minust_center_68[1:i], \
+                                            phi_d_2H_dsdt_results_68[1:i], \
+                                            sigma=phi_d_2H_dsdt_results_statserr_68[1:i], \
+                                            absolute_sigma=True, p0=[100, 10], maxfev=50000)
+    curve_fit_residuals             = phi_d_2H_dsdt_results_68[1:i] - uniform_form(phi_d_2H_dsdt_minust_center_68[1:i], curve_fit_params[0], curve_fit_params[1])
+    reduced_chi2                    = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr_68[1:i])**2)/(len(phi_d_2H_dsdt_results_68[1:i])-2)
+
+    plt.axes(axs[0])
+    plt.plot(np.linspace(phi_d_2H_dsdt_minust_center_68[1], phi_d_2H_dsdt_minust_center_68[i], 1000), uniform_form(np.linspace(phi_d_2H_dsdt_minust_center_68[1], phi_d_2H_dsdt_minust_center_68[i], 1000), curve_fit_params[0], curve_fit_params[1]), '-',  color = color_list[i-3])
+    plt.plot(np.linspace(0.01, 0.6, 1000),  uniform_form(np.linspace(0.01, 0.6, 1000), curve_fit_params[0],  curve_fit_params[1]), '--', color = color_list[i-3])
+
+    plt.axes(axs[1])
+    this_radius     = 0.1973*np.sqrt(3*curve_fit_params[1]/5)
+    this_radius_err = 0.1973*np.sqrt(3/5)*0.5*np.sqrt(curve_fit_cov[1][1])/curve_fit_params[1]**(1/2)
+    plt.errorbar(phi_d_2H_dsdt_minust_center_68[i], this_radius, yerr=this_radius_err, fmt='o', color = 'g')
+
+    plt.axes(twin_axes)
+    plt.plot(phi_d_2H_dsdt_minust_center_68[i], reduced_chi2, 'o', color = 'r')
+
+plt.axes(axs[0])
+plt.yscale('log')
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$')
+plt.xlim(0, 0.6)
+plt.ylim(1e0, 1e3)
+plt.legend()
+
+plt.axes(axs[1])
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$r\ [fm]$', color='g')
+plt.xlim(0, 0.6)
+plt.ylim(0, 3.0)
+plt.yticks(np.arange(0, 3.5, 0.5), color='g')
+
+plt.axes(twin_axes)
+plt.ylabel(r'$\chi^2/ndf$', color='r')
+plt.ylim(0, 40.0)
+plt.yticks(np.arange(0, 40.5, 5), color='r')
+
+file_pdf.savefig()
+plt.close()
+
+###################################################################### 7.8-8.8 GeV #####################################################################################
+
+phi_d_2H_dsdt_energy_center_83      = phi_d_2H_dsdt_energy_center   [index[1]:index[2]]
+phi_d_2H_dsdt_minust_center_83      = phi_d_2H_dsdt_minust_center   [index[1]:index[2]]
+phi_d_2H_dsdt_results_83            = phi_d_2H_dsdt_results         [index[1]:index[2]]
+phi_d_2H_dsdt_results_statserr_83   = phi_d_2H_dsdt_results_statserr[index[1]:index[2]]
+phi_d_2H_dsdt_results_p2perr_83     = phi_d_2H_dsdt_results_p2perr  [index[1]:index[2]]
+phi_d_2H_dsdt_results_normerr_83    = phi_d_2H_dsdt_results_normerr [index[1]:index[2]]
+phi_d_2H_dsdt_results_systerr_83    = phi_d_2H_dsdt_results_systerr [index[1]:index[2]]
+
+# MONOPOLE FORM
+fig = plt.figure(figsize=(16, 6), dpi=300)
+gs = fig.add_gridspec(1, 2)
+axs = gs.subplots()
+twin_axes = axs[1].twinx()
+plt.suptitle("Monopole Form, 7.8-8.8 GeV")
+plt.axes(axs[0])
+plt.errorbar(phi_d_2H_dsdt_minust_center_83[1:], phi_d_2H_dsdt_results_83[1:], yerr=phi_d_2H_dsdt_results_statserr_83[1:], fmt='b.', label='Data, 7.8-8.8 GeV')
+
+for i in fitting_indices:
+    curve_fit_params, curve_fit_cov = curve_fit(monopole_form, \
+                                            phi_d_2H_dsdt_minust_center_83[1:i], \
+                                            phi_d_2H_dsdt_results_83[1:i], \
+                                            sigma=phi_d_2H_dsdt_results_statserr_83[1:i], \
+                                            absolute_sigma=True, p0=[300, 0.05], bounds=([-np.inf, 0], [np.inf, 1]), maxfev=50000)
+    curve_fit_residuals             = phi_d_2H_dsdt_results_83[1:i] - monopole_form(phi_d_2H_dsdt_minust_center_83[1:i], curve_fit_params[0], curve_fit_params[1])
+    reduced_chi2                    = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr_83[1:i])**2)/(len(phi_d_2H_dsdt_results_83[1:i])-2)
+    plt.axes(axs[0])
+    plt.plot(np.linspace(0.01, phi_d_2H_dsdt_minust_center_83[i], 1000), monopole_form(np.linspace(0.01, phi_d_2H_dsdt_minust_center_83[i], 1000), curve_fit_params[0], curve_fit_params[1]), '-',  color = color_list[i-3])
+    plt.plot(np.linspace(phi_d_2H_dsdt_minust_center_83[i], 0.6, 1000),  monopole_form(np.linspace(phi_d_2H_dsdt_minust_center_83[i], 0.6, 1000), curve_fit_params[0],  curve_fit_params[1]), ':', color = color_list[i-3])
+
+    plt.axes(axs[1])
+    this_radius = 0.1973*np.sqrt(6/curve_fit_params[1])
+    this_radius_err = 0.1973*np.sqrt(6)*0.5*np.sqrt(curve_fit_cov[1][1])/curve_fit_params[1]**(3/2)
+    plt.errorbar(phi_d_2H_dsdt_minust_center_83[i], this_radius, yerr=this_radius_err, fmt='o', color = 'g')
+
+    plt.axes(twin_axes)
+    plt.plot(phi_d_2H_dsdt_minust_center_83[i], reduced_chi2, 'o', color = 'r')
+
+plt.axes(axs[0])
+plt.yscale('log')
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$')
+plt.xlim(0, 0.6)
+plt.ylim(1e0, 1e3)
+plt.legend()
+
+plt.axes(axs[1])
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$r\ [fm]$', color='g')
+plt.xlim(0, 0.6)
+plt.ylim(0, 3.0)
+plt.yticks(np.arange(0, 3.5, 0.5), color='g')
+
+plt.axes(twin_axes)
+plt.ylabel(r'$\chi^2/ndf$', color='r')
+plt.ylim(0, 3.0)
+plt.yticks(np.arange(0, 3.5, 0.5), color='r')
+
+file_pdf.savefig()
+plt.close()
+
+
+# DIPOLE FORM
+fig = plt.figure(figsize=(16, 6), dpi=300)
+gs = fig.add_gridspec(1, 2)
+axs = gs.subplots()
+twin_axes = axs[1].twinx()
+plt.suptitle("Dipole Form, 7.8-8.8 GeV")
+plt.axes(axs[0])
+plt.errorbar(phi_d_2H_dsdt_minust_center_83[1:], phi_d_2H_dsdt_results_83[1:], yerr=phi_d_2H_dsdt_results_statserr_83[1:], fmt='b.', label='Data, 7.8-8.8 GeV')
+
+for i in fitting_indices:
+    curve_fit_params, curve_fit_cov = curve_fit(dipole_form, \
+                                            phi_d_2H_dsdt_minust_center_83[1:i], \
+                                            phi_d_2H_dsdt_results_83[1:i], \
+                                            sigma=phi_d_2H_dsdt_results_statserr_83[1:i], \
+                                            absolute_sigma=True, p0=[300, 0.05], bounds=([-np.inf, 0], [np.inf, 1]), maxfev=50000)
+    curve_fit_residuals             = phi_d_2H_dsdt_results_83[1:i] - dipole_form(phi_d_2H_dsdt_minust_center_83[1:i], curve_fit_params[0], curve_fit_params[1])
+    reduced_chi2                    = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr_83[1:i])**2)/(len(phi_d_2H_dsdt_results_83[1:i])-2)
+    plt.axes(axs[0])
+    plt.plot(np.linspace(0.01, phi_d_2H_dsdt_minust_center_83[i], 1000), dipole_form(np.linspace(0.01, phi_d_2H_dsdt_minust_center_83[i], 1000), curve_fit_params[0], curve_fit_params[1]), '-',  color = color_list[i-3])
+    plt.plot(np.linspace(phi_d_2H_dsdt_minust_center_83[i], 0.6, 1000),  dipole_form(np.linspace(phi_d_2H_dsdt_minust_center_83[i], 0.6, 1000), curve_fit_params[0],  curve_fit_params[1]), ':', color = color_list[i-3])
+
+    plt.axes(axs[1])
+    # plt.errorbar(phi_d_2H_dsdt_minust_center_83[i], 0.197*np.sqrt(6/curve_fit_params[1]), yerr=0.197*np.sqrt(6/curve_fit_cov[1][1]), fmt='o', color = color_list[i-3])
+
+plt.axes(axs[0])
+plt.yscale('log')
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$')
+plt.xlim(0, 0.6)
+plt.ylim(1e0, 1e3)
+plt.legend()
+
+plt.axes(axs[1])
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$r\ [fm]$', color='g')
+plt.xlim(0, 0.6)
+plt.ylim(0, 3.0)
+plt.yticks(np.arange(0, 3.5, 0.5), color='g')
+
+plt.axes(twin_axes)
+plt.ylabel(r'$\chi^2/ndf$', color='r')
+plt.ylim(0, 3.0)
+plt.yticks(np.arange(0, 3.5, 0.5), color='r')
+
+file_pdf.savefig()
+plt.close()
+
+# TRIPOLE FORM
+fig = plt.figure(figsize=(16, 6), dpi=300)
+gs = fig.add_gridspec(1, 2)
+axs = gs.subplots()
+twin_axes = axs[1].twinx()
+plt.suptitle("Tripole Form, 7.8-8.8 GeV")
+plt.axes(axs[0])
+plt.errorbar(phi_d_2H_dsdt_minust_center_83[1:], phi_d_2H_dsdt_results_83[1:], yerr=phi_d_2H_dsdt_results_statserr_83[1:], fmt='b.', label='Data, 7.8-8.8 GeV')
+
+for i in fitting_indices:
+    curve_fit_params, curve_fit_cov = curve_fit(tripole_form, \
+                                            phi_d_2H_dsdt_minust_center_83[1:i], \
+                                            phi_d_2H_dsdt_results_83[1:i], \
+                                            sigma=phi_d_2H_dsdt_results_statserr_83[1:i], \
+                                            absolute_sigma=True, p0=[300, 0.05], maxfev=50000)
+    curve_fit_residuals             = phi_d_2H_dsdt_results_83[1:i] - tripole_form(phi_d_2H_dsdt_minust_center_83[1:i], curve_fit_params[0], curve_fit_params[1])
+    reduced_chi2                    = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr_83[1:i])**2)/(len(phi_d_2H_dsdt_results_83[1:i])-2)
+
+    plt.axes(axs[0])
+    plt.plot(np.linspace(0.01, phi_d_2H_dsdt_minust_center_83[i], 1000), tripole_form(np.linspace(0.01, phi_d_2H_dsdt_minust_center_83[i], 1000), curve_fit_params[0], curve_fit_params[1]), '-',  color = color_list[i-3])
+    plt.plot(np.linspace(phi_d_2H_dsdt_minust_center_83[i], 0.6, 1000),  tripole_form(np.linspace(phi_d_2H_dsdt_minust_center_83[i], 0.6, 1000), curve_fit_params[0],  curve_fit_params[1]), ':', color = color_list[i-3])
+
+    plt.axes(axs[1])
+    this_radius = 0.1973*np.sqrt(18/curve_fit_params[1])
+    this_radius_err = 0.1973*np.sqrt(18)*0.5*np.sqrt(curve_fit_cov[1][1])/curve_fit_params[1]**(3/2)
+    plt.errorbar(phi_d_2H_dsdt_minust_center_83[i], this_radius, yerr=this_radius_err, fmt='o', color = 'g')
+
+    plt.axes(twin_axes)
+    plt.plot(phi_d_2H_dsdt_minust_center_83[i], reduced_chi2, 'o', color = 'r')
+
+plt.axes(axs[0])
+plt.yscale('log')
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$')
+plt.xlim(0, 0.6)
+plt.ylim(1e0, 1e3)
+plt.legend()
+
+plt.axes(axs[1])
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$r\ [fm]$', color='g')
+plt.xlim(0, 0.6)
+plt.ylim(0, 4.0)
+plt.yticks(np.arange(0, 4.5, 0.5), color='g')
+
+plt.axes(twin_axes)
+plt.ylabel(r'$\chi^2/ndf$', color='r')
+plt.ylim(0, 4.0)
+plt.yticks(np.arange(0, 4.5, 0.5), color='r')
+
+file_pdf.savefig()
+plt.close()
+
+# QUADRUPOLE FORM
+fig = plt.figure(figsize=(16, 6), dpi=300)
+gs = fig.add_gridspec(1, 2)
+axs = gs.subplots()
+twin_axes = axs[1].twinx()
+plt.suptitle("Quadrupole Form, 7.8-8.8 GeV")
+plt.axes(axs[0])
+plt.errorbar(phi_d_2H_dsdt_minust_center_83[1:], phi_d_2H_dsdt_results_83[1:], yerr=phi_d_2H_dsdt_results_statserr_83[1:], fmt='b.', label='Data, 7.8-8.8 GeV')
+
+for i in fitting_indices:
+    curve_fit_params, curve_fit_cov = curve_fit(quadrupole_form, \
+                                            phi_d_2H_dsdt_minust_center_83[1:i], \
+                                            phi_d_2H_dsdt_results_83[1:i], \
+                                            sigma=phi_d_2H_dsdt_results_statserr_83[1:i], \
+                                            absolute_sigma=True, p0=[300, 0.05], maxfev=50000)
+    curve_fit_residuals             = phi_d_2H_dsdt_results_83[1:i] - quadrupole_form(phi_d_2H_dsdt_minust_center_83[1:i], curve_fit_params[0], curve_fit_params[1])
+    reduced_chi2                    = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr_83[1:i])**2)/(len(phi_d_2H_dsdt_results_83[1:i])-2)
+
+    plt.axes(axs[0])
+    plt.plot(np.linspace(0.01, phi_d_2H_dsdt_minust_center_83[i], 1000), quadrupole_form(np.linspace(0.01, phi_d_2H_dsdt_minust_center_83[i], 1000), curve_fit_params[0], curve_fit_params[1]), '-',  color = color_list[i-3])
+    plt.plot(np.linspace(phi_d_2H_dsdt_minust_center_83[i], 0.6, 1000),  quadrupole_form(np.linspace(phi_d_2H_dsdt_minust_center_83[i], 0.6, 1000), curve_fit_params[0],  curve_fit_params[1]), ':', color = color_list[i-3])
+
+    plt.axes(axs[1])
+    minust_array[i-min_points] = phi_d_2H_dsdt_minust_center_83[i]
+    radius_array[i-min_points] = 0.1973*np.sqrt(24/curve_fit_params[1])
+    radius_err_array[i-min_points] = 0.1973*np.sqrt(24)*0.5*np.sqrt(curve_fit_cov[1][1])/curve_fit_params[1]**(3/2)
+    plt.errorbar(phi_d_2H_dsdt_minust_center_83[i], radius_array[i-min_points], yerr=radius_err_array[i-min_points], fmt='o', color = 'g')
+
+    plt.axes(twin_axes)
+    plt.plot(phi_d_2H_dsdt_minust_center_83[i], reduced_chi2, 'o', color = 'r')
+
+plt.axes(axs[1])
+curve_fit_params, curve_fit_cov = curve_fit(linear_function, minust_array, radius_array, sigma=radius_err_array, absolute_sigma=True, p0=[1.0, 1.0], maxfev=50000)
+plt.plot(np.linspace(0, 0.6, 1000), linear_function(np.linspace(0, 0.6, 1000), curve_fit_params[0], curve_fit_params[1]), '--', color='g', label=f'Linear fit, r = {curve_fit_params[1]:.2f} * |t| + {curve_fit_params[0]:.2f}')
+plt.legend()
+
+plt.axes(axs[0])
+plt.yscale('log')
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$')
+plt.xlim(0, 0.6)
+plt.ylim(1e0, 1e3)
+plt.legend()
+
+plt.axes(axs[1])
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$r\ [fm]$', color='g')
+plt.xlim(0, 0.6)
+plt.ylim(0, 3.0)
+plt.yticks(np.arange(0, 3.5, 0.5), color='g')
+
+plt.axes(twin_axes)
+plt.ylabel(r'$\chi^2/ndf$', color='r')
+plt.ylim(0, 3.0)
+plt.yticks(np.arange(0, 3.5, 0.5), color='r')
+
+file_pdf.savefig()
+plt.close()
+
+# GAUSSIAN FORM
+fig = plt.figure(figsize=(16, 6), dpi=300)
+gs = fig.add_gridspec(1, 2)
+axs = gs.subplots()
+twin_axes = axs[1].twinx()
+plt.suptitle("Gaussian Form, 7.8-8.8 GeV")
+plt.axes(axs[0])
+plt.errorbar(phi_d_2H_dsdt_minust_center_83[1:], phi_d_2H_dsdt_results_83[1:], yerr=phi_d_2H_dsdt_results_statserr_83[1:], fmt='b.', label='Data, 7.8-8.8 GeV')
+
+for i in fitting_indices:
+    curve_fit_params, curve_fit_cov = curve_fit(gaussian_form, \
+                                            phi_d_2H_dsdt_minust_center_83[1:i], \
+                                            phi_d_2H_dsdt_results_83[1:i], \
+                                            sigma=phi_d_2H_dsdt_results_statserr_83[1:i], \
+                                            absolute_sigma=True, p0=[300, 0.05], maxfev=50000)
+    curve_fit_residuals             = phi_d_2H_dsdt_results_83[1:i] - gaussian_form(phi_d_2H_dsdt_minust_center_83[1:i], curve_fit_params[0], curve_fit_params[1])
+    reduced_chi2                    = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr_83[1:i])**2)/(len(phi_d_2H_dsdt_results_83[1:i])-2)
+
+    plt.axes(axs[0])
+    plt.plot(np.linspace(phi_d_2H_dsdt_minust_center_83[1], phi_d_2H_dsdt_minust_center_83[i], 1000), gaussian_form(np.linspace(phi_d_2H_dsdt_minust_center_83[1], phi_d_2H_dsdt_minust_center_83[i], 1000), curve_fit_params[0], curve_fit_params[1]), '-',  color = color_list[i-3])
+    plt.plot(np.linspace(0.01, 0.6, 1000),  gaussian_form(np.linspace(0.01, 0.6, 1000), curve_fit_params[0],  curve_fit_params[1]), '--', color = color_list[i-3])
+
+    plt.axes(axs[1])
+    minust_array[i-min_points] = phi_d_2H_dsdt_minust_center_83[i]
+    radius_array[i-min_points] = 0.1973*np.sqrt(3/2/curve_fit_params[1])
+    radius_err_array[i-min_points] = 0.1973*np.sqrt(3/2)*0.5*np.sqrt(curve_fit_cov[1][1])/curve_fit_params[1]**(3/2)
+    plt.errorbar(phi_d_2H_dsdt_minust_center_83[i], radius_array[i-min_points], yerr=radius_err_array[i-min_points], fmt='o', color = 'g')
+
+    plt.axes(twin_axes)
+    plt.plot(phi_d_2H_dsdt_minust_center_83[i], reduced_chi2, 'o', color = 'r')
+
+plt.axes(axs[1])
+curve_fit_params, curve_fit_cov = curve_fit(linear_function, minust_array, radius_array, sigma=radius_err_array, absolute_sigma=True, p0=[1.0, 1.0], maxfev=50000)
+plt.plot(np.linspace(0, 0.6, 1000), linear_function(np.linspace(0, 0.6, 1000), curve_fit_params[0], curve_fit_params[1]), '--', color='g', label=f'Linear fit, r = {curve_fit_params[1]:.2f} * |t| + {curve_fit_params[0]:.2f}')
+plt.legend()
+
+plt.axes(axs[0])
+plt.yscale('log')
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$')
+plt.xlim(0, 0.6)
+plt.ylim(1e0, 1e3)
+plt.legend()
+
+plt.axes(axs[1])
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$r\ [fm]$', color='g')
+plt.xlim(0, 0.6)
+plt.ylim(0, 3.0)
+plt.yticks(np.arange(0, 3.5, 0.5), color='g')
+
+plt.axes(twin_axes)
+plt.ylabel(r'$\chi^2/ndf$', color='r')
+plt.ylim(0, 5.0)
+plt.yticks(np.arange(0, 5.5, 1.0), color='r')
+
+file_pdf.savefig()
+plt.close()
+
+# UNIFORM FORM
+fig = plt.figure(figsize=(16, 6), dpi=300)
+gs = fig.add_gridspec(1, 2)
+axs = gs.subplots()
+twin_axes = axs[1].twinx()
+plt.suptitle("Uniform Form, 7.8-8.8 GeV")
+plt.axes(axs[0])
+plt.errorbar(phi_d_2H_dsdt_minust_center_83[1:], phi_d_2H_dsdt_results_83[1:], yerr=phi_d_2H_dsdt_results_statserr_83[1:], fmt='b.', label='Data, 7.8-8.8 GeV')
+
+for i in fitting_indices:
+    curve_fit_params, curve_fit_cov = curve_fit(uniform_form, \
+                                            phi_d_2H_dsdt_minust_center_83[1:i], \
+                                            phi_d_2H_dsdt_results_83[1:i], \
+                                            sigma=phi_d_2H_dsdt_results_statserr_83[1:i], \
+                                            absolute_sigma=True, p0=[100, 10], maxfev=50000)
+    curve_fit_residuals             = phi_d_2H_dsdt_results_83[1:i] - uniform_form(phi_d_2H_dsdt_minust_center_83[1:i], curve_fit_params[0], curve_fit_params[1])
+    reduced_chi2                    = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr_83[1:i])**2)/(len(phi_d_2H_dsdt_results_83[1:i])-2)
+
+    plt.axes(axs[0])
+    plt.plot(np.linspace(phi_d_2H_dsdt_minust_center_83[1], phi_d_2H_dsdt_minust_center_83[i], 1000), uniform_form(np.linspace(phi_d_2H_dsdt_minust_center_83[1], phi_d_2H_dsdt_minust_center_83[i], 1000), curve_fit_params[0], curve_fit_params[1]), '-',  color = color_list[i-3])
+    plt.plot(np.linspace(0.01, 0.6, 1000),  uniform_form(np.linspace(0.01, 0.6, 1000), curve_fit_params[0],  curve_fit_params[1]), '--', color = color_list[i-3])
+
+    plt.axes(axs[1])
+    this_radius     = 0.1973*np.sqrt(3*curve_fit_params[1]/5)
+    this_radius_err = 0.1973*np.sqrt(3/5)*0.5*np.sqrt(curve_fit_cov[1][1])/curve_fit_params[1]**(1/2)
+    plt.errorbar(phi_d_2H_dsdt_minust_center_83[i], this_radius, yerr=this_radius_err, fmt='o', color = 'g')
+
+    plt.axes(twin_axes)
+    plt.plot(phi_d_2H_dsdt_minust_center_83[i], reduced_chi2, 'o', color = 'r')
+
+plt.axes(axs[0])
+plt.yscale('log')
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$')
+plt.xlim(0, 0.6)
+plt.ylim(1e0, 1e3)
+plt.legend()
+
+plt.axes(axs[1])
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$r\ [fm]$', color='g')
+plt.xlim(0, 0.6)
+plt.ylim(0, 3.0)
+plt.yticks(np.arange(0, 3.5, 0.5), color='g')
+
+plt.axes(twin_axes)
+plt.ylabel(r'$\chi^2/ndf$', color='r')
+plt.ylim(0, 40.0)
+plt.yticks(np.arange(0, 40.5, 5), color='r')
+
+file_pdf.savefig()
+plt.close()
+
+###################################################################### 8.8-10.8 GeV #####################################################################################
+
+phi_d_2H_dsdt_energy_center_98      = phi_d_2H_dsdt_energy_center   [index[2]:index[3]]
+phi_d_2H_dsdt_minust_center_98      = phi_d_2H_dsdt_minust_center   [index[2]:index[3]]
+phi_d_2H_dsdt_results_98            = phi_d_2H_dsdt_results         [index[2]:index[3]]
+phi_d_2H_dsdt_results_statserr_98   = phi_d_2H_dsdt_results_statserr[index[2]:index[3]]
+phi_d_2H_dsdt_results_p2perr_98     = phi_d_2H_dsdt_results_p2perr  [index[2]:index[3]]
+phi_d_2H_dsdt_results_normerr_98    = phi_d_2H_dsdt_results_normerr [index[2]:index[3]]
+phi_d_2H_dsdt_results_systerr_98    = phi_d_2H_dsdt_results_systerr [index[2]:index[3]]
+
+# MONOPOLE FORM
+fig = plt.figure(figsize=(16, 6), dpi=300)
+gs = fig.add_gridspec(1, 2)
+axs = gs.subplots()
+twin_axes = axs[1].twinx()
+plt.suptitle("Monopole Form, 8.8-10.8 GeV")
+plt.axes(axs[0])
+plt.errorbar(phi_d_2H_dsdt_minust_center_98[1:], phi_d_2H_dsdt_results_98[1:], yerr=phi_d_2H_dsdt_results_statserr_98[1:], fmt='b.', label='Data, 8.8-10.8 GeV')
+
+for i in fitting_indices:
+    curve_fit_params, curve_fit_cov = curve_fit(monopole_form, \
+                                            phi_d_2H_dsdt_minust_center_98[1:i], \
+                                            phi_d_2H_dsdt_results_98[1:i], \
+                                            sigma=phi_d_2H_dsdt_results_statserr_98[1:i], \
+                                            absolute_sigma=True, p0=[300, 0.05], bounds=([-np.inf, 0], [np.inf, 1]), maxfev=50000)
+    curve_fit_residuals             = phi_d_2H_dsdt_results_98[1:i] - monopole_form(phi_d_2H_dsdt_minust_center_98[1:i], curve_fit_params[0], curve_fit_params[1])
+    reduced_chi2                    = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr_98[1:i])**2)/(len(phi_d_2H_dsdt_results_98[1:i])-2)
+    plt.axes(axs[0])
+    plt.plot(np.linspace(phi_d_2H_dsdt_minust_center_98[1], phi_d_2H_dsdt_minust_center_98[i], 1000), monopole_form(np.linspace(phi_d_2H_dsdt_minust_center_98[1], phi_d_2H_dsdt_minust_center_98[i], 1000), curve_fit_params[0], curve_fit_params[1]), '-',  color = color_list[i-3])
+    plt.plot(np.linspace(0.01, 0.6, 1000),  monopole_form(np.linspace(0.01, 0.6, 1000), curve_fit_params[0],  curve_fit_params[1]), '--', color = color_list[i-3])
+
+    plt.axes(axs[1])
+    this_radius = 0.1973*np.sqrt(6/curve_fit_params[1])
+    this_radius_err = 0.1973*np.sqrt(6)*0.5*np.sqrt(curve_fit_cov[1][1])/curve_fit_params[1]**(3/2)
+    plt.errorbar(phi_d_2H_dsdt_minust_center_98[i], this_radius, yerr=this_radius_err, fmt='o', color = 'g')
+
+    plt.axes(twin_axes)
+    plt.plot(phi_d_2H_dsdt_minust_center_98[i], reduced_chi2, 'o', color = 'r')
+
+plt.axes(axs[0])
+plt.yscale('log')
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$')
+plt.xlim(0, 0.6)
+plt.ylim(1e0, 1e3)
+plt.legend()
+
+plt.axes(axs[1])
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$r\ [fm]$', color='g')
+plt.xlim(0, 0.6)
+plt.ylim(0, 3.0)
+plt.yticks(np.arange(0, 3.5, 0.5), color='g')
+
+plt.axes(twin_axes)
+plt.ylabel(r'$\chi^2/ndf$', color='r')
+plt.ylim(0, 3.0)
+plt.yticks(np.arange(0, 3.5, 0.5), color='r')
+
+file_pdf.savefig()
+plt.close()
+
+
+# DIPOLE FORM
+fig = plt.figure(figsize=(16, 6), dpi=300)
+gs = fig.add_gridspec(1, 2)
+axs = gs.subplots()
+twin_axes = axs[1].twinx()
+plt.suptitle("Dipole Form, 8.8-10.8 GeV")
+plt.axes(axs[0])
+plt.errorbar(phi_d_2H_dsdt_minust_center_98[1:], phi_d_2H_dsdt_results_98[1:], yerr=phi_d_2H_dsdt_results_statserr_98[1:], fmt='b.', label='Data, 8.8-10.8 GeV')
+
+for i in fitting_indices:
+    curve_fit_params, curve_fit_cov = curve_fit(dipole_form, \
+                                            phi_d_2H_dsdt_minust_center_98[1:i], \
+                                            phi_d_2H_dsdt_results_98[1:i], \
+                                            sigma=phi_d_2H_dsdt_results_statserr_98[1:i], \
+                                            absolute_sigma=True, p0=[300, 0.05], bounds=([-np.inf, 0], [np.inf, 1]), maxfev=50000)
+    curve_fit_residuals             = phi_d_2H_dsdt_results_98[1:i] - dipole_form(phi_d_2H_dsdt_minust_center_98[1:i], curve_fit_params[0], curve_fit_params[1])
+    reduced_chi2                    = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr_98[1:i])**2)/(len(phi_d_2H_dsdt_results_98[1:i])-2)
+    plt.axes(axs[0])
+    plt.plot(np.linspace(phi_d_2H_dsdt_minust_center_98[1], phi_d_2H_dsdt_minust_center_98[i], 1000), dipole_form(np.linspace(phi_d_2H_dsdt_minust_center_98[1], phi_d_2H_dsdt_minust_center_98[i], 1000), curve_fit_params[0], curve_fit_params[1]), '-',  color = color_list[i-3])
+    plt.plot(np.linspace(0.01, 0.6, 1000),  dipole_form(np.linspace(0.01, 0.6, 1000), curve_fit_params[0],  curve_fit_params[1]), '--', color = color_list[i-3])
+
+    plt.axes(axs[1])
+    # plt.errorbar(phi_d_2H_dsdt_minust_center_98[i], 0.197*np.sqrt(6/curve_fit_params[1]), yerr=0.197*np.sqrt(6/curve_fit_cov[1][1]), fmt='o', color = color_list[i-3])
+
+plt.axes(axs[0])
+plt.yscale('log')
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$')
+plt.xlim(0, 0.6)
+plt.ylim(1e0, 1e3)
+plt.legend()
+
+plt.axes(axs[1])
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$r\ [fm]$', color='g')
+plt.xlim(0, 0.6)
+plt.ylim(0, 3.0)
+plt.yticks(np.arange(0, 3.5, 0.5), color='g')
+
+plt.axes(twin_axes)
+plt.ylabel(r'$\chi^2/ndf$', color='r')
+plt.ylim(0, 3.0)
+plt.yticks(np.arange(0, 3.5, 0.5), color='r')
+
+file_pdf.savefig()
+plt.close()
+
+# TRIPOLE FORM
+fig = plt.figure(figsize=(16, 6), dpi=300)
+gs = fig.add_gridspec(1, 2)
+axs = gs.subplots()
+twin_axes = axs[1].twinx()
+plt.suptitle("Tripole Form, 8.8-10.8 GeV")
+plt.axes(axs[0])
+plt.errorbar(phi_d_2H_dsdt_minust_center_98[1:], phi_d_2H_dsdt_results_98[1:], yerr=phi_d_2H_dsdt_results_statserr_98[1:], fmt='b.', label='Data, 8.8-10.8 GeV')
+
+for i in fitting_indices:
+    curve_fit_params, curve_fit_cov = curve_fit(tripole_form, \
+                                            phi_d_2H_dsdt_minust_center_98[1:i], \
+                                            phi_d_2H_dsdt_results_98[1:i], \
+                                            sigma=phi_d_2H_dsdt_results_statserr_98[1:i], \
+                                            absolute_sigma=True, p0=[300, 0.05], maxfev=50000)
+    curve_fit_residuals             = phi_d_2H_dsdt_results_98[1:i] - tripole_form(phi_d_2H_dsdt_minust_center_98[1:i], curve_fit_params[0], curve_fit_params[1])
+    reduced_chi2                    = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr_98[1:i])**2)/(len(phi_d_2H_dsdt_results_98[1:i])-2)
+
+    plt.axes(axs[0])
+    plt.plot(np.linspace(phi_d_2H_dsdt_minust_center_98[1], phi_d_2H_dsdt_minust_center_98[i], 1000), tripole_form(np.linspace(phi_d_2H_dsdt_minust_center_98[1], phi_d_2H_dsdt_minust_center_98[i], 1000), curve_fit_params[0], curve_fit_params[1]), '-',  color = color_list[i-3])
+    plt.plot(np.linspace(0.01, 0.6, 1000),  tripole_form(np.linspace(0.01, 0.6, 1000), curve_fit_params[0],  curve_fit_params[1]), '--', color = color_list[i-3])
+
+    plt.axes(axs[1])
+    this_radius = 0.1973*np.sqrt(18/curve_fit_params[1])
+    this_radius_err = 0.1973*np.sqrt(18)*0.5*np.sqrt(curve_fit_cov[1][1])/curve_fit_params[1]**(3/2)
+    plt.errorbar(phi_d_2H_dsdt_minust_center_98[i], this_radius, yerr=this_radius_err, fmt='o', color = 'g')
+
+    plt.axes(twin_axes)
+    plt.plot(phi_d_2H_dsdt_minust_center_98[i], reduced_chi2, 'o', color = 'r')
+
+plt.axes(axs[0])
+plt.yscale('log')
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$')
+plt.xlim(0, 0.6)
+plt.ylim(1e0, 1e3)
+plt.legend()
+
+plt.axes(axs[1])
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$r\ [fm]$', color='g')
+plt.xlim(0, 0.6)
+plt.ylim(0, 4.0)
+plt.yticks(np.arange(0, 4.5, 0.5), color='g')
+
+plt.axes(twin_axes)
+plt.ylabel(r'$\chi^2/ndf$', color='r')
+plt.ylim(0, 4.0)
+plt.yticks(np.arange(0, 4.5, 0.5), color='r')
+
+file_pdf.savefig()
+plt.close()
+
+# QUADRUPOLE FORM
+fig = plt.figure(figsize=(16, 6), dpi=300)
+gs = fig.add_gridspec(1, 2)
+axs = gs.subplots()
+twin_axes = axs[1].twinx()
+plt.suptitle("Quadrupole Form, 8.8-10.8 GeV")
+plt.axes(axs[0])
+plt.errorbar(phi_d_2H_dsdt_minust_center_98[1:], phi_d_2H_dsdt_results_98[1:], yerr=phi_d_2H_dsdt_results_statserr_98[1:], fmt='b.', label='Data, 8.8-10.8 GeV')
+
+for i in fitting_indices:
+    curve_fit_params, curve_fit_cov = curve_fit(quadrupole_form, \
+                                            phi_d_2H_dsdt_minust_center_98[1:i], \
+                                            phi_d_2H_dsdt_results_98[1:i], \
+                                            sigma=phi_d_2H_dsdt_results_statserr_98[1:i], \
+                                            absolute_sigma=True, p0=[300, 0.05], maxfev=50000)
+    curve_fit_residuals             = phi_d_2H_dsdt_results_98[1:i] - quadrupole_form(phi_d_2H_dsdt_minust_center_98[1:i], curve_fit_params[0], curve_fit_params[1])
+    reduced_chi2                    = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr_98[1:i])**2)/(len(phi_d_2H_dsdt_results_98[1:i])-2)
+
+    plt.axes(axs[0])
+    plt.plot(np.linspace(phi_d_2H_dsdt_minust_center_98[1], phi_d_2H_dsdt_minust_center_98[i], 1000), quadrupole_form(np.linspace(phi_d_2H_dsdt_minust_center_98[1], phi_d_2H_dsdt_minust_center_98[i], 1000), curve_fit_params[0], curve_fit_params[1]), '-',  color = color_list[i-3])
+    plt.plot(np.linspace(0.01, 0.6, 1000),  quadrupole_form(np.linspace(0.01, 0.6, 1000), curve_fit_params[0],  curve_fit_params[1]), '--', color = color_list[i-3])
+
+    plt.axes(axs[1])
+    minust_array[i-min_points] = phi_d_2H_dsdt_minust_center_98[i]
+    radius_array[i-min_points] = 0.1973*np.sqrt(24/curve_fit_params[1])
+    radius_err_array[i-min_points] = 0.1973*np.sqrt(24)*0.5*np.sqrt(curve_fit_cov[1][1])/curve_fit_params[1]**(3/2)
+    plt.errorbar(phi_d_2H_dsdt_minust_center_98[i], radius_array[i-min_points], yerr=radius_err_array[i-min_points], fmt='o', color = 'g')
+
+    plt.axes(twin_axes)
+    plt.plot(phi_d_2H_dsdt_minust_center_98[i], reduced_chi2, 'o', color = 'r')
+
+plt.axes(axs[1])
+curve_fit_params, curve_fit_cov = curve_fit(linear_function, minust_array, radius_array, sigma=radius_err_array, absolute_sigma=True, p0=[1.0, 1.0], maxfev=50000)
+plt.plot(np.linspace(0, 0.6, 1000), linear_function(np.linspace(0, 0.6, 1000), curve_fit_params[0], curve_fit_params[1]), '--', color='g', label=f'Linear fit, r = {curve_fit_params[1]:.2f} * |t| + {curve_fit_params[0]:.2f}')
+plt.legend()
+
+plt.axes(axs[0])
+plt.yscale('log')
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$')
+plt.xlim(0, 0.6)
+plt.ylim(1e0, 1e3)
+plt.legend()
+
+plt.axes(axs[1])
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$r\ [fm]$', color='g')
+plt.xlim(0, 0.6)
+plt.ylim(0, 3.0)
+plt.yticks(np.arange(0, 3.5, 0.5), color='g')
+
+plt.axes(twin_axes)
+plt.ylabel(r'$\chi^2/ndf$', color='r')
+plt.ylim(0, 3.0)
+plt.yticks(np.arange(0, 3.5, 0.5), color='r')
+
+file_pdf.savefig()
+plt.close()
+
+# GAUSSIAN FORM
+fig = plt.figure(figsize=(16, 6), dpi=300)
+gs = fig.add_gridspec(1, 2)
+axs = gs.subplots()
+twin_axes = axs[1].twinx()
+plt.suptitle("Gaussian Form, 8.8-10.8 GeV")
+plt.axes(axs[0])
+plt.errorbar(phi_d_2H_dsdt_minust_center_98[1:], phi_d_2H_dsdt_results_98[1:], yerr=phi_d_2H_dsdt_results_statserr_98[1:], fmt='b.', label='Data, 8.8-10.8 GeV')
+
+for i in fitting_indices:
+    curve_fit_params, curve_fit_cov = curve_fit(gaussian_form, \
+                                            phi_d_2H_dsdt_minust_center_98[1:i], \
+                                            phi_d_2H_dsdt_results_98[1:i], \
+                                            sigma=phi_d_2H_dsdt_results_statserr_98[1:i], \
+                                            absolute_sigma=True, p0=[300, 0.05], maxfev=50000)
+    curve_fit_residuals             = phi_d_2H_dsdt_results_98[1:i] - gaussian_form(phi_d_2H_dsdt_minust_center_98[1:i], curve_fit_params[0], curve_fit_params[1])
+    reduced_chi2                    = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr_98[1:i])**2)/(len(phi_d_2H_dsdt_results_98[1:i])-2)
+
+    plt.axes(axs[0])
+    plt.plot(np.linspace(phi_d_2H_dsdt_minust_center_98[1], phi_d_2H_dsdt_minust_center_98[i], 1000), gaussian_form(np.linspace(phi_d_2H_dsdt_minust_center_98[1], phi_d_2H_dsdt_minust_center_98[i], 1000), curve_fit_params[0], curve_fit_params[1]), '-',  color = color_list[i-3])
+    plt.plot(np.linspace(0.01, 0.6, 1000),  gaussian_form(np.linspace(0.01, 0.6, 1000), curve_fit_params[0],  curve_fit_params[1]), '--', color = color_list[i-3])
+
+    plt.axes(axs[1])
+    minust_array[i-min_points] = phi_d_2H_dsdt_minust_center_98[i]
+    radius_array[i-min_points] = 0.1973*np.sqrt(3/2/curve_fit_params[1])
+    radius_err_array[i-min_points] = 0.1973*np.sqrt(3/2)*0.5*np.sqrt(curve_fit_cov[1][1])/curve_fit_params[1]**(3/2)
+    plt.errorbar(phi_d_2H_dsdt_minust_center_98[i], radius_array[i-min_points], yerr=radius_err_array[i-min_points], fmt='o', color = 'g')
+
+    plt.axes(twin_axes)
+    plt.plot(phi_d_2H_dsdt_minust_center_98[i], reduced_chi2, 'o', color = 'r')
+
+plt.axes(axs[1])
+curve_fit_params, curve_fit_cov = curve_fit(linear_function, minust_array, radius_array, sigma=radius_err_array, absolute_sigma=True, p0=[1.0, 1.0], maxfev=50000)
+plt.plot(np.linspace(0, 0.6, 1000), linear_function(np.linspace(0, 0.6, 1000), curve_fit_params[0], curve_fit_params[1]), '--', color='g', label=f'Linear fit, r = {curve_fit_params[1]:.2f} * |t| + {curve_fit_params[0]:.2f}')
+plt.legend()
+
+plt.axes(axs[0])
+plt.yscale('log')
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$')
+plt.xlim(0, 0.6)
+plt.ylim(1e0, 1e3)
+plt.legend()
+
+plt.axes(axs[1])
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$r\ [fm]$', color='g')
+plt.xlim(0, 0.6)
+plt.ylim(0, 3.0)
+plt.yticks(np.arange(0, 3.5, 0.5), color='g')
+
+plt.axes(twin_axes)
+plt.ylabel(r'$\chi^2/ndf$', color='r')
+plt.ylim(0, 5.0)
+plt.yticks(np.arange(0, 5.5, 1.0), color='r')
+
+file_pdf.savefig()
+plt.close()
+
+# UNIFORM FORM
+fig = plt.figure(figsize=(16, 6), dpi=300)
+gs = fig.add_gridspec(1, 2)
+axs = gs.subplots()
+twin_axes = axs[1].twinx()
+plt.suptitle("Uniform Form, 8.8-10.8 GeV")
+plt.axes(axs[0])
+plt.errorbar(phi_d_2H_dsdt_minust_center_98[1:], phi_d_2H_dsdt_results_98[1:], yerr=phi_d_2H_dsdt_results_statserr_98[1:], fmt='b.', label='Data, 8.8-10.8 GeV')
+
+for i in fitting_indices:
+    curve_fit_params, curve_fit_cov = curve_fit(uniform_form, \
+                                            phi_d_2H_dsdt_minust_center_98[1:i], \
+                                            phi_d_2H_dsdt_results_98[1:i], \
+                                            sigma=phi_d_2H_dsdt_results_statserr_98[1:i], \
+                                            absolute_sigma=True, p0=[100, 10], maxfev=50000)
+    curve_fit_residuals             = phi_d_2H_dsdt_results_98[1:i] - uniform_form(phi_d_2H_dsdt_minust_center_98[1:i], curve_fit_params[0], curve_fit_params[1])
+    reduced_chi2                    = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr_98[1:i])**2)/(len(phi_d_2H_dsdt_results_98[1:i])-2)
+
+    plt.axes(axs[0])
+    plt.plot(np.linspace(phi_d_2H_dsdt_minust_center_98[1], phi_d_2H_dsdt_minust_center_98[i], 1000), uniform_form(np.linspace(phi_d_2H_dsdt_minust_center_98[1], phi_d_2H_dsdt_minust_center_98[i], 1000), curve_fit_params[0], curve_fit_params[1]), '-',  color = color_list[i-3])
+    plt.plot(np.linspace(0.01, 0.6, 1000),  uniform_form(np.linspace(0.01, 0.6, 1000), curve_fit_params[0],  curve_fit_params[1]), '--', color = color_list[i-3])
+
+    plt.axes(axs[1])
+    this_radius     = 0.1973*np.sqrt(3*curve_fit_params[1]/5)
+    this_radius_err = 0.1973*np.sqrt(3/5)*0.5*np.sqrt(curve_fit_cov[1][1])/curve_fit_params[1]**(1/2)
+    plt.errorbar(phi_d_2H_dsdt_minust_center_98[i], this_radius, yerr=this_radius_err, fmt='o', color = 'g')
+
+    plt.axes(twin_axes)
+    plt.plot(phi_d_2H_dsdt_minust_center_98[i], reduced_chi2, 'o', color = 'r')
+
+plt.axes(axs[0])
+plt.yscale('log')
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$d\sigma/dt\ [nb/(GeV^2/c)]$')
+plt.xlim(0, 0.6)
+plt.ylim(1e0, 1e3)
+plt.legend()
+
+plt.axes(axs[1])
+plt.xlabel(r'$-t\ [GeV^2/c]$')
+plt.ylabel(r'$r\ [fm]$', color='g')
+plt.xlim(0, 0.6)
+plt.ylim(0, 3.0)
+plt.yticks(np.arange(0, 3.5, 0.5), color='g')
+
+plt.axes(twin_axes)
+plt.ylabel(r'$\chi^2/ndf$', color='r')
+plt.ylim(0, 40.0)
+plt.yticks(np.arange(0, 40.5, 5), color='r')
+
+file_pdf.savefig()
+plt.close()
+
+###################################################################### END #####################################################################################
 
 file_pdf.close()
