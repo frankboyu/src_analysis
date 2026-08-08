@@ -203,7 +203,7 @@ sim_version  = '07'
 print("Data version: " + data_version)
 print("Sim version: " + sim_version)
 
-file_pdf    = PdfPages("/work/halld2/home/boyu/src_analysis/filter/output/hist_vm_d.pdf")
+file_pdf    = PdfPages("/work/halld2/home/boyu/src_analysis/plot/vm_d/output/plots_phi_d_hists.pdf")
 file_data   = File("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_exc_recon_data_"    + data_version                     + ".root")
 file_sim    = File("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_exc_recon_sim_"     + data_version + "_" + sim_version + ".root")
 # file_tagged = File("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_exc_thrown_tagged_" + data_version + "_" + sim_version + ".root")

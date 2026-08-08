@@ -1,5 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
+
+file_pdf = PdfPages("/work/halld2/home/boyu/src_analysis/plot/vm_d/output/plots_vm_d_flux_syst.pdf")
 
 energy_bins = [(5.8,7.8), (7.8,8.8), (8.8,10.8)]
 
@@ -7,7 +10,7 @@ region1 = 0
 region2 = 125
 region3 = 227
 
-bin_edges = np.loadtxt('/work/halld2/home/boyu/src_analysis/flux/output/2H/lumi_summed_2H.txt')
+bin_edges = np.loadtxt('/work/halld2/home/boyu/src_analysis/flux/output/deuterium/lumi_summed_deuterium.txt')
 tagh_flux_error = np.loadtxt('/work/halld2/home/boyu/src_analysis/flux/systematic/tagh_flux_syst.txt')
 tagm_flux_error = np.loadtxt('/work/halld2/home/boyu/src_analysis/flux/systematic/tagm_flux_syst.txt')
 
@@ -37,8 +40,7 @@ ax2 = ax1.twinx()
 ax2.errorbar(bin_edges[:,3], bin_edges[:,5], xerr=(bin_edges[:,4]-bin_edges[:,2])/2, fmt='.', color='black', label='Lumi per energy bin')
 ax2.set_ylabel("Integrated luminosity [nb$^{-1}$]")
 
-
-plt.savefig("flux_syst.png")
+file_pdf.savefig()
 
 print("Average energy between 5.8 and 7.8 GeV for SRC-CT:", np.sum(bin_edges[182:,3]*bin_edges[182:,5]/np.sum(bin_edges[182:,5])))
 print("Average energy between 7.8 and 8.8 GeV for SRC-CT:", np.sum(bin_edges[98:182,3]*bin_edges[98:182,5]/np.sum(bin_edges[98:182,5])))
@@ -46,3 +48,5 @@ print("Average energy between 8.8 and 10.8 GeV for SRC-CT:", np.sum(bin_edges[0:
 
 print("Average energy between 1.6 and 2.6 GeV for CLAS:", 1/(np.log(2.6)-np.log(1.6)) * (2.6-1.6))
 print("Average energy between 2.6 and 3.6 GeV for CLAS:", 1/(np.log(3.6)-np.log(2.6)) * (3.6-2.6))
+
+file_pdf.close()

@@ -56,7 +56,7 @@ plt.plot(theory_minust, theory_dsdt, 'r-', label='Theory')
 plt.xlabel(r'$-t$ (GeV$^2$)', fontsize=16)
 plt.ylabel(r'$\frac{d\sigma}{dt}$ (nb/GeV$^2$)', fontsize=16)
 plt.yscale('log')
-plt.savefig("test.png")
+plt.savefig("output/plots_phi_d_theory_intuition.png")
 
 ###################################################################### END #####################################################################################
 

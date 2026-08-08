@@ -4,7 +4,7 @@ from scipy.optimize import curve_fit
 from matplotlib.backends.backend_pdf import PdfPages
 
 rad_to_deg = 180/np.pi
-file_pdf = PdfPages("/work/halld2/home/boyu/src_analysis/plot/vm_d/output/plots_vm_d_chisq.pdf")
+file_pdf = PdfPages("/work/halld2/home/boyu/src_analysis/plot/vm_d/output/plots_vm_d_contour.pdf")
 
 def legend_without_duplicate_labels(ax):
     handles, labels = ax.get_legend_handles_labels()
