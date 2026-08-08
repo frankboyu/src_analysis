@@ -63,6 +63,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
         string VertexZCut       = "TMath::Abs(vertex_z_kin - 65.0) < 14.0";
         string VertexRCut       = "TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.0";
         string BeamAccidCut     = "TMath::Abs(beam_DeltaT_meas) < 18.0";
+        string RunGroupCut      = "polarization_angle > -2.0";
 
         if      (tag.find("dEdx_1.00") != string::npos)
             dEdxCut         = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-4.01*d_momentum_meas+4.88) + 3.26)";
@@ -146,6 +147,12 @@ int get_yield(string channel, string reaction, string observable, string tag)
             BeamAccidCut     = "TMath::Abs(beam_DeltaT_meas) < 14.0";
         else if (tag.find("beamaccid_4out") != string::npos)
             BeamAccidCut     = "TMath::Abs(beam_DeltaT_meas) < 2.0 || (TMath::Abs(beam_DeltaT_meas) > 6.0 && TMath::Abs(beam_DeltaT_meas) < 22.0)";
+        else if (tag.find("rungroup_0_90") != string::npos)
+            RunGroupCut      = "polarization_angle == 0.0 || polarization_angle == 90.0";
+        else if (tag.find("rungroup_45_135") != string::npos)
+            RunGroupCut      = "polarization_angle == 45.0 || polarization_angle == 135.0";
+        else if (tag.find("rungroup_amo") != string::npos)
+            RunGroupCut      = "polarization_angle == -1.0";
 
         rdf_input = rdf_input   .Filter(dEdxCut.c_str())
                                 .Filter(MissPMinusCut.c_str())
@@ -154,7 +161,8 @@ int get_yield(string channel, string reaction, string observable, string tag)
                                 .Filter(ThetaCut.c_str())
                                 .Filter(VertexZCut.c_str())
                                 .Filter(VertexRCut.c_str())
-                                .Filter(BeamAccidCut.c_str());
+                                .Filter(BeamAccidCut.c_str())
+                                .Filter(RunGroupCut.c_str());
 
         if      (tag.find("beamaccid_3") != string::npos)
             rdf_input = rdf_input   .Define("beamaccid_weight_syst",    "TMath::Abs(beam_DeltaT_meas) < 2.0 ? 1.0 : -1.0/6.0");
