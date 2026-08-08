@@ -1,4 +1,4 @@
 cd theory
-./a.out > temp.txt
+./temp.out > temp.txt
 cd ../
 python get_intuition.py

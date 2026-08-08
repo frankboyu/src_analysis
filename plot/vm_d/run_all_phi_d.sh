@@ -9,13 +9,13 @@ gxenv $HALLD_VERSIONS/version.xml
 
 ###################################################################### NUMBER OF COMBOS #####################################################################################
 
-# root -b -q -l "get_num_combo.C("phi_d", "recon_exc_data_2H_ver12_flat")"
-# root -b -q -l "get_num_combo.C("phi_d", "recon_exc_sim_2H_ver12_flat")"
+# root -b -q -l "get_num_combo.C(\"phi_d\", \"exc_recon_data_ver12\")"
+# root -b -q -l "get_num_combo.C(\"phi_d\", \"exc_recon_sim_ver12\")"
 
 ###################################################################### SIMULATION WEIGHT ITERATIONS #####################################################################################
 
-# root -b -q -l "get_yield.C("phi_d", "recon_exc_sim_2H_ver12_flat",        "dsdt", "simweight_iter0")"
-# root -b -q -l "get_yield.C("phi_d", "thrown_exc_tagged_2H_ver12_flat",    "dsdt", "simweight_iter0")"
+# root -b -q -l "get_yield.C(\"phi_d\", \"recon_exc_sim_2H_ver12_flat\",        \"dsdt\", \"simweight_iter0\")"
+# root -b -q -l "get_yield.C(\"phi_d\", \"thrown_exc_tagged_2H_ver12_flat\",    \"dsdt\", \"simweight_iter0\")"
 # python get_simweight.py
 
 # root -b -q -l "get_yield.C(\"phi_d\", \"recon_exc_sim_2H_ver12_flat\",        \"dsdt\", \"simweight_iter1\")"
@@ -34,58 +34,49 @@ gxenv $HALLD_VERSIONS/version.xml
 # root -b -q -l "get_yield.C(\"phi_d\", \"thrown_exc_tagged_2H_ver12_flat\",    \"dsdt\", \"simweight_iter4\")"
 # python get_simweight.py
 
+# root -b -q -l "get_yield.C(\"phi_d\", \"recon_exc_sim_2H_ver12_flat\",        \"dsdt\", \"simweight_iter5\")"
+# root -b -q -l "get_yield.C(\"phi_d\", \"thrown_exc_tagged_2H_ver12_flat\",    \"dsdt\", \"simweight_iter5\")"
+# python get_simweight.py
+
 ###################################################################### CUT VARIATIONS #####################################################################################
 
-RUN_MODE="batch"
-# RUN_MODE="local"
+# RUN_MODE="batch"
+RUN_MODE="local"
 # RUN_MODE="echo"
 
 CHANNEL_LIST=()
 CHANNEL_LIST+=("phi_d")
-# CHANNEL_LIST+=("rho_d")
 
 REACTION_LIST=()
-REACTION_LIST+=("recon_exc_data_2H_ver12")
-REACTION_LIST+=("recon_exc_sim_2H_ver12_flat" "thrown_exc_tagged_2H_ver12_flat")
-REACTION_LIST+=("recon_exc_sim_2H_ver12_model" "thrown_exc_tagged_2H_ver12_model")
+# REACTION_LIST+=("exc_recon_data_ver12")
+REACTION_LIST+=("exc_recon_sim_ver12_05")
+REACTION_LIST+=("exc_thrown_tagged_ver12_05")
 
 OBSERVABLE_LIST=()
 # OBSERVABLE_LIST+=("dsdt")
 OBSERVABLE_LIST+=("dsdt" "Wcostheta" "Wdecayphi" "Wpolphi" "Wpsi")
 
 TAG_LIST=()
-TAG_LIST+=("nominal")
-TAG_LIST+=("dEdx_1.50" "dEdx_1.75" "dEdx_2.50" "dEdx_3.00")
-TAG_LIST+=("misspminus_0.0150" "misspminus_0.0175" "misspminus_0.0250" "misspminus_0.0300")
-TAG_LIST+=("chisquared_4.50" "chisquared_4.75" "chisquared_5.50" "chisquared_6.00")
-TAG_LIST+=("momentum_0.350" "momentum_0.375" "momentum_0.425" "momentum_0.450")
-TAG_LIST+=("theta_1.90" "theta_1.95" "theta_2.05" "theta_2.10")
-TAG_LIST+=("vertexZ_13.50" "vertexZ_13.75" "vertexZ_14.25" "vertexZ_14.50")
-TAG_LIST+=("vertexR_0.50" "vertexR_0.75" "vertexR_1.25" "vertexR_1.50")
-TAG_LIST+=("fitfunc_quadratic" "fitfunc_phenomenological" "fitfunc_fulllinear" "fitfunc_fullquadratic")
-TAG_LIST+=("beamaccid_3" "beamaccid_5" "beamaccid_4out")
-TAG_LIST+=("comboaccid_all" "comboaccid_none")
-TAG_LIST+=("fitmax_1.06" "fitmax_1.07" "fitmax_1.09" "fitmax_1.10")
-TAG_LIST+=("fitwidth_0.0040" "fitwidth_0.0048" "fitwidth_0.0060" "fitwidth_0.0075")
-TAG_LIST+=("fitbkg_fulllinear" "fitbkg_quadratic" "fitbkg_fullquadratic" "fitbkg_phenomenological")
-TAG_LIST+=("fitsig_noBL" "fitsig_nonrel" "fitsig_relBWsim")
-TAG_LIST+=("simweight_syst_a1_-1.0" "simweight_syst_a1_-0.5" "simweight_syst_a1_0.5" "simweight_syst_a1_1.0")
-TAG_LIST+=("simweight_syst_b1_-1.0" "simweight_syst_b1_-0.5" "simweight_syst_b1_0.5" "simweight_syst_b1_1.0")
-TAG_LIST+=("simweight_syst_a2_-1.0" "simweight_syst_a2_-0.5" "simweight_syst_a2_0.5" "simweight_syst_a2_1.0")
-TAG_LIST+=("simweight_syst_b2_-1.0" "simweight_syst_b2_-0.5" "simweight_syst_b2_0.5" "simweight_syst_b2_1.0")
-# for i in {-1..1}
-# do
-#     for j in {-1..1}
-#     do
-#         for k in {-1..1}
-#         do
-#             for l in {-1..1}
-#             do
-#                 TAG_LIST+=("simweight_syst_a1_${i}_b1_${j}_a2_${k}_b2_${l}")
-#             done
-#         done
-#     done
-# done
+# TAG_LIST+=("nominal")
+# TAG_LIST+=("dEdx_1.50"              "dEdx_1.75"                 "dEdx_2.50"             "dEdx_3.00")
+# TAG_LIST+=("misspminus_0.0150"      "misspminus_0.0175"         "misspminus_0.0250"     "misspminus_0.0300")
+# TAG_LIST+=("chisquared_4.50"        "chisquared_4.75"           "chisquared_5.50"       "chisquared_6.00")
+# TAG_LIST+=("momentum_0.350"         "momentum_0.375"            "momentum_0.425"        "momentum_0.450")
+# TAG_LIST+=("theta_1.90"             "theta_1.95"                "theta_2.05"            "theta_2.10")
+# TAG_LIST+=("vertexZ_13.50"          "vertexZ_13.75"             "vertexZ_14.25"         "vertexZ_14.50")
+# TAG_LIST+=("vertexR_0.50"           "vertexR_0.75"              "vertexR_1.25"          "vertexR_1.50")
+# TAG_LIST+=("fitfunc_quadratic"      "fitfunc_phenomenological"  "fitfunc_fulllinear"    "fitfunc_fullquadratic")
+# TAG_LIST+=("beamaccid_3"            "beamaccid_5"               "beamaccid_4out")
+# TAG_LIST+=("comboaccid_all"         "comboaccid_none")
+# TAG_LIST+=("fitmax_1.06"            "fitmax_1.07"               "fitmax_1.09"           "fitmax_1.10")
+# TAG_LIST+=("fitwidth_0.0040"        "fitwidth_0.0048"           "fitwidth_0.0060"       "fitwidth_0.0075")
+# TAG_LIST+=("fitbkg_fulllinear"      "fitbkg_quadratic"          "fitbkg_fullquadratic" "fitbkg_phenomenological")
+# TAG_LIST+=("fitsig_noBL"            "fitsig_nonrel"             "fitsig_relBWsim")
+# TAG_LIST+=("simweight_syst_a1_-1.0" "simweight_syst_a1_-0.5" "simweight_syst_a1_0.5" "simweight_syst_a1_1.0")
+# TAG_LIST+=("simweight_syst_b1_-1.0" "simweight_syst_b1_-0.5" "simweight_syst_b1_0.5" "simweight_syst_b1_1.0")
+# TAG_LIST+=("simweight_syst_a2_-1.0" "simweight_syst_a2_-0.5" "simweight_syst_a2_0.5" "simweight_syst_a2_1.0")
+# TAG_LIST+=("simweight_syst_b2_-1.0" "simweight_syst_b2_-0.5" "simweight_syst_b2_0.5" "simweight_syst_b2_1.0")
+TAG_LIST+=("rungroup_0_90" "rungroup_45_135" "rungroup_amo")
 # TAG_LIST+=("sideband")
 
 for CHANNEL in "${CHANNEL_LIST[@]}"
@@ -139,8 +130,16 @@ do
     done
 done
 
-swif2 run src_analysis_plot
-# python get_plot.py
+if [[ "$RUN_MODE" == "batch" ]]; then
+    swif2 run src_analysis_plot
+fi
+
+################################################################### GET PLOTS #####################################################################################
+
+# python get_histograms.py
+# python get_observable.py
+# python get_chisq.py
+# python get_contour.py
 
 ###################################################################### END #####################################################################################
 
