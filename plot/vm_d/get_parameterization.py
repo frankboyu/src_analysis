@@ -1,6 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
+from matplotlib.backends.backend_pdf import PdfPages
+
+file_pdf = PdfPages("/work/halld2/home/boyu/src_analysis/plot/vm_d/output/plots_vm_d_parameterization.pdf")
 
 mass_photon = 0.0  # GeV/c^2
 mass_proton = 0.9382720813  # GeV/c^2
@@ -18,8 +21,8 @@ def slope_function(s, alpha, beta):
     return 2*alpha*np.log(s) + beta
 
 # dsdt
-data = np.loadtxt('dsdt.txt', delimiter=',')
-error = np.loadtxt('dsdt_sigma.txt', delimiter=',')
+data = np.loadtxt('input/parameterization_dsdt.txt', delimiter=',')
+error = np.loadtxt('input/parameterization_dsdt_sigma.txt', delimiter=',')
 energy = data[:, 0]
 s = mass_proton**2 + 2*mass_proton*energy
 q_photon = np.sqrt(kallen(s, mass_proton**2, mass_photon**2))/(2*np.sqrt(s))
@@ -62,7 +65,7 @@ plt.ylim(0, 3.5)
 # plt.yscale('log')
 plt.legend()
 plt.grid()
-plt.savefig('dsdt_fit.png')
+file_pdf.savefig()
 plt.show()
 plt.close()
 
@@ -75,9 +78,9 @@ dsdt_theory = fit_function(x_theory, *coefficients)
 print("Theoretical ds/dt values at energies", energy_theory, "are:", dsdt_theory)
 
 # slope factor
-s           = np.loadtxt('slope.txt')[:, 0]
-slope       = np.loadtxt('slope.txt')[:, 1]
-slope_error = np.loadtxt('slope.txt')[:, 2]
+s           = np.loadtxt('input/parameterization_slope.txt')[:, 0]
+slope       = np.loadtxt('input/parameterization_slope.txt')[:, 1]
+slope_error = np.loadtxt('input/parameterization_slope.txt')[:, 2]
 energy_slope = (s - mass_proton**2) / (2*mass_proton)
 plt.figure(figsize=(6, 6), dpi=300)
 plt.errorbar(energy_slope, slope, yerr=slope_error, color='b', label='Data Points', fmt='o')
@@ -99,9 +102,11 @@ plt.ylabel(r'b (GeV$^{-2}$)')
 plt.xlim(1.0, 15.0)
 plt.ylim(0, 10)
 plt.grid()
-plt.savefig('slope_factor.png')
+file_pdf.savefig()
 plt.show()
 plt.close()
 
 b_theory = slope_function(s_theory, *coefficients)
 print("Theoretical slope factor values at energies", energy_theory, "are:", b_theory)
+
+file_pdf.close()
