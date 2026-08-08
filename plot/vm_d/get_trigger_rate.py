@@ -7,8 +7,6 @@ import ROOT as root
 from scipy.integrate import quad
 import scipy.stats
 
-###################################################################### DEFINITIONS #####################################################################################
-
 ROOT.gROOT.SetBatch(True)
 nObj = 0
 
@@ -186,7 +184,8 @@ class Hist2D:
         return Hist1D(self.TH2.ProjectionY(),**kwargs)
 
 
-file = File("hdmon_online090212.root")
+file = File("input/trigger_rate_hdmon_online090212.root")
+file_pdf = PdfPages("/work/halld2/home/boyu/src_analysis/plot/vm_d/output/plots_vm_d_illustrations.pdf")
 hist_gtp = file.get("rootspy/highlevel/L1bits_gtp")
 hist_fp = file.get("rootspy/highlevel/L1bits_fp")
 
@@ -201,5 +200,8 @@ plt.xticks(np.arange(0, 7, 1), labels=["", "GTP Bit 1\nST+FCAL+BCAL","GTP Bit 2\
 plt.xlabel('Trigger Bit')
 plt.ylabel('Counts')
 plt.yscale('log')
-plt.savefig("trigger_rate.png")
+file_pdf.savefig()
 plt.close()
+
+
+file_pdf.close()

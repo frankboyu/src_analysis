@@ -3,6 +3,7 @@ import os, sys, math, array, pprint, rcdb, ccdb, MySQLdb
 import numpy as np
 import ROOT as root
 import matplotlib.pyplot as plt
+from matplotlib.backends.backend_pdf import PdfPages
 
 #FUNCTION DEFINITIONS
 def LoadCCDB():
@@ -41,7 +42,7 @@ for irun, run in enumerate(run_list):
 
     accidental_scaling_factor_assignment    = ccdb_conn.get_assignment("/ANALYSIS/accidental_scaling_factor", run_number, ccdb_variation)
     accidental_scaling_factor               = accidental_scaling_factor_assignment     .constant_set.data_table
-    
+
     if (run_number < 90300):
         run_numbers[irun] = run_number
     else:
@@ -71,5 +72,7 @@ for ax in axs:
     ax.axhline(1.0, color='red', linestyle='--', linewidth=1.0)
     ax.set_xlabel("Run Number", fontsize=12)
 
-plt.savefig("accidental_scaling_factor.png")
-plt.close()
+file_pdf = PdfPages("/work/halld2/home/boyu/src_analysis/plot/vm_d/output/plots_vm_d_accid_scaling_factor.pdf")
+
+file_pdf.savefig()
+file_pdf.close()
