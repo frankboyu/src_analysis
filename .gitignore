@@ -19,3 +19,7 @@ plot/vm_d/archive/target_density/epics_readings.csv
 plot/vm_d/input/target_density_deuterium_eos.csv
 plot/vm_d/input/target_density_epics_readings.csv
 plot/vm_d/archive/clas
+plot/vm_d/input/theory_paras_58.txt
+plot/vm_d/input/theory_paras_78.txt
+plot/vm_d/input/theory_paras_98.txt
+plot/vm_d/input/theory_paras.txt
