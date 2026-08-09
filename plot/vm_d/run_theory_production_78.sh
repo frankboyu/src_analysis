@@ -5,14 +5,14 @@ start=`date +%s`
 LABEL=four_para
 mkdir output/${LABEL}/
 
-gfortran -ffixed-line-length-none -o run_78.out edved_wkng_pol.f
+gfortran -ffixed-line-length-none -o run_78.out edved_wkng_pol_78.f
 
-for BEAMENERGY in 8.3
+for BEAMENERGY in 6.9
 do
     mkdir output/${LABEL}/E_${BEAMENERGY}/
-    for SGAMMAN in $(seq 10 0.2 12)
+    for SGAMMAN in $(seq 14.2 0.2 14.6)
     do
-        for BGAMMAN in $(seq 2 0.2 6)
+        for BGAMMAN in $(seq 4 0.2 6)
         do
             mkdir output/${LABEL}/E_${BEAMENERGY}/E_${BEAMENERGY}_gamma_s_${SGAMMAN}_b_${BGAMMAN}/
             for SPHIN in $(seq 20 2.0 40)
