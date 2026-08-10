@@ -45,9 +45,8 @@ phi_d_2H_dsdt_results_p2perr_68     = phi_d_2H_dsdt_results_p2perr  [index[0]:in
 phi_d_2H_dsdt_results_normerr_68    = phi_d_2H_dsdt_results_normerr [index[0]:index[1]]
 phi_d_2H_dsdt_results_systerr_68    = phi_d_2H_dsdt_results_systerr [index[0]:index[1]]
 
-
-theory_minust = np.loadtxt('theory/temp.txt')[:,0]
-theory_dsdt = np.loadtxt('theory/temp.txt')[:,2]
+theory_minust = np.loadtxt('output/table_phi_d_theory_intuition.txt')[:,0]
+theory_dsdt = np.loadtxt('output/table_phi_d_theory_intuition.txt')[:,2]
 
 plt.errorbar(phi_d_2H_dsdt_minust_center_68[1:], phi_d_2H_dsdt_results_68[1:], yerr=phi_d_2H_dsdt_results_statserr_68[1:], fmt='b.', label='Data, 5.8-7.8 GeV')
 
