@@ -4,8 +4,8 @@ from scipy.optimize import curve_fit
 from matplotlib.backends.backend_pdf import PdfPages
 
 rad_to_deg = 180/np.pi
-file_results    = PdfPages("/work/halld2/home/boyu/src_analysis/plot/vm_d/output/plots_vm_d_results.pdf")
-file_syst       = PdfPages("/work/halld2/home/boyu/src_analysis/plot/vm_d/output/plots_vm_d_syst.pdf")
+file_results    = PdfPages("/work/halld2/home/boyu/src_analysis/plot/vm_d/output/plots_vm_d_observables.pdf")
+file_syst       = PdfPages("/work/halld2/home/boyu/src_analysis/plot/vm_d/output/plots_vm_d_systematics.pdf")
 
 def dsdt_func(minust, a1, b1, a2, b2):
     return a1*np.exp(-b1*minust) + a2*np.exp(-b2*minust)
@@ -17,7 +17,7 @@ def Wphi_func(phi, c):
     return 1-2*c*np.cos(2*phi*np.pi/180)
 
 def lumi(energy_min, energy_max, length):
-    lumi_table = np.loadtxt('/work/halld2/home/boyu/src_analysis/flux/output/2H/lumi_summed_2H.txt')
+    lumi_table = np.loadtxt('/work/halld2/home/boyu/src_analysis/flux/output/deuterium/lumi_summed_deuterium.txt')
     length_total = 29.5
 
     integrated_lumi = np.zeros(energy_min.shape, dtype=float)
@@ -33,7 +33,7 @@ def flux_systematic(energy_low, energy_high):
     region2 = 125
     region3 = 227
 
-    bin_edges = np.loadtxt('/work/halld2/home/boyu/src_analysis/flux/output/2H/lumi_summed_2H.txt')
+    bin_edges = np.loadtxt('/work/halld2/home/boyu/src_analysis/flux/output/deuterium/lumi_summed_deuterium.txt')
     tagh_flux_error = np.loadtxt('/work/halld2/home/boyu/src_analysis/flux/systematic/tagh_flux_syst.txt')
     tagm_flux_error = np.loadtxt('/work/halld2/home/boyu/src_analysis/flux/systematic/tagm_flux_syst.txt')
 
@@ -115,6 +115,7 @@ simweight_a1_list   = (['simweight_syst_a1_-1.0',   'simweight_syst_a1_-0.5',   
 simweight_b1_list   = (['simweight_syst_b1_-1.0',   'simweight_syst_b1_-0.5',   'simweight_syst_b1_0.5',    'simweight_syst_b1_1.0'])
 simweight_a2_list   = (['simweight_syst_a2_-1.0',   'simweight_syst_a2_-0.5',   'simweight_syst_a2_0.5',    'simweight_syst_a2_1.0'])
 simweight_b2_list   = (['simweight_syst_b2_-1.0',   'simweight_syst_b2_-0.5',   'simweight_syst_b2_0.5',    'simweight_syst_b2_1.0'])
+# rungroup_list       = (['rungroup_0_90',            'rungroup_45_135',          'rungroup_amo'])
 
 variation_name_list = []
 cut_index_list      = []
@@ -127,85 +128,85 @@ for i, this_list in enumerate([nominal_list, dedx_list, pminus_list, chisquared_
 
 ################################################################# READ THE NUMBERS ###################################################################################
 
-phi_d_2H_dsdt_energy_center                 = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_dsdt_nominal.txt')[:,0]
-phi_d_2H_dsdt_energy_width                  = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_dsdt_nominal.txt')[:,1]
-phi_d_2H_dsdt_energy_low                    = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_dsdt_nominal.txt')[:,2]
-phi_d_2H_dsdt_energy_high                   = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_dsdt_nominal.txt')[:,3]
-phi_d_2H_dsdt_minust_center                 = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_dsdt_nominal.txt')[:,4]
-phi_d_2H_dsdt_minust_width                  = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_dsdt_nominal.txt')[:,5]
-phi_d_2H_dsdt_minust_low                    = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_dsdt_nominal.txt')[:,6]
-phi_d_2H_dsdt_minust_high                   = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_dsdt_nominal.txt')[:,7]
+phi_d_2H_dsdt_energy_center                 = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_dsdt_nominal.txt')[:,0]
+phi_d_2H_dsdt_energy_width                  = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_dsdt_nominal.txt')[:,1]
+phi_d_2H_dsdt_energy_low                    = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_dsdt_nominal.txt')[:,2]
+phi_d_2H_dsdt_energy_high                   = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_dsdt_nominal.txt')[:,3]
+phi_d_2H_dsdt_minust_center                 = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_dsdt_nominal.txt')[:,4]
+phi_d_2H_dsdt_minust_width                  = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_dsdt_nominal.txt')[:,5]
+phi_d_2H_dsdt_minust_low                    = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_dsdt_nominal.txt')[:,6]
+phi_d_2H_dsdt_minust_high                   = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_dsdt_nominal.txt')[:,7]
 
-phi_d_2H_Wcostheta_energy_center            = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wcostheta_nominal.txt')[:,0]
-phi_d_2H_Wcostheta_energy_width             = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wcostheta_nominal.txt')[:,1]
-phi_d_2H_Wcostheta_energy_low               = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wcostheta_nominal.txt')[:,2]
-phi_d_2H_Wcostheta_energy_high              = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wcostheta_nominal.txt')[:,3]
-phi_d_2H_Wcostheta_minust_center            = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wcostheta_nominal.txt')[:,4]
-phi_d_2H_Wcostheta_minust_width             = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wcostheta_nominal.txt')[:,5]
-phi_d_2H_Wcostheta_minust_low               = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wcostheta_nominal.txt')[:,6]
-phi_d_2H_Wcostheta_minust_high              = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wcostheta_nominal.txt')[:,7]
-phi_d_2H_Wcostheta_costheta_center          = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wcostheta_nominal.txt')[:,8]
-phi_d_2H_Wcostheta_costheta_width           = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wcostheta_nominal.txt')[:,9]
-phi_d_2H_Wcostheta_costheta_low             = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wcostheta_nominal.txt')[:,10]
-phi_d_2H_Wcostheta_costheta_high            = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wcostheta_nominal.txt')[:,11]
+phi_d_2H_Wcostheta_energy_center            = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wcostheta_nominal.txt')[:,0]
+phi_d_2H_Wcostheta_energy_width             = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wcostheta_nominal.txt')[:,1]
+phi_d_2H_Wcostheta_energy_low               = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wcostheta_nominal.txt')[:,2]
+phi_d_2H_Wcostheta_energy_high              = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wcostheta_nominal.txt')[:,3]
+phi_d_2H_Wcostheta_minust_center            = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wcostheta_nominal.txt')[:,4]
+phi_d_2H_Wcostheta_minust_width             = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wcostheta_nominal.txt')[:,5]
+phi_d_2H_Wcostheta_minust_low               = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wcostheta_nominal.txt')[:,6]
+phi_d_2H_Wcostheta_minust_high              = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wcostheta_nominal.txt')[:,7]
+phi_d_2H_Wcostheta_costheta_center          = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wcostheta_nominal.txt')[:,8]
+phi_d_2H_Wcostheta_costheta_width           = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wcostheta_nominal.txt')[:,9]
+phi_d_2H_Wcostheta_costheta_low             = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wcostheta_nominal.txt')[:,10]
+phi_d_2H_Wcostheta_costheta_high            = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wcostheta_nominal.txt')[:,11]
 
-phi_d_2H_Wdecayphi_energy_center            = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wdecayphi_nominal.txt')[:,0]
-phi_d_2H_Wdecayphi_energy_width             = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wdecayphi_nominal.txt')[:,1]
-phi_d_2H_Wdecayphi_energy_low               = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wdecayphi_nominal.txt')[:,2]
-phi_d_2H_Wdecayphi_energy_high              = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wdecayphi_nominal.txt')[:,3]
-phi_d_2H_Wdecayphi_minust_center            = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wdecayphi_nominal.txt')[:,4]
-phi_d_2H_Wdecayphi_minust_width             = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wdecayphi_nominal.txt')[:,5]
-phi_d_2H_Wdecayphi_minust_low               = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wdecayphi_nominal.txt')[:,6]
-phi_d_2H_Wdecayphi_minust_high              = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wdecayphi_nominal.txt')[:,7]
-phi_d_2H_Wdecayphi_decayphi_center          = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wdecayphi_nominal.txt')[:,8]
-phi_d_2H_Wdecayphi_decayphi_width           = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wdecayphi_nominal.txt')[:,9]
-phi_d_2H_Wdecayphi_decayphi_low             = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wdecayphi_nominal.txt')[:,10]
-phi_d_2H_Wdecayphi_decayphi_high            = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wdecayphi_nominal.txt')[:,11]
+phi_d_2H_Wdecayphi_energy_center            = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wdecayphi_nominal.txt')[:,0]
+phi_d_2H_Wdecayphi_energy_width             = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wdecayphi_nominal.txt')[:,1]
+phi_d_2H_Wdecayphi_energy_low               = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wdecayphi_nominal.txt')[:,2]
+phi_d_2H_Wdecayphi_energy_high              = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wdecayphi_nominal.txt')[:,3]
+phi_d_2H_Wdecayphi_minust_center            = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wdecayphi_nominal.txt')[:,4]
+phi_d_2H_Wdecayphi_minust_width             = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wdecayphi_nominal.txt')[:,5]
+phi_d_2H_Wdecayphi_minust_low               = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wdecayphi_nominal.txt')[:,6]
+phi_d_2H_Wdecayphi_minust_high              = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wdecayphi_nominal.txt')[:,7]
+phi_d_2H_Wdecayphi_decayphi_center          = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wdecayphi_nominal.txt')[:,8]
+phi_d_2H_Wdecayphi_decayphi_width           = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wdecayphi_nominal.txt')[:,9]
+phi_d_2H_Wdecayphi_decayphi_low             = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wdecayphi_nominal.txt')[:,10]
+phi_d_2H_Wdecayphi_decayphi_high            = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wdecayphi_nominal.txt')[:,11]
 
-phi_d_2H_Wpolphi_energy_center              = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpolphi_nominal.txt')[:,0]
-phi_d_2H_Wpolphi_energy_width               = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpolphi_nominal.txt')[:,1]
-phi_d_2H_Wpolphi_energy_low                 = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpolphi_nominal.txt')[:,2]
-phi_d_2H_Wpolphi_energy_high                = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpolphi_nominal.txt')[:,3]
-phi_d_2H_Wpolphi_minust_center              = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpolphi_nominal.txt')[:,4]
-phi_d_2H_Wpolphi_minust_width               = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpolphi_nominal.txt')[:,5]
-phi_d_2H_Wpolphi_minust_low                 = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpolphi_nominal.txt')[:,6]
-phi_d_2H_Wpolphi_minust_high                = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpolphi_nominal.txt')[:,7]
-phi_d_2H_Wpolphi_polphi_center              = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpolphi_nominal.txt')[:,8]
-phi_d_2H_Wpolphi_polphi_width               = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpolphi_nominal.txt')[:,9]
-phi_d_2H_Wpolphi_polphi_low                 = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpolphi_nominal.txt')[:,10]
-phi_d_2H_Wpolphi_polphi_high                = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpolphi_nominal.txt')[:,11]
+phi_d_2H_Wpolphi_energy_center              = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpolphi_nominal.txt')[:,0]
+phi_d_2H_Wpolphi_energy_width               = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpolphi_nominal.txt')[:,1]
+phi_d_2H_Wpolphi_energy_low                 = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpolphi_nominal.txt')[:,2]
+phi_d_2H_Wpolphi_energy_high                = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpolphi_nominal.txt')[:,3]
+phi_d_2H_Wpolphi_minust_center              = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpolphi_nominal.txt')[:,4]
+phi_d_2H_Wpolphi_minust_width               = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpolphi_nominal.txt')[:,5]
+phi_d_2H_Wpolphi_minust_low                 = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpolphi_nominal.txt')[:,6]
+phi_d_2H_Wpolphi_minust_high                = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpolphi_nominal.txt')[:,7]
+phi_d_2H_Wpolphi_polphi_center              = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpolphi_nominal.txt')[:,8]
+phi_d_2H_Wpolphi_polphi_width               = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpolphi_nominal.txt')[:,9]
+phi_d_2H_Wpolphi_polphi_low                 = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpolphi_nominal.txt')[:,10]
+phi_d_2H_Wpolphi_polphi_high                = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpolphi_nominal.txt')[:,11]
 
-phi_d_2H_Wpsi_energy_center                 = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpsi_nominal.txt')[:,0]
-phi_d_2H_Wpsi_energy_width                  = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpsi_nominal.txt')[:,1]
-phi_d_2H_Wpsi_energy_low                    = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpsi_nominal.txt')[:,2]
-phi_d_2H_Wpsi_energy_high                   = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpsi_nominal.txt')[:,3]
-phi_d_2H_Wpsi_minust_center                 = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpsi_nominal.txt')[:,4]
-phi_d_2H_Wpsi_minust_width                  = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpsi_nominal.txt')[:,5]
-phi_d_2H_Wpsi_minust_low                    = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpsi_nominal.txt')[:,6]
-phi_d_2H_Wpsi_minust_high                   = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpsi_nominal.txt')[:,7]
-phi_d_2H_Wpsi_psi_center                    = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpsi_nominal.txt')[:,8]
-phi_d_2H_Wpsi_psi_width                     = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpsi_nominal.txt')[:,9]
-phi_d_2H_Wpsi_psi_low                       = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpsi_nominal.txt')[:,10]
-phi_d_2H_Wpsi_psi_high                      = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpsi_nominal.txt')[:,11]
+phi_d_2H_Wpsi_energy_center                 = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpsi_nominal.txt')[:,0]
+phi_d_2H_Wpsi_energy_width                  = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpsi_nominal.txt')[:,1]
+phi_d_2H_Wpsi_energy_low                    = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpsi_nominal.txt')[:,2]
+phi_d_2H_Wpsi_energy_high                   = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpsi_nominal.txt')[:,3]
+phi_d_2H_Wpsi_minust_center                 = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpsi_nominal.txt')[:,4]
+phi_d_2H_Wpsi_minust_width                  = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpsi_nominal.txt')[:,5]
+phi_d_2H_Wpsi_minust_low                    = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpsi_nominal.txt')[:,6]
+phi_d_2H_Wpsi_minust_high                   = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpsi_nominal.txt')[:,7]
+phi_d_2H_Wpsi_psi_center                    = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpsi_nominal.txt')[:,8]
+phi_d_2H_Wpsi_psi_width                     = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpsi_nominal.txt')[:,9]
+phi_d_2H_Wpsi_psi_low                       = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpsi_nominal.txt')[:,10]
+phi_d_2H_Wpsi_psi_high                      = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpsi_nominal.txt')[:,11]
 
 # Read the yield numbers
-phi_d_2H_dsdt_yield_data                    = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_dsdt_nominal.txt')[:,8]
-phi_d_2H_dsdt_yield_data_statserr           = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_dsdt_nominal.txt')[:,9]
-phi_d_2H_dsdt_yield_sim                     = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_dsdt_nominal.txt')[:,8]
-phi_d_2H_dsdt_yield_sim_statserr            = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_dsdt_nominal.txt')[:,9]
-phi_d_2H_dsdt_yield_tagged                  = np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_ver12_flat_dsdt_nominal.txt')[:,8]
-phi_d_2H_dsdt_yield_tagged_statserr         = np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_ver12_flat_dsdt_nominal.txt')[:,9]
+phi_d_2H_dsdt_yield_data                    = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_dsdt_nominal.txt')[:,8]
+phi_d_2H_dsdt_yield_data_statserr           = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_dsdt_nominal.txt')[:,9]
+phi_d_2H_dsdt_yield_sim                     = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_sim_ver12_dsdt_nominal.txt')[:,8]
+phi_d_2H_dsdt_yield_sim_statserr            = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_sim_ver12_dsdt_nominal.txt')[:,9]
+phi_d_2H_dsdt_yield_tagged                  = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_thrown_tagged_ver12_dsdt_nominal.txt')[:,8]
+phi_d_2H_dsdt_yield_tagged_statserr         = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_thrown_tagged_ver12_dsdt_nominal.txt')[:,9]
 phi_d_2H_dsdt_efficiency                    = phi_d_2H_dsdt_yield_sim/phi_d_2H_dsdt_yield_tagged
 phi_d_2H_dsdt_efficiency_statserr           = phi_d_2H_dsdt_efficiency*np.sqrt((phi_d_2H_dsdt_yield_sim_statserr/phi_d_2H_dsdt_yield_sim)**2 + (phi_d_2H_dsdt_yield_tagged_statserr/phi_d_2H_dsdt_yield_tagged)**2)
 phi_d_2H_dsdt_results                       = phi_d_2H_dsdt_yield_data/phi_d_2H_dsdt_efficiency/lumi(phi_d_2H_dsdt_energy_low, phi_d_2H_dsdt_energy_high, 28)/(phi_d_2H_dsdt_minust_high-phi_d_2H_dsdt_minust_low)/0.489/1000
 phi_d_2H_dsdt_results_statserr              = phi_d_2H_dsdt_results*np.sqrt((phi_d_2H_dsdt_yield_data_statserr/phi_d_2H_dsdt_yield_data)**2 + (phi_d_2H_dsdt_efficiency_statserr/phi_d_2H_dsdt_efficiency)**2)
 
-phi_d_2H_Wcostheta_yield_data               = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wcostheta_nominal.txt')[:,12]
-phi_d_2H_Wcostheta_yield_data_statserr      = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wcostheta_nominal.txt')[:,13]
-phi_d_2H_Wcostheta_yield_sim                = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_Wcostheta_nominal.txt')[:,12]
-phi_d_2H_Wcostheta_yield_sim_statserr       = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_Wcostheta_nominal.txt')[:,13]
-phi_d_2H_Wcostheta_yield_tagged             = np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_ver12_flat_Wcostheta_nominal.txt')[:,12]
-phi_d_2H_Wcostheta_yield_tagged_statserr    = np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_ver12_flat_Wcostheta_nominal.txt')[:,13]
+phi_d_2H_Wcostheta_yield_data               = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wcostheta_nominal.txt')[:,12]
+phi_d_2H_Wcostheta_yield_data_statserr      = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wcostheta_nominal.txt')[:,13]
+phi_d_2H_Wcostheta_yield_sim                = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_sim_ver12_Wcostheta_nominal.txt')[:,12]
+phi_d_2H_Wcostheta_yield_sim_statserr       = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_sim_ver12_Wcostheta_nominal.txt')[:,13]
+phi_d_2H_Wcostheta_yield_tagged             = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_thrown_tagged_ver12_Wcostheta_nominal.txt')[:,12]
+phi_d_2H_Wcostheta_yield_tagged_statserr    = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_thrown_tagged_ver12_Wcostheta_nominal.txt')[:,13]
 phi_d_2H_Wcostheta_efficiency               = phi_d_2H_Wcostheta_yield_sim/phi_d_2H_Wcostheta_yield_tagged
 phi_d_2H_Wcostheta_efficiency_statserr      = phi_d_2H_Wcostheta_efficiency*np.sqrt((phi_d_2H_Wcostheta_yield_sim_statserr/phi_d_2H_Wcostheta_yield_sim)**2 + (phi_d_2H_Wcostheta_yield_tagged_statserr/phi_d_2H_Wcostheta_yield_tagged)**2)
 phi_d_2H_Wcostheta_results                  = phi_d_2H_Wcostheta_yield_data/phi_d_2H_Wcostheta_efficiency  # raw results
@@ -215,12 +216,12 @@ phi_d_2H_Wcostheta_results_statserr         = normalize_distribution(phi_d_2H_Wc
 phi_d_2H_Wcostheta_results                  = phi_d_2H_Wcostheta_results/(phi_d_2H_Wcostheta_costheta_high - phi_d_2H_Wcostheta_costheta_low)  # normalize to have the integral equal to 1
 phi_d_2H_Wcostheta_results_statserr         = phi_d_2H_Wcostheta_results_statserr/(phi_d_2H_Wcostheta_costheta_high - phi_d_2H_Wcostheta_costheta_low)  # set the proper statistical uncertainties
 
-phi_d_2H_Wdecayphi_yield_data               = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wdecayphi_nominal.txt')[:,12]
-phi_d_2H_Wdecayphi_yield_data_statserr      = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wdecayphi_nominal.txt')[:,13]
-phi_d_2H_Wdecayphi_yield_sim                = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_Wdecayphi_nominal.txt')[:,12]
-phi_d_2H_Wdecayphi_yield_sim_statserr       = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_Wdecayphi_nominal.txt')[:,13]
-phi_d_2H_Wdecayphi_yield_tagged             = np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_ver12_flat_Wdecayphi_nominal.txt')[:,12]
-phi_d_2H_Wdecayphi_yield_tagged_statserr    = np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_ver12_flat_Wdecayphi_nominal.txt')[:,13]
+phi_d_2H_Wdecayphi_yield_data               = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wdecayphi_nominal.txt')[:,12]
+phi_d_2H_Wdecayphi_yield_data_statserr      = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wdecayphi_nominal.txt')[:,13]
+phi_d_2H_Wdecayphi_yield_sim                = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_sim_ver12_Wdecayphi_nominal.txt')[:,12]
+phi_d_2H_Wdecayphi_yield_sim_statserr       = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_sim_ver12_Wdecayphi_nominal.txt')[:,13]
+phi_d_2H_Wdecayphi_yield_tagged             = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_thrown_tagged_ver12_Wdecayphi_nominal.txt')[:,12]
+phi_d_2H_Wdecayphi_yield_tagged_statserr    = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_thrown_tagged_ver12_Wdecayphi_nominal.txt')[:,13]
 phi_d_2H_Wdecayphi_efficiency               = phi_d_2H_Wdecayphi_yield_sim/phi_d_2H_Wdecayphi_yield_tagged
 phi_d_2H_Wdecayphi_efficiency_statserr      = phi_d_2H_Wdecayphi_efficiency*np.sqrt((phi_d_2H_Wdecayphi_yield_sim_statserr/phi_d_2H_Wdecayphi_yield_sim)**2 + (phi_d_2H_Wdecayphi_yield_tagged_statserr/phi_d_2H_Wdecayphi_yield_tagged)**2)
 phi_d_2H_Wdecayphi_results                  = phi_d_2H_Wdecayphi_yield_data/phi_d_2H_Wdecayphi_efficiency  # raw results
@@ -230,12 +231,12 @@ phi_d_2H_Wdecayphi_results_statserr         = normalize_distribution(phi_d_2H_Wd
 phi_d_2H_Wdecayphi_results                  = 2*np.pi*phi_d_2H_Wdecayphi_results/((phi_d_2H_Wdecayphi_decayphi_high - phi_d_2H_Wdecayphi_decayphi_low)/180*np.pi)  # normalize to have the integral equal to 2pi
 phi_d_2H_Wdecayphi_results_statserr         = 2*np.pi*phi_d_2H_Wdecayphi_results_statserr/((phi_d_2H_Wdecayphi_decayphi_high - phi_d_2H_Wdecayphi_decayphi_low)/180*np.pi)  # set the proper statistical uncertainties
 
-phi_d_2H_Wpolphi_yield_data                 = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpolphi_nominal.txt')[:,12]
-phi_d_2H_Wpolphi_yield_data_statserr        = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpolphi_nominal.txt')[:,13]
-phi_d_2H_Wpolphi_yield_sim                  = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_Wpolphi_nominal.txt')[:,12]
-phi_d_2H_Wpolphi_yield_sim_statserr         = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_Wpolphi_nominal.txt')[:,13]
-phi_d_2H_Wpolphi_yield_tagged               = np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_ver12_flat_Wpolphi_nominal.txt')[:,12]
-phi_d_2H_Wpolphi_yield_tagged_statserr      = np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_ver12_flat_Wpolphi_nominal.txt')[:,13]
+phi_d_2H_Wpolphi_yield_data                 = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpolphi_nominal.txt')[:,12]
+phi_d_2H_Wpolphi_yield_data_statserr        = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpolphi_nominal.txt')[:,13]
+phi_d_2H_Wpolphi_yield_sim                  = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_sim_ver12_Wpolphi_nominal.txt')[:,12]
+phi_d_2H_Wpolphi_yield_sim_statserr         = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_sim_ver12_Wpolphi_nominal.txt')[:,13]
+phi_d_2H_Wpolphi_yield_tagged               = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_thrown_tagged_ver12_Wpolphi_nominal.txt')[:,12]
+phi_d_2H_Wpolphi_yield_tagged_statserr      = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_thrown_tagged_ver12_Wpolphi_nominal.txt')[:,13]
 phi_d_2H_Wpolphi_efficiency                 = phi_d_2H_Wpolphi_yield_sim/phi_d_2H_Wpolphi_yield_tagged
 phi_d_2H_Wpolphi_efficiency_statserr        = phi_d_2H_Wpolphi_efficiency*np.sqrt((phi_d_2H_Wpolphi_yield_sim_statserr/phi_d_2H_Wpolphi_yield_sim)**2 + (phi_d_2H_Wpolphi_yield_tagged_statserr/phi_d_2H_Wpolphi_yield_tagged)**2)
 phi_d_2H_Wpolphi_results                    = phi_d_2H_Wpolphi_yield_data/phi_d_2H_Wpolphi_efficiency  # raw results
@@ -245,12 +246,12 @@ phi_d_2H_Wpolphi_results_statserr           = normalize_distribution(phi_d_2H_Wp
 phi_d_2H_Wpolphi_results                    = 2*np.pi*phi_d_2H_Wpolphi_results/((phi_d_2H_Wpolphi_polphi_high - phi_d_2H_Wpolphi_polphi_low)/180*np.pi)  # normalize to have the integral equal to 2pi
 phi_d_2H_Wpolphi_results_statserr           = 2*np.pi*phi_d_2H_Wpolphi_results_statserr/((phi_d_2H_Wpolphi_polphi_high - phi_d_2H_Wpolphi_polphi_low)/180*np.pi)  # set the proper statistical uncertainties
 
-phi_d_2H_Wpsi_yield_data                    = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpsi_nominal.txt')[:,12]
-phi_d_2H_Wpsi_yield_data_statserr           = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpsi_nominal.txt')[:,13]
-phi_d_2H_Wpsi_yield_sim                     = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_Wpsi_nominal.txt')[:,12]
-phi_d_2H_Wpsi_yield_sim_statserr            = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_Wpsi_nominal.txt')[:,13]
-phi_d_2H_Wpsi_yield_tagged                  = np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_ver12_flat_Wpsi_nominal.txt')[:,12]
-phi_d_2H_Wpsi_yield_tagged_statserr         = np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_ver12_flat_Wpsi_nominal.txt')[:,13]
+phi_d_2H_Wpsi_yield_data                    = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpsi_nominal.txt')[:,12]
+phi_d_2H_Wpsi_yield_data_statserr           = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpsi_nominal.txt')[:,13]
+phi_d_2H_Wpsi_yield_sim                     = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_sim_ver12_Wpsi_nominal.txt')[:,12]
+phi_d_2H_Wpsi_yield_sim_statserr            = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_sim_ver12_Wpsi_nominal.txt')[:,13]
+phi_d_2H_Wpsi_yield_tagged                  = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_thrown_tagged_ver12_Wpsi_nominal.txt')[:,12]
+phi_d_2H_Wpsi_yield_tagged_statserr         = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_thrown_tagged_ver12_Wpsi_nominal.txt')[:,13]
 phi_d_2H_Wpsi_efficiency                    = phi_d_2H_Wpsi_yield_sim/phi_d_2H_Wpsi_yield_tagged
 phi_d_2H_Wpsi_efficiency_statserr           = phi_d_2H_Wpsi_efficiency*np.sqrt((phi_d_2H_Wpsi_yield_sim_statserr/phi_d_2H_Wpsi_yield_sim)**2 + (phi_d_2H_Wpsi_yield_tagged_statserr/phi_d_2H_Wpsi_yield_tagged)**2)
 phi_d_2H_Wpsi_results                       = phi_d_2H_Wpsi_yield_data/phi_d_2H_Wpsi_efficiency  # raw results
@@ -265,73 +266,73 @@ for tag in variation_name_list:
         continue
 
     if (tag.find('simweight') != -1 or tag == 'fitsig_relBWsim'):
-        phi_d_2H_dsdt_yield_data                    = np.vstack((phi_d_2H_dsdt_yield_data,                      np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_dsdt_nominal.txt')[:,8]))
-        phi_d_2H_dsdt_yield_data_statserr           = np.vstack((phi_d_2H_dsdt_yield_data_statserr,             np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_dsdt_nominal.txt')[:,9]))
-        phi_d_2H_Wcostheta_yield_data               = np.vstack((phi_d_2H_Wcostheta_yield_data,                 np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wcostheta_nominal.txt')[:,12]))
-        phi_d_2H_Wcostheta_yield_data_statserr      = np.vstack((phi_d_2H_Wcostheta_yield_data_statserr,        np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wcostheta_nominal.txt')[:,13]))
-        phi_d_2H_Wdecayphi_yield_data               = np.vstack((phi_d_2H_Wdecayphi_yield_data,                 np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wdecayphi_nominal.txt')[:,12]))
-        phi_d_2H_Wdecayphi_yield_data_statserr      = np.vstack((phi_d_2H_Wdecayphi_yield_data_statserr,        np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wdecayphi_nominal.txt')[:,13]))
-        phi_d_2H_Wpolphi_yield_data                 = np.vstack((phi_d_2H_Wpolphi_yield_data,                   np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpolphi_nominal.txt')[:,12]))
-        phi_d_2H_Wpolphi_yield_data_statserr        = np.vstack((phi_d_2H_Wpolphi_yield_data_statserr,          np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpolphi_nominal.txt')[:,13]))
-        phi_d_2H_Wpsi_yield_data                    = np.vstack((phi_d_2H_Wpsi_yield_data,                      np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpsi_nominal.txt')[:,12]))
-        phi_d_2H_Wpsi_yield_data_statserr           = np.vstack((phi_d_2H_Wpsi_yield_data_statserr,             np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpsi_nominal.txt')[:,13]))
+        phi_d_2H_dsdt_yield_data                    = np.vstack((phi_d_2H_dsdt_yield_data,                      np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_dsdt_nominal.txt')[:,8]))
+        phi_d_2H_dsdt_yield_data_statserr           = np.vstack((phi_d_2H_dsdt_yield_data_statserr,             np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_dsdt_nominal.txt')[:,9]))
+        phi_d_2H_Wcostheta_yield_data               = np.vstack((phi_d_2H_Wcostheta_yield_data,                 np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wcostheta_nominal.txt')[:,12]))
+        phi_d_2H_Wcostheta_yield_data_statserr      = np.vstack((phi_d_2H_Wcostheta_yield_data_statserr,        np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wcostheta_nominal.txt')[:,13]))
+        phi_d_2H_Wdecayphi_yield_data               = np.vstack((phi_d_2H_Wdecayphi_yield_data,                 np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wdecayphi_nominal.txt')[:,12]))
+        phi_d_2H_Wdecayphi_yield_data_statserr      = np.vstack((phi_d_2H_Wdecayphi_yield_data_statserr,        np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wdecayphi_nominal.txt')[:,13]))
+        phi_d_2H_Wpolphi_yield_data                 = np.vstack((phi_d_2H_Wpolphi_yield_data,                   np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpolphi_nominal.txt')[:,12]))
+        phi_d_2H_Wpolphi_yield_data_statserr        = np.vstack((phi_d_2H_Wpolphi_yield_data_statserr,          np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpolphi_nominal.txt')[:,13]))
+        phi_d_2H_Wpsi_yield_data                    = np.vstack((phi_d_2H_Wpsi_yield_data,                      np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpsi_nominal.txt')[:,12]))
+        phi_d_2H_Wpsi_yield_data_statserr           = np.vstack((phi_d_2H_Wpsi_yield_data_statserr,             np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpsi_nominal.txt')[:,13]))
     else:
-        phi_d_2H_dsdt_yield_data                    = np.vstack((phi_d_2H_dsdt_yield_data,                      np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_dsdt_'+tag+'.txt')[:,8]))
-        phi_d_2H_dsdt_yield_data_statserr           = np.vstack((phi_d_2H_dsdt_yield_data_statserr,             np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_dsdt_'+tag+'.txt')[:,9]))
-        phi_d_2H_Wcostheta_yield_data               = np.vstack((phi_d_2H_Wcostheta_yield_data,                 np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wcostheta_'+tag+'.txt')[:,12]))
-        phi_d_2H_Wcostheta_yield_data_statserr      = np.vstack((phi_d_2H_Wcostheta_yield_data_statserr,        np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wcostheta_'+tag+'.txt')[:,13]))
-        phi_d_2H_Wdecayphi_yield_data               = np.vstack((phi_d_2H_Wdecayphi_yield_data,                 np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wdecayphi_'+tag+'.txt')[:,12]))
-        phi_d_2H_Wdecayphi_yield_data_statserr      = np.vstack((phi_d_2H_Wdecayphi_yield_data_statserr,        np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wdecayphi_'+tag+'.txt')[:,13]))
-        phi_d_2H_Wpolphi_yield_data                 = np.vstack((phi_d_2H_Wpolphi_yield_data,                   np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpolphi_'+tag+'.txt')[:,12]))
-        phi_d_2H_Wpolphi_yield_data_statserr        = np.vstack((phi_d_2H_Wpolphi_yield_data_statserr,          np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpolphi_'+tag+'.txt')[:,13]))
-        phi_d_2H_Wpsi_yield_data                    = np.vstack((phi_d_2H_Wpsi_yield_data,                      np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpsi_'+tag+'.txt')[:,12]))
-        phi_d_2H_Wpsi_yield_data_statserr           = np.vstack((phi_d_2H_Wpsi_yield_data_statserr,             np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpsi_'+tag+'.txt')[:,13]))
+        phi_d_2H_dsdt_yield_data                    = np.vstack((phi_d_2H_dsdt_yield_data,                      np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_dsdt_'+tag+'.txt')[:,8]))
+        phi_d_2H_dsdt_yield_data_statserr           = np.vstack((phi_d_2H_dsdt_yield_data_statserr,             np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_dsdt_'+tag+'.txt')[:,9]))
+        phi_d_2H_Wcostheta_yield_data               = np.vstack((phi_d_2H_Wcostheta_yield_data,                 np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wcostheta_'+tag+'.txt')[:,12]))
+        phi_d_2H_Wcostheta_yield_data_statserr      = np.vstack((phi_d_2H_Wcostheta_yield_data_statserr,        np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wcostheta_'+tag+'.txt')[:,13]))
+        phi_d_2H_Wdecayphi_yield_data               = np.vstack((phi_d_2H_Wdecayphi_yield_data,                 np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wdecayphi_'+tag+'.txt')[:,12]))
+        phi_d_2H_Wdecayphi_yield_data_statserr      = np.vstack((phi_d_2H_Wdecayphi_yield_data_statserr,        np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wdecayphi_'+tag+'.txt')[:,13]))
+        phi_d_2H_Wpolphi_yield_data                 = np.vstack((phi_d_2H_Wpolphi_yield_data,                   np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpolphi_'+tag+'.txt')[:,12]))
+        phi_d_2H_Wpolphi_yield_data_statserr        = np.vstack((phi_d_2H_Wpolphi_yield_data_statserr,          np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpolphi_'+tag+'.txt')[:,13]))
+        phi_d_2H_Wpsi_yield_data                    = np.vstack((phi_d_2H_Wpsi_yield_data,                      np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpsi_'+tag+'.txt')[:,12]))
+        phi_d_2H_Wpsi_yield_data_statserr           = np.vstack((phi_d_2H_Wpsi_yield_data_statserr,             np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpsi_'+tag+'.txt')[:,13]))
 
     if (tag.find('fit') != -1 and tag != 'fitsig_relBWsim'):
-        phi_d_2H_dsdt_yield_sim                     = np.vstack((phi_d_2H_dsdt_yield_sim,                       np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_dsdt_nominal.txt')[:,8]))
-        phi_d_2H_dsdt_yield_sim_statserr            = np.vstack((phi_d_2H_dsdt_yield_sim_statserr,              np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_dsdt_nominal.txt')[:,9]))
-        phi_d_2H_Wcostheta_yield_sim                = np.vstack((phi_d_2H_Wcostheta_yield_sim,                  np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_Wcostheta_nominal.txt')[:,12]))
-        phi_d_2H_Wcostheta_yield_sim_statserr       = np.vstack((phi_d_2H_Wcostheta_yield_sim_statserr,         np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_Wcostheta_nominal.txt')[:,13]))
-        phi_d_2H_Wdecayphi_yield_sim                = np.vstack((phi_d_2H_Wdecayphi_yield_sim,                  np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_Wdecayphi_nominal.txt')[:,12]))
-        phi_d_2H_Wdecayphi_yield_sim_statserr       = np.vstack((phi_d_2H_Wdecayphi_yield_sim_statserr,         np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_Wdecayphi_nominal.txt')[:,13]))
-        phi_d_2H_Wpolphi_yield_sim                  = np.vstack((phi_d_2H_Wpolphi_yield_sim,                    np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_Wpolphi_nominal.txt')[:,12]))
-        phi_d_2H_Wpolphi_yield_sim_statserr         = np.vstack((phi_d_2H_Wpolphi_yield_sim_statserr,           np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_Wpolphi_nominal.txt')[:,13]))
-        phi_d_2H_Wpsi_yield_sim                     = np.vstack((phi_d_2H_Wpsi_yield_sim,                       np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_Wpsi_nominal.txt')[:,12]))
-        phi_d_2H_Wpsi_yield_sim_statserr            = np.vstack((phi_d_2H_Wpsi_yield_sim_statserr,              np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_Wpsi_nominal.txt')[:,13]))
+        phi_d_2H_dsdt_yield_sim                     = np.vstack((phi_d_2H_dsdt_yield_sim,                       np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_sim_ver12_dsdt_nominal.txt')[:,8]))
+        phi_d_2H_dsdt_yield_sim_statserr            = np.vstack((phi_d_2H_dsdt_yield_sim_statserr,              np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_sim_ver12_dsdt_nominal.txt')[:,9]))
+        phi_d_2H_Wcostheta_yield_sim                = np.vstack((phi_d_2H_Wcostheta_yield_sim,                  np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_sim_ver12_Wcostheta_nominal.txt')[:,12]))
+        phi_d_2H_Wcostheta_yield_sim_statserr       = np.vstack((phi_d_2H_Wcostheta_yield_sim_statserr,         np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_sim_ver12_Wcostheta_nominal.txt')[:,13]))
+        phi_d_2H_Wdecayphi_yield_sim                = np.vstack((phi_d_2H_Wdecayphi_yield_sim,                  np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_sim_ver12_Wdecayphi_nominal.txt')[:,12]))
+        phi_d_2H_Wdecayphi_yield_sim_statserr       = np.vstack((phi_d_2H_Wdecayphi_yield_sim_statserr,         np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_sim_ver12_Wdecayphi_nominal.txt')[:,13]))
+        phi_d_2H_Wpolphi_yield_sim                  = np.vstack((phi_d_2H_Wpolphi_yield_sim,                    np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_sim_ver12_Wpolphi_nominal.txt')[:,12]))
+        phi_d_2H_Wpolphi_yield_sim_statserr         = np.vstack((phi_d_2H_Wpolphi_yield_sim_statserr,           np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_sim_ver12_Wpolphi_nominal.txt')[:,13]))
+        phi_d_2H_Wpsi_yield_sim                     = np.vstack((phi_d_2H_Wpsi_yield_sim,                       np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_sim_ver12_Wpsi_nominal.txt')[:,12]))
+        phi_d_2H_Wpsi_yield_sim_statserr            = np.vstack((phi_d_2H_Wpsi_yield_sim_statserr,              np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_sim_ver12_Wpsi_nominal.txt')[:,13]))
     else:
-        phi_d_2H_dsdt_yield_sim                     = np.vstack((phi_d_2H_dsdt_yield_sim,                       np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_dsdt_'+tag+'.txt')[:,8]))
-        phi_d_2H_dsdt_yield_sim_statserr            = np.vstack((phi_d_2H_dsdt_yield_sim_statserr,              np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_dsdt_'+tag+'.txt')[:,9]))
-        phi_d_2H_Wcostheta_yield_sim                = np.vstack((phi_d_2H_Wcostheta_yield_sim,                  np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_Wcostheta_'+tag+'.txt')[:,12]))
-        phi_d_2H_Wcostheta_yield_sim_statserr       = np.vstack((phi_d_2H_Wcostheta_yield_sim_statserr,         np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_Wcostheta_'+tag+'.txt')[:,13]))
-        phi_d_2H_Wdecayphi_yield_sim                = np.vstack((phi_d_2H_Wdecayphi_yield_sim,                  np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_Wdecayphi_'+tag+'.txt')[:,12]))
-        phi_d_2H_Wdecayphi_yield_sim_statserr       = np.vstack((phi_d_2H_Wdecayphi_yield_sim_statserr,         np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_Wdecayphi_'+tag+'.txt')[:,13]))
-        phi_d_2H_Wpolphi_yield_sim                  = np.vstack((phi_d_2H_Wpolphi_yield_sim,                    np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_Wpolphi_'+tag+'.txt')[:,12]))
-        phi_d_2H_Wpolphi_yield_sim_statserr         = np.vstack((phi_d_2H_Wpolphi_yield_sim_statserr,           np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_Wpolphi_'+tag+'.txt')[:,13]))
-        phi_d_2H_Wpsi_yield_sim                     = np.vstack((phi_d_2H_Wpsi_yield_sim,                       np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_Wpsi_'+tag+'.txt')[:,12]))
-        phi_d_2H_Wpsi_yield_sim_statserr            = np.vstack((phi_d_2H_Wpsi_yield_sim_statserr,              np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_Wpsi_'+tag+'.txt')[:,13]))
+        phi_d_2H_dsdt_yield_sim                     = np.vstack((phi_d_2H_dsdt_yield_sim,                       np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_sim_ver12_dsdt_'+tag+'.txt')[:,8]))
+        phi_d_2H_dsdt_yield_sim_statserr            = np.vstack((phi_d_2H_dsdt_yield_sim_statserr,              np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_sim_ver12_dsdt_'+tag+'.txt')[:,9]))
+        phi_d_2H_Wcostheta_yield_sim                = np.vstack((phi_d_2H_Wcostheta_yield_sim,                  np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_sim_ver12_Wcostheta_'+tag+'.txt')[:,12]))
+        phi_d_2H_Wcostheta_yield_sim_statserr       = np.vstack((phi_d_2H_Wcostheta_yield_sim_statserr,         np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_sim_ver12_Wcostheta_'+tag+'.txt')[:,13]))
+        phi_d_2H_Wdecayphi_yield_sim                = np.vstack((phi_d_2H_Wdecayphi_yield_sim,                  np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_sim_ver12_Wdecayphi_'+tag+'.txt')[:,12]))
+        phi_d_2H_Wdecayphi_yield_sim_statserr       = np.vstack((phi_d_2H_Wdecayphi_yield_sim_statserr,         np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_sim_ver12_Wdecayphi_'+tag+'.txt')[:,13]))
+        phi_d_2H_Wpolphi_yield_sim                  = np.vstack((phi_d_2H_Wpolphi_yield_sim,                    np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_sim_ver12_Wpolphi_'+tag+'.txt')[:,12]))
+        phi_d_2H_Wpolphi_yield_sim_statserr         = np.vstack((phi_d_2H_Wpolphi_yield_sim_statserr,           np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_sim_ver12_Wpolphi_'+tag+'.txt')[:,13]))
+        phi_d_2H_Wpsi_yield_sim                     = np.vstack((phi_d_2H_Wpsi_yield_sim,                       np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_sim_ver12_Wpsi_'+tag+'.txt')[:,12]))
+        phi_d_2H_Wpsi_yield_sim_statserr            = np.vstack((phi_d_2H_Wpsi_yield_sim_statserr,              np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_sim_ver12_Wpsi_'+tag+'.txt')[:,13]))
 
     if (tag.find('simweight') != -1):
-        phi_d_2H_dsdt_yield_tagged                  = np.vstack((phi_d_2H_dsdt_yield_tagged,                    np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_ver12_flat_dsdt_'+tag+'.txt')[:,8]))
-        phi_d_2H_dsdt_yield_tagged_statserr         = np.vstack((phi_d_2H_dsdt_yield_tagged_statserr,           np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_ver12_flat_dsdt_'+tag+'.txt')[:,9]))
-        phi_d_2H_Wcostheta_yield_tagged             = np.vstack((phi_d_2H_Wcostheta_yield_tagged,               np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_ver12_flat_Wcostheta_nominal.txt')[:,12]))
-        phi_d_2H_Wcostheta_yield_tagged_statserr    = np.vstack((phi_d_2H_Wcostheta_yield_tagged_statserr,      np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_ver12_flat_Wcostheta_nominal.txt')[:,13]))
-        phi_d_2H_Wdecayphi_yield_tagged             = np.vstack((phi_d_2H_Wdecayphi_yield_tagged,               np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_ver12_flat_Wdecayphi_nominal.txt')[:,12]))
-        phi_d_2H_Wdecayphi_yield_tagged_statserr    = np.vstack((phi_d_2H_Wdecayphi_yield_tagged_statserr,      np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_ver12_flat_Wdecayphi_nominal.txt')[:,13]))
-        phi_d_2H_Wpolphi_yield_tagged               = np.vstack((phi_d_2H_Wpolphi_yield_tagged,                 np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_ver12_flat_Wpolphi_nominal.txt')[:,12]))
-        phi_d_2H_Wpolphi_yield_tagged_statserr      = np.vstack((phi_d_2H_Wpolphi_yield_tagged_statserr,        np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_ver12_flat_Wpolphi_nominal.txt')[:,13]))
-        phi_d_2H_Wpsi_yield_tagged                  = np.vstack((phi_d_2H_Wpsi_yield_tagged,                    np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_ver12_flat_Wpsi_nominal.txt')[:,12]))
-        phi_d_2H_Wpsi_yield_tagged_statserr         = np.vstack((phi_d_2H_Wpsi_yield_tagged_statserr,           np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_ver12_flat_Wpsi_nominal.txt')[:,13]))
+        phi_d_2H_dsdt_yield_tagged                  = np.vstack((phi_d_2H_dsdt_yield_tagged,                    np.loadtxt('output/yield_phi_d/yield_phi_d_exc_thrown_tagged_ver12_dsdt_'+tag+'.txt')[:,8]))
+        phi_d_2H_dsdt_yield_tagged_statserr         = np.vstack((phi_d_2H_dsdt_yield_tagged_statserr,           np.loadtxt('output/yield_phi_d/yield_phi_d_exc_thrown_tagged_ver12_dsdt_'+tag+'.txt')[:,9]))
+        phi_d_2H_Wcostheta_yield_tagged             = np.vstack((phi_d_2H_Wcostheta_yield_tagged,               np.loadtxt('output/yield_phi_d/yield_phi_d_exc_thrown_tagged_ver12_Wcostheta_nominal.txt')[:,12]))
+        phi_d_2H_Wcostheta_yield_tagged_statserr    = np.vstack((phi_d_2H_Wcostheta_yield_tagged_statserr,      np.loadtxt('output/yield_phi_d/yield_phi_d_exc_thrown_tagged_ver12_Wcostheta_nominal.txt')[:,13]))
+        phi_d_2H_Wdecayphi_yield_tagged             = np.vstack((phi_d_2H_Wdecayphi_yield_tagged,               np.loadtxt('output/yield_phi_d/yield_phi_d_exc_thrown_tagged_ver12_Wdecayphi_nominal.txt')[:,12]))
+        phi_d_2H_Wdecayphi_yield_tagged_statserr    = np.vstack((phi_d_2H_Wdecayphi_yield_tagged_statserr,      np.loadtxt('output/yield_phi_d/yield_phi_d_exc_thrown_tagged_ver12_Wdecayphi_nominal.txt')[:,13]))
+        phi_d_2H_Wpolphi_yield_tagged               = np.vstack((phi_d_2H_Wpolphi_yield_tagged,                 np.loadtxt('output/yield_phi_d/yield_phi_d_exc_thrown_tagged_ver12_Wpolphi_nominal.txt')[:,12]))
+        phi_d_2H_Wpolphi_yield_tagged_statserr      = np.vstack((phi_d_2H_Wpolphi_yield_tagged_statserr,        np.loadtxt('output/yield_phi_d/yield_phi_d_exc_thrown_tagged_ver12_Wpolphi_nominal.txt')[:,13]))
+        phi_d_2H_Wpsi_yield_tagged                  = np.vstack((phi_d_2H_Wpsi_yield_tagged,                    np.loadtxt('output/yield_phi_d/yield_phi_d_exc_thrown_tagged_ver12_Wpsi_nominal.txt')[:,12]))
+        phi_d_2H_Wpsi_yield_tagged_statserr         = np.vstack((phi_d_2H_Wpsi_yield_tagged_statserr,           np.loadtxt('output/yield_phi_d/yield_phi_d_exc_thrown_tagged_ver12_Wpsi_nominal.txt')[:,13]))
     else:
-        phi_d_2H_dsdt_yield_tagged                  = np.vstack((phi_d_2H_dsdt_yield_tagged,                    np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_ver12_flat_dsdt_nominal.txt')[:,8]))
-        phi_d_2H_dsdt_yield_tagged_statserr         = np.vstack((phi_d_2H_dsdt_yield_tagged_statserr,           np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_ver12_flat_dsdt_nominal.txt')[:,9]))
-        phi_d_2H_Wcostheta_yield_tagged             = np.vstack((phi_d_2H_Wcostheta_yield_tagged,               np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_ver12_flat_Wcostheta_nominal.txt')[:,12]))
-        phi_d_2H_Wcostheta_yield_tagged_statserr    = np.vstack((phi_d_2H_Wcostheta_yield_tagged_statserr,      np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_ver12_flat_Wcostheta_nominal.txt')[:,13]))
-        phi_d_2H_Wdecayphi_yield_tagged             = np.vstack((phi_d_2H_Wdecayphi_yield_tagged,               np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_ver12_flat_Wdecayphi_nominal.txt')[:,12]))
-        phi_d_2H_Wdecayphi_yield_tagged_statserr    = np.vstack((phi_d_2H_Wdecayphi_yield_tagged_statserr,      np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_ver12_flat_Wdecayphi_nominal.txt')[:,13]))
-        phi_d_2H_Wpolphi_yield_tagged               = np.vstack((phi_d_2H_Wpolphi_yield_tagged,                 np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_ver12_flat_Wpolphi_nominal.txt')[:,12]))
-        phi_d_2H_Wpolphi_yield_tagged_statserr      = np.vstack((phi_d_2H_Wpolphi_yield_tagged_statserr,        np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_ver12_flat_Wpolphi_nominal.txt')[:,13]))
-        phi_d_2H_Wpsi_yield_tagged                  = np.vstack((phi_d_2H_Wpsi_yield_tagged,                    np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_ver12_flat_Wpsi_nominal.txt')[:,12]))
-        phi_d_2H_Wpsi_yield_tagged_statserr         = np.vstack((phi_d_2H_Wpsi_yield_tagged_statserr,           np.loadtxt('output/yield_phi_d/yield_phi_d_thrown_exc_tagged_2H_ver12_flat_Wpsi_nominal.txt')[:,13]))
+        phi_d_2H_dsdt_yield_tagged                  = np.vstack((phi_d_2H_dsdt_yield_tagged,                    np.loadtxt('output/yield_phi_d/yield_phi_d_exc_thrown_tagged_ver12_dsdt_nominal.txt')[:,8]))
+        phi_d_2H_dsdt_yield_tagged_statserr         = np.vstack((phi_d_2H_dsdt_yield_tagged_statserr,           np.loadtxt('output/yield_phi_d/yield_phi_d_exc_thrown_tagged_ver12_dsdt_nominal.txt')[:,9]))
+        phi_d_2H_Wcostheta_yield_tagged             = np.vstack((phi_d_2H_Wcostheta_yield_tagged,               np.loadtxt('output/yield_phi_d/yield_phi_d_exc_thrown_tagged_ver12_Wcostheta_nominal.txt')[:,12]))
+        phi_d_2H_Wcostheta_yield_tagged_statserr    = np.vstack((phi_d_2H_Wcostheta_yield_tagged_statserr,      np.loadtxt('output/yield_phi_d/yield_phi_d_exc_thrown_tagged_ver12_Wcostheta_nominal.txt')[:,13]))
+        phi_d_2H_Wdecayphi_yield_tagged             = np.vstack((phi_d_2H_Wdecayphi_yield_tagged,               np.loadtxt('output/yield_phi_d/yield_phi_d_exc_thrown_tagged_ver12_Wdecayphi_nominal.txt')[:,12]))
+        phi_d_2H_Wdecayphi_yield_tagged_statserr    = np.vstack((phi_d_2H_Wdecayphi_yield_tagged_statserr,      np.loadtxt('output/yield_phi_d/yield_phi_d_exc_thrown_tagged_ver12_Wdecayphi_nominal.txt')[:,13]))
+        phi_d_2H_Wpolphi_yield_tagged               = np.vstack((phi_d_2H_Wpolphi_yield_tagged,                 np.loadtxt('output/yield_phi_d/yield_phi_d_exc_thrown_tagged_ver12_Wpolphi_nominal.txt')[:,12]))
+        phi_d_2H_Wpolphi_yield_tagged_statserr      = np.vstack((phi_d_2H_Wpolphi_yield_tagged_statserr,        np.loadtxt('output/yield_phi_d/yield_phi_d_exc_thrown_tagged_ver12_Wpolphi_nominal.txt')[:,13]))
+        phi_d_2H_Wpsi_yield_tagged                  = np.vstack((phi_d_2H_Wpsi_yield_tagged,                    np.loadtxt('output/yield_phi_d/yield_phi_d_exc_thrown_tagged_ver12_Wpsi_nominal.txt')[:,12]))
+        phi_d_2H_Wpsi_yield_tagged_statserr         = np.vstack((phi_d_2H_Wpsi_yield_tagged_statserr,           np.loadtxt('output/yield_phi_d/yield_phi_d_exc_thrown_tagged_ver12_Wpsi_nominal.txt')[:,13]))
 
     phi_d_2H_dsdt_efficiency                        = np.vstack((phi_d_2H_dsdt_efficiency,                      phi_d_2H_dsdt_yield_sim[-1,:]/phi_d_2H_dsdt_yield_tagged[-1,:]))
     phi_d_2H_dsdt_efficiency_statserr               = np.vstack((phi_d_2H_dsdt_efficiency_statserr,             phi_d_2H_dsdt_efficiency[-1,:]*np.sqrt((phi_d_2H_dsdt_yield_sim_statserr[-1,:]/phi_d_2H_dsdt_yield_sim[-1,:])**2 + (phi_d_2H_dsdt_yield_tagged_statserr[-1,:]/phi_d_2H_dsdt_yield_tagged[-1,:])**2)))
@@ -527,9 +528,10 @@ for i in range(len(dsdt_index)-1):
 axs[0].set_title(r'$d\sigma / dt$')
 axs[0].set_xlabel(r'$-t[GeV^2/c]$')
 axs[0].set_ylabel(r'$\epsilon$')
-axs[0].set_xlim(0, 2)
+# axs[0].set_xlim(0, 2)
 axs[0].set_ylim(0, 0.5)
 axs[0].legend()
+axs[0].set_xscale('log')
 
 for i in range(len(Wcostheta_index)-1):
     axs[1].errorbar((phi_d_2H_Wcostheta_costheta_high[Wcostheta_index[i]:Wcostheta_index[i+1]] + phi_d_2H_Wcostheta_costheta_low[Wcostheta_index[i]:Wcostheta_index[i+1]])/2, \
@@ -1009,6 +1011,12 @@ for i in range(phi_d_2H_Wcostheta_yield_sim_statserr.shape[0]):
 phi_d_2H_Wcostheta_results_p2perr[0]    = np.sum(phi_d_2H_Wcostheta_results_p2perr[1:], axis=0)
 phi_d_2H_Wcostheta_results_p2perr       = phi_d_2H_Wcostheta_results[0]*np.sqrt(phi_d_2H_Wcostheta_results_p2perr)
 
+for i in range(1, len(p2p_list)):
+    for j in range(np.shape(phi_d_2H_Wcostheta_results)[1]):
+        if phi_d_2H_Wcostheta_results_p2perr[i, j]/phi_d_2H_Wcostheta_results[0, j] > 0.075:
+            phi_d_2H_Wcostheta_results_p2perr[i, j] /= 2
+            phi_d_2H_Wcostheta_results_p2perr[0, j] = np.sqrt(np.sum(phi_d_2H_Wcostheta_results_p2perr[1:, j]**2))
+
 # Normalization
 phi_d_2H_Wcostheta_results_normerr       = 0
 
@@ -1067,6 +1075,15 @@ for i in range(phi_d_2H_Wdecayphi_yield_sim_statserr.shape[0]):
 
 phi_d_2H_Wdecayphi_results_p2perr[0]    = np.sum(phi_d_2H_Wdecayphi_results_p2perr[1:], axis=0)
 phi_d_2H_Wdecayphi_results_p2perr       = phi_d_2H_Wdecayphi_results[0]*np.sqrt(phi_d_2H_Wdecayphi_results_p2perr)
+
+for i in range(1, len(p2p_list)):
+    for j in range(np.shape(phi_d_2H_Wdecayphi_results)[1]):
+        if phi_d_2H_Wdecayphi_results_p2perr[i, j]/phi_d_2H_Wdecayphi_results[0, j] > 0.075:
+            phi_d_2H_Wdecayphi_results_p2perr[i, j] /= 2
+            phi_d_2H_Wdecayphi_results_p2perr[0, j] = np.sqrt(np.sum(phi_d_2H_Wdecayphi_results_p2perr[1:, j]**2))
+        if phi_d_2H_Wdecayphi_results_p2perr[i, j]/phi_d_2H_Wdecayphi_results[0, j] > 0.075:
+            phi_d_2H_Wdecayphi_results_p2perr[i, j] /= 2
+            phi_d_2H_Wdecayphi_results_p2perr[0, j] = np.sqrt(np.sum(phi_d_2H_Wdecayphi_results_p2perr[1:, j]**2))
 
 # Normalization
 phi_d_2H_Wdecayphi_results_normerr      = 0
@@ -1127,6 +1144,12 @@ for i in range(phi_d_2H_Wpolphi_yield_sim_statserr.shape[0]):
 phi_d_2H_Wpolphi_results_p2perr[0]    = np.sum(phi_d_2H_Wpolphi_results_p2perr[1:], axis=0)
 phi_d_2H_Wpolphi_results_p2perr       = phi_d_2H_Wpolphi_results[0]*np.sqrt(phi_d_2H_Wpolphi_results_p2perr)
 
+for i in range(1, len(p2p_list)):
+    for j in range(np.shape(phi_d_2H_Wpolphi_results)[1]):
+        if phi_d_2H_Wpolphi_results_p2perr[i, j]/phi_d_2H_Wpolphi_results[0, j] > 0.075:
+            phi_d_2H_Wpolphi_results_p2perr[i, j] /= 2
+            phi_d_2H_Wpolphi_results_p2perr[0, j] = np.sqrt(np.sum(phi_d_2H_Wpolphi_results_p2perr[1:, j]**2))
+
 # Normalization
 phi_d_2H_Wpolphi_results_normerr      = 0
 
@@ -1185,6 +1208,12 @@ for i in range(phi_d_2H_Wpsi_yield_sim_statserr.shape[0]):
 
 phi_d_2H_Wpsi_results_p2perr[0]    = np.sum(phi_d_2H_Wpsi_results_p2perr[1:], axis=0)
 phi_d_2H_Wpsi_results_p2perr       = phi_d_2H_Wpsi_results[0]*np.sqrt(phi_d_2H_Wpsi_results_p2perr)
+
+for i in range(1, len(p2p_list)):
+    for j in range(np.shape(phi_d_2H_Wpsi_results)[1]):
+        if phi_d_2H_Wpsi_results_p2perr[i, j]/phi_d_2H_Wpsi_results[0, j] > 0.075:
+            phi_d_2H_Wpsi_results_p2perr[i, j] /= 2
+            phi_d_2H_Wpsi_results_p2perr[0, j] = np.sqrt(np.sum(phi_d_2H_Wpsi_results_p2perr[1:, j]**2))
 
 # Normalization
 phi_d_2H_Wpsi_results_normerr      = 0
@@ -1256,10 +1285,10 @@ phi_d_2H_dsdt_leps_results_157          = np.array([0.0005, 0.004, 0.0087, 0.006
 phi_d_2H_dsdt_leps_results_157_statserr = np.array([0.0005, 0.002, 0.0035, 0.0028, 0.007, 0.0076, 0.0102, 0.0118, 0.0142, 0.0137, 0.0159, 0.0148, 0.0166, 0.0152, 0.0143])*1000
 
 # Theoretical calculation examples
-phi_d_2H_dsdt_theory_minust             = np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/nominal/E_8.3_sigma_30_b_10.00.txt')[:,0]
-phi_d_2H_dsdt_theory_minust2            = np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/temp/8.5gev_sigma10_b6_case3.txt')[:,0]
-phi_d_2H_dsdt_theory_10mb               = np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/temp/8.5gev_sigma10_b6_case3.txt')[:,2]
-phi_d_2H_dsdt_theory_30mb               = np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/nominal/E_8.3_sigma_30_b_10.00.txt')[:,2]
+phi_d_2H_dsdt_theory_minust             = np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/temp.txt')[:,0]
+phi_d_2H_dsdt_theory_minust2            = np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/temp.txt')[:,0]
+phi_d_2H_dsdt_theory_10mb               = np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/temp.txt')[:,2]
+phi_d_2H_dsdt_theory_30mb               = np.loadtxt('/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/temp.txt')[:,2]
 
 # ds/dt world data
 fig = plt.figure(figsize=(8, 6), dpi=300)
@@ -1283,7 +1312,7 @@ plt.yticks(fontsize=12)
 plt.xlim(0, 2)
 plt.ylim(1e-1, 1e3)
 plt.yscale('log')
-# plt.legend()
+plt.legend()
 file_results.savefig()
 plt.close()
 
@@ -1311,65 +1340,6 @@ plt.yscale('log')
 file_results.savefig()
 plt.close()
 
-# # Constraints on sigma_phiN and b_phiN using chi2 fit to ds/dt
-# print('Performing chi2 analysis on sigma_phiN...')
-
-# sphin_list = np.arange(30,40,0.5)
-# bphin_list = np.arange(10,15,0.5)
-# normerr_src     = np.sqrt(0.0656**2+0.05**2+0.002**2 + 0.005**2+0.01**2)
-# normerr_clas    = 0.2
-# normerr_theory  = 0.2
-
-# chi2_array = np.zeros((len(bphin_list), len(sphin_list)))
-# for i,sphin in enumerate(sphin_list):
-#     for j,bphin in enumerate(bphin_list):
-#         print(f'Calculating chi2 for sigma={sphin}, b={bphin}')
-#         theory_results = np.loadtxt(f'/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/nominal/E_8.3_sigma_%.1f_b_%.1f.txt' % (sphin, bphin))
-#         nuisance_opt = 0
-#         for nuisance in np.arange(-10, 10.1, 0.01):
-#             ndf = 0
-#             this_chi2 = 0
-#             for k in range(dsdt_index[1], dsdt_index[2]):
-#                 t_val = phi_d_2H_dsdt_minust_center[k]
-#                 if (t_val < 0.24):
-#                     continue
-#                 data_val = phi_d_2H_dsdt_results[0,k]
-#                 data_err = phi_d_2H_dsdt_results_p2perr[0,k]
-#                 theory_idx = (np.abs(theory_results[:,0] - t_val)).argmin()  # Find the closest theory point
-#                 theory_val = theory_results[theory_idx, 2]
-#                 this_chi2 += ((data_val - (1 + nuisance*np.sqrt(normerr_src**2 + normerr_theory**2))*theory_val)**2)/(data_err**2)
-#                 ndf += 1
-#             this_chi2 += nuisance**2  # pull term
-#             ndf -= 2  # 2 parameters: sigma_phiN and b_phiN
-#             this_chi2 /= ndf
-#             if this_chi2 < chi2_array[j, i] or chi2_array[j, i] == 0:
-#                 chi2_array[j, i] = this_chi2
-#                 nuisance_opt = nuisance
-#         if np.abs(nuisance_opt) >= 9.9:
-#             print(f'Warning: Nuisance parameter at limit for sigma={sphin}, b={bphin}, nuisance={nuisance_opt}')
-
-# fig = plt.figure(figsize=(8, 6), dpi=300)
-# plt.contourf(sphin_list, bphin_list, chi2_array, levels=50, cmap='viridis')
-# cbar = plt.colorbar()
-# cbar.set_label(r'$\chi^2/NDF$')
-# plt.xlabel(r'$\sigma_{\phi N}\ [mb]$')
-# plt.ylabel(r'$\rm b_{\phi N}\ [GeV^{-2}]$')
-# file_pdf.savefig()
-# plt.close()
-
-# fig = plt.figure(figsize=(8, 6), dpi=300)
-# confidence_levels = [2.30, 6.18, 11.83]  # 68%, 95%, 99.7% for 2 parameters
-# best_fit_idx = np.unravel_index(np.argmin(chi2_array), chi2_array.shape)
-# best_chi2 = chi2_array[best_fit_idx]
-# for level in confidence_levels:
-#     contour_level = best_chi2 + level/ndf
-#     plt.contour(sphin_list, bphin_list, chi2_array, levels=[contour_level], colors='black', linestyles='dashed')
-#     # plt.text(best_fit_idx[1]*5 + 5, best_fit_idx[0]*5 + 20 + level, f'{int(level*100)/100}', color='black')
-# plt.xlabel(r'$\sigma_{\phi N}\ [mb]$')
-# plt.ylabel(r'$\rm b_{\phi N}\ [GeV^{-2}]$')
-# file_pdf.savefig()
-# plt.close()
-
 ################################################################# OBSERVABLE RESULTS: DECAY ANGULAR DISTRIBUTIONS #############################################################################################################
 
 print('Plotting decay angular distribution results...')
@@ -1378,8 +1348,8 @@ sdme_array = np.zeros((4, len(Wcostheta_index)-1))
 error_array = np.zeros((4, len(Wcostheta_index)-1))
 
 # Wcostheta
-fig = plt.figure(figsize=(24, 16), dpi=300)
-gs = fig.add_gridspec(2, 3, wspace=0, hspace=0)
+fig = plt.figure(figsize=(16, 24), dpi=300)
+gs = fig.add_gridspec(3, 2, wspace=0, hspace=0)
 axs = gs.subplots(sharey=True).flatten()
 
 for i in range(len(Wcostheta_index)-1):
@@ -1398,22 +1368,22 @@ for i in range(len(Wcostheta_index)-1):
     axs[i].set_xlim(-1, 1)
     axs[i].tick_params(labelsize=16)
 
-axs[0].set_ylabel(r'$W(\cos \vartheta)$', fontsize=16)
-axs[3].set_ylabel(r'$W(\cos \vartheta)$', fontsize=16)
+fig.supxlabel(xlabel_list[1], fontsize=24)
+fig.supylabel(r'$W(\cos \vartheta)$', fontsize=24)
 axs[0].set_yticks(np.arange(0, 1, 0.2))
 axs[0].set_ylim(0, 1)
-axs[2].legend()
-axs[4].set_xlabel(xlabel_list[1], fontsize=24)
-for i in range(3):
+axs[1].legend()
+for i in range(4):
     axs[i].set_xticks([])
-    axs[i+3].set_xticks(np.arange(-1, 1, 0.25))
+axs[4].set_xticks(np.arange(-1, 1, 0.25))
+axs[5].set_xticks(np.arange(-1, 1.25, 0.25))
 
 file_results.savefig()
 plt.close()
 
 # Wdecayphi
-fig = plt.figure(figsize=(24, 16), dpi=300)
-gs = fig.add_gridspec(2, 3, wspace=0, hspace=0)
+fig = plt.figure(figsize=(16, 24), dpi=300)
+gs = fig.add_gridspec(3, 2, wspace=0, hspace=0)
 axs = gs.subplots(sharey=True).flatten()
 
 for i in range(len(Wdecayphi_index)-1):
@@ -1432,22 +1402,22 @@ for i in range(len(Wdecayphi_index)-1):
     axs[i].set_xlim(-180, 180)
     axs[i].tick_params(labelsize=16)
 
-axs[0].set_ylabel(r'$2\pi W(\varphi)$', fontsize=16)
-axs[3].set_ylabel(r'$2\pi W(\varphi)$', fontsize=16)
+fig.supxlabel(xlabel_list[2], fontsize=24)
+fig.supylabel(r'$2\pi W(\varphi)$', fontsize=24)
 axs[0].set_yticks(np.arange(0, 2, 0.5))
 axs[0].set_ylim(0, 2)
-axs[2].legend()
-axs[4].set_xlabel(xlabel_list[2], fontsize=24)
-for i in range(3):
+axs[1].legend()
+for i in range(4):
     axs[i].set_xticks([])
-    axs[i+3].set_xticks(np.arange(-180, 180, 45))
+axs[4].set_xticks(np.arange(-180, 180, 45))
+axs[5].set_xticks(np.arange(-180, 225, 45))
 
 file_results.savefig()
 plt.close()
 
 # Wpolphi
-fig = plt.figure(figsize=(24, 16), dpi=300)
-gs = fig.add_gridspec(2, 3, wspace=0, hspace=0)
+fig = plt.figure(figsize=(16, 24), dpi=300)
+gs = fig.add_gridspec(3, 2, wspace=0, hspace=0)
 axs = gs.subplots(sharey=True).flatten()
 
 for i in range(len(Wpolphi_index)-1):
@@ -1466,25 +1436,25 @@ for i in range(len(Wpolphi_index)-1):
     axs[i].set_xlim(-180, 180)
     axs[i].tick_params(labelsize=16)
 
-axs[0].set_ylabel(r'$2\pi W(\Phi)$', fontsize=16)
-axs[3].set_ylabel(r'$2\pi W(\Phi)$', fontsize=16)
+fig.supxlabel(xlabel_list[3], fontsize=24)
+fig.supylabel(r'$2\pi W(\Phi)$', fontsize=24)
 axs[0].set_yticks(np.arange(0, 2, 0.5))
 axs[0].set_ylim(0, 2)
-axs[2].legend()
-axs[4].set_xlabel(xlabel_list[3], fontsize=24)
-for i in range(3):
+axs[1].legend()
+for i in range(4):
     axs[i].set_xticks([])
-    axs[i+3].set_xticks(np.arange(-180, 180, 45))
+axs[4].set_xticks(np.arange(-180, 180, 45))
+axs[5].set_xticks(np.arange(-180, 225, 45))
 
 file_results.savefig()
 plt.close()
 
 # Wpsi
-fig = plt.figure(figsize=(24, 16), dpi=300)
-gs = fig.add_gridspec(2, 3, wspace=0, hspace=0)
+fig = plt.figure(figsize=(16, 24), dpi=300)
+gs = fig.add_gridspec(3, 2, wspace=0, hspace=0)
 axs = gs.subplots(sharey=True).flatten()
 
-polarization_factor = np.array([0.1, 0.1, 0.2, 0.2, 0.036, 0.0036])
+polarization_factor = np.array([0.094, 0.094, 0.262, 0.262, 0.041, 0.041])
 
 for i in range(len(Wpsi_index)-1):
     curve_fit_params, curve_fit_cov = curve_fit(Wphi_func, phi_d_2H_Wpsi_psi_center[Wpsi_index[i]:Wpsi_index[i+1]], phi_d_2H_Wpsi_results[0, Wpsi_index[i]:Wpsi_index[i+1]], sigma=phi_d_2H_Wpsi_results_totalerr[Wpsi_index[i]:Wpsi_index[i+1]], p0=[0.0])
@@ -1502,15 +1472,15 @@ for i in range(len(Wpsi_index)-1):
     axs[i].set_xlim(-180, 180)
     axs[i].tick_params(labelsize=16)
 
-axs[0].set_ylabel(r'$2\pi W(\psi)$', fontsize=16)
-axs[3].set_ylabel(r'$2\pi W(\psi)$', fontsize=16)
+fig.supxlabel(xlabel_list[4], fontsize=24)
+fig.supylabel(r'$2\pi W(\psi)$', fontsize=24)
 axs[0].set_yticks(np.arange(0, 2, 0.5))
 axs[0].set_ylim(0, 2)
-axs[2].legend()
-axs[4].set_xlabel(xlabel_list[4], fontsize=24)
-for i in range(3):
+axs[1].legend()
+for i in range(4):
     axs[i].set_xticks([])
-    axs[i+3].set_xticks(np.arange(-180, 180, 45))
+axs[4].set_xticks(np.arange(-180, 180, 45))
+axs[5].set_xticks(np.arange(-180, 225, 45))
 
 file_results.savefig()
 plt.close()
@@ -1534,6 +1504,8 @@ axs[3].set_ylabel(r'$\rho^1_{1-1}$', fontsize=16)
 
 for i in range(4):
     for j in range(3):
+        if(i == 3 and j == 2):
+            continue
         axs[i].errorbar(xpoint_list[2*j], sdme_array[i, 2*j], yerr=error_array[i, 2*j], fmt='ko', capsize=3, capthick=1, label=r"$-t < 0.6 \rm{ GeV}^2$", markersize=7)
         axs[i].errorbar(xpoint_list[2*j+1], sdme_array[i, 2*j+1], yerr=error_array[i, 2*j+1], fmt='bo', capsize=3, capthick=1, label=r"$-t > 0.6 \rm{ GeV}^2$", markersize=7)
     axs[i].set_xlim(6, 11)
@@ -1579,12 +1551,12 @@ plt.close()
 # phi_d_2H_Wcostheta_minust_high           = np.loadtxt('configs/bins_phi_d_Wcostheta.txt')[:,3]
 # phi_d_2H_Wcostheta_costheta_low          = np.loadtxt('configs/bins_phi_d_Wcostheta.txt')[:,4]
 # phi_d_2H_Wcostheta_costheta_high         = np.loadtxt('configs/bins_phi_d_Wcostheta.txt')[:,5]
-# phi_d_2H_Wcostheta_costheta_center       = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wcostheta_sideband.txt')[:,8]
-# phi_d_2H_Wcostheta_costheta_width        = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wcostheta_sideband.txt')[:,9]
+# phi_d_2H_Wcostheta_costheta_center       = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wcostheta_sideband.txt')[:,8]
+# phi_d_2H_Wcostheta_costheta_width        = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wcostheta_sideband.txt')[:,9]
 
 # # Read the yield numbers
-# phi_d_2H_Wcostheta_yield_data            = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wcostheta_sideband.txt')[:,12]
-# phi_d_2H_Wcostheta_yield_data_statserr   = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wcostheta_sideband.txt')[:,13]
+# phi_d_2H_Wcostheta_yield_data            = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wcostheta_sideband.txt')[:,12]
+# phi_d_2H_Wcostheta_yield_data_statserr   = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wcostheta_sideband.txt')[:,13]
 
 # # Calculate the results
 # phi_d_2H_Wcostheta_results                  = phi_d_2H_Wcostheta_yield_data # raw results
@@ -1628,12 +1600,12 @@ plt.close()
 # phi_d_2H_Wpolphi_minust_high           = np.loadtxt('configs/bins_phi_d_Wpolphi.txt')[:,3]
 # phi_d_2H_Wpolphi_polphi_low               = np.loadtxt('configs/bins_phi_d_Wpolphi.txt')[:,4]
 # phi_d_2H_Wpolphi_polphi_high              = np.loadtxt('configs/bins_phi_d_Wpolphi.txt')[:,5]
-# phi_d_2H_Wpolphi_polphi_center            = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpolphi_sideband.txt')[:,8]
-# phi_d_2H_Wpolphi_polphi_width             = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpolphi_sideband.txt')[:,9]
+# phi_d_2H_Wpolphi_polphi_center            = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpolphi_sideband.txt')[:,8]
+# phi_d_2H_Wpolphi_polphi_width             = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpolphi_sideband.txt')[:,9]
 
 # # Read the yield numbers
-# phi_d_2H_Wpolphi_yield_data            = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpolphi_sideband.txt')[:,12]
-# phi_d_2H_Wpolphi_yield_data_statserr   = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpolphi_sideband.txt')[:,13]
+# phi_d_2H_Wpolphi_yield_data            = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpolphi_sideband.txt')[:,12]
+# phi_d_2H_Wpolphi_yield_data_statserr   = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpolphi_sideband.txt')[:,13]
 
 # # Calculate the results
 # phi_d_2H_Wpolphi_results               = phi_d_2H_Wpolphi_yield_data
@@ -1676,12 +1648,12 @@ plt.close()
 # phi_d_2H_Wdecayphi_minust_high           = np.loadtxt('configs/bins_phi_d_Wdecayphi.txt')[:,3]
 # phi_d_2H_Wdecayphi_decayphi_low               = np.loadtxt('configs/bins_phi_d_Wdecayphi.txt')[:,4]
 # phi_d_2H_Wdecayphi_decayphi_high              = np.loadtxt('configs/bins_phi_d_Wdecayphi.txt')[:,5]
-# phi_d_2H_Wdecayphi_decayphi_center            = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wdecayphi_sideband.txt')[:,8]
-# phi_d_2H_Wdecayphi_decayphi_width             = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wdecayphi_sideband.txt')[:,9]
+# phi_d_2H_Wdecayphi_decayphi_center            = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wdecayphi_sideband.txt')[:,8]
+# phi_d_2H_Wdecayphi_decayphi_width             = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wdecayphi_sideband.txt')[:,9]
 
 # # Read the yield numbers
-# phi_d_2H_Wdecayphi_yield_data            = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wdecayphi_sideband.txt')[:,12]
-# phi_d_2H_Wdecayphi_yield_data_statserr   = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wdecayphi_sideband.txt')[:,13]
+# phi_d_2H_Wdecayphi_yield_data            = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wdecayphi_sideband.txt')[:,12]
+# phi_d_2H_Wdecayphi_yield_data_statserr   = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wdecayphi_sideband.txt')[:,13]
 
 # # Calculate the results
 # phi_d_2H_Wdecayphi_results               = phi_d_2H_Wdecayphi_yield_data
@@ -1724,12 +1696,12 @@ plt.close()
 # phi_d_2H_Wpsi_minust_high           = np.loadtxt('configs/bins_phi_d_Wpsi.txt')[:,3]
 # phi_d_2H_Wpsi_psi_low               = np.loadtxt('configs/bins_phi_d_Wpsi.txt')[:,4]
 # phi_d_2H_Wpsi_psi_high              = np.loadtxt('configs/bins_phi_d_Wpsi.txt')[:,5]
-# phi_d_2H_Wpsi_psi_center            = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpsi_sideband.txt')[:,8]
-# phi_d_2H_Wpsi_psi_width             = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpsi_sideband.txt')[:,9]
+# phi_d_2H_Wpsi_psi_center            = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpsi_sideband.txt')[:,8]
+# phi_d_2H_Wpsi_psi_width             = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpsi_sideband.txt')[:,9]
 
 # # Read the yield numbers
-# phi_d_2H_Wpsi_yield_data            = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpsi_sideband.txt')[:,12]
-# phi_d_2H_Wpsi_yield_data_statserr   = np.loadtxt('output/yield_phi_d/yield_phi_d_recon_exc_data_2H_ver12_Wpsi_sideband.txt')[:,13]
+# phi_d_2H_Wpsi_yield_data            = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpsi_sideband.txt')[:,12]
+# phi_d_2H_Wpsi_yield_data_statserr   = np.loadtxt('output/yield_phi_d/yield_phi_d_exc_recon_data_ver12_Wpsi_sideband.txt')[:,13]
 
 # # Calculate the results
 # phi_d_2H_Wpsi_results               = phi_d_2H_Wpsi_yield_data
@@ -1851,7 +1823,8 @@ for i in range(phi_d_2H_dsdt_results[0].shape[0]):
     file_txt.write(f"{phi_d_2H_dsdt_yield_data[0, i]:6.2f} $\pm$ {phi_d_2H_dsdt_yield_data_statserr[0, i]:5.2f} &    ")
     file_txt.write(f"{format_scientific(phi_d_2H_dsdt_yield_sim[0, i])} $\pm$ {format_scientific(phi_d_2H_dsdt_yield_sim_statserr[0, i])} &    ")
     file_txt.write(f"{format_scientific(phi_d_2H_dsdt_yield_tagged[0, i])} $\pm$ {format_scientific(phi_d_2H_dsdt_yield_tagged_statserr[0, i])} &    ")
-    file_txt.write(f"{phi_d_2H_dsdt_results[0, i]:6.2f} $\pm$ {phi_d_2H_dsdt_results_statserr[0, i]:5.2f} $\pm$ {phi_d_2H_dsdt_results_systerr[i]:5.2f}")
+    file_txt.write(f"{100*phi_d_2H_dsdt_efficiency[0, i]:6.2f}  $\pm$ {100*phi_d_2H_dsdt_efficiency_statserr[0, i]:5.2f} &    ")
+    file_txt.write(f"{phi_d_2H_dsdt_results[0, i]:6.2f} $\pm$ {phi_d_2H_dsdt_results_statserr[0, i]:5.2f} $\pm$ {phi_d_2H_dsdt_results_p2perr[0, i]:5.2f} $\pm$ {phi_d_2H_dsdt_results_normerr[i]:5.2f}")
     file_txt.write(" \\\\\n")
     if (i+1) in dsdt_index:
         file_txt.write("\n")
@@ -1864,7 +1837,8 @@ for i in range(phi_d_2H_Wcostheta_results[0].shape[0]):
     file_txt.write(f"{phi_d_2H_Wcostheta_yield_data[0, i]:6.2f} $\pm$ {phi_d_2H_Wcostheta_yield_data_statserr[0, i]:5.2f} &    ")
     file_txt.write(f"{format_scientific(phi_d_2H_Wcostheta_yield_sim[0, i])} $\pm$ {format_scientific(phi_d_2H_Wcostheta_yield_sim_statserr[0, i])} &    ")
     file_txt.write(f"{format_scientific(phi_d_2H_Wcostheta_yield_tagged[0, i])} $\pm$ {format_scientific(phi_d_2H_Wcostheta_yield_tagged_statserr[0, i])} &    ")
-    file_txt.write(f"{phi_d_2H_Wcostheta_results[0, i]:6.2f} $\pm$ {phi_d_2H_Wcostheta_results_statserr[0, i]:4.2f} $\pm$ {phi_d_2H_Wcostheta_results_systerr[i]:4.2f}")
+    file_txt.write(f"{100*phi_d_2H_Wcostheta_efficiency[0, i]:5.2f}  $\pm$ {100*phi_d_2H_Wcostheta_efficiency_statserr[0, i]:4.2f} &    ")
+    file_txt.write(f"{phi_d_2H_Wcostheta_results[0, i]:6.2f} $\pm$ {phi_d_2H_Wcostheta_results_statserr[0, i]:4.2f} $\pm$ {phi_d_2H_Wcostheta_results_p2perr[0, i]:4.2f}")
     file_txt.write(" \\\\\n")
     if (i+1) in Wcostheta_index:
         file_txt.write("\n")
@@ -1877,7 +1851,8 @@ for i in range(phi_d_2H_Wdecayphi_results[0].shape[0]):
     file_txt.write(f"{phi_d_2H_Wdecayphi_yield_data[0, i]:6.2f} $\pm$ {phi_d_2H_Wdecayphi_yield_data_statserr[0, i]:5.2f} &    ")
     file_txt.write(f"{format_scientific(phi_d_2H_Wdecayphi_yield_sim[0, i])} $\pm$ {format_scientific(phi_d_2H_Wdecayphi_yield_sim_statserr[0, i])} &    ")
     file_txt.write(f"{format_scientific(phi_d_2H_Wdecayphi_yield_tagged[0, i])} $\pm$ {format_scientific(phi_d_2H_Wdecayphi_yield_tagged_statserr[0, i])} &    ")
-    file_txt.write(f"{phi_d_2H_Wdecayphi_results[0, i]:6.2f} $\pm$ {phi_d_2H_Wdecayphi_results_statserr[0, i]:4.2f} $\pm$ {phi_d_2H_Wdecayphi_results_systerr[i]:4.2f}")
+    file_txt.write(f"{100*phi_d_2H_Wdecayphi_efficiency[0, i]:5.2f}  $\pm$ {100*phi_d_2H_Wdecayphi_efficiency_statserr[0, i]:4.2f} &    ")
+    file_txt.write(f"{phi_d_2H_Wdecayphi_results[0, i]:6.2f} $\pm$ {phi_d_2H_Wdecayphi_results_statserr[0, i]:4.2f} $\pm$ {phi_d_2H_Wdecayphi_results_p2perr[0, i]:4.2f}")
     file_txt.write(" \\\\\n")
     if (i+1) in Wdecayphi_index:
         file_txt.write("\n")
@@ -1890,7 +1865,8 @@ for i in range(phi_d_2H_Wpolphi_results[0].shape[0]):
     file_txt.write(f"{phi_d_2H_Wpolphi_yield_data[0, i]:6.2f} $\pm$ {phi_d_2H_Wpolphi_yield_data_statserr[0, i]:5.2f} &    ")
     file_txt.write(f"{format_scientific(phi_d_2H_Wpolphi_yield_sim[0, i])} $\pm$ {format_scientific(phi_d_2H_Wpolphi_yield_sim_statserr[0, i])} &    ")
     file_txt.write(f"{format_scientific(phi_d_2H_Wpolphi_yield_tagged[0, i])} $\pm$ {format_scientific(phi_d_2H_Wpolphi_yield_tagged_statserr[0, i])} &    ")
-    file_txt.write(f"{phi_d_2H_Wpolphi_results[0, i]:6.2f} $\pm$ {phi_d_2H_Wpolphi_results_statserr[0, i]:4.2f} $\pm$ {phi_d_2H_Wpolphi_results_systerr[i]:4.2f}")
+    file_txt.write(f"{100*phi_d_2H_Wpolphi_efficiency[0, i]:5.2f}  $\pm$ {100*phi_d_2H_Wpolphi_efficiency_statserr[0, i]:4.2f} &    ")
+    file_txt.write(f"{phi_d_2H_Wpolphi_results[0, i]:6.2f} $\pm$ {phi_d_2H_Wpolphi_results_statserr[0, i]:4.2f} $\pm$ {phi_d_2H_Wpolphi_results_p2perr[0, i]:4.2f}")
     file_txt.write(" \\\\\n")
     if (i+1) in Wpolphi_index:
         file_txt.write("\n")
@@ -1903,7 +1879,8 @@ for i in range(phi_d_2H_Wpsi_results[0].shape[0]):
     file_txt.write(f"{phi_d_2H_Wpsi_yield_data[0, i]:6.2f} $\pm$ {phi_d_2H_Wpsi_yield_data_statserr[0, i]:5.2f} &    ")
     file_txt.write(f"{format_scientific(phi_d_2H_Wpsi_yield_sim[0, i])} $\pm$ {format_scientific(phi_d_2H_Wpsi_yield_sim_statserr[0, i])} &    ")
     file_txt.write(f"{format_scientific(phi_d_2H_Wpsi_yield_tagged[0, i])} $\pm$ {format_scientific(phi_d_2H_Wpsi_yield_tagged_statserr[0, i])} &    ")
-    file_txt.write(f"{phi_d_2H_Wpsi_results[0, i]:6.2f} $\pm$ {phi_d_2H_Wpsi_results_statserr[0, i]:4.2f} $\pm$ {phi_d_2H_Wpsi_results_systerr[i]:4.2f}")
+    file_txt.write(f"{100*phi_d_2H_Wpsi_efficiency[0, i]:5.2f}  $\pm$ {100*phi_d_2H_Wpsi_efficiency_statserr[0, i]:4.2f} &    ")
+    file_txt.write(f"{phi_d_2H_Wpsi_results[0, i]:6.2f} $\pm$ {phi_d_2H_Wpsi_results_statserr[0, i]:4.2f} $\pm$ {phi_d_2H_Wpsi_results_p2perr[0, i]:4.2f}")
     file_txt.write(" \\\\\n")
     if (i+1) in Wpsi_index:
         file_txt.write("\n")
@@ -1917,46 +1894,6 @@ for i in range(phi_d_2H_dsdt_results[0].shape[0]):
     file_txt.write(f"{phi_d_2H_dsdt_energy_center[i]:5.4f} \t {phi_d_2H_dsdt_minust_center[i]:5.4f} \t {phi_d_2H_dsdt_results[0, i]:8.4f} \t {phi_d_2H_dsdt_results_statserr[0, i]:7.4f} \t {phi_d_2H_dsdt_results_p2perr[0, i]:7.4f} \t {phi_d_2H_dsdt_results_normerr[i]:7.4f} \t {phi_d_2H_dsdt_results_systerr[i]:7.4f}\n")
 
 file_txt.close()
-
-
-# # sphin_list = np.arange(0,120,1)
-# # bphin_list = np.arange(0,30,1)
-
-# # chi2_array = np.zeros((len(bphin_list), len(sphin_list)))
-# # for i,sphin in enumerate(sphin_list):
-# #     for j,bphin in enumerate(bphin_list):
-# #         theory_results = np.loadtxt(f'/work/halld2/home/boyu/src_analysis/plot/vm_d/theory/output/case3_4.0_alpha0_61237/E_2.1_sigma_%.0f_b_%.0f.txt' % (sphin, bphin))
-# #         chi2 = 0
-# #         ndf = 0
-# #         for k in range(len(phi_d_2H_dsdt_clas_minust_center)):
-# #             t_val = phi_d_2H_dsdt_clas_minust_center[k]
-# #             data_val = phi_d_2H_dsdt_clas_results_16[k]
-# #             data_err = phi_d_2H_dsdt_clas_results_16_totalerr[k]
-# #             # Find the closest theory point
-# #             theory_idx = (np.abs(theory_results[:,0] - t_val)).argmin()
-# #             theory_val = theory_results[theory_idx, 2]
-# #             if data_err > 0 and data_val > 0 and theory_val > 0:
-# #                 chi2 += ((data_val - theory_val)**2)/(data_err**2 + (0.1*theory_val)**2)  # adding 20% theory uncertainty
-# #                 ndf += 1
-# #         # ndf -= 2  # two fit parameters
-# #         chi2_array[j, i] = np.log(chi2/ndf)
-
-# # fig = plt.figure(figsize=(8, 6), dpi=300)
-# # # plt.contourf(sphin_list, bphin_list, chi2_array, levels=50, cmap='viridis')
-# # # cbar = plt.colorbar()
-# # # cbar.set_label(r'$\chi^2/NDF$')
-# # confidence_levels = [2.30, 6.18]  # 68%, 95%, 99.7% for 2 parameters
-# # best_fit_idx = np.unravel_index(np.argmin(chi2_array), chi2_array.shape)
-# # best_chi2 = chi2_array[best_fit_idx]
-# # for level in confidence_levels:
-# #     contour_level = best_chi2 + level/ndf
-# #     plt.contour(sphin_list, bphin_list, chi2_array, levels=[contour_level], colors='black', linestyles='dashed')
-# #     # plt.text(best_fit_idx[1]*5 + 5, best_fit_idx[0]*5 + 20 + level, f'{int(level*100)/100}', color='black')
-# # plt.xlabel(r'$\sigma_{\phi N}\ [mb]$')
-# # plt.ylabel(r'$\rm b_{\phi N}\ [GeV^{-2}]$')
-# # plt.title(r'$\chi^2/NDF$ map for $\phi-D$ scattering parameters')
-# # file_pdf.savefig()
-# # plt.close()
 
 ################################################################# END #############################################################################################################
 
