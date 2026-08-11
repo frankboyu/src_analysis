@@ -2,7 +2,7 @@
 
 start=`date +%s`
 
-LABEL=theory_empirical_alpha_0
+LABEL=theory_empirical_alpha_m0.1
 mkdir output/${LABEL}/
 
 gfortran -ffixed-line-length-none -o run_theory.out get_edved_wkng_pol.f
@@ -14,9 +14,9 @@ do
     do
         for BGAMMAN in $(seq 4 0.2 4)
         do
-            for SPHIN in $(seq 20 0.4 40)
+            for SPHIN in $(seq 20 0.2 40)
             do
-                for BPHIN in $(seq 5 0.2 15)
+                for BPHIN in $(seq 5 0.1 15)
                 do
                     echo "Running with E=$BEAMENERGY GeV, sigma_gn=$SGAMMAN mb, b_gn=$BGAMMAN GeV^-2, sigma_vn=$SPHIN mb, b_vn=$BPHIN GeV^-2"
                     echo "$BEAMENERGY" > input/theory_paras.txt
