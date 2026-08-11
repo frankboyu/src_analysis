@@ -2,30 +2,29 @@
 
 start=`date +%s`
 
-LABEL=four_para
+LABEL=theory_icase2_alpha_m0.1
 mkdir output/${LABEL}/
 
-gfortran -ffixed-line-length-none -o run_78.out edved_wkng_pol_78.f
+gfortran -ffixed-line-length-none -o run_theory_78.out get_edved_wkng_pol_78.f
 
-for BEAMENERGY in 6.9
+# for BEAMENERGY in 2.1 3.1 6.9 8.3 9.7
+for BEAMENERGY in 6.9 8.3 9.7
 do
-    mkdir output/${LABEL}/E_${BEAMENERGY}/
-    for SGAMMAN in $(seq 14.2 0.2 14.6)
+    for SGAMMAN in $(seq 11 0.2 11)
     do
-        for BGAMMAN in $(seq 4 0.2 6)
+        for BGAMMAN in $(seq 4 0.2 4)
         do
-            mkdir output/${LABEL}/E_${BEAMENERGY}/E_${BEAMENERGY}_gamma_s_${SGAMMAN}_b_${BGAMMAN}/
-            for SPHIN in $(seq 20 2.0 40)
+            for SPHIN in $(seq 20 0.4 40)
             do
-                for BPHIN in $(seq 5 1.0 15)
+                for BPHIN in $(seq 5 0.2 15)
                 do
                     echo "Running with E=$BEAMENERGY GeV, sigma_gn=$SGAMMAN mb, b_gn=$BGAMMAN GeV^-2, sigma_vn=$SPHIN mb, b_vn=$BPHIN GeV^-2"
-                    echo "$BEAMENERGY" > input_paras_78.txt
-                    echo "$SGAMMAN" >> input_paras_78.txt
-                    echo "$BGAMMAN" >> input_paras_78.txt
-                    echo "$SPHIN" >> input_paras_78.txt
-                    echo "$BPHIN" >> input_paras_78.txt
-                    ./run_78.out > output/${LABEL}/E_${BEAMENERGY}/E_${BEAMENERGY}_gamma_s_${SGAMMAN}_b_${BGAMMAN}/E_${BEAMENERGY}_gamma_s_${SGAMMAN}_b_${BGAMMAN}_phi_s_${SPHIN}_b_${BPHIN}.txt
+                    echo "$BEAMENERGY" > input/theory_paras_78.txt
+                    echo "$SGAMMAN" >> input/theory_paras_78.txt
+                    echo "$BGAMMAN" >> input/theory_paras_78.txt
+                    echo "$SPHIN" >> input/theory_paras_78.txt
+                    echo "$BPHIN" >> input/theory_paras_78.txt
+                    ./run_theory_78.out > output/${LABEL}/E_${BEAMENERGY}_gamma_s_${SGAMMAN}_b_${BGAMMAN}_phi_s_${SPHIN}_b_${BPHIN}.txt
                 done
             done
         done

@@ -1,7 +1,7 @@
         program test
         common/par/pi,pm,dm,vmm
         common/input/beamenergy,sgamman,bgamman,sphin,bphin,flag
-        open(12,file='input_paras_98.txt')
+        open(12,file='input/theory_paras_98.txt')
         read(12,*)beamenergy
         read(12,*)sgamman
         read(12,*)bgamman
@@ -1177,10 +1177,10 @@
       common/formfactors/f_c(400),f_q(400),t_c(40,40),t_q(40,40)
       common/ctornot/ict0
       if(ins.eq.1)then
-      open(unit=11,status='old',file='input_fc_fq_98.data')
+      open(unit=11,status='old',file='input/theory_fc_fq_98.data')
       read(11,10)(f_c(k),f_q(k),k=1,400)
       close(11)
-      open(unit=12,status='old',file='input_tc_tq_98.data')
+      open(unit=12,status='old',file='input/theory_tc_tq_98.data')
 *      write(12,10)((TC(kt,kz),TQ(kt,kz),kt=1,400),kz=1,400)
       read(12,10)((t_c(kt,kz),t_q(kt,kz),kt=1,40),kz=1,40)
       close(12)
