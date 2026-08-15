@@ -259,8 +259,8 @@ Bool_t DSelector_jpsi_d_exc_recon::Process(Long64_t locEntry)
         // PERFORM CUTS
         if(locBeamP4_Measured.E()               < 5.84)                                             dComboWrapper->Set_IsComboCut(true);
         if(dDeuteronWrapper->Get_dEdx_CDC()     == 0.0  || dDeuteronWrapper->Get_dEdx_ST()  == 0.0) dComboWrapper->Set_IsComboCut(true);
-        if((locPositronP4+locElectronP4).M()    < 2.2)                                              dComboWrapper->Set_IsComboCut(true);
-        // if(dComboWrapper->Get_ChiSq_KinFit()/dComboWrapper->Get_NDF_KinFit()                > 10)   dComboWrapper->Set_IsComboCut(true);
+        if((locPositronP4+locElectronP4).M()    < 0.8)                                              dComboWrapper->Set_IsComboCut(true);
+        if(dComboWrapper->Get_ChiSq_KinFit()/dComboWrapper->Get_NDF_KinFit()                > 1e6)  dComboWrapper->Set_IsComboCut(true);
 
         if(dComboWrapper->Get_IsComboCut())  continue;
 
