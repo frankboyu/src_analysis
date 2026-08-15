@@ -2,7 +2,7 @@
 """Plot EPICS sensor readings from a comma-delimited CSV file.
 
 Expected columns:
-time, unix time, top temperature, bottom temperature, fill pressure, exhaust pressure
+time, unix time, top temperature, bottom temperature, exhaust pressure, fill pressure
 
 The time column must use the format YYYY-MM-DD HH:MM:SS.
 """
@@ -157,8 +157,8 @@ def read_readings(csv_path: Path, density_table_path: Path) -> EpicsReadings:
 
             top_value = float(row[2])
             bottom_value = float(row[3])
-            fill_value = float(row[4])
-            exhaust_value = float(row[5])
+            exhaust_value = float(row[4])
+            fill_value = float(row[5])
 
             if (
                 top_value < MIN_TEMPERATURE
@@ -223,10 +223,9 @@ def read_readings(csv_path: Path, density_table_path: Path) -> EpicsReadings:
 
 
 def plot_density(ax: plt.Axes, readings: EpicsReadings) -> None:
-    ax.plot(readings.timestamps, readings.density, label="Density", color="tab:purple", linewidth=1.5)
+    ax.plot(readings.timestamps, readings.density, color="tab:purple", linewidth=1.5)
     ax.set_ylabel("Density (g/mL)")
     ax.grid(True, alpha=0.3)
-    ax.legend(loc="best")
 
 
 def plot_density_uncertainty(ax: plt.Axes, readings: EpicsReadings) -> None:
@@ -236,7 +235,6 @@ def plot_density_uncertainty(ax: plt.Axes, readings: EpicsReadings) -> None:
         readings.density_uncertainty_high_pct,
         color="tab:purple",
         alpha=0.25,
-        label="Density uncertainty",
     )
     ax.plot(
         readings.timestamps,
@@ -254,7 +252,50 @@ def plot_density_uncertainty(ax: plt.Axes, readings: EpicsReadings) -> None:
     )
     ax.set_ylabel("Uncertainty (%)")
     ax.grid(True, alpha=0.3)
-    ax.legend(loc="best")
+
+
+def get_running_periods(readings: EpicsReadings) -> List[np.ndarray]:
+    if not readings.top_temperature:
+        return []
+
+    period_indices: List[np.ndarray] = []
+    start_index = 0
+    top_temperature = np.asarray(readings.top_temperature, dtype=float)
+
+    for index in range(1, len(top_temperature)):
+        if abs(top_temperature[index] - top_temperature[index - 1]) > 1.0:
+            period_indices.append(np.arange(start_index, index))
+            start_index = index
+
+    period_indices.append(np.arange(start_index, len(top_temperature)))
+    return period_indices
+
+
+def plot_density_variation(ax: plt.Axes, readings: EpicsReadings) -> None:
+    density_values = np.asarray(readings.density, dtype=float)
+    periods = get_running_periods(readings)
+
+    for period_number, indices in enumerate(periods, start=1):
+        if indices.size == 0:
+            continue
+
+        period_density = density_values[indices]
+        period_average_density = float(np.mean(period_density))
+        if period_average_density == 0.0:
+            continue
+
+        variation_pct = 100.0 * (period_density - period_average_density) / period_average_density
+        ax.plot(
+            np.asarray(readings.timestamps, dtype=object)[indices],
+            variation_pct,
+            linewidth=1.2,
+            color="tab:purple",
+        )
+
+    ax.axhline(0.0, color="gray", linestyle="--", linewidth=1.0)
+    ax.set_ylabel("Variation (%)")
+    ax.set_ylim(-0.4, 0.1)
+    ax.grid(True, alpha=0.3)
 
 
 def plot_density_vs_temperature(density_table: DensityTable, title: str | None = None) -> plt.Figure:
@@ -288,14 +329,14 @@ def plot_density_vs_temperature(density_table: DensityTable, title: str | None =
 
 
 def plot_readings(readings: EpicsReadings, title: str | None = None) -> plt.Figure:
-    fig, (ax_temp, ax_pressure, ax_density, ax_uncertainty) = plt.subplots(
-        4,
+    fig, (ax_temp, ax_pressure, ax_density, ax_uncertainty, ax_variation) = plt.subplots(
+        5,
         1,
-        figsize=(14, 12),
+        figsize=(14, 14),
         dpi=300,
         sharex=True,
         constrained_layout=False,
-        gridspec_kw={"height_ratios": [1.0, 1.0, 1.0, 0.5]},
+        gridspec_kw={"height_ratios": [1.0, 1.0, 1.0, 0.5, 0.5]},
     )
 
     fig.suptitle(title or "EPICS Sensor Readings", fontsize=14)
@@ -331,6 +372,9 @@ def plot_readings(readings: EpicsReadings, title: str | None = None) -> plt.Figu
 
     plot_density_uncertainty(ax_uncertainty, readings)
     ax_uncertainty.set_xlabel("Time")
+
+    plot_density_variation(ax_variation, readings)
+    ax_variation.set_xlabel("Time")
 
     def format_actual_time(x_value: float, _position: int) -> str:
         tick_time = mdates.num2date(x_value).replace(tzinfo=None)
@@ -381,8 +425,14 @@ def main() -> int:
     density_values = np.asarray(readings.density, dtype=float)
     density_mean = float(np.mean(density_values))
     density_stddev = float(np.std(density_values))
+    running_periods = get_running_periods(readings)
 
     print(f"Density over time: mean = {density_mean:.6f} g/mL, std dev = {density_stddev:.6f} g/mL")
+    for period_number, indices in enumerate(running_periods, start=1):
+        if indices.size == 0:
+            continue
+        period_mean_density = float(np.mean(np.asarray(readings.density, dtype=float)[indices]))
+        print(f"Period {period_number} average density = {period_mean_density:.6f} g/mL")
     output_path.parent.mkdir(parents=True, exist_ok=True)
     with PdfPages(output_path) as pdf:
         pdf.savefig(plot_readings(readings, title=args.title), bbox_inches="tight")
