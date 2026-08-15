@@ -42,7 +42,7 @@ target = sys.argv[1]
 #RCDB CONNECTION
 if (target == 'deuterium'):
     rcdb_query = "@is_src_production and @status_approved and run_config == 'FCAL_BCAL_PS_SRC_m9.conf' and beam_on_current > 55.0 and target_type=='FULL & Ready Deuterium'"
-    density         = 0.1638
+    density         = 0.168277
     atomic_mass     = 2.014
     target_length   = 29.5
 elif (target == 'helium'):
@@ -231,17 +231,27 @@ for run in run_list:
 file_total.close()
 
 for i, run in enumerate(run_list):
+    if (run.number < 90250):
+        density = 0.169792
+    elif (run.number > 90250 and run.number < 90580):
+        density = 0.165829
+    else:
+        density = 0.169078
+
     if (i == 0):
         summed_lumi = np.loadtxt("output/"+target+"/flux_corr_"+str(run.number)+".txt")
+        summed_lumi[:,5] *= density*target_length*Navagadro*units_cm2_b/atomic_mass/1e12
+        summed_lumi[:,6] *= density*target_length*Navagadro*units_cm2_b/atomic_mass/1e12
     else:
         if(np.shape(np.loadtxt("output/"+target+"/flux_corr_"+str(run.number)+".txt")) != np.shape(summed_lumi)):
             print("ERROR: Different dimensions of flux files")
             sys.exit(1)
-        summed_lumi[:,5] = summed_lumi[:,5] + np.loadtxt("output/"+target+"/flux_corr_"+str(run.number)+".txt")[:,5]
-        summed_lumi[:,6] = np.sqrt(summed_lumi[:,6]**2 + np.loadtxt("output/"+target+"/flux_corr_"+str(run.number)+".txt")[:,6]**2)
-
-summed_lumi[:,5] *= density*target_length*Navagadro*units_cm2_b/atomic_mass/1e12
-summed_lumi[:,6] *= density*target_length*Navagadro*units_cm2_b/atomic_mass/1e12
+        this_lumi = np.loadtxt("output/"+target+"/flux_corr_"+str(run.number)+".txt")[:,5]
+        this_error = np.loadtxt("output/"+target+"/flux_corr_"+str(run.number)+".txt")[:,6]
+        this_lumi *= density*target_length*Navagadro*units_cm2_b/atomic_mass/1e12
+        this_error *= density*target_length*Navagadro*units_cm2_b/atomic_mass/1e12
+        summed_lumi[:,5] = summed_lumi[:,5] + this_lumi
+        summed_lumi[:,6] = np.sqrt(summed_lumi[:,6]**2 + this_error**2)
 
 file_summed = open("output/"+target+"/lumi_summed_"+target+".txt", "w+")
 for i in range(len(summed_lumi)):
