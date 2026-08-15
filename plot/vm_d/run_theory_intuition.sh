@@ -1,6 +1,6 @@
 echo 6.9   > input/theory_paras.txt
-echo 11.0  >> input/theory_paras.txt
-echo 4.00  >> input/theory_paras.txt
+echo 14.0  >> input/theory_paras.txt
+echo 5.50  >> input/theory_paras.txt
 echo 30.8  >> input/theory_paras.txt
 echo 11.2 >> input/theory_paras.txt
 

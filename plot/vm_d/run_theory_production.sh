@@ -10,9 +10,9 @@ gfortran -ffixed-line-length-none -o run_theory.out get_edved_wkng_pol.f
 # for BEAMENERGY in 2.1 3.1 6.9 8.3 9.7
 for BEAMENERGY in 6.9 8.3 9.7
 do
-    for SGAMMAN in $(seq 10 0.1 12)
+    for SGAMMAN in $(seq 12 0.1 14)
     do
-        for BGAMMAN in $(seq 4 0.2 8)
+        for BGAMMAN in $(seq 4.1 0.2 8.1)
         do
             for SPHIN in $(seq 30.8 0.2 30.8)
             do
