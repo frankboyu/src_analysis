@@ -5,7 +5,7 @@ start=`date +%s`
 LABEL=theory_icase2_alpha_0
 mkdir output/${LABEL}/
 
-gfortran -ffixed-line-length-none -o run_theory_98.out get_edved_wkng_pol_98.f
+gfortran -ffixed-line-length-none -o exe_theory_98.out get_edved_wkng_pol_98.f
 
 # for BEAMENERGY in 2.1 3.1 6.9 8.3 9.7
 for BEAMENERGY in 6.9 8.3 9.7
@@ -24,7 +24,7 @@ do
                     echo "$BGAMMAN" >> input/theory_paras_98.txt
                     echo "$SPHIN" >> input/theory_paras_98.txt
                     echo "$BPHIN" >> input/theory_paras_98.txt
-                    ./run_theory_98.out > output/${LABEL}/E_${BEAMENERGY}_gamma_s_${SGAMMAN}_b_${BGAMMAN}_phi_s_${SPHIN}_b_${BPHIN}.txt
+                    ./exe_theory_98.out > output/${LABEL}/E_${BEAMENERGY}_gamma_s_${SGAMMAN}_b_${BGAMMAN}_phi_s_${SPHIN}_b_${BPHIN}.txt
                 done
             done
         done

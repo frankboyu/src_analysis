@@ -4,6 +4,6 @@ echo 5.50  >> input/theory_paras.txt
 echo 30.8  >> input/theory_paras.txt
 echo 11.2 >> input/theory_paras.txt
 
-gfortran -ffixed-line-length-none -o run_theory.out get_edved_wkng_pol.f
-./run_theory.out > output/table_phi_d_theory_intuition.txt
+gfortran -ffixed-line-length-none -o exe_theory.out get_edved_wkng_pol.f
+./exe_theory.out > output/table_phi_d_theory_intuition.txt
 python get_theory_intuition.py
