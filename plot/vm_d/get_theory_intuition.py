@@ -48,7 +48,7 @@ phi_d_2H_dsdt_results_systerr_68    = phi_d_2H_dsdt_results_systerr [index[0]:in
 theory_minust = np.loadtxt('output/table_phi_d_theory_intuition.txt')[:,0]
 theory_dsdt = np.loadtxt('output/table_phi_d_theory_intuition.txt')[:,2]
 
-plt.errorbar(phi_d_2H_dsdt_minust_center_68[1:], phi_d_2H_dsdt_results_68[1:], yerr=phi_d_2H_dsdt_results_statserr_68[1:], fmt='b.', label='Data, 5.8-7.8 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center_68[1:], phi_d_2H_dsdt_results_68[1:], yerr=phi_d_2H_dsdt_results_systerr_68[1:], fmt='b.', label='Data, 5.8-7.8 GeV')
 
 plt.plot(theory_minust, theory_dsdt, 'r-', label='Theory')
 
