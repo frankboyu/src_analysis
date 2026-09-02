@@ -264,15 +264,15 @@ void filter_phi_d_exc_recon(string reaction, string output_mode)
     ;
 
     cout << "Filtering events...\n";
-    string dEdxCut              = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.65*d_momentum_meas+4.47) + 2.57)";
-    string dEdxCutSyst          = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.11*d_momentum_meas+3.90) + 1.83)";
-    string MissPMinusCut        = "miss_pminus_meas > -0.02";
-    string MissPMinusCutSyst    = "miss_pminus_meas > -0.04";
+    string dEdxCut              = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.61*d_momentum_meas+4.46) + 2.54)";
+    string dEdxCutSyst          = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.05*d_momentum_meas+3.88) + 1.80)";
+    string MissPMinusCut        = "miss_pminus_meas > -0.023";
+    string MissPMinusCutSyst    = "miss_pminus_meas > -0.050";
     string KinFitChiSqCut       = "chisq_per_ndf_kin < 5.0";
     string KinFitChiSqCutSyst   = "chisq_per_ndf_kin < 7.0";
     string KinematicsCut        = "kp_momentum_meas > 0.40 && km_momentum_meas > 0.40 && d_momentum_meas > 0.40 && kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
     string KinematicsCutSyst    = "kp_momentum_meas > 0.35 && km_momentum_meas > 0.35 && d_momentum_meas > 0.35 && kp_theta_meas > 1.0 && km_theta_meas > 1.0 && d_theta_meas > 1.0";
-    string VertexCut            = "TMath::Abs(vertex_z_kin - 65.0) < 14.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.0";
+    string VertexCut            = "TMath::Abs(vertex_z_kin - 65.0) < 13.9 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.0";
     string VertexCutSyst        = "TMath::Abs(vertex_z_kin - 65.0) < 15.0 && TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.5";
     string PhiMassCut           = "phi_mass_kin > 1.00 && phi_mass_kin < 1.04";
 
