@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.optimize import curve_fit
+from scipy.optimize import curve_fit, fsolve
 from matplotlib.backends.backend_pdf import PdfPages
 
 rad_to_deg = 180/np.pi
@@ -10,6 +10,11 @@ error_list = []
 
 def dsdt_func(minust, a1, b1, a2, b2):
     return a1*np.exp(-b1*minust) + a2*np.exp(-b2*minust)
+
+def bin_center(minust_low, minust_high, a1, b1, a2, b2):
+    f_average = (np.exp(-b1*minust_low) - np.exp(-b1*minust_high))*a1/b1/(minust_high - minust_low) + (np.exp(-b2*minust_low) - np.exp(-b2*minust_high))*a2/b2/(minust_high - minust_low)
+    minust_center = fsolve(lambda minust: a1*np.exp(-b1*minust) + a2*np.exp(-b2*minust) - f_average, (minust_low + minust_high)/2)[0]
+    return minust_center
 
 def lumi(energy_min, energy_max, length):
     lumi_table = np.loadtxt('/work/halld2/home/boyu/src_analysis/flux/output/2H/lumi_summed_2H.txt')
@@ -50,6 +55,9 @@ for i in range(len(phi_d_2H_dsdt_energy_low)):
 
 ###################################################################### ITERATION 0 #####################################################################################
 
+# Calculate the bin centers
+phi_d_2H_dsdt_minust_center_iter0           = (phi_d_2H_dsdt_minust_low + phi_d_2H_dsdt_minust_high)/2
+
 # Simulation yield numbers
 phi_d_2H_dsdt_yield_sim_iter0               = np.loadtxt(f'output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_dsdt_simweight_iter0.txt')[:,8]
 phi_d_2H_dsdt_yield_sim_statser_iter0       = np.loadtxt(f'output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_dsdt_simweight_iter0.txt')[:,9]
@@ -65,18 +73,18 @@ phi_d_2H_dsdt_results_statserr_iter0        = phi_d_2H_dsdt_results_iter0*np.sqr
 # Plot the cross section
 fig = plt.figure(figsize=(8, 6), dpi=300)
 color_code = ['b', 'k', 'r']
-plt.errorbar(phi_d_2H_dsdt_minust_center[index[0]:index[1]],       phi_d_2H_dsdt_results_iter0[index[0]:index[1]],          xerr=phi_d_2H_dsdt_minust_width[index[0]:index[1]],        yerr=phi_d_2H_dsdt_results_statserr_iter0[index[0]:index[1]],            fmt='b.', label='6-8 GeV')
-plt.errorbar(phi_d_2H_dsdt_minust_center[index[1]:index[2]],       phi_d_2H_dsdt_results_iter0[index[1]:index[2]],          xerr=phi_d_2H_dsdt_minust_width[index[1]:index[2]],        yerr=phi_d_2H_dsdt_results_statserr_iter0[index[1]:index[2]],            fmt='k.', label='8-9 GeV')
-plt.errorbar(phi_d_2H_dsdt_minust_center[index[2]:index[3]],       phi_d_2H_dsdt_results_iter0[index[2]:index[3]],          xerr=phi_d_2H_dsdt_minust_width[index[2]:index[3]],        yerr=phi_d_2H_dsdt_results_statserr_iter0[index[2]:index[3]],            fmt='r.', label='9-11 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center_iter0[index[0]:index[1]],       phi_d_2H_dsdt_results_iter0[index[0]:index[1]],          xerr=phi_d_2H_dsdt_minust_width[index[0]:index[1]],        yerr=phi_d_2H_dsdt_results_statserr_iter0[index[0]:index[1]],            fmt='b.', label='6-8 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center_iter0[index[1]:index[2]],       phi_d_2H_dsdt_results_iter0[index[1]:index[2]],          xerr=phi_d_2H_dsdt_minust_width[index[1]:index[2]],        yerr=phi_d_2H_dsdt_results_statserr_iter0[index[1]:index[2]],            fmt='k.', label='8-9 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center_iter0[index[2]:index[3]],       phi_d_2H_dsdt_results_iter0[index[2]:index[3]],          xerr=phi_d_2H_dsdt_minust_width[index[2]:index[3]],        yerr=phi_d_2H_dsdt_results_statserr_iter0[index[2]:index[3]],            fmt='r.', label='9-11 GeV')
 
 # Fit the cross section with the function
-fit_indices = np.where(phi_d_2H_dsdt_minust_center > 0.24)[0]
+fit_indices = np.where(phi_d_2H_dsdt_minust_center_iter0 > 0.24)[0]
 curve_fit_params, curve_fit_cov = curve_fit(dsdt_func, \
-                                            phi_d_2H_dsdt_minust_center[fit_indices], \
+                                            phi_d_2H_dsdt_minust_center_iter0[fit_indices], \
                                             phi_d_2H_dsdt_results_iter0[fit_indices], \
                                             sigma=phi_d_2H_dsdt_results_statserr_iter0[fit_indices], \
                                             absolute_sigma=True, p0=[3000, 15, 15, 3])
-curve_fit_residuals             = phi_d_2H_dsdt_results_iter0[fit_indices] - dsdt_func(phi_d_2H_dsdt_minust_center[fit_indices], curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3])
+curve_fit_residuals             = phi_d_2H_dsdt_results_iter0[fit_indices] - dsdt_func(phi_d_2H_dsdt_minust_center_iter0[fit_indices], curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3])
 reduced_chi2                    = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr_iter0[fit_indices])**2)/(len(phi_d_2H_dsdt_results_iter0[fit_indices])-4)
 plt.plot(np.linspace(0, 2, 100), dsdt_func(np.linspace(0, 2, 100), curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3]), '--', color = 'g', label='Combined fit')
 plt.text(0.01, 1, r'$a_1=%.5f\pm%.5f$' % (curve_fit_params[0], np.sqrt(curve_fit_cov[0][0])), fontsize=10, color='b', ha='left', va='top')
@@ -101,6 +109,9 @@ plt.close()
 
 ###################################################################### ITERATION 1 #####################################################################################
 
+# Calculate the bin centers
+phi_d_2H_dsdt_minust_center_iter1           = bin_center(phi_d_2H_dsdt_minust_low, phi_d_2H_dsdt_minust_high, para_list[0][0], para_list[0][1], para_list[0][2], para_list[0][3])
+
 # Simulation yield numbers
 phi_d_2H_dsdt_yield_sim_iter1               = np.loadtxt(f'output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_dsdt_simweight_iter1.txt')[:,8]
 phi_d_2H_dsdt_yield_sim_statser_iter1       = np.loadtxt(f'output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_dsdt_simweight_iter1.txt')[:,9]
@@ -116,18 +127,18 @@ phi_d_2H_dsdt_results_statserr_iter1        = phi_d_2H_dsdt_results_iter1*np.sqr
 # Plot the cross section
 fig = plt.figure(figsize=(8, 6), dpi=300)
 color_code = ['b', 'k', 'r']
-plt.errorbar(phi_d_2H_dsdt_minust_center[index[0]:index[1]],       phi_d_2H_dsdt_results_iter1[index[0]:index[1]],          xerr=phi_d_2H_dsdt_minust_width[index[0]:index[1]],        yerr=phi_d_2H_dsdt_results_statserr_iter1[index[0]:index[1]],            fmt='b.', label='6-8 GeV')
-plt.errorbar(phi_d_2H_dsdt_minust_center[index[1]:index[2]],       phi_d_2H_dsdt_results_iter1[index[1]:index[2]],          xerr=phi_d_2H_dsdt_minust_width[index[1]:index[2]],        yerr=phi_d_2H_dsdt_results_statserr_iter1[index[1]:index[2]],            fmt='k.', label='8-9 GeV')
-plt.errorbar(phi_d_2H_dsdt_minust_center[index[2]:index[3]],       phi_d_2H_dsdt_results_iter1[index[2]:index[3]],          xerr=phi_d_2H_dsdt_minust_width[index[2]:index[3]],        yerr=phi_d_2H_dsdt_results_statserr_iter1[index[2]:index[3]],            fmt='r.', label='9-11 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center_iter1[index[0]:index[1]],       phi_d_2H_dsdt_results_iter1[index[0]:index[1]],          xerr=phi_d_2H_dsdt_minust_width[index[0]:index[1]],        yerr=phi_d_2H_dsdt_results_statserr_iter1[index[0]:index[1]],            fmt='b.', label='6-8 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center_iter1[index[1]:index[2]],       phi_d_2H_dsdt_results_iter1[index[1]:index[2]],          xerr=phi_d_2H_dsdt_minust_width[index[1]:index[2]],        yerr=phi_d_2H_dsdt_results_statserr_iter1[index[1]:index[2]],            fmt='k.', label='8-9 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center_iter1[index[2]:index[3]],       phi_d_2H_dsdt_results_iter1[index[2]:index[3]],          xerr=phi_d_2H_dsdt_minust_width[index[2]:index[3]],        yerr=phi_d_2H_dsdt_results_statserr_iter1[index[2]:index[3]],            fmt='r.', label='9-11 GeV')
 
 # Fit the cross section with the function
-fit_indices = np.where(phi_d_2H_dsdt_minust_center > 0.24)[0]
+fit_indices = np.where(phi_d_2H_dsdt_minust_center_iter1 > 0.24)[0]
 curve_fit_params, curve_fit_cov = curve_fit(dsdt_func, \
-                                            phi_d_2H_dsdt_minust_center[fit_indices], \
+                                            phi_d_2H_dsdt_minust_center_iter1[fit_indices], \
                                             phi_d_2H_dsdt_results_iter1[fit_indices], \
                                             sigma=phi_d_2H_dsdt_results_statserr_iter1[fit_indices], \
                                             absolute_sigma=True, p0=[3000, 15, 15, 3])
-curve_fit_residuals             = phi_d_2H_dsdt_results_iter1[fit_indices] - dsdt_func(phi_d_2H_dsdt_minust_center[fit_indices], curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3])
+curve_fit_residuals             = phi_d_2H_dsdt_results_iter1[fit_indices] - dsdt_func(phi_d_2H_dsdt_minust_center_iter1[fit_indices], curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3])
 reduced_chi2                    = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr_iter1[fit_indices])**2)/(len(phi_d_2H_dsdt_results_iter1[fit_indices])-4)
 plt.plot(np.linspace(0, 2, 100), dsdt_func(np.linspace(0, 2, 100), curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3]), '--', color = 'g', label='Combined fit')
 plt.text(0.01, 1, r'$a_1=%.5f\pm%.5f$' % (curve_fit_params[0], np.sqrt(curve_fit_cov[0][0])), fontsize=10, color='b', ha='left', va='top')
@@ -152,6 +163,9 @@ plt.close()
 
 ###################################################################### ITERATION 2 #####################################################################################
 
+# Calculate the bin centers
+phi_d_2H_dsdt_minust_center_iter2           = bin_center(phi_d_2H_dsdt_minust_low, phi_d_2H_dsdt_minust_high, para_list[1][0], para_list[1][1], para_list[1][2], para_list[1][3])
+
 # Simulation yield numbers
 phi_d_2H_dsdt_yield_sim_iter2               = np.loadtxt(f'output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_dsdt_simweight_iter2.txt')[:,8]
 phi_d_2H_dsdt_yield_sim_statser_iter2       = np.loadtxt(f'output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_dsdt_simweight_iter2.txt')[:,9]
@@ -167,18 +181,18 @@ phi_d_2H_dsdt_results_statserr_iter2        = phi_d_2H_dsdt_results_iter2*np.sqr
 # Plot the cross section
 fig = plt.figure(figsize=(8, 6), dpi=300)
 color_code = ['b', 'k', 'r']
-plt.errorbar(phi_d_2H_dsdt_minust_center[index[0]:index[1]],       phi_d_2H_dsdt_results_iter2[index[0]:index[1]],          xerr=phi_d_2H_dsdt_minust_width[index[0]:index[1]],        yerr=phi_d_2H_dsdt_results_statserr_iter2[index[0]:index[1]],            fmt='b.', label='6-8 GeV')
-plt.errorbar(phi_d_2H_dsdt_minust_center[index[1]:index[2]],       phi_d_2H_dsdt_results_iter2[index[1]:index[2]],          xerr=phi_d_2H_dsdt_minust_width[index[1]:index[2]],        yerr=phi_d_2H_dsdt_results_statserr_iter2[index[1]:index[2]],            fmt='k.', label='8-9 GeV')
-plt.errorbar(phi_d_2H_dsdt_minust_center[index[2]:index[3]],       phi_d_2H_dsdt_results_iter2[index[2]:index[3]],          xerr=phi_d_2H_dsdt_minust_width[index[2]:index[3]],        yerr=phi_d_2H_dsdt_results_statserr_iter2[index[2]:index[3]],            fmt='r.', label='9-11 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center_iter2[index[0]:index[1]],       phi_d_2H_dsdt_results_iter2[index[0]:index[1]],          xerr=phi_d_2H_dsdt_minust_width[index[0]:index[1]],        yerr=phi_d_2H_dsdt_results_statserr_iter2[index[0]:index[1]],            fmt='b.', label='6-8 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center_iter2[index[1]:index[2]],       phi_d_2H_dsdt_results_iter2[index[1]:index[2]],          xerr=phi_d_2H_dsdt_minust_width[index[1]:index[2]],        yerr=phi_d_2H_dsdt_results_statserr_iter2[index[1]:index[2]],            fmt='k.', label='8-9 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center_iter2[index[2]:index[3]],       phi_d_2H_dsdt_results_iter2[index[2]:index[3]],          xerr=phi_d_2H_dsdt_minust_width[index[2]:index[3]],        yerr=phi_d_2H_dsdt_results_statserr_iter2[index[2]:index[3]],            fmt='r.', label='9-11 GeV')
 
 # Fit the cross section with the function
-fit_indices = np.where(phi_d_2H_dsdt_minust_center > 0.24)[0]
+fit_indices = np.where(phi_d_2H_dsdt_minust_center_iter2 > 0.24)[0]
 curve_fit_params, curve_fit_cov = curve_fit(dsdt_func, \
-                                            phi_d_2H_dsdt_minust_center[fit_indices], \
+                                            phi_d_2H_dsdt_minust_center_iter2[fit_indices], \
                                             phi_d_2H_dsdt_results_iter2[fit_indices], \
                                             sigma=phi_d_2H_dsdt_results_statserr_iter2[fit_indices], \
                                             absolute_sigma=True, p0=[3000, 15, 15, 3])
-curve_fit_residuals             = phi_d_2H_dsdt_results_iter2[fit_indices] - dsdt_func(phi_d_2H_dsdt_minust_center[fit_indices], curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3])
+curve_fit_residuals             = phi_d_2H_dsdt_results_iter2[fit_indices] - dsdt_func(phi_d_2H_dsdt_minust_center_iter2[fit_indices], curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3])
 reduced_chi2                    = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr_iter2[fit_indices])**2)/(len(phi_d_2H_dsdt_results_iter2[fit_indices])-4)
 plt.plot(np.linspace(0, 2, 100), dsdt_func(np.linspace(0, 2, 100), curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3]), '--', color = 'g', label='Combined fit')
 plt.text(0.01, 1, r'$a_1=%.5f\pm%.5f$' % (curve_fit_params[0], np.sqrt(curve_fit_cov[0][0])), fontsize=10, color='b', ha='left', va='top')
@@ -203,6 +217,9 @@ plt.close()
 
 ###################################################################### ITERATION 3 #####################################################################################
 
+# Calculate the bin centers
+phi_d_2H_dsdt_minust_center_iter3           = bin_center(phi_d_2H_dsdt_minust_low, phi_d_2H_dsdt_minust_high, para_list[2][0], para_list[2][1], para_list[2][2], para_list[2][3])
+
 # Simulation yield numbers
 phi_d_2H_dsdt_yield_sim_iter3               = np.loadtxt(f'output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_dsdt_simweight_iter3.txt')[:,8]
 phi_d_2H_dsdt_yield_sim_statser_iter3       = np.loadtxt(f'output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_dsdt_simweight_iter3.txt')[:,9]
@@ -218,18 +235,18 @@ phi_d_2H_dsdt_results_statserr_iter3        = phi_d_2H_dsdt_results_iter3*np.sqr
 # Plot the cross section
 fig = plt.figure(figsize=(8, 6), dpi=300)
 color_code = ['b', 'k', 'r']
-plt.errorbar(phi_d_2H_dsdt_minust_center[index[0]:index[1]],       phi_d_2H_dsdt_results_iter3[index[0]:index[1]],          xerr=phi_d_2H_dsdt_minust_width[index[0]:index[1]],        yerr=phi_d_2H_dsdt_results_statserr_iter3[index[0]:index[1]],            fmt='b.', label='6-8 GeV')
-plt.errorbar(phi_d_2H_dsdt_minust_center[index[1]:index[2]],       phi_d_2H_dsdt_results_iter3[index[1]:index[2]],          xerr=phi_d_2H_dsdt_minust_width[index[1]:index[2]],        yerr=phi_d_2H_dsdt_results_statserr_iter3[index[1]:index[2]],            fmt='k.', label='8-9 GeV')
-plt.errorbar(phi_d_2H_dsdt_minust_center[index[2]:index[3]],       phi_d_2H_dsdt_results_iter3[index[2]:index[3]],          xerr=phi_d_2H_dsdt_minust_width[index[2]:index[3]],        yerr=phi_d_2H_dsdt_results_statserr_iter3[index[2]:index[3]],            fmt='r.', label='9-11 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center_iter3[index[0]:index[1]],       phi_d_2H_dsdt_results_iter3[index[0]:index[1]],          xerr=phi_d_2H_dsdt_minust_width[index[0]:index[1]],        yerr=phi_d_2H_dsdt_results_statserr_iter3[index[0]:index[1]],            fmt='b.', label='6-8 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center_iter3[index[1]:index[2]],       phi_d_2H_dsdt_results_iter3[index[1]:index[2]],          xerr=phi_d_2H_dsdt_minust_width[index[1]:index[2]],        yerr=phi_d_2H_dsdt_results_statserr_iter3[index[1]:index[2]],            fmt='k.', label='8-9 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center_iter3[index[2]:index[3]],       phi_d_2H_dsdt_results_iter3[index[2]:index[3]],          xerr=phi_d_2H_dsdt_minust_width[index[2]:index[3]],        yerr=phi_d_2H_dsdt_results_statserr_iter3[index[2]:index[3]],            fmt='r.', label='9-11 GeV')
 
 # Fit the cross section with the function
-fit_indices = np.where(phi_d_2H_dsdt_minust_center > 0.24)[0]
+fit_indices = np.where(phi_d_2H_dsdt_minust_center_iter3 > 0.24)[0]
 curve_fit_params, curve_fit_cov = curve_fit(dsdt_func, \
-                                            phi_d_2H_dsdt_minust_center[fit_indices], \
+                                            phi_d_2H_dsdt_minust_center_iter3[fit_indices], \
                                             phi_d_2H_dsdt_results_iter3[fit_indices], \
                                             sigma=phi_d_2H_dsdt_results_statserr_iter3[fit_indices], \
                                             absolute_sigma=True, p0=[3000, 15, 15, 3])
-curve_fit_residuals             = phi_d_2H_dsdt_results_iter3[fit_indices] - dsdt_func(phi_d_2H_dsdt_minust_center[fit_indices], curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3])
+curve_fit_residuals             = phi_d_2H_dsdt_results_iter3[fit_indices] - dsdt_func(phi_d_2H_dsdt_minust_center_iter3[fit_indices], curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3])
 reduced_chi2                    = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr_iter3[fit_indices])**2)/(len(phi_d_2H_dsdt_results_iter3[fit_indices])-4)
 plt.plot(np.linspace(0, 2, 100), dsdt_func(np.linspace(0, 2, 100), curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3]), '--', color = 'g', label='Combined fit')
 plt.text(0.01, 1, r'$a_1=%.5f\pm%.5f$' % (curve_fit_params[0], np.sqrt(curve_fit_cov[0][0])), fontsize=10, color='b', ha='left', va='top')
@@ -254,6 +271,9 @@ plt.close()
 
 ###################################################################### ITERATION 4 #####################################################################################
 
+# Calculate the bin centers
+phi_d_2H_dsdt_minust_center_iter4           = bin_center(phi_d_2H_dsdt_minust_low, phi_d_2H_dsdt_minust_high, para_list[3][0], para_list[3][1], para_list[3][2], para_list[3][3])
+
 # Simulation yield numbers
 phi_d_2H_dsdt_yield_sim_iter4               = np.loadtxt(f'output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_dsdt_simweight_iter4.txt')[:,8]
 phi_d_2H_dsdt_yield_sim_statser_iter4       = np.loadtxt(f'output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_dsdt_simweight_iter4.txt')[:,9]
@@ -269,18 +289,18 @@ phi_d_2H_dsdt_results_statserr_iter4        = phi_d_2H_dsdt_results_iter4*np.sqr
 # Plot the cross section
 fig = plt.figure(figsize=(8, 6), dpi=300)
 color_code = ['b', 'k', 'r']
-plt.errorbar(phi_d_2H_dsdt_minust_center[index[0]:index[1]],       phi_d_2H_dsdt_results_iter4[index[0]:index[1]],          xerr=phi_d_2H_dsdt_minust_width[index[0]:index[1]],        yerr=phi_d_2H_dsdt_results_statserr_iter4[index[0]:index[1]],            fmt='b.', label='6-8 GeV')
-plt.errorbar(phi_d_2H_dsdt_minust_center[index[1]:index[2]],       phi_d_2H_dsdt_results_iter4[index[1]:index[2]],          xerr=phi_d_2H_dsdt_minust_width[index[1]:index[2]],        yerr=phi_d_2H_dsdt_results_statserr_iter4[index[1]:index[2]],            fmt='k.', label='8-9 GeV')
-plt.errorbar(phi_d_2H_dsdt_minust_center[index[2]:index[3]],       phi_d_2H_dsdt_results_iter4[index[2]:index[3]],          xerr=phi_d_2H_dsdt_minust_width[index[2]:index[3]],        yerr=phi_d_2H_dsdt_results_statserr_iter4[index[2]:index[3]],            fmt='r.', label='9-11 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center_iter4[index[0]:index[1]],       phi_d_2H_dsdt_results_iter4[index[0]:index[1]],          xerr=phi_d_2H_dsdt_minust_width[index[0]:index[1]],        yerr=phi_d_2H_dsdt_results_statserr_iter4[index[0]:index[1]],            fmt='b.', label='6-8 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center_iter4[index[1]:index[2]],       phi_d_2H_dsdt_results_iter4[index[1]:index[2]],          xerr=phi_d_2H_dsdt_minust_width[index[1]:index[2]],        yerr=phi_d_2H_dsdt_results_statserr_iter4[index[1]:index[2]],            fmt='k.', label='8-9 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center_iter4[index[2]:index[3]],       phi_d_2H_dsdt_results_iter4[index[2]:index[3]],          xerr=phi_d_2H_dsdt_minust_width[index[2]:index[3]],        yerr=phi_d_2H_dsdt_results_statserr_iter4[index[2]:index[3]],            fmt='r.', label='9-11 GeV')
 
 # Fit the cross section with the function
-fit_indices = np.where(phi_d_2H_dsdt_minust_center > 0.24)[0]
+fit_indices = np.where(phi_d_2H_dsdt_minust_center_iter4 > 0.24)[0]
 curve_fit_params, curve_fit_cov = curve_fit(dsdt_func, \
-                                            phi_d_2H_dsdt_minust_center[fit_indices], \
+                                            phi_d_2H_dsdt_minust_center_iter4[fit_indices], \
                                             phi_d_2H_dsdt_results_iter4[fit_indices], \
                                             sigma=phi_d_2H_dsdt_results_statserr_iter4[fit_indices], \
                                             absolute_sigma=True, p0=[3000, 15, 15, 3])
-curve_fit_residuals             = phi_d_2H_dsdt_results_iter4[fit_indices] - dsdt_func(phi_d_2H_dsdt_minust_center[fit_indices], curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3])
+curve_fit_residuals             = phi_d_2H_dsdt_results_iter4[fit_indices] - dsdt_func(phi_d_2H_dsdt_minust_center_iter4[fit_indices], curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3])
 reduced_chi2                    = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr_iter4[fit_indices])**2)/(len(phi_d_2H_dsdt_results_iter4[fit_indices])-4)
 plt.plot(np.linspace(0, 2, 100), dsdt_func(np.linspace(0, 2, 100), curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3]), '--', color = 'g', label='Combined fit')
 plt.text(0.01, 1, r'$a_1=%.5f\pm%.5f$' % (curve_fit_params[0], np.sqrt(curve_fit_cov[0][0])), fontsize=10, color='b', ha='left', va='top')
@@ -305,6 +325,9 @@ plt.close()
 
 ###################################################################### ITERATION 5 #####################################################################################
 
+# Calculate the bin centers
+phi_d_2H_dsdt_minust_center_iter5           = bin_center(phi_d_2H_dsdt_minust_low, phi_d_2H_dsdt_minust_high, para_list[4][0], para_list[4][1], para_list[4][2], para_list[4][3])
+
 # Simulation yield numbers
 phi_d_2H_dsdt_yield_sim_iter5               = np.loadtxt(f'output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_dsdt_simweight_iter5.txt')[:,8]
 phi_d_2H_dsdt_yield_sim_statser_iter5       = np.loadtxt(f'output/yield_phi_d/yield_phi_d_recon_exc_sim_2H_ver12_flat_dsdt_simweight_iter5.txt')[:,9]
@@ -320,18 +343,18 @@ phi_d_2H_dsdt_results_statserr_iter5        = phi_d_2H_dsdt_results_iter5*np.sqr
 # Plot the cross section
 fig = plt.figure(figsize=(8, 6), dpi=300)
 color_code = ['b', 'k', 'r']
-plt.errorbar(phi_d_2H_dsdt_minust_center[index[0]:index[1]],       phi_d_2H_dsdt_results_iter5[index[0]:index[1]],          xerr=phi_d_2H_dsdt_minust_width[index[0]:index[1]],        yerr=phi_d_2H_dsdt_results_statserr_iter5[index[0]:index[1]],            fmt='b.', label='6-8 GeV')
-plt.errorbar(phi_d_2H_dsdt_minust_center[index[1]:index[2]],       phi_d_2H_dsdt_results_iter5[index[1]:index[2]],          xerr=phi_d_2H_dsdt_minust_width[index[1]:index[2]],        yerr=phi_d_2H_dsdt_results_statserr_iter5[index[1]:index[2]],            fmt='k.', label='8-9 GeV')
-plt.errorbar(phi_d_2H_dsdt_minust_center[index[2]:index[3]],       phi_d_2H_dsdt_results_iter5[index[2]:index[3]],          xerr=phi_d_2H_dsdt_minust_width[index[2]:index[3]],        yerr=phi_d_2H_dsdt_results_statserr_iter5[index[2]:index[3]],            fmt='r.', label='9-11 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center_iter5[index[0]:index[1]],       phi_d_2H_dsdt_results_iter5[index[0]:index[1]],          xerr=phi_d_2H_dsdt_minust_width[index[0]:index[1]],        yerr=phi_d_2H_dsdt_results_statserr_iter5[index[0]:index[1]],            fmt='b.', label='6-8 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center_iter5[index[1]:index[2]],       phi_d_2H_dsdt_results_iter5[index[1]:index[2]],          xerr=phi_d_2H_dsdt_minust_width[index[1]:index[2]],        yerr=phi_d_2H_dsdt_results_statserr_iter5[index[1]:index[2]],            fmt='k.', label='8-9 GeV')
+plt.errorbar(phi_d_2H_dsdt_minust_center_iter5[index[2]:index[3]],       phi_d_2H_dsdt_results_iter5[index[2]:index[3]],          xerr=phi_d_2H_dsdt_minust_width[index[2]:index[3]],        yerr=phi_d_2H_dsdt_results_statserr_iter5[index[2]:index[3]],            fmt='r.', label='9-11 GeV')
 
 # Fit the cross section with the function
-fit_indices = np.where(phi_d_2H_dsdt_minust_center > 0.24)[0]
+fit_indices = np.where(phi_d_2H_dsdt_minust_center_iter5 > 0.24)[0]
 curve_fit_params, curve_fit_cov = curve_fit(dsdt_func, \
-                                            phi_d_2H_dsdt_minust_center[fit_indices], \
+                                            phi_d_2H_dsdt_minust_center_iter5[fit_indices], \
                                             phi_d_2H_dsdt_results_iter5[fit_indices], \
                                             sigma=phi_d_2H_dsdt_results_statserr_iter5[fit_indices], \
                                             absolute_sigma=True, p0=[3000, 15, 15, 3])
-curve_fit_residuals             = phi_d_2H_dsdt_results_iter5[fit_indices] - dsdt_func(phi_d_2H_dsdt_minust_center[fit_indices], curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3])
+curve_fit_residuals             = phi_d_2H_dsdt_results_iter5[fit_indices] - dsdt_func(phi_d_2H_dsdt_minust_center_iter5[fit_indices], curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3])
 reduced_chi2                    = np.sum((curve_fit_residuals/phi_d_2H_dsdt_results_statserr_iter5[fit_indices])**2)/(len(phi_d_2H_dsdt_results_iter5[fit_indices])-4)
 plt.plot(np.linspace(0, 2, 100), dsdt_func(np.linspace(0, 2, 100), curve_fit_params[0], curve_fit_params[1], curve_fit_params[2], curve_fit_params[3]), '--', color = 'g', label='Combined fit')
 plt.text(0.01, 1, r'$a_1=%.5f\pm%.5f$' % (curve_fit_params[0], np.sqrt(curve_fit_cov[0][0])), fontsize=10, color='b', ha='left', va='top')
