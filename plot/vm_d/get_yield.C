@@ -322,7 +322,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
     }
 
     // Read bin edges from input text file
-    string input_txt_name = Form("/work/halld2/home/boyu/src_analysis/plot/vm_d/configs/bins_%s_%s.txt", channel.c_str(), observable.c_str());
+    string input_txt_name = Form("/work/halld2/home/boyu/src_analysis/plot/vm_d/input/bins_%s_%s.txt", channel.c_str(), observable.c_str());
     cout << "Input text file: " << input_txt_name << endl;
     ifstream input_txt(input_txt_name.c_str());
     vector<vector<double>> bins;
@@ -339,8 +339,8 @@ int get_yield(string channel, string reaction, string observable, string tag)
     input_txt.close();
 
     // Prepare output files
-    string output_textfile_name = Form("/work/halld2/home/boyu/src_analysis/plot/vm_d/output/yield_%s/yield_%s_%s_%s_%s.txt", channel.c_str(), channel.c_str(), reaction.c_str(), observable.c_str(), tag.c_str());
-    string output_pdffile_name = Form("/work/halld2/home/boyu/src_analysis/plot/vm_d/output/yield_%s/yield_%s_%s_%s_%s.pdf", channel.c_str(), channel.c_str(), reaction.c_str(), observable.c_str(), tag.c_str());
+    string output_textfile_name = Form("/work/halld2/home/boyu/src_analysis/plot/vm_d/output/yield_%s/yield_%s_%s_%s_%s.txt", observable.c_str(), channel.c_str(), reaction.c_str(), observable.c_str(), tag.c_str());
+    string output_pdffile_name = Form("/work/halld2/home/boyu/src_analysis/plot/vm_d/output/yield_%s/yield_%s_%s_%s_%s.pdf", observable.c_str(), channel.c_str(), reaction.c_str(), observable.c_str(), tag.c_str());
     cout << "Output text file: " << output_textfile_name << endl;
     cout << "Output PDF file: " << output_pdffile_name << endl;
     FILE *output_textfile = fopen(output_textfile_name.c_str(),"w");
