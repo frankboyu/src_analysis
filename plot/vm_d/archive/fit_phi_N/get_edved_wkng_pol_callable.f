@@ -137,7 +137,7 @@
         icase    =  5
         sigma_gn =  sgamman !relevant only for icase=5
         b_g      =  bgamman !relevant only for icase=3,4,5
-        alpha_g  =  -0.1
+        alpha_g  =  0.0
 ********************************************************************
 *         Parameters of cross section, slope  factor and real part
 ********************************************************************
@@ -149,7 +149,7 @@
 ********************************************************************
         sigma_vn = sphin
         b_vn     = bphin
-        al_vn    = -0.1
+        al_vn    = 0.0
 ********************************************************************
 
 ************* J/PSI ************************************************
@@ -519,7 +519,7 @@ C     --- 3. Send the calculated cross-section back to C++ ---
         qqpz = qpz
         qp_a = 0.0
         qp_b = 1.6
-        eps = 0.001
+        eps = 0.00001
         call gadap2(qp_a,qp_b,phip_a,phip_b,under_ab,eps,sum)
         two_FaFb = sum/((2.0*pi)**2)
         return
@@ -613,7 +613,7 @@ C     --- 3. Send the calculated cross-section back to C++ ---
         qqppz = qppz        
         qp_a = 0.0
         qp_b = 1.6
-        eps = 0.001
+        eps = 0.00001
         call gadap2(0.0,1.6,phip_a,phip_b,under_bb,eps,sum)
         FbFb = sum/((2.0*pi)**2)/((2.0*pi)**2) *100.0
         return
@@ -809,7 +809,7 @@ C     --- 3. Send the calculated cross-section back to C++ ---
        elseif(icase.eq.5)then
        q_photon = sqrt(s**2 + pm**4 - 2*s*pm**2)/2.0/sqrt(s)
        q_phi = sqrt(s**2 + pm**4 + vmm**4 - 2*s*pm*pm - 2*s*vmm*vmm - 2*pm*pm*vmm*vmm)/2.0/sqrt(s)
-       dsdt_min = (1.0/137.0/16.0/6.69**2)*((q_phi/q_photon)**2)*(sigma_gn*sigma_gn)*1000.0*2.56819
+        dsdt_min = (1.0/137.0/16.0/6.69**2)*((q_phi/q_photon)**2)*(1+alg(s,kvm)*alg(s,kvm))*(sigma_gn*sigma_gn)*1000.0*2.56819
        dsdt = dsdt_min*exp(b_gn(s,kvm)*(t-tmin))
        !dsdt = sigma_gn*exp(b_gn(s,kvm)*(t-tmin) + 1.4*(t-tmin)**2)
        endif
