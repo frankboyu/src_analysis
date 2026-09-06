@@ -421,8 +421,10 @@ int get_yield(string channel, string reaction, string observable, string tag)
                     variable = "decay_phi_helicity_kin";
                 else if (observable == "Wpolphi")
                     variable = "polarization_phi_com_kin";
-                else if (observable == "Wpsi")
-                    variable = "psi_helicity_kin";
+                else if (observable == "Wsumpsi")
+                    variable = "sum_psi_helicity_kin";
+                else if (observable == "Wdiffpsi")
+                    variable = "diff_psi_helicity_kin";
                 angle_cut = Form("%s>%.2f && %s<%.2f", variable.c_str(), bins[i][4], variable.c_str(), bins[i][5]);
                 rdf_bin = rdf_bin.Filter(angle_cut.c_str());
                 if (tag == "sideband")
@@ -663,8 +665,10 @@ int get_yield(string channel, string reaction, string observable, string tag)
                     variable = "decay_phi_helicity_truth";
                 else if (observable == "Wpolphi")
                     variable = "polarization_phi_com_truth";
-                else if (observable == "Wpsi")
-                    variable = "psi_helicity_truth";
+                else if (observable == "Wsumpsi")
+                    variable = "sum_psi_helicity_truth";
+                else if (observable == "Wdiffpsi")
+                    variable = "diff_psi_helicity_truth";
                 angle_cut = Form("%s>%.2f && %s<%.2f", variable.c_str(), bins[i][4], variable.c_str(), bins[i][5]);
                 rdf_bin = rdf_bin.Filter(angle_cut.c_str());
                 if (tag == "sideband")
