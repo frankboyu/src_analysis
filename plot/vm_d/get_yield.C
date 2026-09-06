@@ -55,32 +55,34 @@ int get_yield(string channel, string reaction, string observable, string tag)
     auto rdf_input = RNode(rdf_raw);
     if (reaction.find("recon") != string::npos)
     {
-        string dEdxCut          = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.65*d_momentum_meas+4.47) + 2.57)";
-        string MissPMinusCut    = "miss_pminus_meas > -0.02";
+        string dEdxCut          = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.51*d_momentum_meas+4.42) + 2.34)";
+        string MissPMinusCut    = "miss_pminus_meas > -0.023";
         string KinFitChiSqCut   = "chisq_per_ndf_kin < 5.0";
         string MomentumCut      = "kp_momentum_meas > 0.400 && km_momentum_meas > 0.400 && d_momentum_meas > 0.400";
         string ThetaCut         = "kp_theta_meas > 2.0 && km_theta_meas > 2.0 && d_theta_meas > 2.0";
-        string VertexZCut       = "TMath::Abs(vertex_z_kin - 65.0) < 14.0";
+        string VertexZCut       = "TMath::Abs(vertex_z_kin - 65.0) < 13.9";
         string VertexRCut       = "TMath::Sqrt(vertex_x_kin*vertex_x_kin + vertex_y_kin*vertex_y_kin) < 1.0";
         string BeamAccidCut     = "TMath::Abs(beam_DeltaT_meas) < 18.0";
         string RunGroupCut      = "polarization_angle > -2.0";
 
         if      (tag.find("dEdx_1.00") != string::npos)
-            dEdxCut         = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-4.01*d_momentum_meas+4.88) + 3.26)";
+            dEdxCut         = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.94*d_momentum_meas+4.85) + 3.12)";
         else if (tag.find("dEdx_1.50") != string::npos)
-            dEdxCut         = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.85*d_momentum_meas+4.69) + 2.92)";
+            dEdxCut         = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.74*d_momentum_meas+4.65) + 2.74)";
         else if (tag.find("dEdx_1.75") != string::npos)
-            dEdxCut         = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.74*d_momentum_meas+4.58) + 2.73)";
+            dEdxCut         = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.64*d_momentum_meas+4.54) + 2.54)";
         else if (tag.find("dEdx_2.50") != string::npos)
-            dEdxCut         = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.41*d_momentum_meas+4.21) + 2.21)";
+            dEdxCut         = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.23*d_momentum_meas+4.15) + 1.92)";
         else if (tag.find("dEdx_3.00") != string::npos)
-            dEdxCut         = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-3.11*d_momentum_meas+3.90) + 1.83)";
+            dEdxCut         = "d_dedx_cdc_keV_per_cm_meas > (TMath::Exp(-2.87*d_momentum_meas+3.82) + 1.45)";
         else if (tag.find("misspminus_0.0100") != string::npos)
             MissPMinusCut   = "miss_pminus_meas > -0.0100";
         else if (tag.find("misspminus_0.0150") != string::npos)
             MissPMinusCut   = "miss_pminus_meas > -0.0150";
         else if (tag.find("misspminus_0.0175") != string::npos)
             MissPMinusCut   = "miss_pminus_meas > -0.0175";
+        else if (tag.find("misspminus_0.0200") != string::npos)
+            MissPMinusCut   = "miss_pminus_meas > -0.0200";
         else if (tag.find("misspminus_0.0250") != string::npos)
             MissPMinusCut   = "miss_pminus_meas > -0.0250";
         else if (tag.find("misspminus_0.0300") != string::npos)
@@ -245,7 +247,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
         else
             rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_nominal(beam_energy_truth, minust_truth)");
 
-        rdf_input = rdf_input       .Define("yield_weight",             "beamaccid_weight_syst*combo_accid_weight_syst*sim_weight_syst")
+        rdf_input = rdf_input       .Define("yield_weight",             "beamaccid_weight_syst*combo_accid_weight_syst*sim_weight_syst*diff_psi_weight")
                                     .Define("yield_weight_squared",     "yield_weight*yield_weight");
     }
     else if (reaction.find("thrown") != string::npos)
@@ -317,7 +319,7 @@ int get_yield(string channel, string reaction, string observable, string tag)
         else
             rdf_input = rdf_input   .Define("sim_weight_syst",          "sim_weight_func_nominal(beam_energy_truth, minust_truth)");
 
-        rdf_input = rdf_input       .Define("yield_weight",             "sim_weight_syst")
+        rdf_input = rdf_input       .Define("yield_weight",             "sim_weight_syst*diff_psi_weight")
                                     .Define("yield_weight_squared",     "yield_weight*yield_weight");
     }
 
