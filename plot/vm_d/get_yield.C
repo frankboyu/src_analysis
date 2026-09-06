@@ -1131,25 +1131,6 @@ double sim_weight_func_nominal(double beam_energy_truth, double minust_truth)
         b2 = 3.331;
     }
     return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
-
-    // With energy dependence
-    // double a1, b1, a2, b2 = 0;
-    // double normalization = 10;
-    // if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
-    //     return 1.0;
-    // else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
-    // {
-    //     a1 = 6445.03;  b1 = 17.22; a2 = 12.42; b2 = 2.49;
-    // }
-    // else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
-    // {
-    //     a1 = 13232.54; b1 = 20.23; a2 = 24.78; b2 = 3.61;
-    // }
-    // else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
-    // {
-    //     a1 = 4782.12;  b1 = 16.78; a2 = 13.18; b2 = 2.94;
-    // }
-    // return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
 }
 
 double sim_weight_func_iterations(double beam_energy_truth, double minust_truth, int iteration)
@@ -1182,108 +1163,6 @@ double sim_weight_func_iterations(double beam_energy_truth, double minust_truth,
         a1 = 10223; b1 = 19.34; a2 = 20.24; b2 = 3.331;
     }
     return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
-
-    // With energy dependence
-    // double a1, b1, a2, b2 = 0;
-    // double normalization = 10;
-    // if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
-    //     return 1.0;
-    // else if (iteration == "simweight_iter0")
-    //     return 1.0;
-    // else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
-    // {
-    //     if (iteration == "simweight_iter1")
-    //     {
-    //         a1 = 3632.01; b1 = 15.82; a2 = 12.19; b2 = 2.49;
-    //     }
-    //     else if (iteration == "simweight_iter2")
-    //     {
-    //         a1 = 6127.78; b1 = 17.10; a2 = 12.43; b2 = 2.50;
-    //     }
-    //     else if (iteration == "simweight_iter3")
-    //     {
-    //         a1 = 6417.46; b1 = 17.21; a2 = 12.42; b2 = 2.49;
-    //     }
-    //     else if (iteration == "simweight_iter4")
-    //     {
-    //         a1 = 6442.44; b1 = 17.22; a2 = 12.42; b2 = 2.49;
-    //     }
-    //     else if (iteration == "simweight_iter5")
-    //     {
-    //         a1 = 6444.93; b1 = 17.22; a2 = 12.42; b2 = 2.49;
-    //     }
-    //     else if (iteration == "simweight_iter6")
-    //     {
-    //         a1 = 6444.97; b1 = 17.22; a2 = 12.42; b2 = 2.49;
-    //     }
-    //     else if (iteration == "simweight_iter7")
-    //     {
-    //         a1 = 6445.03; b1 = 17.22; a2 = 12.42; b2 = 2.49;
-    //     }
-    // }
-    // else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
-    // {
-    //     if (iteration == "simweight_iter1")
-    //     {
-    //         a1 = 4842.04;  b1 = 17.22; a2 = 17.43; b2 = 3.13;
-    //     }
-    //     else if (iteration == "simweight_iter2")
-    //     {
-    //         a1 = 11328.73; b1 = 19.75; a2 = 23.50; b2 = 3.54;
-    //     }
-    //     else if (iteration == "simweight_iter3")
-    //     {
-    //         a1 = 12903.60; b1 = 20.16; a2 = 24.55; b2 = 3.60;
-    //     }
-    //     else if (iteration == "simweight_iter4")
-    //     {
-    //         a1 = 13181.89; b1 = 20.22; a2 = 24.74; b2 = 3.61;
-    //     }
-    //     else if (iteration == "simweight_iter5")
-    //     {
-    //         a1 = 13225.39; b1 = 20.23; a2 = 24.77; b2 = 3.61;
-    //     }
-    //     else if (iteration == "simweight_iter6")
-    //     {
-    //         a1 = 13232.23; b1 = 20.23; a2 = 24.78; b2 = 3.61;
-    //     }
-    //     else if (iteration == "simweight_iter7")
-    //     {
-    //         a1 = 13232.54; b1 = 20.23; a2 = 24.78; b2 = 3.61;
-    //     }
-    // }
-    // else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
-    // {
-    //     if (iteration == "simweight_iter1")
-    //     {
-    //         a1 = 2882.53; b1 = 15.54; a2 = 12.54; b2 = 2.90;
-    //     }
-    //     else if (iteration == "simweight_iter2")
-    //     {
-    //         a1 = 4602.99; b1 = 16.69; a2 = 13.21; b2 = 2.95;
-    //     }
-    //     else if (iteration == "simweight_iter3")
-    //     {
-    //         a1 = 4769.82; b1 = 16.77; a2 = 13.19; b2 = 2.94;
-    //     }
-    //     else if (iteration == "simweight_iter4")
-    //     {
-    //         a1 = 4781.31; b1 = 16.78; a2 = 13.18; b2 = 2.94;
-    //     }
-    //     else if (iteration == "simweight_iter5")
-    //     {
-    //         a1 = 4782.23; b1 = 16.78; a2 = 13.18; b2 = 2.94;
-    //     }
-    //     else if (iteration == "simweight_iter6")
-    //     {
-    //         a1 = 4782.18; b1 = 16.78; a2 = 13.18; b2 = 2.94;
-    //     }
-    //     else if (iteration == "simweight_iter7")
-    //     {
-    //         a1 = 4782.12; b1 = 16.78; a2 = 13.18; b2 = 2.94;
-    //     }
-    // }
-    // return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
 }
 
 double sim_weight_func_systematic(double beam_energy_truth, double minust_truth, double a1_variation, double b1_variation, double a2_variation, double b2_variation)
@@ -1300,29 +1179,6 @@ double sim_weight_func_systematic(double beam_energy_truth, double minust_truth,
         a1_nominal = 10220; b1_nominal = 19.34; a2_nominal = 20.23; b2_nominal = 3.331;
         a1_sigma = 1480; b1_sigma = 0.50; a2_sigma = 1.21; b2_sigma = 0.068;
     }
-
-    // With energy dependence
-    // double a1_nominal, b1_nominal, a2_nominal, b2_nominal = 0;
-    // double a1_sigma, b1_sigma, a2_sigma, b2_sigma = 0;
-    // double a1, b1, a2, b2 = 0;
-    // double normalization = 10;
-    // if (beam_energy_truth < 0.01)   // data, with its truth variable set to zero as placeholder
-    //     return 1.0;
-    // else if (beam_energy_truth >= 6.0 && beam_energy_truth < 8.0)                            // simulation, weighted by the measured cross section
-    // {
-    //     a1_nominal = 6445.03;  b1_nominal = 17.22; a2_nominal = 12.42; b2_nominal = 2.49;
-    //     a1_sigma = 100.0; b1_sigma = 0.1; a2_sigma = 0.5; b2_sigma = 0.05;
-    // }
-    // else if (beam_energy_truth >= 8.0 && beam_energy_truth < 9.0)
-    // {
-    //     a1_nominal = 13232.54; b1_nominal = 20.23; a2_nominal = 24.78; b2_nominal = 3.61;
-    //     a1_sigma = 200.0; b1_sigma = 0.2; a2_sigma = 1.0; b2_sigma = 0.1;
-    // }
-    // else if (beam_energy_truth >= 9.0 && beam_energy_truth < 11.0)
-    // {
-    //     a1_nominal = 4782.12;  b1_nominal = 16.78; a2_nominal = 13.18; b2_nominal = 2.94;
-    //     a1_sigma = 150.0; b1_sigma = 0.15; a2_sigma = 0.7; b2_sigma = 0.07;
-    // }
 
         a1 = a1_nominal + a1_variation*a1_sigma;
         b1 = b1_nominal + b1_variation*b1_sigma;
