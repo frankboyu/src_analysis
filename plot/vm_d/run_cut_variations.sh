@@ -2,59 +2,22 @@
 
 start=`date +%s`
 
-###################################################################### SET UP ENVIRONMENT #####################################################################################
+RUN_MODE=$1
 
 source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
 gxenv $HALLD_VERSIONS/version.xml
-
-###################################################################### NUMBER OF COMBOS #####################################################################################
-
-# root -b -q -l "get_num_combo.C(\"phi_d\", \"exc_recon_data_ver12\")"
-# root -b -q -l "get_num_combo.C(\"phi_d\", \"exc_recon_sim_ver12\")"
-
-###################################################################### SIMULATION WEIGHT ITERATIONS #####################################################################################
-
-# root -b -q -l "get_yield.C(\"phi_d\", \"recon_exc_sim_2H_ver12_flat\",        \"dsdt\", \"simweight_iter0\")"
-# root -b -q -l "get_yield.C(\"phi_d\", \"thrown_exc_tagged_2H_ver12_flat\",    \"dsdt\", \"simweight_iter0\")"
-# python get_simweight.py
-
-# root -b -q -l "get_yield.C(\"phi_d\", \"recon_exc_sim_2H_ver12_flat\",        \"dsdt\", \"simweight_iter1\")"
-# root -b -q -l "get_yield.C(\"phi_d\", \"thrown_exc_tagged_2H_ver12_flat\",    \"dsdt\", \"simweight_iter1\")"
-# python get_simweight.py
-
-# root -b -q -l "get_yield.C(\"phi_d\", \"recon_exc_sim_2H_ver12_flat\",        \"dsdt\", \"simweight_iter2\")"
-# root -b -q -l "get_yield.C(\"phi_d\", \"thrown_exc_tagged_2H_ver12_flat\",    \"dsdt\", \"simweight_iter2\")"
-# python get_simweight.py
-
-# root -b -q -l "get_yield.C(\"phi_d\", \"recon_exc_sim_2H_ver12_flat\",        \"dsdt\", \"simweight_iter3\")"
-# root -b -q -l "get_yield.C(\"phi_d\", \"thrown_exc_tagged_2H_ver12_flat\",    \"dsdt\", \"simweight_iter3\")"
-# python get_simweight.py
-
-# root -b -q -l "get_yield.C(\"phi_d\", \"recon_exc_sim_2H_ver12_flat\",        \"dsdt\", \"simweight_iter4\")"
-# root -b -q -l "get_yield.C(\"phi_d\", \"thrown_exc_tagged_2H_ver12_flat\",    \"dsdt\", \"simweight_iter4\")"
-# python get_simweight.py
-
-# root -b -q -l "get_yield.C(\"phi_d\", \"recon_exc_sim_2H_ver12_flat\",        \"dsdt\", \"simweight_iter5\")"
-# root -b -q -l "get_yield.C(\"phi_d\", \"thrown_exc_tagged_2H_ver12_flat\",    \"dsdt\", \"simweight_iter5\")"
-# python get_simweight.py
-
-###################################################################### CUT VARIATIONS #####################################################################################
-
-# RUN_MODE="batch"
-RUN_MODE="local"
-# RUN_MODE="echo"
 
 CHANNEL_LIST=()
 CHANNEL_LIST+=("phi_d")
 
 REACTION_LIST=()
 # REACTION_LIST+=("exc_recon_data_ver12")
-REACTION_LIST+=("exc_recon_sim_ver12_05")
-REACTION_LIST+=("exc_thrown_tagged_ver12_05")
+REACTION_LIST+=("exc_recon_sim_ver12_07")
+REACTION_LIST+=("exc_thrown_tagged_ver12_07")
 
 OBSERVABLE_LIST=()
 # OBSERVABLE_LIST+=("dsdt")
-OBSERVABLE_LIST+=("dsdt" "Wcostheta" "Wdecayphi" "Wpolphi" "Wpsi")
+OBSERVABLE_LIST+=("dsdt" "Wcostheta" "Wdecayphi" "Wpolphi" "Wsumpsi" "Wdiffpsi")
 
 TAG_LIST=()
 # TAG_LIST+=("nominal")
@@ -133,15 +96,6 @@ done
 if [[ "$RUN_MODE" == "batch" ]]; then
     swif2 run src_analysis_plot
 fi
-
-################################################################### GET PLOTS #####################################################################################
-
-# python get_histograms.py
-# python get_observable.py
-# python get_chisq.py
-# python get_contour.py
-
-###################################################################### END #####################################################################################
 
 end=`date +%s`
 echo "Time taken: $(echo "scale=2; ($end - $start) / 60" | bc -l) minutes"
