@@ -1148,25 +1148,21 @@ double sim_weight_func_iterations(double beam_energy_truth, double minust_truth,
         return 1.0;
     else if (iteration == 0)
         return 1.0;
-    else if (iteration == 1)
+    else
     {
-        a1 = 6066; b1 = 17.94; a2 = 18.72; b2 = 3.234;
-    }
-    else if (iteration == 2)
-    {
-        a1 = 9847; b1 = 19.24; a2 = 20.17; b2 = 3.327;
-    }
-    else if (iteration == 3)
-    {
-        a1 = 10200; b1 = 19.33; a2 = 20.23; b2 = 3.330;
-    }
-    else if (iteration == 4)
-    {
-        a1 = 10220; b1 = 19.34; a2 = 20.23; b2 = 3.331;
-    }
-    else if (iteration == 5)
-    {
-        a1 = 10223; b1 = 19.34; a2 = 20.24; b2 = 3.331;
+        ifstream input_file(Form("output/table_simweight_iter%d.txt", iteration-1));
+        string line;
+        double *parameters[] = {&a1, &b1, &a2, &b2};
+
+        for (int i = 0; i < 4; ++i)
+        {
+            if (!getline(input_file, line))
+            {
+                cerr << "Unable to read sim-weight parameters from output/table_simweight_iter" << iteration-1 << ".txt" << endl;
+                return 1.0;
+            }
+            *parameters[i] = stod(line);
+        }
     }
     return (a1*TMath::Exp(-b1*minust_truth) + a2*TMath::Exp(-b2*minust_truth))/normalization;
 }
