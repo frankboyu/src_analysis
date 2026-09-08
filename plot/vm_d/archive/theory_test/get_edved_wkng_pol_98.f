@@ -1,7 +1,7 @@
         program test
         common/par/pi,pm,dm,vmm
         common/input/beamenergy,sgamman,bgamman,sphin,bphin,flag
-        open(12,file='input/theory_paras_58.txt')
+        open(12,file='input/theory_paras_98.txt')
         read(12,*)beamenergy
         read(12,*)sgamman
         read(12,*)bgamman
@@ -950,8 +950,8 @@
        elseif(icase.eq.5)then
        q_photon = sqrt(s**2 + pm**4 - 2*s*pm**2)/2.0/sqrt(s)
        q_phi = sqrt(s**2 + pm**4 + vmm**4 - 2*s*pm*pm - 2*s*vmm*vmm - 2*pm*pm*vmm*vmm)/2.0/sqrt(s)
-       dsdt_min = (1.0/137.0/16.0/6.69**2)*((q_phi/q_photon)**2)*(sigma_gn*sigma_gn)*1000.0*2.56819
-       dsdt = dsdt_min*exp(b_gn(s,kvm)*(t-tmin))
+       dsdt_min = (1.0/137.0/16.0/6.69**2)*((q_phi/q_photon)**2)*(1+alg(s,kvm)*alg(s,kvm))*(sigma_gn*sigma_gn)*1000.0*2.56819
+       dsdt = dsdt_min*exp(b_gn(s,kvm)*(t-tmin) + 2.0*(t-tmin)**2)
        !dsdt = sigma_gn*exp(b_gn(s,kvm)*(t-tmin) + 1.4*(t-tmin)**2)
        endif
 ************************************************************************
@@ -1177,10 +1177,10 @@
       common/formfactors/f_c(400),f_q(400),t_c(40,40),t_q(40,40)
       common/ctornot/ict0
       if(ins.eq.1)then
-      open(unit=11,status='old',file='input/theory_fc_fq_58.data')
+      open(unit=11,status='old',file='input/theory_fc_fq_98.data')
       read(11,10)(f_c(k),f_q(k),k=1,400)
       close(11)
-      open(unit=12,status='old',file='input/theory_tc_tq_58.data')
+      open(unit=12,status='old',file='input/theory_tc_tq_98.data')
 *      write(12,10)((TC(kt,kz),TQ(kt,kz),kt=1,400),kz=1,400)
       read(12,10)((t_c(kt,kz),t_q(kt,kz),kt=1,40),kz=1,40)
       close(12)

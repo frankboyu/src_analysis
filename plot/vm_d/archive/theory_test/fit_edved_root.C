@@ -34,11 +34,15 @@ double chiSquare(double* parameters) {
     const int initialize = 1;
     const double zero = 0.0;
     double unusedCrossSection = 0.0;
-    double fortranParameters[4] = {
+    double fortranParameters[8] = {
         4.5,
         11.0,
+        0.0,
         parameters[0],
-        parameters[1]
+        parameters[1],
+        0.0,
+        0.0,
+        1.0
     };
     edved_c(&initialize, &ivm, &zero, &zero, &zero, &zero, &zero,
             &unusedCrossSection, fortranParameters);

@@ -9,8 +9,12 @@ namespace edved {
 struct Parameters {
     double bgamman = 0.0;
     double sgamman = 0.0;
+    double agamman = 0.0;
     double bphin = 0.0;
     double sphin = 0.0;
+    double aphin = 0.0;
+    double t2term = 0.0;
+    double wfflag = 1.0;
 };
 
 struct Result {
@@ -36,8 +40,8 @@ extern "C" void edved_(
     float* ei, float* q2, float* q0, float* epsl, float* t,
     float* crs0, float* crs, float* tcrs0, float* tcrs,
     float* pd, float* thd, float* pvm, float* thvm,
-    float* beamenergy, float* bgamman, float* sgamman,
-    float* bphin, float* sphin);
+    float* beamenergy, float* bgamman, float* sgamman, float* agamman,
+    float* bphin, float* sphin, float* aphin, float* t2term, float* wfflag);
 
 class EdvedModel {
 public:
@@ -54,10 +58,15 @@ public:
         float beamenergy = 0.0f;
         float bgamman = static_cast<float>(parameters.bgamman);
         float sgamman = static_cast<float>(parameters.sgamman);
+        float agamman = static_cast<float>(parameters.agamman);
         float bphin = static_cast<float>(parameters.bphin);
         float sphin = static_cast<float>(parameters.sphin);
+        float aphin = static_cast<float>(parameters.aphin);
+        float t2term = static_cast<float>(parameters.t2term);
+        float wfflag = static_cast<float>(parameters.wfflag);
         callFortran(in, ivm, zero, zero, zero, zero, zero, zero, zero, zero, zero,
-                    zero, zero, zero, zero, beamenergy, bgamman, sgamman, bphin, sphin);
+                zero, zero, zero, zero, beamenergy, bgamman, sgamman, agamman,
+                bphin, sphin, aphin, t2term, wfflag);
         initialized_ = true;
         meson_ = meson;
     }
@@ -77,7 +86,7 @@ public:
         float pd = 0.0f, thd = 0.0f, pvm = 0.0f, thvm = 0.0f;
         float zero = 0.0f;
         callFortran(in, ivm, fei, fq2, fq0, fepsl, ft, crs0, crs, tcrs0, tcrs,
-                    pd, thd, pvm, thvm, zero, zero, zero, zero, zero);
+                pd, thd, pvm, thvm, zero, zero, zero, zero, zero, zero, zero, zero);
 
         Result result;
         result.crs0 = crs0;
@@ -96,9 +105,11 @@ private:
         int& in, int& ivm, float& ei, float& q2, float& q0, float& epsl, float& t,
         float& crs0, float& crs, float& tcrs0, float& tcrs,
         float& pd, float& thd, float& pvm, float& thvm,
-        float& beamenergy, float& bgamman, float& sgamman, float& bphin, float& sphin) {
+         float& beamenergy, float& bgamman, float& sgamman, float& agamman,
+         float& bphin, float& sphin, float& aphin, float& t2term, float& wfflag) {
         edved_(&in, &ivm, &ei, &q2, &q0, &epsl, &t, &crs0, &crs, &tcrs0, &tcrs,
-               &pd, &thd, &pvm, &thvm, &beamenergy, &bgamman, &sgamman, &bphin, &sphin);
+             &pd, &thd, &pvm, &thvm, &beamenergy, &bgamman, &sgamman, &agamman,
+             &bphin, &sphin, &aphin, &t2term, &wfflag);
     }
 
     bool initialized_ = false;
@@ -110,21 +121,26 @@ private:
 // sphin, bphin.
 Result getPhiResult(double photonEnergy, double minusT,
                    double sgamman, double bgamman,
-                   double sphin, double bphin) {
+                   double sphin, double bphin,
+                   double agamman = 0.0, double aphin = 0.0,
+                   double t2term = 0.0, double wfflag = 1.0) {
     if (photonEnergy <= 0.0)
         throw std::invalid_argument("photonEnergy must be positive");
     if (minusT < 0.0)
         throw std::invalid_argument("minusT must be non-negative");
 
     EdvedModel model("input");
-    model.initialize(3, {bgamman, sgamman, bphin, sphin});
+    model.initialize(3, {bgamman, sgamman, agamman, bphin, sphin, aphin, t2term, wfflag});
     return model.calculate(0.0, 0.0, photonEnergy, 0.0, -minusT);
 }
 
 double getPhiCrossSection(double photonEnergy, double minusT,
                           double sgamman, double bgamman,
-                          double sphin, double bphin) {
-    return getPhiResult(photonEnergy, minusT, sgamman, bgamman, sphin, bphin).crs;
+                                                    double sphin, double bphin,
+                                                    double agamman = 0.0, double aphin = 0.0,
+                                                    double t2term = 0.0, double wfflag = 1.0) {
+        return getPhiResult(photonEnergy, minusT, sgamman, bgamman, sphin, bphin,
+                                                agamman, aphin, t2term, wfflag).crs;
 }
 
 } // namespace edved

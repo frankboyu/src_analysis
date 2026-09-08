@@ -2,21 +2,20 @@
 
 start=`date +%s`
 
-LABEL=theory_empirical_alpha_m0.1_gn
+LABEL=theory_two_para_t2_1.0
 mkdir output/${LABEL}/
 
 gfortran -ffixed-line-length-none -o exe_theory_58.out get_edved_wkng_pol_58.f
 
-# for BEAMENERGY in 2.1 3.1 6.9 8.3 9.7
 for BEAMENERGY in 6.9 8.3 9.7
 do
-    for SGAMMAN in $(seq 12 0.1 14)
+    for SGAMMAN in $(seq 11.0 0.5 11.0)
     do
-        for BGAMMAN in $(seq 4.0 0.2 8.0)
+        for BGAMMAN in $(seq 4.0 0.5 4.0)
         do
-            for SPHIN in $(seq 30.8 0.2 30.8)
+            for SPHIN in $(seq 20.0 0.2 40.0)
             do
-                for BPHIN in $(seq 11.2 0.1 11.2)
+                for BPHIN in $(seq 5.0 0.1 15.0)
                 do
                     echo "Running with E=$BEAMENERGY GeV, sigma_gn=$SGAMMAN mb, b_gn=$BGAMMAN GeV^-2, sigma_vn=$SPHIN mb, b_vn=$BPHIN GeV^-2"
                     echo "$BEAMENERGY" > input/theory_paras_58.txt
