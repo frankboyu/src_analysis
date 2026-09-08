@@ -83,7 +83,7 @@ do
                     JOB_RESOURCES="-account halld -partition production -os el9 -cores 1 -ram 1GB -disk 4GB -time 24hrs"
                     JOB_OUT="-stdout /farm_out/boyu/src_analysis/plot/yield_${CHANNEL}_${REACTION}_${OBSERVABLE}_${TAG}_$(date '+%Y-%m-%d').out"
                     JOB_ERR="-stderr /farm_out/boyu/src_analysis/plot/yield_${CHANNEL}_${REACTION}_${OBSERVABLE}_${TAG}_$(date '+%Y-%m-%d').err"
-                    JOB_COMMAND="sh /work/halld2/home/boyu/src_analysis/plot/vm_d/run_yield_extraction.sh \"$CHANNEL\" \"$REACTION\" \"$OBSERVABLE\" \"$TAG\""
+                    JOB_COMMAND="sh /work/halld2/home/boyu/src_analysis/plot/vm_d/run_yield_single.sh \"$CHANNEL\" \"$REACTION\" \"$OBSERVABLE\" \"$TAG\""
                     swif2 add-job $JOB_WORKFLOW $JOB_NAME $JOB_RESOURCES $JOB_OUT $JOB_ERR $JOB_COMMAND
                 else
                     echo "Error: Unknown RUN_MODE '$RUN_MODE'. Please set RUN_MODE to 'echo', 'local' or 'batch'."
