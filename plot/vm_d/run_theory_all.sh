@@ -10,7 +10,7 @@ gxenv $HALLD_VERSIONS/version.xml
 TAG_LIST=()
 # TAG_LIST+=("two_para_nominal")
 # TAG_LIST+=("two_para_sgamman_12.0_bgamman_5.0")
-TAG_LIST+=("two_para_sgamman_12.0_bgamman_6.0")
+TAG_LIST+=("two_para_sgamman_12.0_bgamman_5.5")
 
 sh run_theory_compile.sh
 
@@ -19,7 +19,7 @@ do
     if [[ "$RUN_MODE" == "echo" ]]; then
         echo "Dry run: TAG=$TAG"
     elif [[ "$RUN_MODE" == "local" ]]; then
-        root -b -q -l "get_edved_wkng_pol_run.C(\"$TAG\")"
+        root -b -q -l "get_theory_run.C(\"$TAG\")"
     elif [[ "$RUN_MODE" == "batch" ]]; then
         JOB_WORKFLOW="-workflow src_analysis_plot"
         JOB_NAME="-name theory_${TAG}_$(date '+%Y-%m-%d-%H-%M')"

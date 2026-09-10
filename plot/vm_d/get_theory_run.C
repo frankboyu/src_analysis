@@ -8,7 +8,7 @@
 #include <string>
 using namespace std;
 
-R__LOAD_LIBRARY(/work/halld2/home/boyu/src_analysis/plot/vm_d/exe_theory_callable.out)
+R__LOAD_LIBRARY(/work/halld2/home/boyu/src_analysis/plot/vm_d/lib_edved.so)
 
 extern "C" {
 void edved_c(const int* in, const int* ivm, const double* ei,
@@ -16,7 +16,7 @@ void edved_c(const int* in, const int* ivm, const double* ei,
             const double* t, double* crs, const double* params);
 }
 
-void get_edved_wkng_pol_run(string tag)
+void get_theory_run(string tag)
 {
     const int ivm = 3;
 
