@@ -1,13 +1,13 @@
-import ROOT
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.backends.backend_pdf import PdfPages
-from scipy.optimize import curve_fit
-from scipy.integrate import quad
-import scipy
-import ROOT as root
+import  ROOT                            as      root
+import  numpy                           as      np
+import  matplotlib.pyplot               as      plt
+import  scipy                           as      sp
+from    scipy.optimize                  import  curve_fit
+from    scipy.integrate                 import  quad
+from    matplotlib.backends.backend_pdf import  PdfPages
 
 mass_kaon = 0.493677
+plt.rcParams['font.size'] = 16
 
 def exponential(x, a, b, c):
     return np.exp(a*x+b)+c
@@ -24,23 +24,23 @@ def double_gaussian(x, a1, b1, c1, a2, b2, c2):
 def triple_gaussian(x, a1, b1, c1, a2, b2, c2, a3, c3):
     return a1*np.exp(-0.5*((x-b1)/c1)**2) + a2*np.exp(-0.5*((x-b2)/c2)**2) + a3*np.exp(-0.5*((x-b2)/c3)**2)
 
-ROOT.gROOT.SetBatch(True)
+root.gROOT.SetBatch(True)
 nObj = 0
 
 class File:
     def __init__(self,infile):
-        if (isinstance(infile,ROOT.TFile)):
+        if (isinstance(infile,root.TFile)):
             self.TFile = infile
         else:
-            self.TFile = ROOT.TFile(infile)
+            self.TFile = root.TFile(infile)
 
     def get(self,name,**kwargs):
         # if (not self.TFile.GetListOfKeys().Contains(name)):
             # raise ValueError("File does not contain specified object")
         h = self.TFile.Get(name)
-        if (isinstance(h,ROOT.TH2)):
+        if (isinstance(h,root.TH2)):
             return Hist2D(h,**kwargs)
-        elif (isinstance(h,ROOT.TH1)):
+        elif (isinstance(h,root.TH1)):
             return Hist1D(h,**kwargs)
         else:
             raise ValueError("Object is not a supported type")
@@ -85,7 +85,7 @@ class Hist1D:
         if (rebin != 1):
             self.TH1.Rebin(rebin)
 
-        g = ROOT.TGraphAsymmErrors(self.TH1)
+        g = root.TGraphAsymmErrors(self.TH1)
         self.x = np.array(g.GetX())
         self.y = np.array(g.GetY())*scale
         xerr = []
@@ -103,7 +103,7 @@ class Hist1D:
     def rebin(self,factor):
         if (factor != 1):
             self.TH1.Rebin(factor)
-            g = ROOT.TGraphAsymmErrors(self.TH1)
+            g = root.TGraphAsymmErrors(self.TH1)
             self.x = np.array(g.GetX())
             self.y = np.array(g.GetY())
             xerr = []
@@ -203,29 +203,50 @@ sim_version  = '07'
 print("Data version: " + data_version)
 print("Sim version: " + sim_version)
 
-file_pdf    = PdfPages("/work/halld2/home/boyu/src_analysis/plot/vm_d/output/plots_phi_d_hists.pdf")
+cut_pdf     = PdfPages("/work/halld2/home/boyu/src_analysis/plot/vm_d/output/plots_phi_d_hists_cut.pdf")
+check_pdf   = PdfPages("/work/halld2/home/boyu/src_analysis/plot/vm_d/output/plots_phi_d_hists_check.pdf")
 file_data   = File("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_exc_recon_data_"    + data_version                     + ".root")
 file_sim    = File("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_exc_recon_sim_"     + data_version + "_" + sim_version + ".root")
 # file_tagged = File("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_exc_thrown_tagged_" + data_version + "_" + sim_version + ".root")
 # file_gen    = File("/work/halld2/home/boyu/src_analysis/filter/output/filteredhist_phi_d_exc_thrown_gen_"    + data_version + "_" + sim_version + ".root")
 
-print("################################################################# EVENT SELECTION #################################################################")
+if (data_version == 'ver12' and sim_version == '07'):
+    num_events = 1e7
+
+a1 = 10222.59309
+b1 = 19.33908
+a2 = 20.23543
+b2 = 3.33070
+
+integrated_cs = 1000*quad(lambda x: a1*np.exp(-b1*x)+a2*np.exp(-b2*x), 0, 2)[0] # in pb
+integrated_cs = 1000*2
+integrated_lumi = 18.13 # in pb-1
+normalization_factor = integrated_lumi * integrated_cs / num_events
+
+normalization_factor = 0.0019
+
+print("################################################################# CUT STUDIES #################################################################")
 
 print("KinFit Chi2")
 fig = plt.figure(figsize=(8, 6), dpi=300)
 hist_data = file_data.get('KinFitChiSqCut/kinfit_cut_chisq_per_ndf_KinFitChiSqCut')
 hist_sim  = file_sim. get('KinFitChiSqCut/kinfit_cut_chisq_per_ndf_KinFitChiSqCut')
 hist_sim.scale(hist_data.y.max()/hist_sim.y.max())
-hist_data.plotPoints(label="Data", marker='o', markersize=3, linestyle='None', color='black')
-hist_sim. plotPoints(label="Sim",  marker='o', markersize=3, linestyle='None', color='blue')
-plt.plot(np.linspace(0,10,1000), hist_data.y.max()*(scipy.stats.chi2.pdf(np.linspace(0,10,1000)*7, df=7)*7)/(scipy.stats.chi2.pdf(np.linspace(0,10,1000)*7, df=7)*7).max(), '-', color='green', label=r'$\chi^2$(ndf=7) PDF')
-plt.plot([5, 5], [0, hist_data.y.max()*1.2], '-', color='red', label=r'Cut position')
+# hist_sim.scale(normalization_factor)
+hist_data.plotPoints(label="Data", marker='o', markersize=4, linestyle='None', color='black')
+hist_sim. plotPoints(label="Sim",  marker='o', markersize=4, linestyle='None', color='blue')
+plt.plot(np.linspace(0,10,1000), hist_data.y.max()*(sp.stats.chi2.pdf(np.linspace(0,10,1000)*7, df=7)*7)/(sp.stats.chi2.pdf(np.linspace(0,10,1000)*7, df=7)*7).max(), '-', color='green', label=r'$\chi^2$(ndf=7) PDF')
+plt.plot([5, 5], [0, hist_data.y.max()*1.2], '-', color='red', label=r'Cut position', linewidth=2)
 plt.xlabel(r"$\chi^{2}$/NDF")
 plt.ylabel(r"Counts")
+plt.xticks(fontsize=16)
+plt.yticks(np.arange(0, round(hist_data.y.max()*1.2, -2)+1, round(hist_data.y.max()*1.2/5, -2)))
+plt.minorticks_on()
+plt.tick_params(which='both', direction='in', top=True, right=True)
+plt.legend(fontsize=16)
 plt.xlim(0, 10)
 plt.ylim(0, round(hist_data.y.max()*1.2, -2))
-plt.legend()
-file_pdf.savefig()
+cut_pdf.savefig()
 plt.close()
 
 print("Deuteron dE/dx: comparison between data and simulation")
@@ -234,22 +255,25 @@ gs = fig.add_gridspec(1, 2)
 axs = gs.subplots()
 hist_data = file_data.get('dEdxCut/pid_cut_d_dEdx_cdc_dEdxCut')
 hist_sim  = file_sim .get('dEdxCut/pid_cut_d_dEdx_cdc_dEdxCut')
-# hist_sim.scale(0.002)
-hist_sim.areaNorm(hist_data)
+hist_sim.scale(normalization_factor)
 plt.axes(axs[0])
 hist_data.plotHeatmap(vmin=0, vmax=50)
-plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=24, fontstyle='italic', ha='right', va='top')
 plt.axes(axs[1])
 hist_sim.plotHeatmap(vmin=0, vmax=50)
-plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=24, fontstyle='italic', ha='right', va='top')
 for i in range(2):
     plt.axes(axs[i])
-    plt.plot(np.arange(0.25, 3, 0.01), np.exp(-3.65*np.arange(0.25, 3, 0.01)+4.47)+2.57, color='red')
+    plt.plot(np.arange(0.25, 3, 0.01), np.exp(-3.65*np.arange(0.25, 3, 0.01)+4.47)+2.57, color='red', linewidth=2)
     plt.xlim(0, 2)
     plt.ylim(0, 40)
-    plt.xlabel(r"$p_d$ (GeV/c)")
-    plt.ylabel(r"$(dE/dx)^{\mathrm{CDC}}_d$ (keV/cm)")
-file_pdf.savefig()
+    plt.xlabel(r"$p$ [GeV]")
+    plt.ylabel(r"$dE/dx$ [keV/cm]")
+    plt.xticks(np.arange(0, 2.5, 0.5))
+    plt.yticks(np.arange(0, 45, 10))
+    plt.minorticks_on()
+    plt.tick_params(which='both', direction='in', top=True, right=True)
+cut_pdf.savefig()
 plt.close()
 
 print("Deuteron dE/dx: combined fit of deuteron and proton bands")
@@ -257,24 +281,28 @@ plt.figure(figsize=(16,20), dpi=300)
 fig, axs = plt.subplots(5, 3, figsize=(16,20), dpi=300)
 axs = axs.flatten()
 hist_data = file_data.get('dEdxCut/pid_cut_d_dEdx_cdc_dEdxCut')
-rebin_factors  = np.array([4,  4,  4,    2,  1,  1,  1,  2,  2,  4,  4,   4,   8,   8], dtype=int)
-dedx_p_edges   = np.array([45, 50, 52.5, 55, 60, 65, 70, 75, 80, 90, 100, 120, 140, 200], dtype=int)
-dedx_p_low     = dedx_p_edges[:-1]
-dedx_p_high    = dedx_p_edges[1:]
-dedx_p_centers = (dedx_p_low + dedx_p_high)/2
+rebin_factors   = np.array([4,  4,  4,    2,  1,  1,  1,  2,  2,  4,  4,   4,   8,   8], dtype=int)
+dedx_p_edges    = np.array([45, 50, 52.5, 55, 60, 65, 70, 75, 80, 90, 100, 120, 140, 200], dtype=int)
+dedx_p_low      = dedx_p_edges[:-1]
+dedx_p_high     = dedx_p_edges[1:]
+dedx_p_centers  = (dedx_p_low + dedx_p_high)/2
 d_amplitude_value,  d_amplitude_err,  d_mean_value,   d_mean_err, d_sigma_value,  d_sigma_err  = np.array([]), np.array([]), np.array([]), np.array([]), np.array([]), np.array([])
 p_amplitude1_value, p_amplitude1_err, p_mean_value,   p_mean_err, p_sigma1_value, p_sigma1_err = np.array([]), np.array([]), np.array([]), np.array([]), np.array([]), np.array([])
 p_amplitude2_value, p_amplitude2_err, p_sigma2_value, p_sigma2_err                             = np.array([]), np.array([]), np.array([]), np.array([])
-chisquared = np.array([])
 contamination = np.array([])
+chisquared = np.array([])
 for i in range(len(dedx_p_edges)-1):
     plt.sca(axs[i])
     hist_slice = Hist1D(hist_data.TH2.ProjectionY("_px",int(dedx_p_edges[i]),int(dedx_p_edges[i+1])))
     hist_slice.rebin(int(rebin_factors[i]))
     hist_slice.yerr = np.sqrt(hist_slice.yerr**2 + 1)  # Add a constant error of 1 to all bins to avoid zero error bars
-    hist_slice.plotPoints(fmt='o', label='Data', markersize=3, color='black')
-    plt.ylim(0, hist_slice.y.max()*1.2)
+    hist_slice.plotPoints(fmt='o', label='Data', markersize=4, color='black')
+    plt.ylim(0, round(hist_slice.y.max()*1.2 / 50) * 50)
     plt.xlim(0, 40)
+    plt.yticks(np.arange(0, round(hist_slice.y.max()*1.2, -1)+1, round(hist_slice.y.max()*1.2/5, -1)), fontsize=12)
+    plt.xticks(np.arange(0, 45, 10), fontsize=12)
+    plt.minorticks_on()
+    plt.tick_params(which='both', direction='in', top=True, right=True)
 
     fit_low = np.exp(-2.35*(dedx_p_centers[i]/100)+2.71)+0.24       # -2 sigma position for proton from the first trial fit, nominal position
     if (i == 0):
@@ -286,7 +314,7 @@ for i in range(len(dedx_p_edges)-1):
     p0_d_sigma  = np.exp(-4.46*(dedx_p_centers[i]/100)+5.47)+4.55 - p0_d_mean
     p0_p_mean   = np.exp(-3.62*(dedx_p_centers[i]/100)+3.70)+1.48
     p0_p_sigma  = np.exp(-4.00*(dedx_p_centers[i]/100)+4.06)+1.99 - p0_p_mean
-    fit_mask = (hist_slice.x > fit_low) & (hist_slice.x < fit_high)
+    fit_mask        = (hist_slice.x > fit_low) & (hist_slice.x < fit_high)
     hist_slice.x    = hist_slice.x[fit_mask]
     hist_slice.y    = hist_slice.y[fit_mask]
     hist_slice.yerr = hist_slice.yerr[fit_mask]
@@ -315,28 +343,24 @@ for i in range(len(dedx_p_edges)-1):
         p_sigma2_err        = np.append(p_sigma2_err,       np.sqrt(pcov[7][7]))
         chisquared          = np.append(chisquared,         chisq)
         contamination       = np.append(contamination, quad(lambda x: double_gaussian(x, popt[3], popt[4], popt[5], popt[6], popt[4], popt[7]), popt[1]-2.0*popt[2], np.inf)[0] / quad(lambda x: triple_gaussian(x, *popt), popt[1]-2.0*popt[2], np.inf)[0])
-        plt.plot(np.arange(fit_low, fit_high, 0.01), triple_gaussian(np.arange(fit_low, fit_high, 0.01), *popt),                label="Triple Gaussian Fit",    color='red')
-        plt.plot(np.arange(fit_low, fit_high, 0.01), gaussian(np.arange(fit_low, fit_high, 0.01), popt[0], popt[1], popt[2]),   label="Deuteron Component",     color='blue',   linestyle='--')
-        plt.plot(np.arange(fit_low, fit_high, 0.01), double_gaussian(np.arange(fit_low, fit_high, 0.01), popt[3], popt[4], popt[5], popt[6], popt[4], popt[7]),   label="Proton Component",       color='green',  linestyle='--')
-        if (i == 3):
-            plt.text(0.5, 0.50, r'$A_1=%.2f \pm %.2f$' %        (popt[0], np.sqrt(pcov[0][0])),         transform=plt.gca().transAxes, fontsize=10)
-            plt.text(0.5, 0.45, r'$\mu_1=%.3f \pm %.3f$' %      (popt[1], np.sqrt(pcov[1][1])),         transform=plt.gca().transAxes, fontsize=10)
-            plt.text(0.5, 0.40, r'$\sigma_1=%.3f \pm %.3f$' %   (abs(popt[2]), np.sqrt(pcov[2][2])),    transform=plt.gca().transAxes, fontsize=10)
-            plt.text(0.5, 0.35, r'$A_2=%.2f \pm %.2f$' %        (popt[3], np.sqrt(pcov[3][3])),         transform=plt.gca().transAxes, fontsize=10)
-            plt.text(0.5, 0.30, r'$\mu_2=%.3f \pm %.3f$' %      (popt[4], np.sqrt(pcov[4][4])),         transform=plt.gca().transAxes, fontsize=10)
-            plt.text(0.5, 0.25, r'$\sigma_2=%.3f \pm %.3f$' %   (abs(popt[5]), np.sqrt(pcov[5][5])),    transform=plt.gca().transAxes, fontsize=10)
-            plt.text(0.5, 0.20, r'$\chi^2/ndf=%.2f$' %          (chisq/(len(hist_slice.x)-3)),          transform=plt.gca().transAxes, fontsize=10)
-        else:
-            plt.text(0.5, 0.70, r'$A_1=%.2f \pm %.2f$' %        (popt[0], np.sqrt(pcov[0][0])),         transform=plt.gca().transAxes, fontsize=10)
-            plt.text(0.5, 0.65, r'$\mu_1=%.3f \pm %.3f$' %      (popt[1], np.sqrt(pcov[1][1])),         transform=plt.gca().transAxes, fontsize=10)
-            plt.text(0.5, 0.60, r'$\sigma_1=%.3f \pm %.3f$' %   (abs(popt[2]), np.sqrt(pcov[2][2])),    transform=plt.gca().transAxes, fontsize=10)
-            plt.text(0.5, 0.55, r'$A_2=%.2f \pm %.2f$' %        (popt[3], np.sqrt(pcov[3][3])),         transform=plt.gca().transAxes, fontsize=10)
-            plt.text(0.5, 0.50, r'$\mu_2=%.3f \pm %.3f$' %      (popt[4], np.sqrt(pcov[4][4])),         transform=plt.gca().transAxes, fontsize=10)
-            plt.text(0.5, 0.45, r'$\sigma_2=%.3f \pm %.3f$' %   (abs(popt[5]), np.sqrt(pcov[5][5])),    transform=plt.gca().transAxes, fontsize=10)
-            plt.text(0.5, 0.40, r'$\chi^2/ndf=%.2f$' %          (chisq/(len(hist_slice.x)-3)),          transform=plt.gca().transAxes, fontsize=10)
-        plt.title(r'$p$ bin: [%.2f, %.2f] GeV/c' %  (dedx_p_low[i]/100, dedx_p_high[i]/100))
+        plt.plot(np.arange(fit_low, fit_high, 0.01), triple_gaussian(np.arange(fit_low, fit_high, 0.01), *popt),                                                    label="Triple Gaussian Fit",    color='red',    linestyle='-', linewidth=2, zorder=10)
+        plt.plot(np.arange(fit_low, fit_high, 0.01), gaussian(np.arange(fit_low, fit_high, 0.01), popt[0], popt[1], popt[2]),                                       label="Deuteron Component",     color='blue',   linestyle='--',linewidth=2, zorder=10)
+        plt.plot(np.arange(fit_low, fit_high, 0.01), double_gaussian(np.arange(fit_low, fit_high, 0.01), popt[3], popt[4], popt[5], popt[6], popt[4], popt[7]),     label="Proton Component",       color='green',  linestyle='--',linewidth=2, zorder=10)
+
+        plt.text(0.4, 0.90 - 0*0.07, r'$A_d=%.2f \pm %.2f$' %           (popt[0],      np.sqrt(pcov[0][0])),    transform=plt.gca().transAxes, fontsize=12)
+        plt.text(0.4, 0.90 - 1*0.07, r'$\sigma_d=%.3f \pm %.3f$' %      (abs(popt[2]), np.sqrt(pcov[2][2])),    transform=plt.gca().transAxes, fontsize=12)
+        plt.text(0.4, 0.90 - 2*0.07, r'$\mu_d=%.3f \pm %.3f$' %         (popt[1],      np.sqrt(pcov[1][1])),    transform=plt.gca().transAxes, fontsize=12)
+        plt.text(0.4, 0.90 - 3*0.07, r'$A_{p1}=%.2f \pm %.2f$' %        (popt[3],      np.sqrt(pcov[3][3])),    transform=plt.gca().transAxes, fontsize=12)
+        plt.text(0.4, 0.90 - 4*0.07, r'$\sigma_{p1}=%.3f \pm %.3f$' %   (abs(popt[5]), np.sqrt(pcov[5][5])),    transform=plt.gca().transAxes, fontsize=12)
+        plt.text(0.4, 0.90 - 5*0.07, r'$A_{p2}=%.2f \pm %.2f$' %        (popt[6],      np.sqrt(pcov[6][6])),    transform=plt.gca().transAxes, fontsize=12)
+        plt.text(0.4, 0.90 - 6*0.07, r'$\sigma_{p2}=%.3f \pm %.3f$' %   (abs(popt[7]), np.sqrt(pcov[7][7])),    transform=plt.gca().transAxes, fontsize=12)
+        plt.text(0.4, 0.90 - 7*0.07, r'$\mu_p=%.3f \pm %.3f$' %         (popt[4],      np.sqrt(pcov[4][4])),    transform=plt.gca().transAxes, fontsize=12)
+        plt.text(0.4, 0.90 - 8*0.07, r'$\chi^2/ndf=%.2f$' %             (chisq/(len(hist_slice.x)-3)),          transform=plt.gca().transAxes, fontsize=12)
+        plt.title(r'%.2f--%.2f GeV' % (dedx_p_low[i]/100, dedx_p_high[i]/100), fontsize=12)
     else:
-        popt, pcov          = curve_fit(gaussian, hist_slice.x, hist_slice.y, p0=[hist_slice.y.max(),p0_d_mean,p0_d_sigma])
+        popt, pcov          = curve_fit(gaussian, hist_slice.x, hist_slice.y, \
+                                        p0=[hist_slice.y.max()/2, p0_d_mean, p0_d_sigma], \
+                                        bounds=([0, 0, 0], [hist_slice.y.max(), p0_d_mean+2*p0_d_sigma, 2*p0_d_sigma]))
         residuals           = hist_slice.y - gaussian(hist_slice.x, *popt)
         chisq               = np.sum((residuals**2) / gaussian(hist_slice.x, *popt))
         d_amplitude_value   = np.append(d_amplitude_value,  popt[0])
@@ -347,28 +371,31 @@ for i in range(len(dedx_p_edges)-1):
         d_sigma_err         = np.append(d_sigma_err,        np.sqrt(pcov[2][2]))
         chisquared          = np.append(chisquared,         chisq)
         contamination       = np.append(contamination,      0)
-        plt.plot(np.arange(fit_low, fit_high, 0.01), gaussian(np.arange(fit_low, fit_high, 0.01), *popt), label="Gaussian Fit", color='red')
-        plt.title(r'$p$ bin: [%.2f, %.2f] GeV/c' % (dedx_p_low[i]/100, dedx_p_high[i]/100))
-        plt.text(0.5, 0.90, r'$A_2=%.2f \pm %.2f$' %            (popt[0], np.sqrt(pcov[0][0])),         transform=plt.gca().transAxes, fontsize=10)
-        plt.text(0.5, 0.85, r'$\mu_2=%.3f \pm %.3f$' %          (popt[1], np.sqrt(pcov[1][1])),         transform=plt.gca().transAxes, fontsize=10)
-        plt.text(0.5, 0.80, r'$\sigma_2=%.3f \pm %.3f$' %       (abs(popt[2]), np.sqrt(pcov[2][2])),    transform=plt.gca().transAxes, fontsize=10)
-        plt.text(0.5, 0.75, r'$\chi^2/ndf=%.2f$' %              (chisq/(len(hist_slice.x)-3)),          transform=plt.gca().transAxes, fontsize=10)
+        plt.plot(np.arange(fit_low, fit_high, 0.01), gaussian(np.arange(fit_low, fit_high, 0.01), *popt), label="Gaussian Fit", color='red', zorder=10)
+        plt.title(r'%.2f--%.2f GeV' % (dedx_p_low[i]/100, dedx_p_high[i]/100), fontsize=12)
+        plt.text(0.4, 0.90 - 0*0.07, r'$A_d=%.2f \pm %.2f$' %           (popt[0],      np.sqrt(pcov[0][0])),    transform=plt.gca().transAxes, fontsize=12)
+        plt.text(0.4, 0.90 - 1*0.07, r'$\sigma_d=%.3f \pm %.3f$' %      (abs(popt[2]), np.sqrt(pcov[2][2])),    transform=plt.gca().transAxes, fontsize=12)
+        plt.text(0.4, 0.90 - 2*0.07, r'$\mu_d=%.3f \pm %.3f$' %         (popt[1],      np.sqrt(pcov[1][1])),    transform=plt.gca().transAxes, fontsize=12)
+        plt.text(0.4, 0.90 - 3*0.07, r'$\chi^2/ndf=%.2f$' %             (chisq/(len(hist_slice.x)-3)),          transform=plt.gca().transAxes, fontsize=12)
 fig.supxlabel(r'$dE/dx$ (keV/cm)', fontsize=20)
 fig.supylabel('Counts', fontsize=20)
-axs[12].legend()
-file_pdf.savefig()
+
+plt.sca(axs[13])
+plt.plot(100,100, color='red',  label='Total',          linestyle='-',  linewidth=2)
+plt.plot(100,101, color='blue', label='Deuteron peak',  linestyle='--', linewidth=2)
+plt.plot(100,102, color='green',label='Proton peak',    linestyle='--', linewidth=2)
+plt.xlim(0, 40)
+plt.ylim(0, 50)
+plt.yticks(np.arange(0, 51, 10), fontsize=12)
+plt.xticks(np.arange(0, 45, 10), fontsize=12)
+plt.minorticks_on()
+plt.tick_params(which='both', direction='in', top=True, right=True)
+plt.legend(fontsize=16)
+
+cut_pdf.savefig()
 plt.close()
 
-print("deuteron CDC dE/dx: average proton contamination")
-plt.figure(figsize=(8,6))
-plt.plot(dedx_p_centers/100, contamination, 'o-', color='magenta')
-plt.xlabel('Deuteron Momentum (GeV/c)')
-plt.ylabel('Average Proton Contamination')
-plt.ylim(0, 0.005)
-file_pdf.savefig()
-plt.close()
-
-print("deuteron CDC dE/dx: individual proton contaimations")
+print("Deuteron dE/dx: proton contaimations")
 plt.figure(figsize=(8,6))
 avg_purity, avg_efficiency, avg_rejection = np.array([]), np.array([]), np.array([])
 for cut_values in np.arange(-3, -1, 0.25):
@@ -382,214 +409,190 @@ for cut_values in np.arange(-3, -1, 0.25):
         individual_purity     = np.append(individual_purity,     signal/(signal+background))
         individual_efficiency = np.append(individual_efficiency, signal/total_signal)
         individual_rejection  = np.append(individual_rejection,  1-background/total_background)
-    plt.plot(dedx_p_centers[:-1]/100, 1-individual_purity, 'o-', label='Cut at %.2f sigma' % cut_values)
+    plt.plot(dedx_p_centers[:-1]/100, 100*(1-individual_purity), 'o-', label=r'%.2f $\sigma$' % cut_values)
     total_signal += quad(lambda x: gaussian(x, d_amplitude_value[-1], d_mean_value[-1], d_sigma_value[-1]), -np.inf, np.inf)[0]
     signal       += quad(lambda x: gaussian(x, d_amplitude_value[-1], d_mean_value[-1], d_sigma_value[-1]), d_mean_value[-1]+cut_values*d_sigma_value[-1], np.inf)[0]
     avg_purity     = np.append(avg_purity, signal/(signal+background))
     avg_efficiency = np.append(avg_efficiency, signal/total_signal)
     avg_rejection  = np.append(avg_rejection, 1-background/total_background)
-plt.legend()
-plt.xlabel('Deuteron Momentum (GeV/c)')
-plt.ylabel('Average Proton Contamination')
-plt.ylim(0, 0.005)
-file_pdf.savefig()
+plt.xlabel(r'$p$ [GeV]')
+plt.ylabel('Proton Contamination [%]')
+plt.xlim(0.4, 1.4)
+plt.ylim(0, 0.5)
+plt.xticks(np.arange(0.4, 1.5, 0.2))
+plt.yticks(np.arange(0, 0.6, 0.1))
+plt.minorticks_on()
+plt.tick_params(which='both', direction='in', top=True, right=True)
+plt.legend(fontsize=16)
+cut_pdf.savefig()
 plt.close()
 
-print("deuteron CDC dE/dx: perfomance metrics")
+print("Deuteron dE/dx: perfomance metrics")
 plt.figure(figsize=(8,6))
 plt.plot(np.arange(-3, -1, 0.25), avg_purity,     'o-', color='magenta', label='Purity')
 plt.plot(np.arange(-3, -1, 0.25), avg_efficiency, 'o-', color='cyan',    label='Efficiency')
 plt.plot(np.arange(-3, -1, 0.25), avg_rejection,  'o-', color='yellow',  label='Rejection')
-plt.xlabel('Cut Values')
+plt.xlabel(r'Cut Values [$\sigma$]')
 plt.ylabel('Performance Metrics')
-plt.legend()
-file_pdf.savefig()
+plt.xticks(np.arange(-3.0, -1.0, 0.5))
+plt.yticks(np.arange(0.90, 1.01, 0.02))
+plt.minorticks_on()
+plt.tick_params(which='both', direction='in', top=True, right=True)
+plt.legend(fontsize=16)
+cut_pdf.savefig()
 plt.close()
 
-# # hist_data = file_data.get('dEdxCut/d_dEdx_cdc_meas_dEdxCut')
-# # p_points = np.arange(0.25, 3, 0.01)
-# # para_list = []
-# # variation_list = np.array([-3, -2.75, -2.5, -2.25, -2, -1.75, -1.5, -1.25, -1, 0.0, 1.0, 2.0, 3.0])
-# # color_list = ['violet', 'blue', 'cyan', 'green', 'yellow', 'orange', 'red', 'orange', 'yellow', 'green', 'cyan', 'blue', 'violet']
-# # for N in variation_list:
-# #     popt, pcov = curve_fit(exponential, dedx_p_centers/100, d_mean_value+N*d_sigma_value)
-# #     para_list.append(popt)
+print("Deuteron dE/dx: fit the deuteron band only")
+plt.figure(figsize=(16,20), dpi=300)
+fig, axs = plt.subplots(5, 3, figsize=(16,20), dpi=300)
+axs = axs.flatten()
+hist_data = file_data.get('dEdxCut/pid_cut_d_dEdx_cdc_dEdxCut')
+rebin_factors   = np.array([4,  4,  4,    2,  1,  1,  1,  2,  2,  4,  4,   4,   8,   8], dtype=int)
+dedx_p_edges    = np.array([45, 50, 52.5, 55, 60, 65, 70, 75, 80, 90, 100, 120, 140, 200], dtype=int)
+dedx_p_low      = dedx_p_edges[:-1]
+dedx_p_high     = dedx_p_edges[1:]
+dedx_p_centers  = (dedx_p_low + dedx_p_high)/2
+d_amplitude_value,  d_amplitude_err,  d_mean_value,   d_mean_err, d_sigma_value,  d_sigma_err  = np.array([]), np.array([]), np.array([]), np.array([]), np.array([]), np.array([])
+chisquared = np.array([])
+for i in range(len(dedx_p_edges)-1):
+    plt.sca(axs[i])
+    hist_slice = Hist1D(hist_data.TH2.ProjectionY("_px",int(dedx_p_edges[i]),int(dedx_p_edges[i+1])))
+    hist_slice.rebin(int(rebin_factors[i]))
+    hist_slice.yerr = np.sqrt(hist_slice.yerr**2 + 1)  # Add a constant error of 1 to all bins to avoid zero error bars
+    hist_slice.plotPoints(fmt='o', label='Data', markersize=4, color='black')
+    plt.ylim(0, round(hist_slice.y.max()*1.2 / 50) * 50)
+    plt.xlim(0, 40)
+    plt.yticks(np.arange(0, round(hist_slice.y.max()*1.2, -1)+1, round(hist_slice.y.max()*1.2/5, -1)), fontsize=12)
+    plt.xticks(np.arange(0, 45, 10), fontsize=12)
+    plt.minorticks_on()
+    plt.tick_params(which='both', direction='in', top=True, right=True)
 
-# # plt.figure(figsize=(8,6))
-# # plt.errorbar(dedx_p_centers/100, d_mean_value, xerr=(dedx_p_high-dedx_p_low)/200, yerr=d_mean_err, fmt='k.', label=r'$\mu$')
-# # plt.errorbar(dedx_p_centers/100, d_sigma_value, xerr=(dedx_p_high-dedx_p_low)/200, yerr=d_sigma_err, fmt='b.', label=r'$\sigma$')
-# # plt.xlim(0,2)
-# # plt.ylim(0,40)
-# # plt.xlabel(r'$p$ (GeV/c)')
-# # plt.ylabel(r'$dE/dx$ (keV/cm)')
-# # plt.legend()
-# # file_pdf.savefig()
-# # plt.close()
+    fit_low     = np.exp(-3.42*(dedx_p_centers[i]/100)+4.33)+2.39   # -2 sigma position for deuteron from the first trial fit
+    fit_high    = np.exp(-4.64*(dedx_p_centers[i]/100)+5.70)+5.22   # +2 sigma position for deuteron from the first trial fit
+    p0_d_mean   = np.exp(-4.22*(dedx_p_centers[i]/100)+5.18)+3.87
+    p0_d_sigma  = np.exp(-4.46*(dedx_p_centers[i]/100)+5.47)+4.55 - p0_d_mean
+    fit_mask        = (hist_slice.x > fit_low) & (hist_slice.x < fit_high)
+    hist_slice.x    = hist_slice.x[fit_mask]
+    hist_slice.y    = hist_slice.y[fit_mask]
+    hist_slice.yerr = hist_slice.yerr[fit_mask]
+    if (True):  # a dummy conditional statement to keep the consistency between this and the combined fit for easy comparison
+        popt, pcov          = curve_fit(gaussian, hist_slice.x, hist_slice.y, \
+                                        p0=[hist_slice.y.max()/2, p0_d_mean, p0_d_sigma], \
+                                        bounds=([0, 0, 0], [hist_slice.y.max(), p0_d_mean+2*p0_d_sigma, 2*p0_d_sigma]))
+        residuals           = hist_slice.y - gaussian(hist_slice.x, *popt)
+        chisq               = np.sum((residuals**2) / gaussian(hist_slice.x, *popt))
+        d_amplitude_value   = np.append(d_amplitude_value,  popt[0])
+        d_amplitude_err     = np.append(d_amplitude_err,    np.sqrt(pcov[0][0]))
+        d_mean_value        = np.append(d_mean_value,       popt[1])
+        d_mean_err          = np.append(d_mean_err,         np.sqrt(pcov[1][1]))
+        d_sigma_value       = np.append(d_sigma_value,      abs(popt[2]))
+        d_sigma_err         = np.append(d_sigma_err,        np.sqrt(pcov[2][2]))
+        chisquared          = np.append(chisquared,         chisq)
+        plt.plot(np.arange(fit_low, fit_high, 0.01), gaussian(np.arange(fit_low, fit_high, 0.01), *popt), label="Gaussian Fit", color='red', zorder=10)
+        plt.title(r'%.2f--%.2f GeV' % (dedx_p_low[i]/100, dedx_p_high[i]/100), fontsize=12)
+        plt.text(0.4, 0.90 - 0*0.07, r'$A_d=%.2f \pm %.2f$' %           (popt[0],      np.sqrt(pcov[0][0])),    transform=plt.gca().transAxes, fontsize=12)
+        plt.text(0.4, 0.90 - 1*0.07, r'$\sigma_d=%.3f \pm %.3f$' %      (abs(popt[2]), np.sqrt(pcov[2][2])),    transform=plt.gca().transAxes, fontsize=12)
+        plt.text(0.4, 0.90 - 2*0.07, r'$\mu_d=%.3f \pm %.3f$' %         (popt[1],      np.sqrt(pcov[1][1])),    transform=plt.gca().transAxes, fontsize=12)
+        plt.text(0.4, 0.90 - 3*0.07, r'$\chi^2/ndf=%.2f$' %             (chisq/(len(hist_slice.x)-3)),          transform=plt.gca().transAxes, fontsize=12)
+fig.supxlabel(r'$dE/dx$ (keV/cm)', fontsize=20)
+fig.supylabel('Counts', fontsize=20)
 
-# # plt.figure(figsize=(8,6))
-# # hist_data.plotHeatmap(log_scale=True, vmin=0, vmax=5, cmap='jet')
-# # dE_points = exponential(p_points, *para_list[4])
-# # plt.scatter(dedx_p_centers/100, d_mean_value-2.0*d_sigma_value, color='r', marker='o', s=20, label=r'Data points of $\mu-2\sigma$')
-# # plt.plot(p_points, dE_points, label=r'Exponential fit, $p_1=%.2f, p_2=%.2f, p_3=%.2f$' % (para_list[4][0], para_list[4][1], para_list[4][2]), color='y')
-# # plt.xlim(0,2)
-# # plt.ylim(0,40)
-# # plt.xlabel(r'$p$ (GeV/c)')
-# # plt.ylabel(r'$dE/dx$ (keV/cm)')
-# # plt.legend()
-# # file_pdf.savefig()
-# # plt.close()
+plt.sca(axs[13])
+plt.plot(100,100, color='red', label='Gaussian fit', linestyle='-', linewidth=2)
+plt.xlim(0, 40)
+plt.ylim(0, 50)
+plt.yticks(np.arange(0, 51, 10), fontsize=12)
+plt.xticks(np.arange(0, 45, 10), fontsize=12)
+plt.minorticks_on()
+plt.tick_params(which='both', direction='in', top=True, right=True)
+plt.legend(fontsize=16)
 
-# # plt.figure(figsize=(8,6))
-# # hist_data.plotHeatmap(log_scale=True, vmin=0, vmax=5, cmap='jet')
-# # for i in range(len(variation_list)):
-# #     N = variation_list[i]
-# #     dE_points = exponential(p_points, *para_list[i])
-# #     plt.plot(p_points, dE_points, label=r'$%.2f \sigma, p_1=%.2f, p_2=%.2f, p_3=%.2f$' % (N, para_list[i][0], para_list[i][1], para_list[i][2]), color=color_list[i])
-# #     plt.scatter(dedx_p_centers/100, d_mean_value+N*d_sigma_value, color=color_list[i], marker='o', s=10)
-# # plt.xlim(0,2)
-# # plt.ylim(0,40)
-# # plt.xlabel(r'$p$ (GeV/c)')
-# # plt.ylabel(r'$dE/dx$ (keV/cm)')
-# # plt.legend()
-# # file_pdf.savefig()
-# # plt.close()
+cut_pdf.savefig()
+plt.close()
 
-# print("deuteron CDC dE/dx: fit the deuteron band only")
-# plt.figure(figsize=(16,12))
-# fig, axs = plt.subplots(4, 4, figsize=(20,16))
-# axs = axs.flatten()
-# hist_data = file_data.get('dEdxCut/d_dEdx_cdc_meas_dEdxCut')
-# dedx_p_edges = np.array([45, 50, 52.5, 55, 60, 65, 70, 75, 80, 90, 100, 120, 140, 200], dtype=int)
-# dedx_p_low = dedx_p_edges[:-1]
-# dedx_p_high = dedx_p_edges[1:]
-# dedx_p_centers = (dedx_p_low + dedx_p_high)/2
-# d_mean_value, d_mean_err, d_sigma_value, d_sigma_err = np.array([]), np.array([]), np.array([]), np.array([])
-# chisquared = np.array([])
-# for i in range(len(dedx_p_edges)-1):
-#     plt.sca(axs[i])
-#     hist_slice = Hist1D(hist_data.TH2.ProjectionY("_px",int(dedx_p_edges[i]),int(dedx_p_edges[i+1])))
-#     if (i < 1):
-#         hist_slice.rebin(4)
-#     elif (i < 8):
-#         hist_slice.rebin(2)
-#     # if (i < 2):
-#         # hist_slice.rebin(2)
-#     hist_slice.plotPoints(fmt='o', label='Data', markersize=3)
-#     plt.ylim(0, hist_slice.y.max()*1.2)
-#     plt.xlim(0, 40)
-#     fit_low = np.exp(-3.67*(dedx_p_centers[i]/100)+4.48)+2.57
-#     fit_high = np.exp(-4.58*(dedx_p_centers[i]/100)+5.66)+5.22
-#     fit_mask = (hist_slice.x > fit_low) & (hist_slice.x < fit_high)
-#     hist_slice.x = hist_slice.x[fit_mask]
-#     hist_slice.y = hist_slice.y[fit_mask]
-#     hist_slice.yerr = hist_slice.yerr[fit_mask]
-#     popt, pcov = curve_fit(gaussian, hist_slice.x, hist_slice.y, p0=[hist_slice.y.max(),(fit_low+fit_high)/2,(fit_high-fit_low)/4])
-#     d_mean_value = np.append(d_mean_value, popt[1])
-#     d_mean_err = np.append(d_mean_err, np.sqrt(pcov[1][1]))
-#     d_sigma_value = np.append(d_sigma_value, abs(popt[2]))
-#     d_sigma_err = np.append(d_sigma_err, np.sqrt(pcov[2][2]))
-#     residuals = hist_slice.y - gaussian(hist_slice.x, *popt)
-#     chisq = np.sum((residuals**2) / gaussian(hist_slice.x, *popt))
-#     chisquared = np.append(chisquared, chisq)
-#     plt.plot(np.arange(fit_low, fit_high, 0.01), gaussian(np.arange(fit_low, fit_high, 0.01), *popt), \
-#             label="Gaussian Fit", color='red', zorder=10)
-#     plt.text(0.4, 0.75, r'$A=%.2f \pm %.2f$' % (popt[0], np.sqrt(pcov[0][0])), transform=plt.gca().transAxes, fontsize=12)
-#     plt.text(0.4, 0.65, r'$\mu=%.3f \pm %.3f$' % (popt[1], np.sqrt(pcov[1][1])), transform=plt.gca().transAxes, fontsize=12)
-#     plt.text(0.4, 0.55, r'$\sigma=%.3f \pm %.3f$' % (abs(popt[2]), np.sqrt(pcov[2][2])), transform=plt.gca().transAxes, fontsize=12)
-#     plt.text(0.4, 0.45, r'$\chi^2/ndf=%.2f$' % (chisq/(len(hist_slice.x)-3)), transform=plt.gca().transAxes, fontsize=12)
-#     plt.title(r'$p$ bin: [%.2f, %.2f] GeV/c' % (dedx_p_low[i]/100, dedx_p_high[i]/100))
-# fig.supxlabel(r'$dE/dx$ (keV/cm)', fontsize=20)
-# fig.supylabel('Counts', fontsize=20)
-# axs[0].legend()
-# file_pdf.savefig()
-# plt.close()
+print("Deuteron dE/dx: various cut options")
+plt.figure(figsize=(8,6))
+p_points = np.arange(0.25, 3, 0.01)
+para_list = []
+variation_list = np.array([-3, -2.75, -2.5, -2.25, -2, -1.75, -1.5, -1.25, -1, 0.0, 1.0, 2.0, 3.0])
+color_list = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet', 'brown', 'pink', 'gray', 'black', 'cyan', 'magenta']
+for N in variation_list:
+    popt, pcov = curve_fit(exponential, dedx_p_centers/100, d_mean_value+N*d_sigma_value)
+    para_list.append(popt)
+hist_data.plotHeatmap(vmin=0, vmax=50)
+for i in range(len(variation_list)):
+    N = variation_list[i]
+    dE_points = exponential(p_points, *para_list[i])
+    plt.plot(p_points, dE_points, \
+            label=r'$%+5.2f \sigma, p_1=%.2f, p_2=%.2f, p_3=%.2f$' % (N, para_list[i][0], para_list[i][1], para_list[i][2]), \
+            color=color_list[i])
+    plt.scatter(dedx_p_centers/100, d_mean_value+N*d_sigma_value, color=color_list[i], marker='o', s=10)
+plt.xlim(0, 2)
+plt.ylim(0, 40)
+plt.xlabel(r"$p$ [GeV]")
+plt.ylabel(r"$dE/dx$ [keV/cm]")
+plt.xticks(np.arange(0, 2.5, 0.5))
+plt.yticks(np.arange(0, 45, 10))
+plt.minorticks_on()
+plt.tick_params(which='both', direction='in', top=True, right=True)
+plt.legend(fontsize=10, loc='upper right')
+cut_pdf.savefig()
+plt.close()
 
-# print("deuteron CDC dE/dx: chosen cut value")
-# plt.figure(figsize=(8,6))
-# p_points = np.arange(0.25, 3, 0.01)
-# para_list = []
-# variation_list = np.array([-3, -2.75, -2.5, -2.25, -2, -1.75, -1.5, -1.25, -1, 0.0, 1.0, 2.0, 3.0])
-# color_list = ['violet', 'blue', 'cyan', 'green', 'yellow', 'orange', 'red', 'orange', 'yellow', 'green', 'cyan', 'blue', 'violet']
-# for N in variation_list:
-#     popt, pcov = curve_fit(exponential, dedx_p_centers/100, d_mean_value+N*d_sigma_value)
-#     para_list.append(popt)
-# hist_data.plotHeatmap(log_scale=True, vmin=0, vmax=5, cmap='jet')
-# for i in range(len(variation_list)):
-#     N = variation_list[i]
-#     dE_points = exponential(p_points, *para_list[i])
-#     plt.plot(p_points, dE_points, \
-#             label=r'$%.2f \sigma, p_1=%.2f, p_2=%.2f, p_3=%.2f$' % (N, para_list[i][0], para_list[i][1], para_list[i][2]), \
-#             color=color_list[i])
-#     plt.scatter(dedx_p_centers/100, d_mean_value+N*d_sigma_value, color=color_list[i], marker='o', s=10)
-# plt.xlim(0,2)
-# plt.ylim(0,40)
-# plt.xlabel(r'$p$ (GeV/c)')
-# plt.ylabel(r'$dE/dx$ (keV/cm)')
-# plt.legend()
-# file_pdf.savefig()
-# plt.close()
-
-# print("deuteron CDC dE/dx: various cut options")
-# plt.figure(figsize=(8,6))
-# hist_data.plotHeatmap(log_scale=True, vmin=0, vmax=5, cmap='jet')
-# for i in range(len(variation_list)):
-#     N = variation_list[i]
-#     dE_points = exponential(p_points, *para_list[i])
-#     plt.plot(p_points, dE_points, \
-#             label=r'$%.2f \sigma, p_1=%.2f, p_2=%.2f, p_3=%.2f$' % (N, para_list[i][0], para_list[i][1], para_list[i][2]), \
-#             color=color_list[i])
-#     plt.scatter(dedx_p_centers/100, d_mean_value+N*d_sigma_value, color=color_list[i], marker='o', s=10)
-# plt.xlim(0,2)
-# plt.ylim(0,40)
-# plt.xlabel(r'$p$ (GeV/c)')
-# plt.ylabel(r'$dE/dx$ (keV/cm)')
-# plt.legend()
-# file_pdf.savefig()
-# plt.close()
-
-# print("deuteron CDC dE/dx: chosen cut option")
-# plt.figure(figsize=(8,6))
-# hist_data.plotHeatmap(log_scale=True, vmin=0, vmax=5, cmap='jet')
-# dE_points = exponential(p_points, *para_list[4])
-# plt.scatter(dedx_p_centers/100, d_mean_value-2.0*d_sigma_value, color='r', marker='o', s=20, label=r'Data points of $\mu-2\sigma$')
-# plt.plot(p_points, dE_points, label=r'Exponential fit, $p_1=%.2f, p_2=%.2f, p_3=%.2f$' % (para_list[4][0], para_list[4][1], para_list[4][2]), color='y')
-# plt.xlim(0,2)
-# plt.ylim(0,40)
-# plt.xlabel(r'$p$ (GeV/c)')
-# plt.ylabel(r'$dE/dx$ (keV/cm)')
-# plt.legend()
-# file_pdf.savefig()
-# plt.close()
+print("Deuteron dE/dx: chosen cut option")
+plt.figure(figsize=(8,6))
+hist_data.plotHeatmap(vmin=0, vmax=50)
+dE_points = exponential(p_points, *para_list[4])
+plt.scatter(dedx_p_centers/100, d_mean_value-2.0*d_sigma_value, color='r', marker='o', s=20, label=r'Data points of $\mu-2\sigma$')
+plt.plot(p_points, dE_points, label=r'Exponential fit, $p_1=%.2f, p_2=%.2f, p_3=%.2f$' % (para_list[4][0], para_list[4][1], para_list[4][2]), color='y')
+plt.xlim(0, 2)
+plt.ylim(0, 40)
+plt.xlabel(r"$p$ [GeV]")
+plt.ylabel(r"$dE/dx$ [keV/cm]")
+plt.xticks(np.arange(0, 2.5, 0.5))
+plt.yticks(np.arange(0, 45, 10))
+plt.minorticks_on()
+plt.tick_params(which='both', direction='in', top=True, right=True)
+cut_pdf.savefig()
+plt.close()
 
 print("Exclusivity: comparison between data and simulation")
 fig = plt.figure(figsize=(8, 6), dpi=300)
 hist_data = file_data.get('MissPMinusCut/exclusivity_cut_miss_pminus_MissPMinusCut')
 hist_sim  = file_sim .get('MissPMinusCut/exclusivity_cut_miss_pminus_MissPMinusCut')
-hist_sim.scale(hist_data.y.max()/hist_sim.y.max())
+hist_sim.scale(normalization_factor)
 hist_data.plotPoints(label="Data", marker='o', markersize=3, linestyle='None', color='black')
 hist_sim.plotPoints(label="Sim", marker='o', markersize=3, linestyle='None', color='blue')
-plt.plot([-0.02, -0.02], [0, 700], '-', color='red')
+plt.plot([-0.023, -0.023], [0, 700], '-', color='red')
 plt.xlim(-0.2, 0.2)
 plt.ylim(0, 700)
-plt.xlabel(r"$p^-_{\rm miss}$ (GeV/c)")
+plt.xticks(np.arange(-0.2, 0.25, 0.10))
+plt.yticks(np.arange(0, 701, 100))
+plt.minorticks_on()
+plt.tick_params(which='both', direction='in', top=True, right=True)
+plt.xlabel(r"$p^-_{\rm miss}$ [GeV]")
 plt.ylabel("Counts")
 plt.legend()
-file_pdf.savefig()
+cut_pdf.savefig()
 plt.close()
 
 print("Exclusivity: comparison between data and simulation as pion")
 fig = plt.figure(figsize=(8, 6), dpi=300)
 hist_data = file_data.get('MissPMinusCut/exclusivity_miss_pminus_as_pion_MissPMinusCut')
 hist_sim  = file_sim .get('MissPMinusCut/exclusivity_miss_pminus_as_pion_MissPMinusCut')
-hist_sim.scale(hist_data.y.max()/hist_sim.y.max())
+hist_sim.scale(normalization_factor)
 hist_data.plotPoints(label="Data", marker='o', markersize=3, linestyle='None', color='black')
 hist_sim.plotPoints(label="Sim", marker='o', markersize=3, linestyle='None', color='blue')
 plt.xlim(-0.2, 0.2)
 plt.ylim(0, 700)
-plt.xlabel(r"$p^-_{\rm miss}$ (GeV/c)")
+plt.xticks(np.arange(-0.2, 0.25, 0.10))
+plt.yticks(np.arange(0, 701, 100))
+plt.minorticks_on()
+plt.tick_params(which='both', direction='in', top=True, right=True)
+plt.xlabel(r"$p^-_{\rm miss, pion}$ [GeV]")
 plt.ylabel("Counts")
 plt.legend()
-file_pdf.savefig()
+cut_pdf.savefig()
 plt.close()
 
 print("Exclusivity: fit data with double Gaussian")
@@ -600,24 +603,28 @@ def gaussian(x, A, mu, sigma):
 fig = plt.figure(figsize=(8, 6), dpi=300)
 hist_data = file_data.get('MissPMinusCut/exclusivity_cut_miss_pminus_MissPMinusCut')
 hist_data.plotPoints(label="Data", marker='o', markersize=3, linestyle='None', color='black')
-fit_max = 0.02
-fit_min = -0.1
-fit_mask = (hist_data.x < fit_max) & (hist_data.x > fit_min)
-popt, pcov = curve_fit(double_gaussian, hist_data.x[fit_mask], hist_data.y[fit_mask], p0=[150, -0.04, 0.01, 600, 0.0, 0.01], bounds=([0, -0.07, 0, 0, -0.01, 0], [np.inf, -0.04, 0.02, np.inf, 0.01, 0.02]))
-chi_square = np.sum(((hist_data.y[fit_mask] - double_gaussian(hist_data.x[fit_mask], *popt)) ** 2) / hist_data.yerr[fit_mask]**2)
-ndf = np.sum(fit_mask) - len(popt)
-plt.plot(np.linspace(fit_min, fit_max, 1000), double_gaussian(np.linspace(fit_min, fit_max, 1000), *popt), '-', color='red', label='Total')
-plt.plot(np.linspace(fit_min, fit_max, 1000), gaussian(np.linspace(fit_min, fit_max, 1000), popt[0], popt[1], popt[2]), '--', color='blue', label='Background')
+fit_max     = 0.02
+fit_min     = -0.1
+fit_mask    = (hist_data.x < fit_max) & (hist_data.x > fit_min)
+popt, pcov  = curve_fit(double_gaussian, hist_data.x[fit_mask], hist_data.y[fit_mask], p0=[150, -0.04, 0.01, 600, 0.0, 0.01], bounds=([0, -0.07, 0, 0, -0.01, 0], [np.inf, -0.04, 0.02, np.inf, 0.01, 0.02]))
+chi_square  = np.sum(((hist_data.y[fit_mask] - double_gaussian(hist_data.x[fit_mask], *popt)) ** 2) / hist_data.yerr[fit_mask]**2)
+ndf         = np.sum(fit_mask) - len(popt)
+plt.plot(np.linspace(fit_min, fit_max, 1000), double_gaussian(np.linspace(fit_min, fit_max, 1000), *popt),              '-',  color='red',   label='Total')
+plt.plot(np.linspace(fit_min, fit_max, 1000), gaussian(np.linspace(fit_min, fit_max, 1000), popt[0], popt[1], popt[2]), '--', color='blue',  label='Background')
 plt.plot(np.linspace(fit_min, fit_max, 1000), gaussian(np.linspace(fit_min, fit_max, 1000), popt[3], popt[4], popt[5]), '--', color='green', label='Signal')
-plt.text(-0.19, 600, f"$A_1$: {popt[0]:.4f} $\pm$ {np.sqrt(pcov[0, 0]):.4f}\n$\mu_1$: {1000*popt[1]:.4f} $\pm$ {1000*np.sqrt(pcov[1, 1]):.4f} MeV/c\n$\sigma_1$: {1000*popt[2]:.4f} $\pm$ {1000*np.sqrt(pcov[2, 2]):.4f} MeV/c", color='blue')
-plt.text(-0.19, 500, f"$A_2$: {popt[3]:.4f} $\pm$ {np.sqrt(pcov[3, 3]):.4f}\n$\mu_2$: {1000*popt[4]:.4f} $\pm$ {1000*np.sqrt(pcov[4, 4]):.4f} MeV/c\n$\sigma_2$: {1000*popt[5]:.4f} $\pm$ {1000*np.sqrt(pcov[5, 5]):.4f} MeV/c", color='green')
-plt.text(-0.19, 400, f"Chi-square/ndf: {chi_square/ndf:.2f}", color='red')
+plt.text(-0.19, 600, f"$A_1$: {popt[0]:.4f} $\pm$ {np.sqrt(pcov[0, 0]):.4f}\n$\mu_1$: {1000*popt[1]:.4f} $\pm$ {1000*np.sqrt(pcov[1, 1]):.4f} MeV\n$\sigma_1$: {1000*popt[2]:.4f} $\pm$ {1000*np.sqrt(pcov[2, 2]):.4f} MeV/c", color='blue',  fontsize=12)
+plt.text(-0.19, 500, f"$A_2$: {popt[3]:.4f} $\pm$ {np.sqrt(pcov[3, 3]):.4f}\n$\mu_2$: {1000*popt[4]:.4f} $\pm$ {1000*np.sqrt(pcov[4, 4]):.4f} MeV\n$\sigma_2$: {1000*popt[5]:.4f} $\pm$ {1000*np.sqrt(pcov[5, 5]):.4f} MeV/c", color='green', fontsize=12)
+plt.text(-0.19, 450, f"Chi2/NDF: {chi_square/ndf:.2f}", color='red', fontsize=12)
 plt.xlim(-0.2, 0.2)
 plt.ylim(0, 700)
-plt.xlabel(r"$p^-_{\rm miss}$ (GeV/c)")
+plt.xticks(np.arange(-0.2, 0.25, 0.10))
+plt.yticks(np.arange(0, 701, 100))
+plt.minorticks_on()
+plt.tick_params(which='both', direction='in', top=True, right=True)
+plt.xlabel(r"$p^-_{\rm miss}$ [GeV]")
 plt.ylabel("Counts")
 plt.legend()
-file_pdf.savefig()
+cut_pdf.savefig()
 plt.close()
 
 print("Exclusivity: signal significance")
@@ -637,15 +644,13 @@ for i, cut in enumerate(cut_values):
     purity[i]           = signal/(signal+background)
     rejection[i]        = 1 - background/total_background
 plt.plot(cut_values, significance, '-o', color='red')
-plt.text(0.1, 0.2, f"Maximum significance: {np.max(significance):.2f} at cut value: {cut_values[np.argmax(significance)]:.4f} GeV/c", \
-            color='black', fontsize=10, ha='left', va='bottom', transform=plt.gca().transAxes)
-plt.text(0.1, 0.1, f"With efficiency of {efficiency[np.argmax(significance)]:.4f}, purity of {purity[np.argmax(significance)]:.4f}, and rejection of {rejection[np.argmax(significance)]:.4f}", \
-            color='black', fontsize=10, ha='left', va='bottom', transform=plt.gca().transAxes)
-plt.xlabel(r"$p^-_{\rm miss}$ Cut (GeV/c)")
-plt.ylabel("Significance (S/sqrt(S+B))")
-plt.title("Significance vs. Cut on Missing p minus")
-plt.grid()
-file_pdf.savefig()
+plt.text(0.03, 0.4, f"Maximum significance of {np.max(significance):.2f} \nat cut value of {cut_values[np.argmax(significance)]:.4f} GeV", \
+            color='black', fontsize=16, ha='left', va='bottom', transform=plt.gca().transAxes)
+plt.text(0.03, 0.2, f"With efficiency of {efficiency[np.argmax(significance)]:.4f}, purity of {purity[np.argmax(significance)]:.4f}, \nand rejection of {rejection[np.argmax(significance)]:.4f}", \
+            color='black', fontsize=16, ha='left', va='bottom', transform=plt.gca().transAxes)
+plt.xlabel(r"Cut on $p^-_{\rm miss}$ [GeV]")
+plt.ylabel(r"Significance $(S/\sqrt{S+B})$")
+cut_pdf.savefig()
 plt.close()
 
 print("Exclusivity: performance metrics")
@@ -653,12 +658,10 @@ fig = plt.figure(figsize=(8, 6), dpi=300)
 plt.plot(cut_values, efficiency,    '-o', color='blue',  label='Efficiency')
 plt.plot(cut_values, purity,        '-o', color='green', label='Purity')
 plt.plot(cut_values, rejection,     '-o', color='red',   label='Rejection')
-plt.xlabel(r"$p^-_{\rm miss}$ Cut (GeV/c)")
-plt.ylabel("Efficiency / Purity / Rejection")
-plt.title("Efficiency and Purity vs. Cut on Missing p minus")
+plt.xlabel(r"Cut on $p^-_{\rm miss}$ [GeV]")
+plt.ylabel("Performance metrics")
 plt.legend()
-plt.grid()
-file_pdf.savefig()
+cut_pdf.savefig()
 plt.close()
 
 print("Kinematics: K+")
@@ -667,13 +670,13 @@ gs = fig.add_gridspec(1, 2)
 axs = gs.subplots()
 hist_data = file_data.get('KinematicsCut/kinematics_cut_kp_KinematicsCut')
 hist_sim  = file_sim .get('KinematicsCut/kinematics_cut_kp_KinematicsCut')
-hist_sim.areaNorm(hist_data)
+hist_sim.scale(normalization_factor)
 plt.axes(axs[0])
 hist_data.plotHeatmap()
-plt.text(0.95, 0.95, "data",       transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+plt.text(0.95, 0.95, "data",       transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 plt.axes(axs[1])
 hist_sim.plotHeatmap()
-plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 for i in range(2):
     plt.axes(axs[i])
     plt.plot([0,10],    [2,2],  '-', color='red')
@@ -681,9 +684,9 @@ for i in range(2):
     plt.xlim(0, 10)
     plt.ylim(0, 20)
     plt.yticks(np.arange(0, 21, 2))
-    plt.xlabel(r"$p_{K^+}$ (GeV/c)")
-    plt.ylabel(r"$\theta_{K^+}$ (deg)")
-file_pdf.savefig()
+    plt.xlabel(r"$p_{K^+}$ [GeV]")
+    plt.ylabel(r"$\theta_{K^+}$ [deg]")
+cut_pdf.savefig()
 plt.close()
 
 print("Kinematics: K-")
@@ -692,13 +695,13 @@ gs = fig.add_gridspec(1, 2)
 axs = gs.subplots()
 hist_data = file_data.get('KinematicsCut/kinematics_cut_km_KinematicsCut')
 hist_sim  = file_sim .get('KinematicsCut/kinematics_cut_km_KinematicsCut')
-hist_sim.areaNorm(hist_data)
+hist_sim.scale(normalization_factor)
 plt.axes(axs[0])
 hist_data.plotHeatmap()
-plt.text(0.95, 0.95, "data",       transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+plt.text(0.95, 0.95, "data",       transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 plt.axes(axs[1])
 hist_sim.plotHeatmap()
-plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 for i in range(2):
     plt.axes(axs[i])
     plt.plot([0,10],    [2,2],  '-', color='red')
@@ -706,9 +709,9 @@ for i in range(2):
     plt.xlim(0, 10)
     plt.ylim(0, 20)
     plt.yticks(np.arange(0, 21, 2))
-    plt.xlabel(r"$p_{K^-}$ (GeV/c)")
-    plt.ylabel(r"$\theta_{K^-}$ (deg)")
-file_pdf.savefig()
+    plt.xlabel(r"$p_{K^-}$ [GeV]")
+    plt.ylabel(r"$\theta_{K^-}$ [deg]")
+cut_pdf.savefig()
 plt.close()
 
 print("Kinematics: deuteron")
@@ -717,22 +720,22 @@ gs = fig.add_gridspec(1, 2)
 axs = gs.subplots()
 hist_data = file_data.get('KinematicsCut/kinematics_cut_d_KinematicsCut')
 hist_sim  = file_sim .get('KinematicsCut/kinematics_cut_d_KinematicsCut')
-hist_sim.areaNorm(hist_data)
+hist_sim.scale(normalization_factor)
 plt.axes(axs[0])
 hist_data.plotHeatmap()
-plt.text(0.95, 0.95, "data",       transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+plt.text(0.95, 0.95, "data",       transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 plt.axes(axs[1])
 hist_sim.plotHeatmap()
-plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 for i in range(2):
     plt.axes(axs[i])
     plt.plot([0,10],    [2,2],   '-', color='red')
     plt.plot([0.4,0.4], [0,180], '-', color='red')
     plt.xlim(0, 2)
     plt.ylim(0, 180)
-    plt.xlabel(r"$p_{d}$ (GeV/c)")
-    plt.ylabel(r"$\theta_{d}$ (deg)")
-file_pdf.savefig()
+    plt.xlabel(r"$p_{d}$ [GeV]")
+    plt.ylabel(r"$\theta_{d}$ [deg]")
+cut_pdf.savefig()
 plt.close()
 
 print("Vertex: x-y")
@@ -741,47 +744,66 @@ gs = fig.add_gridspec(1, 2)
 axs = gs.subplots()
 hist_data = file_data.get('VertexCut/vertex_cut_x_y_VertexCut')
 hist_sim  = file_sim .get('VertexCut/vertex_cut_x_y_VertexCut')
+hist_sim.scale(normalization_factor)
 plt.axes(axs[0])
 hist_data.plotHeatmap(vmin=0, vmax=100)
 plt.plot(np.cos(np.linspace(0, 2*np.pi, 100)), np.sin(np.linspace(0, 2*np.pi, 100)), '-', color='red')
-plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 plt.axes(axs[1])
 hist_sim.plotHeatmap(vmin=0, vmax=100)
 plt.plot(np.cos(np.linspace(0, 2*np.pi, 100)), np.sin(np.linspace(0, 2*np.pi, 100)), '-', color='red')
-plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 for i in range(2):
     plt.axes(axs[i])
     plt.xlim(-2, 2)
     plt.ylim(-2, 2)
     plt.xlabel(r"Vertex $x$ (cm)")
     plt.ylabel(r"Vertex $y$ (cm)")
-file_pdf.savefig()
+cut_pdf.savefig()
 plt.close()
 
-print("Vertex: z")
+print("Vertex: z comparison between data and simulation")
 fig = plt.figure(figsize=(8, 6), dpi=300)
 hist_data = file_data.get('VertexCut/vertex_cut_z_VertexCut')
 hist_sim  = file_sim .get('VertexCut/vertex_cut_z_VertexCut')
-# hist_sim.scale(0.002)
-hist_sim.areaNorm(hist_data)
+hist_sim.scale(normalization_factor)
 hist_data.plotPoints(label="Data", marker='o', markersize=3, linestyle='None', color='black')
 hist_sim .plotPoints(label="Sim",  marker='o', markersize=3, linestyle='None', color='blue')
-plt.plot([51, 51], [0, 400], '-', color='red')
-plt.plot([79, 79], [0, 400], '-', color='red')
+plt.plot([51.1, 51.1], [0, 400], '-', color='red')
+plt.plot([78.9, 78.9], [0, 400], '-', color='red')
 plt.xlim(40, 90)
 plt.ylim(0, hist_data.y.max()*1.2)
-plt.xlabel(r"Vertex $z$ (cm)")
+plt.xlabel(r"Vertex $z$ [cm]")
 plt.ylabel("Counts")
 plt.legend()
-file_pdf.savefig()
+cut_pdf.savefig()
+plt.close()
+
+print("Vertex: z resolution w.r.t. -t")
+fig = plt.figure(figsize=(8, 6), dpi=300)
+hist_sim = file_sim.get('VertexCut/resolution_t_vertex_z_VertexCut')
+for i in range(5, 40):
+    this_ycenter = (hist_sim.yedge[:-1] + hist_sim.yedge[1:]) / 2
+    this_average = np.average(this_ycenter, weights=hist_sim.z[:, i])
+    this_std = np.sqrt(np.average((this_ycenter - this_average)**2, weights=hist_sim.z[:, i]))
+    popt, pcov = curve_fit(gaussian, this_ycenter, hist_sim.z[:, i], p0=[hist_sim.z[:, i].max(),this_average,this_std])
+    plt.errorbar(hist_sim.xedge[i]+(hist_sim.xedge[i+1]-hist_sim.xedge[i])/2, popt[1], yerr=popt[2], fmt='.', color='red')
+    if i == 5:
+        plt.text(0.10, 0.40, r"Worst resolution at $-t = %.2f $ GeV$^2$ with $\sigma = %.2f$ cm" % (hist_sim.xedge[i], popt[2]), transform=plt.gca().transAxes, fontsize=12, color='black', ha='left', va='top')
+hist_sim.z[hist_sim.z<=0] = np.nan
+hist_sim.z = np.log10(hist_sim.z)
+hist_sim.plotHeatmap()
+plt.ylabel(r"$\Delta Z$ [cm]")
+plt.xlabel(r"$-t [\rm GeV^2]$")
+plt.colorbar(label=r"$\log_{10}$(Counts)")
+cut_pdf.savefig()
 plt.close()
 
 print("K+K- invariant mass")
 fig = plt.figure(figsize=(8, 6), dpi=300)
 hist_data = file_data.get('NominalCut/observable_phi_mass_NominalCut')
 hist_sim  = file_sim .get('NominalCut/observable_phi_mass_NominalCut')
-hist_sim.scale(hist_data.y.max()/hist_sim.y.max())
-# hist_sim.areaNorm(hist_data)
+hist_sim.scale(normalization_factor)
 hist_data.plotPoints(label="Data", marker='o', markersize=3, linestyle='None', color='black')
 hist_sim .plotPoints(label="Sim",  marker='o', markersize=3, linestyle='None', color='blue')
 # plt.plot(x_fit, y_fit, label="Rel BW + Linear Fit", color='red')
@@ -789,31 +811,46 @@ plt.plot([1.005, 1.005], [0, 3000], '-', color='red')
 plt.plot([1.04, 1.04],   [0, 3000], '-', color='red')
 plt.xlim(0.98, 1.1)
 plt.ylim(0, hist_data.y.max()*1.2)
-plt.xlabel(r"$M_{K^+K^-} (GeV/c^2)$", size=14)
+plt.xlabel(r"$M_{K^+K^-} [\rm GeV^2]$", size=14)
 plt.ylabel("Counts / 2 MeV", size=14)
 plt.xticks(size=12)
 plt.yticks(size=12)
 plt.legend()
-file_pdf.savefig()
+cut_pdf.savefig()
 plt.close()
 
 print("################################################################# OBSERVABLE PLOTS #################################################################")
 
-# # Beam energy
-# print("Beam energy")
-# fig = plt.figure(figsize=(8, 6), dpi=300)
-# hist_data = file_data.get('PlotCut/beam_energy_PlotCut')
-# hist_sim = file_sim.get('PlotCut/beam_energy_PlotCut')
-# hist_sim.scale(0.0015)
-# hist_data.plotPoints(label="Data", marker='o', markersize=3, linestyle='None', color='black')
-# hist_sim.plotPoints(label="Sim", marker='o', markersize=3, linestyle='None', color='blue')
-# plt.bar(hist_data.x, hist_data.y, width=0.1, alpha=0.5, label='Data', color='green')
-# plt.xlim(5, 11)
-# plt.xlabel(r"Beam $E$ (GeV)")
-# plt.ylabel("Counts")
-# plt.legend()
-# file_pdf.savefig()
-# plt.close()
+# Beam energy
+print("Beam energy")
+fig = plt.figure(figsize=(8, 6), dpi=300)
+hist_data = file_data.get('PlotCut/observable_Eg_PlotCut')
+hist_sim  = file_sim .get('PlotCut/observable_Eg_PlotCut')
+hist_sim.scale(normalization_factor)
+hist_data.plotPoints(label="Data", marker='o', markersize=3, linestyle='None', color='black')
+hist_sim .plotPoints(label="Sim",  marker='o', markersize=3, linestyle='None', color='blue')
+plt.bar(hist_data.x, hist_data.y, width=0.1, alpha=0.5, label='Data', color='green')
+plt.xlim(5, 11)
+plt.xlabel(r"Beam $E$ (GeV)")
+plt.ylabel("Counts")
+plt.legend()
+check_pdf.savefig()
+plt.close()
+
+# minus t
+print("minus t")
+fig = plt.figure(figsize=(8, 6), dpi=300)
+hist_data = file_data.get('PlotCut/observable_minust_PlotCut')
+hist_sim  = file_sim .get('PlotCut/observable_minust_PlotCut')
+hist_sim.scale(normalization_factor)
+hist_data.plotPoints(label="Data", marker='o', markersize=3, linestyle='None', color='black')
+hist_sim .plotPoints(label="Sim",  marker='o', markersize=3, linestyle='None', color='blue')
+plt.xlim(0, 2)
+plt.xlabel(r"$-t (GeV^2/c^4)$")
+plt.ylabel("Counts")
+plt.legend()
+check_pdf.savefig()
+plt.close()
 
 # # Beam Timing
 # print("Beam timing")
@@ -827,7 +864,7 @@ print("################################################################# OBSERVA
 # plt.xlabel(r"Beam $\Delta t$ (ns)")
 # plt.ylabel("Counts")
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # Beam Accidental Contamination
@@ -847,7 +884,7 @@ print("################################################################# OBSERVA
 # plt.xlabel(r"Beam $\Delta t$ (ns)")
 # plt.ylabel("Counts")
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # ###################################################################### K PLUS #####################################################################################
@@ -858,14 +895,14 @@ print("################################################################# OBSERVA
 # hist_data = file_data.get('PlotCut/kp_DeltaT_meas_PlotCut')
 # hist_sim  = file_sim. get('PlotCut/kp_DeltaT_meas_PlotCut')
 # # hist_sim.scale(0.002)
-# hist_sim.areaNorm(hist_data)
+# hist_sim.scale(normalization_factor)
 # hist_data.plotPoints(label="Data", marker='o', markersize=3, linestyle='None', color='black')
 # hist_sim. plotPoints(label="Sim",  marker='o', markersize=3, linestyle='None', color='blue')
 # plt.xlabel(r"$K^+ \Delta t$ (ns)")
 # plt.ylabel("Counts")
 # plt.xlim(-2, 2)
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # K+ timing vs p
@@ -878,17 +915,17 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.xlim(0, 10)
 #     plt.ylim(-2, 2)
-#     plt.xlabel(r"$p_{K^+}$ (GeV/c)")
+#     plt.xlabel(r"$p_{K^+}$ (GeV)")
 #     plt.ylabel(r"$\Delta t_{K^+}$ (ns)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # K+ CDC dE/dx
@@ -901,19 +938,19 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.plot(np.linspace(0, 10, 100), np.exp(-7.0*np.linspace(0, 10, 100)+3.0)+6.2, color='red')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.plot(np.linspace(0, 10, 100), np.exp(-7.0*np.linspace(0, 10, 100)+3.0)+6.2, color='red')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.xlim(0, 10)
 #     plt.ylim(0, 40)
-#     plt.xlabel(r"$p_{K^+}$ (GeV/c)")
+#     plt.xlabel(r"$p_{K^+}$ (GeV)")
 #     plt.ylabel(r"$(dE/dx)_{K^+}^{\mathrm{CDC}}$ (keV/cm)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # K+ FDC dE/dx
@@ -926,17 +963,17 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.xlim(0, 10)
 #     plt.ylim(0, 40)
-#     plt.xlabel(r"$p_{K^+}$ (GeV/c)")
+#     plt.xlabel(r"$p_{K^+}$ (GeV)")
 #     plt.ylabel(r"$(dE/dx)_{K^+}^{\mathrm{FDC}}$ (keV/cm)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # K+ TOF dE/dx
@@ -949,17 +986,17 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.xlim(0, 10)
 #     plt.ylim(0, 40)
-#     plt.xlabel(r"$p_{K^+}$ (GeV/c)")
+#     plt.xlabel(r"$p_{K^+}$ (GeV)")
 #     plt.ylabel(r"$(dE/dx)_{K^+}^{\mathrm{TOF}}$ (keV/cm)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # K+ ST dE/dx
@@ -972,17 +1009,17 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.xlim(0, 10)
 #     plt.ylim(0, 40)
-#     plt.xlabel(r"$p_{K^+}$ (GeV/c)")
+#     plt.xlabel(r"$p_{K^+}$ (GeV)")
 #     plt.ylabel(r"$(dE/dx)_{K^+}^{\mathrm{ST}}$ (keV/cm)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # K+ kinematics
@@ -995,10 +1032,10 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.plot([0,10], [2,2], '-', color='red')
@@ -1006,9 +1043,9 @@ print("################################################################# OBSERVA
 #     plt.xlim(0, 10)
 #     plt.ylim(0, 20)
 #     plt.yticks(np.arange(0, 21, 2))
-#     plt.xlabel(r"$p_{K^+}$ (GeV/c)")
+#     plt.xlabel(r"$p_{K^+}$ (GeV)")
 #     plt.ylabel(r"$\theta_{K^+}$ (deg)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # K+ kinematics in FDC only
@@ -1021,10 +1058,10 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.plot([0,10], [2,2], '-', color='red')
@@ -1032,9 +1069,9 @@ print("################################################################# OBSERVA
 #     plt.xlim(0, 10)
 #     plt.ylim(0, 20)
 #     plt.yticks(np.arange(0, 21, 2))
-#     plt.xlabel(r"$p_{K^+}$ (GeV/c)")
+#     plt.xlabel(r"$p_{K^+}$ (GeV)")
 #     plt.ylabel(r"$\theta_{K^+}$ (deg)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # K+ kinematics in FDC and CDC
@@ -1047,10 +1084,10 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.plot([0,10], [2,2], '-', color='red')
@@ -1058,9 +1095,9 @@ print("################################################################# OBSERVA
 #     plt.xlim(0, 10)
 #     plt.ylim(0, 20)
 #     plt.yticks(np.arange(0, 21, 2))
-#     plt.xlabel(r"$p_{K^+}$ (GeV/c)")
+#     plt.xlabel(r"$p_{K^+}$ (GeV)")
 #     plt.ylabel(r"$\theta_{K^+}$ (deg)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # K+ kinematics in CDC only
@@ -1073,10 +1110,10 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.plot([0,10], [2,2], '-', color='red')
@@ -1084,9 +1121,9 @@ print("################################################################# OBSERVA
 #     plt.xlim(0, 10)
 #     plt.ylim(0, 20)
 #     plt.yticks(np.arange(0, 21, 2))
-#     plt.xlabel(r"$p_{K^+}$ (GeV/c)")
+#     plt.xlabel(r"$p_{K^+}$ (GeV)")
 #     plt.ylabel(r"$\theta_{K^+}$ (deg)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # ###################################################################### K MINUS #####################################################################################
@@ -1103,7 +1140,7 @@ print("################################################################# OBSERVA
 # plt.xlabel(r"$K^-$ $\Delta t$ (ns)")
 # plt.ylabel("Counts")
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # K- timing vs p
@@ -1116,17 +1153,17 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.xlim(0, 10)
 #     plt.ylim(-2, 2)
-#     plt.xlabel(r"$p_{K^-}$ (GeV/c)")
+#     plt.xlabel(r"$p_{K^-}$ (GeV)")
 #     plt.ylabel(r"$\Delta t_{K^-}$ (ns)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # K- CDC dE/dx
@@ -1139,19 +1176,19 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.plot(np.linspace(0, 10, 100), np.exp(-7.0*np.linspace(0, 10, 100)+3.0)+6.2, color='red')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.plot(np.linspace(0, 10, 100), np.exp(-7.0*np.linspace(0, 10, 100)+3.0)+6.2, color='red')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.xlim(0, 10)
 #     plt.ylim(0, 40)
-#     plt.xlabel(r"$p_{K^-}$ (GeV/c)")
+#     plt.xlabel(r"$p_{K^-}$ (GeV)")
 #     plt.ylabel(r"$(dE/dx)_{K^-}^{\mathrm{CDC}}$ (keV/cm)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # K- FDC dE/dx
@@ -1164,17 +1201,17 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.xlim(0, 10)
 #     plt.ylim(0, 40)
-#     plt.xlabel(r"$p_{K^-}$ (GeV/c)")
+#     plt.xlabel(r"$p_{K^-}$ (GeV)")
 #     plt.ylabel(r"$(dE/dx)_{K^-}^{\mathrm{FDC}}$ (keV/cm)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # K- TOF dE/dx
@@ -1187,17 +1224,17 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.xlim(0, 10)
 #     plt.ylim(0, 40)
-#     plt.xlabel(r"$p_{K^-}$ (GeV/c)")
+#     plt.xlabel(r"$p_{K^-}$ (GeV)")
 #     plt.ylabel(r"$(dE/dx)_{K^-}^{\mathrm{TOF}}$ (keV/cm)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # K- ST dE/dx
@@ -1210,17 +1247,17 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.xlim(0, 10)
 #     plt.ylim(0, 40)
-#     plt.xlabel(r"$p_{K^-}$ (GeV/c)")
+#     plt.xlabel(r"$p_{K^-}$ (GeV)")
 #     plt.ylabel(r"$(dE/dx)_{K^-}^{\mathrm{ST}}$ (keV/cm)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # K- kinematics
@@ -1233,10 +1270,10 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.plot([0,10], [2,2], '-', color='red')
@@ -1244,9 +1281,9 @@ print("################################################################# OBSERVA
 #     plt.xlim(0, 10)
 #     plt.ylim(0, 20)
 #     plt.yticks(np.arange(0, 21, 2))
-#     plt.xlabel(r"$p_{K^-}$ (GeV/c)")
+#     plt.xlabel(r"$p_{K^-}$ (GeV)")
 #     plt.ylabel(r"$\theta_{K^-}$ (deg)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # K- kinematics in FDC only
@@ -1259,10 +1296,10 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.plot([0,10], [2,2], '-', color='red')
@@ -1270,9 +1307,9 @@ print("################################################################# OBSERVA
 #     plt.xlim(0, 10)
 #     plt.ylim(0, 20)
 #     plt.yticks(np.arange(0, 21, 2))
-#     plt.xlabel(r"$p_{K^-}$ (GeV/c)")
+#     plt.xlabel(r"$p_{K^-}$ (GeV)")
 #     plt.ylabel(r"$\theta_{K^-}$ (deg)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # K- kinematics in FDC and CDC
@@ -1285,10 +1322,10 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.plot([0,10], [2,2], '-', color='red')
@@ -1296,9 +1333,9 @@ print("################################################################# OBSERVA
 #     plt.xlim(0, 10)
 #     plt.ylim(0, 20)
 #     plt.yticks(np.arange(0, 21, 2))
-#     plt.xlabel(r"$p_{K^-}$ (GeV/c)")
+#     plt.xlabel(r"$p_{K^-}$ (GeV)")
 #     plt.ylabel(r"$\theta_{K^-}$ (deg)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # K- kinematics in CDC only
@@ -1311,10 +1348,10 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.plot([0,10], [2,2], '-', color='red')
@@ -1322,9 +1359,9 @@ print("################################################################# OBSERVA
 #     plt.xlim(0, 10)
 #     plt.ylim(0, 20)
 #     plt.yticks(np.arange(0, 21, 2))
-#     plt.xlabel(r"$p_{K^-}$ (GeV/c)")
+#     plt.xlabel(r"$p_{K^-}$ (GeV)")
 #     plt.ylabel(r"$\theta_{K^-}$ (deg)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # ###################################################################### DEUTERON #####################################################################################
@@ -1341,7 +1378,7 @@ print("################################################################# OBSERVA
 # plt.xlabel(r"$d \ \Delta t$ (ns)")
 # plt.ylabel("Counts")
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # d timing vs p
@@ -1354,17 +1391,17 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.xlim(0, 2)
 #     plt.ylim(-2, 2)
-#     plt.xlabel(r"$p_d$ (GeV/c)")
+#     plt.xlabel(r"$p_d$ (GeV)")
 #     plt.ylabel(r"$d \ \Delta t$ (ns)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # d CDC dE/dx
@@ -1377,17 +1414,17 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.xlim(0, 2)
 #     plt.ylim(0, 40)
-#     plt.xlabel(r"$p_d$ (GeV/c)")
+#     plt.xlabel(r"$p_d$ (GeV)")
 #     plt.ylabel(r"$(dE/dx)_d^{\mathrm{CDC}}$ (keV/cm)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # d FDC dE/dx
@@ -1400,17 +1437,17 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.xlim(0, 2)
 #     plt.ylim(0, 40)
-#     plt.xlabel(r"$p_d$ (GeV/c)")
+#     plt.xlabel(r"$p_d$ (GeV)")
 #     plt.ylabel(r"$(dE/dx)_d^{\mathrm{FDC}}$ (keV/cm)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # d TOF dE/dx
@@ -1423,17 +1460,17 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.xlim(0, 2)
 #     plt.ylim(0, 40)
-#     plt.xlabel(r"$p_d$ (GeV/c)")
+#     plt.xlabel(r"$p_d$ (GeV)")
 #     plt.ylabel(r"$(dE/dx)_d^{\mathrm{TOF}}$ (keV/cm)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # d ST dE/dx
@@ -1446,17 +1483,17 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.xlim(0, 2)
 #     plt.ylim(0, 40)
-#     plt.xlabel(r"$p_d$ (GeV/c)")
+#     plt.xlabel(r"$p_d$ (GeV)")
 #     plt.ylabel(r"$(dE/dx)_d^{\mathrm{ST}}$ (keV/cm)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # d dE/dx in CDC vs ST
@@ -1469,17 +1506,17 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.xlim(0, 40)
 #     plt.ylim(0, 40)
 #     plt.xlabel(r"$(dE/dx)_{d}^{\mathrm{CDC}}$ (keV/cm)")
 #     plt.ylabel(r"$(dE/dx)_{d}^{\mathrm{ST}}$ (keV/cm)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # d kinematics
@@ -1492,18 +1529,18 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.xlim(0, 2)
 #     plt.ylim(0, 90)
 #     plt.yticks(np.arange(0, 91, 10))
-#     plt.xlabel(r"$p_{d}$ (GeV/c)")
+#     plt.xlabel(r"$p_{d}$ (GeV)")
 #     plt.ylabel(r"$\theta_{d}$ (deg)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # ###################################################################### PHI MESON #####################################################################################
@@ -1520,7 +1557,7 @@ print("################################################################# OBSERVA
 # plt.xlabel(r"$m_{K^+ K^-}$ (GeV/$c$)" )
 # plt.ylabel("Counts")
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # phi mass vs KinFit chi2
@@ -1533,17 +1570,17 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.xlim(0.9, 1.1)
 #     plt.ylim(0, 10)
 #     plt.xlabel(r"$m_{K^+ K^-}$ (GeV/$c$)" )
 #     plt.ylabel(r"$\chi^2$/NDF")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # phi mass vs minus t
@@ -1556,17 +1593,17 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.xlim(0.9, 1.1)
 #     plt.ylim(0, 2)
 #     plt.xlabel(r"$m_{K^+ K^-}$ (GeV/$c$)" )
 #     plt.ylabel(r"$-t (\mathrm{GeV}^2/c^4)$")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # phi mass vs missing p minus
@@ -1579,17 +1616,17 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.xlim(0.9, 1.1)
 #     plt.ylim(-0.1, 0.1)
 #     plt.xlabel(r"$m_{K^+ K^-}$ (GeV/$c$)" )
-#     plt.ylabel(r"$p_{miss}^-$ (GeV/c)")
-# file_pdf.savefig()
+#     plt.ylabel(r"$p_{miss}^-$ (GeV)")
+# check_pdf.savefig()
 # plt.close()
 
 # # phi meson kinematics
@@ -1602,18 +1639,18 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.xlim(0, 10)
 #     plt.ylim(0, 90)
 #     plt.yticks(np.arange(0, 91, 10))
-#     plt.xlabel(r"$p_{\phi}$ (GeV/c)")
+#     plt.xlabel(r"$p_{\phi}$ (GeV)")
 #     plt.ylabel(r"$\theta_{\phi}$ (deg)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # ###################################################################### MISSING P4 #####################################################################################
@@ -1631,7 +1668,7 @@ print("################################################################# OBSERVA
 # plt.xlabel(r"$E_{miss}$ (GeV)")
 # plt.ylabel("Counts")
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # Missing mass squared
@@ -1647,7 +1684,7 @@ print("################################################################# OBSERVA
 # plt.xlabel(r"$m^2_{miss} (GeV^2/c^4)$")
 # plt.ylabel("Counts")
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # Missing p minus
@@ -1660,10 +1697,10 @@ print("################################################################# OBSERVA
 # hist_sim.plotPoints(label="Sim", marker='o', markersize=3, linestyle='-', color='blue')
 # # plt.bar(hist_data.x, hist_data.y, width=0.02, alpha=0.5, label='Data', color='green')
 # plt.xlim(-0.1, 0.1)
-# plt.xlabel(r"$p_{miss}^-$ (GeV/c)")
+# plt.xlabel(r"$p_{miss}^-$ (GeV)")
 # plt.ylabel("Counts")
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # Missing momentum
@@ -1676,10 +1713,10 @@ print("################################################################# OBSERVA
 # hist_sim.plotPoints(label="Sim", marker='o', markersize=3, linestyle='-', color='blue')
 # # plt.bar(hist_data.x, hist_data.y, width=0.02, alpha=0.5, label='Data', color='green')
 # plt.xlim(0, 2.0)
-# plt.xlabel(r"$p_{miss} (GeV/c)$")
+# plt.xlabel(r"$p_{miss} (GeV)$")
 # plt.ylabel("Counts")
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # Missing momentum vs missing energy
@@ -1692,17 +1729,17 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.ylim(-2, 2)
 #     plt.xlim(0, 2)
 #     plt.ylabel(r"$E_{miss}$ (GeV)")
-#     plt.xlabel(r"$p_{miss} (GeV/c)$")
-# file_pdf.savefig()
+#     plt.xlabel(r"$p_{miss} (GeV)$")
+# check_pdf.savefig()
 # plt.close()
 
 # # Missing energy vs phi mass
@@ -1715,17 +1752,17 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.05, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='bottom')
+# plt.text(0.95, 0.05, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='bottom')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.05, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='bottom')
+# plt.text(0.95, 0.05, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='bottom')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.xlim(-2, 2)
 #     plt.ylim(0.9, 1.1)
 #     plt.xlabel(r"$E_{miss}$ (GeV)")
 #     plt.ylabel(r"$m_{K^+ K^-}$ (GeV/$c$)" )
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # ###################################################################### BACKGROUND #####################################################################################
@@ -1743,7 +1780,7 @@ print("################################################################# OBSERVA
 # plt.xlabel("Number of Unused Tracks")
 # plt.ylabel("Counts")
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # Number of unused showers
@@ -1759,7 +1796,7 @@ print("################################################################# OBSERVA
 # plt.xlabel("Number of Unused Showers")
 # plt.ylabel("Counts")
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # Beam accidental weight
@@ -1775,7 +1812,7 @@ print("################################################################# OBSERVA
 # plt.xlabel("Beam Accidental Weight")
 # plt.ylabel("Counts")
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # Combo accidental weight
@@ -1791,7 +1828,7 @@ print("################################################################# OBSERVA
 # plt.xlabel("Combo Accidental Weight")
 # plt.ylabel("Counts")
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # Vertex z
@@ -1806,7 +1843,7 @@ print("################################################################# OBSERVA
 # plt.xlabel(r"Vertex $z$ (cm)")
 # plt.ylabel("Counts")
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # Vertex x-y
@@ -1819,17 +1856,17 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.xlim(-1, 1)
 #     plt.ylim(-1, 1)
 #     plt.xlabel(r"Vertex $x$ (cm)")
 #     plt.ylabel(r"Vertex $y$ (cm)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # rho mass
@@ -1844,7 +1881,7 @@ print("################################################################# OBSERVA
 # plt.xlabel(r"$m_{\pi^+ \pi^-}$ (GeV/$c$)" )
 # plt.ylabel("Counts")
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # rho missing p minus
@@ -1856,10 +1893,10 @@ print("################################################################# OBSERVA
 # hist_data.plotPoints(label="Data", marker='o', markersize=3, linestyle='None', color='black')
 # hist_sim.plotPoints(label="Sim", marker='o', markersize=3, linestyle='None', color='blue')
 # plt.xlim(-0.1, 0.1)
-# plt.xlabel(r"$p_{miss, \pi^+ \pi^-}^-$ (GeV/c)")
+# plt.xlabel(r"$p_{miss, \pi^+ \pi^-}^-$ (GeV)")
 # plt.ylabel("Counts")
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # KinFit FOM
@@ -1875,7 +1912,7 @@ print("################################################################# OBSERVA
 # plt.xlabel("KinFit FOM")
 # plt.ylabel("Counts")
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # KinFit Chi2
@@ -1890,25 +1927,12 @@ print("################################################################# OBSERVA
 # plt.xlabel(r"$\chi^2$/NDF")
 # plt.ylabel("Counts")
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # ###################################################################### KINEMATICS #####################################################################################
 
-# # minus t
-# print("-t")
-# fig = plt.figure(figsize=(8, 6), dpi=300)
-# hist_data = file_data.get('PlotCut/minust_kin_PlotCut')
-# hist_sim = file_sim.get('PlotCut/minust_kin_PlotCut')
-# hist_sim.scale(0.002)
-# hist_data.plotPoints(label="Data", marker='o', markersize=3, linestyle='None', color='black')
-# hist_sim.plotPoints(label="Sim", marker='o', markersize=3, linestyle='None', color='blue')
-# plt.xlim(0, 2)
-# plt.xlabel(r"$-t (GeV^2/c^4)$")
-# plt.ylabel("Counts")
-# plt.legend()
-# file_pdf.savefig()
-# plt.close()
+
 
 # # minus t vs deuteron momentum
 # print("-t vs Deuteron Momentum")
@@ -1920,17 +1944,17 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.xlim(0, 2)
 #     plt.ylim(0, 2)
-#     plt.xlabel(r"$p_d$ (GeV/c)")
+#     plt.xlabel(r"$p_d$ (GeV)")
 #     plt.ylabel(r"$-t (GeV^2/c^4)$")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # minus t vs beam energy
@@ -1943,17 +1967,17 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.xlim(5, 11)
 #     plt.ylim(0, 2)
 #     plt.xlabel(r"Beam $E$ (GeV)")
 #     plt.ylabel(r"$-t (GeV^2/c^4)$")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # com scattering angle
@@ -1968,7 +1992,7 @@ print("################################################################# OBSERVA
 # plt.xlabel(r"$\theta_{COM}$ (deg)")
 # plt.ylabel("Counts")
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # minus t vs com scattering angle
@@ -1981,17 +2005,17 @@ print("################################################################# OBSERVA
 # hist_sim.scale(0.002)
 # plt.axes(axs[0])
 # hist_data.plotHeatmap()
-# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "data", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "simulation", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(2):
 #     plt.axes(axs[i])
 #     plt.ylim(0, 40)
 #     plt.xlim(0, 2)
 #     plt.ylabel(r"$\theta_{COM}$ (deg)")
 #     plt.xlabel(r"$-t (GeV^2/c^4)$")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # Coplanarity
@@ -2006,7 +2030,7 @@ print("################################################################# OBSERVA
 # plt.xlabel(r"Coplanarity (deg)")
 # plt.ylabel("Counts")
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # ###################################################################### DECAY ANGLES #####################################################################################
@@ -2024,7 +2048,7 @@ print("################################################################# OBSERVA
 # plt.xlabel(r"$\cos\vartheta$")
 # plt.ylabel("Counts")
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # Phi
@@ -2040,7 +2064,7 @@ print("################################################################# OBSERVA
 # plt.xlabel(r"$\Phi$ (deg)")
 # plt.ylabel("Counts")
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # varphi
@@ -2056,7 +2080,7 @@ print("################################################################# OBSERVA
 # plt.xlabel(r"$\varphi$ (deg)")
 # plt.ylabel("Counts")
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # psi
@@ -2072,7 +2096,7 @@ print("################################################################# OBSERVA
 # plt.xlabel(r"$\psi$ (deg)")
 # plt.ylabel("Counts")
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # ##################################################################### TRUTH VARIABLES #####################################################################################
@@ -2131,7 +2155,7 @@ print("################################################################# OBSERVA
 # plt.xlabel(r"Beam $E$ Truth (GeV)")
 # plt.ylabel("Counts")
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # phi mass truth
@@ -2145,10 +2169,10 @@ print("################################################################# OBSERVA
 # hist_tagged.plotPoints(label="tagged", marker='o', markersize=3, linestyle='None', color='orange')
 # hist_gen.plotPoints(label="gen", marker='o', markersize=3, linestyle='None', color='green')
 # plt.xlim(0.9, 1.1)
-# plt.xlabel(r"$m_{K^+ K^-}$ Truth $(GeV/c^2)$")
+# plt.xlabel(r"$m_{K^+ K^-}$ Truth $(GeV^2)$")
 # plt.ylabel("Counts")
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # K+ kinematics truth
@@ -2162,21 +2186,21 @@ print("################################################################# OBSERVA
 # hist_sim.scale(110)
 # plt.axes(axs[0])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "detected", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "detected", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_tagged.plotHeatmap()
-# plt.text(0.95, 0.95, "tagged", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "tagged", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[2])
 # hist_gen.plotHeatmap()
-# plt.text(0.95, 0.95, "gen", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "gen", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(3):
 #     plt.axes(axs[i])
 #     plt.xlim(0, 10)
 #     plt.ylim(0, 20)
 #     plt.yticks(np.arange(0, 21, 2))
-#     plt.xlabel(r"$p_{K^+}$ truth (GeV/c)")
+#     plt.xlabel(r"$p_{K^+}$ truth (GeV)")
 #     plt.ylabel(r"$\theta_{K^+}$ truth (deg)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # K- kinematics truth
@@ -2190,21 +2214,21 @@ print("################################################################# OBSERVA
 # hist_sim.scale(110)
 # plt.axes(axs[0])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "detected", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "detected", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_tagged.plotHeatmap()
-# plt.text(0.95, 0.95, "tagged", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "tagged", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[2])
 # hist_gen.plotHeatmap()
-# plt.text(0.95, 0.95, "gen", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "gen", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(3):
 #     plt.axes(axs[i])
 #     plt.xlim(0, 10)
 #     plt.ylim(0, 20)
 #     plt.yticks(np.arange(0, 21, 2))
-#     plt.xlabel(r"$p_{K^-}$ truth (GeV/c)")
+#     plt.xlabel(r"$p_{K^-}$ truth (GeV)")
 #     plt.ylabel(r"$\theta_{K^-}$ truth (deg)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # d kinematics truth
@@ -2218,13 +2242,13 @@ print("################################################################# OBSERVA
 # hist_sim.scale(110)
 # plt.axes(axs[0])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "detected", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "detected", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_tagged.plotHeatmap()
-# plt.text(0.95, 0.95, "tagged", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "tagged", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[2])
 # hist_gen.plotHeatmap()
-# plt.text(0.95, 0.95, "gen", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "gen", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[3])
 # for i in range(np.size(energy_list)):
 #     plt.plot(deuteron_p[i], deuteron_theta[i], linestyle='-', label=f"E={energy_list[i]}")
@@ -2232,15 +2256,15 @@ print("################################################################# OBSERVA
 # for i in range(np.size(t_list)):
 #     plt.plot(deuteron_p[:,i], deuteron_theta[:,i], linestyle='-')
 #     plt.text(deuteron_p[-1][i], deuteron_theta[-1][i], f"{-t_list[i]:.1f}", fontsize=6, ha='left', va='bottom')
-# plt.text(0.95, 0.95, "kinematics", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "kinematics", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(4):
 #     plt.axes(axs[i])
 #     plt.xlim(0, 2)
 #     plt.ylim(50, 90)
 #     plt.yticks(np.arange(50, 91, 10))
-#     plt.xlabel(r"$p_{d}$ truth (GeV/c)")
+#     plt.xlabel(r"$p_{d}$ truth (GeV)")
 #     plt.ylabel(r"$\theta_{d}$ truth(deg)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # phi meson kinematics truth
@@ -2254,13 +2278,13 @@ print("################################################################# OBSERVA
 # hist_sim.scale(110)
 # plt.axes(axs[0])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "detected", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "detected", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_tagged.plotHeatmap()
-# plt.text(0.95, 0.95, "tagged", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "tagged", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[2])
 # hist_gen.plotHeatmap()
-# plt.text(0.95, 0.95, "gen", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "gen", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[3])
 # for i in range(np.size(energy_list)):
 #     plt.plot(phi_p[i], phi_theta[i], linestyle='-', label=f"E={energy_list[i]}")
@@ -2268,15 +2292,15 @@ print("################################################################# OBSERVA
 # for i in range(np.size(t_list)):
 #     plt.plot(phi_p[:,i], phi_theta[:,i], linestyle='-')
 #     plt.text(phi_p[-1][i], phi_theta[-1][i], f"{-t_list[i]:.1f}", fontsize=6, ha='left', va='bottom')
-# plt.text(0.95, 0.95, "kinematics", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "kinematics", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(4):
 #     plt.axes(axs[i])
 #     plt.xlim(5, 11)
 #     plt.ylim(0, 20)
 #     plt.yticks(np.arange(0, 21, 2))
-#     plt.xlabel(r"$p_{\phi}$ truth (GeV/c)")
+#     plt.xlabel(r"$p_{\phi}$ truth (GeV)")
 #     plt.ylabel(r"$\theta_{\phi}$ truth (deg)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # phi meson and d theta truth
@@ -2290,13 +2314,13 @@ print("################################################################# OBSERVA
 # hist_sim.scale(110)
 # plt.axes(axs[0])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "detected", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "detected", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_tagged.plotHeatmap()
-# plt.text(0.95, 0.95, "tagged", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "tagged", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[2])
 # hist_gen.plotHeatmap()
-# plt.text(0.95, 0.95, "gen", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "gen", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[3])
 # for i in range(np.size(energy_list)):
 #     plt.plot(deuteron_theta[i], phi_theta[i], linestyle='-', label=f"E={energy_list[i]}")
@@ -2304,14 +2328,14 @@ print("################################################################# OBSERVA
 # for i in range(np.size(t_list)):
 #     plt.plot(deuteron_theta[:,i], phi_theta[:,i], linestyle='-')
 #     plt.text(deuteron_theta[-1][i], phi_theta[-1][i], f"{-t_list[i]:.1f}", fontsize=6, ha='left', va='bottom')
-# plt.text(0.95, 0.95, "kinematics", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "kinematics", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(4):
 #     plt.axes(axs[i])
 #     plt.xlim(50, 90)
 #     plt.ylim(0, 20)
 #     plt.xlabel(r"$\theta_{d}$ truth (deg)")
 #     plt.ylabel(r"$\theta_{\phi}$ truth (deg)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # phi meson and d momentum truth
@@ -2325,13 +2349,13 @@ print("################################################################# OBSERVA
 # hist_sim.scale(110)
 # plt.axes(axs[0])
 # hist_sim.plotHeatmap()
-# plt.text(0.95, 0.95, "detected", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "detected", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[1])
 # hist_tagged.plotHeatmap()
-# plt.text(0.95, 0.95, "tagged", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "tagged", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[2])
 # hist_gen.plotHeatmap()
-# plt.text(0.95, 0.95, "gen", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "gen", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # plt.axes(axs[3])
 # for i in range(np.size(energy_list)):
 #     plt.plot(deuteron_p[i], phi_p[i], linestyle='-', label=f"E={energy_list[i]}")
@@ -2339,14 +2363,14 @@ print("################################################################# OBSERVA
 # for i in range(np.size(t_list)):
 #     plt.plot(deuteron_p[:,i], phi_p[:,i], linestyle='-')
 #     plt.text(deuteron_p[-1][i], phi_p[-1][i], f"{-t_list[i]:.1f}", fontsize=6, ha='left', va='bottom')
-# plt.text(0.95, 0.95, "kinematics", transform=plt.gca().transAxes, fontsize=16, fontstyle='italic', ha='right', va='top')
+# plt.text(0.95, 0.95, "kinematics", transform=plt.gca().transAxes, fontstyle='italic', ha='right', va='top')
 # for i in range(4):
 #     plt.axes(axs[i])
 #     plt.xlim(0, 2)
 #     plt.ylim(5, 11)
-#     plt.xlabel(r"$p_{d}$ truth (GeV/c)")
-#     plt.ylabel(r"$p_{\phi}$ truth (GeV/c)")
-# file_pdf.savefig()
+#     plt.xlabel(r"$p_{d}$ truth (GeV)")
+#     plt.ylabel(r"$p_{\phi}$ truth (GeV)")
+# check_pdf.savefig()
 # plt.close()
 
 # # minus t truth
@@ -2364,7 +2388,7 @@ print("################################################################# OBSERVA
 # plt.ylabel("Counts")
 # plt.yscale('log')
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # com scattering angle truth
@@ -2382,7 +2406,7 @@ print("################################################################# OBSERVA
 # plt.ylabel("Counts")
 # plt.yscale('log')
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # decay cos(vartheta) truth
@@ -2399,7 +2423,7 @@ print("################################################################# OBSERVA
 # plt.xlabel(r"Decay $\cos\vartheta$ Truth")
 # plt.ylabel("Counts")
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # decay phi truth
@@ -2416,7 +2440,7 @@ print("################################################################# OBSERVA
 # plt.xlabel(r"Decay $\varphi$ Truth (deg)")
 # plt.ylabel("Counts")
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # polarization phi truth
@@ -2433,7 +2457,7 @@ print("################################################################# OBSERVA
 # plt.xlabel(r"Polarization $\Phi$ Truth (deg)")
 # plt.ylabel("Counts")
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # decay psi truth
@@ -2450,7 +2474,7 @@ print("################################################################# OBSERVA
 # plt.xlabel(r"Decay $\psi$ Truth (deg)")
 # plt.ylabel("Counts")
 # plt.legend()
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # ###################################################################### BIN MIGRATIONS #####################################################################################
@@ -2465,7 +2489,7 @@ print("################################################################# OBSERVA
 # plt.ylabel(r"Beam $E$ detected")
 # plt.xlabel(r"Beam $E$ thrown")
 # plt.colorbar(label=r"$\log_{10}$(Counts)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # minus t bin migration
@@ -2478,7 +2502,7 @@ print("################################################################# OBSERVA
 # plt.ylabel(r"$-t$ reconstructed $(\mathrm{GeV}^2/c^4)$")
 # plt.xlabel(r"$-t$ thrown $(\mathrm{GeV}^2/c^4)$")
 # plt.colorbar(label=r"$\log_{10}$(Counts)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 ###################################################################### RESOLUTIONS #####################################################################################
@@ -2503,7 +2527,7 @@ def gaussian(x, a, b, c):
 # plt.xlabel(r"$-t (GeV^2/c^4)$")
 # plt.ylim(-0.1, 0.1)
 # plt.colorbar(label=r"$\log_{10}$(Counts)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # costheta resolution
@@ -2522,7 +2546,7 @@ def gaussian(x, a, b, c):
 # plt.ylabel(r"$\Delta \cos\vartheta$")
 # plt.xlabel(r"$-t (GeV^2/c^4)$")
 # plt.ylim(-0.5, 0.5)
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # decayphi resolution
@@ -2541,7 +2565,7 @@ def gaussian(x, a, b, c):
 # plt.ylabel(r"$\Delta \varphi$ (deg)")
 # plt.xlabel(r"$-t (GeV^2/c^4)$")
 # plt.colorbar(label=r"$\log_{10}$(Counts)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # polphi resolution
@@ -2560,7 +2584,7 @@ def gaussian(x, a, b, c):
 # plt.ylabel(r"$\Delta \Phi$ (deg)")
 # plt.xlabel(r"$-t (GeV^2/c^4)$")
 # plt.colorbar(label=r"$\log_{10}$(Counts)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # psi resolution
@@ -2579,7 +2603,7 @@ def gaussian(x, a, b, c):
 # plt.ylabel(r"$\Delta \psi$ (deg)")
 # plt.xlabel(r"$-t (GeV^2/c^4)$")
 # plt.colorbar(label=r"$\log_{10}$(Counts)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # vertex z resolution
@@ -2600,7 +2624,7 @@ def gaussian(x, a, b, c):
 # plt.ylabel(r"$\Delta Z$ (cm)")
 # plt.xlabel(r"$Z$ (cm)")
 # plt.colorbar(label=r"$\log_{10}$(Counts)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # # vertex z resolution w.r.t. t
@@ -2613,6 +2637,7 @@ def gaussian(x, a, b, c):
 #     this_std = np.sqrt(np.average((this_ycenter - this_average)**2, weights=hist_sim.z[:, i]))
 #     popt, pcov = curve_fit(gaussian, this_ycenter, hist_sim.z[:, i], p0=[hist_sim.z[:, i].max(),this_average,this_std])
 #     plt.errorbar(hist_sim.xedge[i]+(hist_sim.xedge[i+1]-hist_sim.xedge[i])/2, popt[1], yerr=popt[2], fmt='.', color='red')
+#     print(f"t value {hist_sim.xedge[i]:.2f}")
 #     print(f"Bin {i}: Center = {popt[1]:.2f} ± {popt[2]:.2f}")
 #     print(f"Bin {i}: Width = {popt[2]:.2f}")
 # hist_sim.z[hist_sim.z<=0] = np.nan
@@ -2621,7 +2646,7 @@ def gaussian(x, a, b, c):
 # plt.ylabel(r"$\Delta Z$ (cm)")
 # plt.xlabel(r"$-t (GeV^2)$")
 # plt.colorbar(label=r"$\log_{10}$(Counts)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 # phi mass resolution
@@ -2637,12 +2662,13 @@ def gaussian(x, a, b, c):
 # hist_sim.z[hist_sim.z<=0] = np.nan
 # hist_sim.z = np.log10(hist_sim.z)
 # hist_sim.plotHeatmap()
-# plt.ylabel(r"$\Delta$ Phi Mass (GeV/c^2)")
+# plt.ylabel(r"$\Delta$ Phi Mass (GeV^2)")
 # plt.xlabel(r"$-t (GeV^2/c^4)$")
 # plt.colorbar(label=r"$\log_{10}$(Counts)")
-# file_pdf.savefig()
+# check_pdf.savefig()
 # plt.close()
 
 ###################################################################### END #####################################################################################
 
-file_pdf.close()
+cut_pdf.close()
+check_pdf.close()

@@ -2,7 +2,6 @@ import ROOT
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
-from scipy.optimize import curve_fit
 from scipy.integrate import quad
 import scipy
 import ROOT as root
