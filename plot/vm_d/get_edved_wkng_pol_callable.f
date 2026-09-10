@@ -1,6 +1,6 @@
        subroutine 
      & edved(in,ivm,ei,q2,q0,epsl,t,crs0,crs,tcrs0,tcrs,pd,thd,pvm,thvm,
-     & beamenergy,bgamman,sgamman,bphin,sphin)
+     & beamenergy,bgamman,sgamman,agamman,bphin,sphin,aphin,t2term,wfflag)
 **************************************************************************
 *  in   - parameter for initialization (1)-initialize (0)-compute - input
 *  ivm  - 1 - rho meson,  3- phi meson
@@ -137,7 +137,7 @@
         icase    =  5
         sigma_gn =  sgamman !relevant only for icase=5
         b_g      =  bgamman !relevant only for icase=3,4,5
-        alpha_g  =  0.0
+        alpha_g  =  agamman
 ********************************************************************
 *         Parameters of cross section, slope  factor and real part
 ********************************************************************
@@ -149,7 +149,7 @@
 ********************************************************************
         sigma_vn = sphin
         b_vn     = bphin
-        al_vn    = 0.0
+        al_vn    = aphin
 ********************************************************************
 
 ************* J/PSI ************************************************
@@ -184,7 +184,7 @@
         endif
 
         ict = 0
-        ins = 1
+        ins = wfflag
         call form_factors(ict,ins,qt,qz,q2,fc,fq,tc,tq) 
         pi    = acos(-1.0)
         alpha = 1.0/137.0
@@ -390,14 +390,15 @@
 C     --- Arguments from C++ MINUIT ---
       integer(c_int), intent(in)  :: in_c, ivm_c
       real(c_double), intent(in)  :: ei_c, q2_c, q0_c, epsl_c, t_c
-      real(c_double), intent(in)  :: params_c(4)
+      real(c_double), intent(in)  :: params_c(8)
       real(c_double), intent(out) :: crs_c
 
 C     --- Internal Fortran Variables ---
       integer :: in, ivm
       real :: ei, q2, q0, epsl, t, crs, crs0, tcrs0, tcrs
       real :: pd, thd, pvm, thvm, beamenergy
-      real :: bgamman, sgamman, bphin, sphin
+      real :: bgamman, sgamman, agamman, bphin, sphin, aphin
+      real :: t2term, wfflag
 
 C     --- 1. Convert C++ types to Fortran types ---
       in = in_c
@@ -409,14 +410,18 @@ C     --- 1. Convert C++ types to Fortran types ---
       t = t_c
       bgamman = params_c(1)
       sgamman = params_c(2)
-      bphin   = params_c(3)
-      sphin   = params_c(4)
+      agamman = params_c(3)
+      bphin   = params_c(4)
+      sphin   = params_c(5)
+      aphin   = params_c(6)
+      t2term  = params_c(7)
+      wfflag  = params_c(8)
       beamenergy = 0.0
 
 C     --- 2. Call your original, untouched subroutine ---
       call edved(in, ivm, ei, q2, q0, epsl, t, crs0, crs, tcrs0,
      &           tcrs, pd, thd, pvm, thvm, beamenergy, bgamman,
-     &           sgamman, bphin, sphin)
+     &           sgamman, agamman, bphin, sphin, aphin, t2term, wfflag)
 
 C     --- 3. Send the calculated cross-section back to C++ ---
       crs_c = crs
@@ -519,7 +524,7 @@ C     --- 3. Send the calculated cross-section back to C++ ---
         qqpz = qpz
         qp_a = 0.0
         qp_b = 1.6
-        eps = 0.00001
+        eps = 0.001
         call gadap2(qp_a,qp_b,phip_a,phip_b,under_ab,eps,sum)
         two_FaFb = sum/((2.0*pi)**2)
         return
@@ -613,7 +618,7 @@ C     --- 3. Send the calculated cross-section back to C++ ---
         qqppz = qppz        
         qp_a = 0.0
         qp_b = 1.6
-        eps = 0.00001
+        eps = 0.001
         call gadap2(0.0,1.6,phip_a,phip_b,under_bb,eps,sum)
         FbFb = sum/((2.0*pi)**2)/((2.0*pi)**2) *100.0
         return
@@ -810,7 +815,7 @@ C     --- 3. Send the calculated cross-section back to C++ ---
        q_photon = sqrt(s**2 + pm**4 - 2*s*pm**2)/2.0/sqrt(s)
        q_phi = sqrt(s**2 + pm**4 + vmm**4 - 2*s*pm*pm - 2*s*vmm*vmm - 2*pm*pm*vmm*vmm)/2.0/sqrt(s)
         dsdt_min = (1.0/137.0/16.0/6.69**2)*((q_phi/q_photon)**2)*(1+alg(s,kvm)*alg(s,kvm))*(sigma_gn*sigma_gn)*1000.0*2.56819
-       dsdt = dsdt_min*exp(b_gn(s,kvm)*(t-tmin))
+       dsdt = dsdt_min*exp(b_gn(s,kvm)*(t-tmin)+t2term*(t-tmin)**2)
        !dsdt = sigma_gn*exp(b_gn(s,kvm)*(t-tmin) + 1.4*(t-tmin)**2)
        endif
 ************************************************************************
@@ -1036,10 +1041,10 @@ C     --- 3. Send the calculated cross-section back to C++ ---
       common/formfactors/f_c(400),f_q(400),t_c(40,40),t_q(40,40)
       common/ctornot/ict0
       if(ins.eq.1)then
-      open(unit=11,status='old',file='input/theory_fc_fq.data')
+      open(unit=11,status='old',file='/work/halld2/home/boyu/src_analysis/plot/vm_d/input/theory_fc_fq.data')
       read(11,10)(f_c(k),f_q(k),k=1,400)
       close(11)
-      open(unit=12,status='old',file='input/theory_tc_tq.data')
+      open(unit=12,status='old',file='/work/halld2/home/boyu/src_analysis/plot/vm_d/input/theory_tc_tq.data')
 *      write(12,10)((TC(kt,kz),TQ(kt,kz),kt=1,400),kz=1,400)
       read(12,10)((t_c(kt,kz),t_q(kt,kz),kt=1,40),kz=1,40)
       close(12)
