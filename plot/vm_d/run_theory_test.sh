@@ -4,6 +4,9 @@ echo 5.50  >> input/theory_paras.txt
 echo 30.8  >> input/theory_paras.txt
 echo 11.2 >> input/theory_paras.txt
 
+source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
+gxenv $HALLD_VERSIONS/version.xml
+
 gfortran -ffixed-line-length-none -o exe_theory.out get_edved_wkng_pol.f
 ./exe_theory.out > output/table_phi_d_theory_intuition.txt
 python get_theory_intuition.py
