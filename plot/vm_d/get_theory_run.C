@@ -61,7 +61,7 @@ void get_theory_run(string tag)
         throw std::runtime_error("Could not open /work/halld2/home/boyu/src_analysis/plot/vm_d/output/theory/theory_" + tag + ".txt");
 
     // Read kinematic points from input file
-    std::ifstream kinematics_list("/work/halld2/home/boyu/src_analysis/plot/vm_d/output/table_vm_d_dsdt.txt");
+    std::ifstream kinematics_list("/work/halld2/home/boyu/src_analysis/plot/vm_d/output/table_bin_centers.txt");
     std::string line;
     std::vector<double> energy_list;
     std::vector<double> minust_list;
@@ -70,16 +70,10 @@ void get_theory_run(string tag)
         std::istringstream values(line);
         double energy;
         double minust;
-        double unused[5];
-        if (values >> energy >> minust >> unused[0] >> unused[1] >> unused[2] >> unused[3] >> unused[4]) {
-            if (energy > 5.8 && energy < 7.8)
-                energy_list.push_back(6.9);
-            else if (energy > 7.8 && energy < 8.8)
-                energy_list.push_back(8.3);
-            else if (energy > 8.8 && energy < 10.8)
-                energy_list.push_back(9.7);
-            else
-                std::cerr << "Warning: Energy value " << energy << " is out of expected ranges." << std::endl;
+        if (values >> energy >> minust)
+        {
+            if (minust < 0.24)  continue; // Skip points with -t < 0.24 GeV^2
+            energy_list.push_back(energy);
             minust_list.push_back(minust);
         }
     }
@@ -97,7 +91,7 @@ void get_theory_run(string tag)
     results << std::setw(20) << " ";
     results << std::setw(20) << "E_gamma (GeV)";
     for (size_t i = 0; i < energy_list.size(); ++i)
-        results << std::setw(20) << std::fixed << std::setprecision(1) << energy_list[i];
+        results << std::setw(20) << std::fixed << std::setprecision(4) << energy_list[i];
     results << '\n';
 
     results << std::setw(20) << " ";
@@ -110,10 +104,10 @@ void get_theory_run(string tag)
     results << std::setw(20) << "s_phi_n (mb)" << std::setw(20) << "b_phi_n (GeV^-2)" << '\n';
 
     // Loop over sphin and bphin values
-    for (sphin = sphin_range[0]; sphin < sphin_range[1]; sphin += sphin_range[2])
+    for (sphin = sphin_range[0]; sphin_range[1]-sphin > sphin_range[2]/2.0; sphin += sphin_range[2])
     {
         cout << "sphin = " << sphin << std::endl;
-        for (bphin = bphin_range[0]; bphin < bphin_range[1]; bphin += bphin_range[2])
+        for (bphin = bphin_range[0]; bphin_range[1]-bphin > bphin_range[2]/2.0; bphin += bphin_range[2])
         {
             // Initialize parameters for calculations
             const double params[8] = {
