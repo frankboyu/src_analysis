@@ -8,9 +8,14 @@ source /group/halld/Software/build_scripts/gluex_env_boot_jlab.sh
 gxenv $HALLD_VERSIONS/version.xml
 
 TAG_LIST=()
-# TAG_LIST+=("two_para_nominal")
-# TAG_LIST+=("two_para_sgamman_12.0_bgamman_5.0")
-TAG_LIST+=("two_para_sgamman_12.0_bgamman_5.5")
+TAG_LIST+=("two_para_nominal")
+TAG_LIST+=("two_para_agamman_0.05_aphin_0.05"   "two_para_agamman_0.05_aphin_0.00"      "two_para_agamman_-0.05_aphin_-0.05"    "two_para_agamman_-0.10_aphin_-0.10"    "two_para_agamman_-0.15_aphin_-0.15")
+TAG_LIST+=("two_para_t2term_0.0"                "two_para_t2term_0.2"                   "two_para_t2term_0.4"                   "two_para_t2term_0.6"                   "two_para_t2term_0.8")
+TAG_LIST+=("two_para_sgamman_10.0_bgamman_4.0"  "two_para_sgamman_10.0_bgamman_4.2"     "two_para_sgamman_10.0_bgamman_4.4"     "two_para_sgamman_10.0_bgamman_4.6"     "two_para_sgamman_10.0_bgamman_4.8")
+TAG_LIST+=("two_para_sgamman_10.5_bgamman_4.0"  "two_para_sgamman_10.5_bgamman_4.2"     "two_para_sgamman_10.5_bgamman_4.4"     "two_para_sgamman_10.5_bgamman_4.6"     "two_para_sgamman_10.5_bgamman_4.8")
+TAG_LIST+=("two_para_sgamman_11.0_bgamman_4.0"  "two_para_sgamman_11.0_bgamman_4.2"     "two_para_sgamman_11.0_bgamman_4.4"     "two_para_sgamman_11.0_bgamman_4.6"     "two_para_sgamman_11.0_bgamman_4.8")
+TAG_LIST+=("two_para_sgamman_11.5_bgamman_4.0"  "two_para_sgamman_11.5_bgamman_4.2"     "two_para_sgamman_11.5_bgamman_4.4"     "two_para_sgamman_11.5_bgamman_4.6"     "two_para_sgamman_11.5_bgamman_4.8")
+TAG_LIST+=("two_para_sgamman_12.0_bgamman_4.0"  "two_para_sgamman_12.0_bgamman_4.2"     "two_para_sgamman_12.0_bgamman_4.4"     "two_para_sgamman_12.0_bgamman_4.6"     "two_para_sgamman_12.0_bgamman_4.8")
 
 sh run_theory_compile.sh
 
